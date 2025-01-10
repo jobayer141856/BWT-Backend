@@ -21,7 +21,7 @@ export async function insert(req, res, next) {
 
 		return res.status(201).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -44,7 +44,7 @@ export async function update(req, res, next) {
 
 		return res.status(200).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -66,7 +66,7 @@ export async function remove(req, res, next) {
 
 		return res.status(200).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -76,14 +76,18 @@ export async function selectAll(req, res, next) {
 		.from(department)
 		.orderBy(desc(department.created_at));
 
-	const data = await resultPromise;
-	const toast = {
-		status: 200,
-		type: 'select',
-		message: 'Department',
-	};
+	try {
+		const data = await resultPromise;
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'Department',
+		};
 
-	return res.status(200).json({ toast, data });
+		return res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
 }
 
 export async function select(req, res, next) {
@@ -104,6 +108,6 @@ export async function select(req, res, next) {
 
 		return res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }

@@ -105,6 +105,7 @@ export const pathHrUser = {
 				name: SE.string('John Doe'),
 				email: SE.string('john@fzl.com'),
 				designation_uuid: SE.uuid(),
+				department_uuid: SE.uuid(),
 				ext: SE.string('562'),
 				phone: SE.string('01521533595'),
 				created_at: SE.date_time(),
@@ -127,6 +128,10 @@ export const pathHrUser = {
 								example: 'john@fzl.com',
 							},
 							designation_uuid: {
+								type: 'string',
+								example: 'igD0v9DIJQhJeet',
+							},
+							department_uuid: {
 								type: 'string',
 								example: 'igD0v9DIJQhJeet',
 							},

@@ -22,7 +22,7 @@ export async function insert(req, res, next) {
 
 		return res.status(201).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -46,7 +46,7 @@ export async function update(req, res, next) {
 
 		return res.status(201).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -69,7 +69,7 @@ export async function remove(req, res, next) {
 
 		return res.status(201).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 

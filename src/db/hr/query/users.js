@@ -32,7 +32,7 @@ export async function insert(req, res, next) {
 
 		return res.status(201).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -55,7 +55,7 @@ export async function update(req, res, next) {
 
 		return res.status(200).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -77,7 +77,7 @@ export async function remove(req, res, next) {
 
 		return res.status(200).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -121,7 +121,7 @@ export async function selectAll(req, res, next) {
 
 		return res.status(200).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -159,7 +159,7 @@ export async function select(req, res, next) {
 
 		return res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -251,7 +251,7 @@ export async function selectUsersAccessPages(req, res, next) {
 
 		return res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -279,7 +279,7 @@ export async function selectCommonUsers(req, res, next) {
 
 		return res.status(200).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -302,7 +302,7 @@ export async function changeUserAccess(req, res, next) {
 
 		return res.status(200).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -325,7 +325,7 @@ export async function changeUserStatus(req, res, next) {
 
 		return res.status(200).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 export async function changeUserPassword(req, res, next) {
@@ -349,6 +349,6 @@ export async function changeUserPassword(req, res, next) {
 
 		return res.status(200).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }

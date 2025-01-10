@@ -21,7 +21,7 @@ export async function insert(req, res, next) {
 
 		return await res.status(201).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -44,7 +44,7 @@ export async function update(req, res, next) {
 
 		return await res.status(201).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -66,7 +66,7 @@ export async function remove(req, res, next) {
 
 		return await res.status(201).json({ toast, data });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -134,7 +134,7 @@ export async function select(req, res, next) {
 
 		return await res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -167,7 +167,7 @@ export async function selectPolicy(req, res, next) {
 
 		return await res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }
 
@@ -200,6 +200,6 @@ export async function selectNotice(req, res, next) {
 
 		return await res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
-		await handleError({ error, res });
+		next(error);
 	}
 }

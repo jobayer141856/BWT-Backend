@@ -5,6 +5,7 @@ import { VerifyToken } from './middleware/auth.js';
 import route from './routes/index.js';
 import swaggerSpec from './swagger.js';
 import cors from './util/cors.js';
+import { handleError } from './util/index.js';
 
 const server = express();
 
@@ -31,6 +32,11 @@ server.get(
 		},
 	})
 );
+
+// error handler
+server.use(async (err, req, res, next) => {
+	await handleError({ error: err, res });
+});
 
 // listen
 server.listen(SERVER_PORT, () => {
