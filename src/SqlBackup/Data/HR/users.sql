@@ -1,0 +1,2 @@
+INSERT INTO hr.users(uuid, name, email, pass, can_access, phone, ext, created_at, updated_at, status) 
+VALUES ('igD0v9DIJQhJeet', 'admin', 'admin@bwt.com', '$2b$10$rwiY9thm6UzFMghJROAz/.GPstuOU.76ia8WMqG12Jq/JpMK.fqba', '{"dashboard":["read"],"admin__user":["create","read","update","delete","click_status","click_reset_password","click_page_assign"],"admin__user_department":["create","read","update","delete"]}', '12345678910', '123', '2023-10-15 12:05:23', '2023-10-15 12:05:23', 1);
