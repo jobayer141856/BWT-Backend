@@ -27,17 +27,17 @@ otherRouter.get('/product/value/label', otherOperations.selectProduct);
 // branch routes
 otherRouter.get('/branch/value/label', otherOperations.selectBranch);
 
-// purchase routes
-otherRouter.get('/purchase/value/label', otherOperations.selectPurchase);
+// // purchase routes
+// otherRouter.get('/purchase/value/label', otherOperations.selectPurchase);
 
 // stock routes
-otherRouter.get('/stock/value/label', otherOperations.selectStock);
+// otherRouter.get('/stock/value/label', otherOperations.selectStock);
 
 // purchase entry routes
-otherRouter.get(
-	'/purchase-entry/value/label',
-	otherOperations.selectPurchaseEntry
-);
+// otherRouter.get(
+// 	'/purchase-entry/value/label',
+// 	otherOperations.selectPurchaseEntry
+// );
 
 // warehouse routes
 otherRouter.get('/warehouse/value/label', otherOperations.selectWarehouse);
