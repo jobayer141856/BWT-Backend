@@ -143,7 +143,7 @@ export async function select(req, res, next) {
 			message: 'vendor',
 		};
 
-		return res.status(200).json({ toast, data });
+		return res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
 		next(error);
 	}

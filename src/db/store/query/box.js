@@ -2,18 +2,19 @@ import { desc, eq } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
-import { group } from '../schema.js';
+
+import { box, floor } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const groupPromise = db
-		.insert(group)
+	const boxPromise = db
+		.insert(box)
 		.values(req.body)
-		.returning({ insertedName: group.name });
+		.returning({ insertedName: box.name });
 
 	try {
-		const data = await groupPromise;
+		const data = await boxPromise;
 		const toast = {
 			status: 201,
 			type: 'insert',
@@ -29,14 +30,14 @@ export async function insert(req, res, next) {
 export async function update(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const groupPromise = db
-		.update(group)
+	const boxPromise = db
+		.update(box)
 		.set(req.body)
-		.where(eq(group.uuid, req.params.uuid))
-		.returning({ updatedName: group.name });
+		.where(eq(box.uuid, req.params.uuid))
+		.returning({ updatedName: box.name });
 
 	try {
-		const data = await groupPromise;
+		const data = await boxPromise;
 		const toast = {
 			status: 201,
 			type: 'update',
@@ -52,13 +53,13 @@ export async function update(req, res, next) {
 export async function remove(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const groupPromise = db
-		.delete(group)
-		.where(eq(group.uuid, req.params.uuid))
-		.returning({ deletedName: group.name });
+	const boxPromise = db
+		.delete(box)
+		.where(eq(box.uuid, req.params.uuid))
+		.returning({ deletedName: box.name });
 
 	try {
-		const data = await groupPromise;
+		const data = await boxPromise;
 		const toast = {
 			status: 201,
 			type: 'delete',
@@ -72,27 +73,32 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
-	const resultPromise = db
+	const boxPromise = db
 		.select({
-			uuid: group.uuid,
-			name: group.name,
-			created_by: group.created_by,
+			uuid: box.uuid,
+			name: box.name,
+			floor_uuid: box.floor_uuid,
+			floor_name: floor.name,
+			created_by: box.created_by,
 			created_by_name: hrSchema.users.name,
-			created_at: group.created_at,
-			updated_at: group.updated_at,
-			remarks: group.remarks,
+			created_at: box.created_at,
+			updated_at: box.updated_at,
+			remarks: box.remarks,
 		})
-		.from(group)
-		.leftJoin(hrSchema.users, eq(group.created_by, hrSchema.users.uuid))
-		.orderBy(desc(group.created_at));
+		.from(box)
+		.leftJoin(floor, eq(box.floor_uuid, floor.uuid))
+		.leftJoin(hrSchema.users, eq(box.created_by, hrSchema.users.uuid))
+		.orderBy(desc(box.created_at));
 
 	try {
-		const data = await resultPromise;
+		const data = await boxPromise;
+
 		const toast = {
 			status: 200,
 			type: 'select all',
-			message: 'groups list',
+			message: 'boxes list',
 		};
+
 		return await res.status(200).json({ toast, data });
 	} catch (error) {
 		next(error);
@@ -100,28 +106,31 @@ export async function selectAll(req, res, next) {
 }
 
 export async function select(req, res, next) {
-	const resultPromise = db
+	const boxPromise = db
 		.select({
-			uuid: group.uuid,
-			name: group.name,
-			created_by: group.created_by,
+			uuid: box.uuid,
+			name: box.name,
+			floor_uuid: box.floor_uuid,
+			floor_name: floor.name,
+			created_by: box.created_by,
 			created_by_name: hrSchema.users.name,
-			created_at: group.created_at,
-			updated_at: group.updated_at,
-			remarks: group.remarks,
+			created_at: box.created_at,
+			updated_at: box.updated_at,
+			remarks: box.remarks,
 		})
-		.from(group)
-		.leftJoin(hrSchema.users, eq(group.created_by, hrSchema.users.uuid))
-		.where(eq(group.uuid, req.params.uuid));
+		.from(box)
+		.leftJoin(hrSchema.users, eq(box.created_by, hrSchema.users.uuid))
+		.where(eq(box.uuid, req.params.uuid));
 
 	try {
-		const data = await resultPromise;
+		const data = await boxPromise;
 		const toast = {
 			status: 200,
 			type: 'select',
-			message: 'group',
+			message: 'box',
 		};
-		return await res.status(200).json({ toast, data: data[0] });
+
+		return await res.status(200).json({ toast, data : data[0] });
 	} catch (error) {
 		next(error);
 	}

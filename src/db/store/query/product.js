@@ -17,8 +17,8 @@ export async function insert(req, res, next) {
 		const data = await productPromise;
 		const toast = {
 			status: 201,
-			type: 'create',
-			message: `${data[0].insertedId} created`,
+			type: 'insert',
+			message: `${data[0].insertedId} inserted`,
 		};
 
 		return await res.status(201).json({ toast, data });
@@ -146,7 +146,7 @@ export async function select(req, res, next) {
 			type: 'select',
 			message: 'product',
 		};
-		return await res.status(200).json({ toast, data });
+		return await res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
 		next(error);
 	}
