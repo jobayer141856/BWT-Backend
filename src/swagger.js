@@ -9,7 +9,11 @@ import { pathHr } from './db/hr/swagger/route.js';
 import { defStore, tagStore } from './db/store/swagger/def.js';
 import { pathStore } from './db/store/swagger/route.js';
 
-const tags = [...tagHr, ...tagStore];
+//* Others
+
+import { tagOthers, pathOthers } from './db/others/swagger/route.js';
+
+const tags = [...tagHr, ...tagStore, ...tagOthers];
 
 const definitions = {
 	hr: defHr,
@@ -19,6 +23,7 @@ const definitions = {
 const paths = {
 	...pathHr,
 	...pathStore,
+	...pathOthers,
 };
 
 const swaggerSpec = swaggerJSDoc({

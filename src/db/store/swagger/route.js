@@ -720,6 +720,818 @@ export const pathStoreBranch = {
 	},
 };
 
+export const pathStorePurchase = {
+	'/store/purchase': {
+		get: {
+			tags: ['store.purchase'],
+			summary: 'Get all store purchases',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					id: SE.integer(),
+					vendor_uuid: SE.uuid(),
+					vendor_name: SE.string('vendor_name'),
+					branch_uuid: SE.uuid(),
+					branch_name: SE.string('branch_name'),
+					date: SE.date_time(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.purchase'],
+			summary: 'Create a store purchase',
+			requestBody: SE.requestBody_schema_ref('store/purchase'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'store/purchase'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/store/purchase/{uuid}': {
+		get: {
+			tags: ['store.purchase'],
+			summary: 'Get a store purchase',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					id: SE.integer(),
+					vendor_uuid: SE.uuid(),
+					vendor_name: SE.string('vendor_name'),
+					branch_uuid: SE.uuid(),
+					branch_name: SE.string('branch_name'),
+					date: SE.date_time(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.purchase'],
+			summary: 'Update a store purchase',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('store/purchase'),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/purchase'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.purchase'],
+			summary: 'Delete a store purchase',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
+export const pathStoreStock = {
+	'/store/stock': {
+		get: {
+			tags: ['store.stock'],
+			summary: 'Get all store stocks',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					product_uuid: SE.uuid(),
+					product_name: SE.string('product_name'),
+					warehouse_1: SE.number(),
+					warehouse_2: SE.number(),
+					warehouse_3: SE.number(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.stock'],
+			summary: 'Create a store stock',
+			requestBody: SE.requestBody_schema_ref('store/stock'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'store/stock'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/store/stock/{uuid}': {
+		get: {
+			tags: ['store.stock'],
+			summary: 'Get a store stock',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store stock',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					product_uuid: SE.uuid(),
+					product_name: SE.string('product_name'),
+					warehouse_1: SE.number(),
+					warehouse_2: SE.number(),
+					warehouse_3: SE.number(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.stock'],
+			summary: 'Update a store stock',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store stock',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('store/stock'),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/stock'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.stock'],
+			summary: 'Delete a store stock',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store stock',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
+export const pathStorePurchaseEntry = {
+	'/store/purchase-entry': {
+		get: {
+			tags: ['store.purchase_entry'],
+			summary: 'Get all store purchase entries',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					purchase_uuid: SE.uuid(),
+					purchase_id: SE.integer(),
+					stock_uuid: SE.uuid(),
+					stock_name: SE.string('stock_name'),
+					serial_no: SE.string('serial_no'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.purchase_entry'],
+			summary: 'Create a store purchase entry',
+			requestBody: SE.requestBody_schema_ref('store/purchase_entry'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'store/purchase_entry'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/store/purchase-entry/{uuid}': {
+		get: {
+			tags: ['store.purchase_entry'],
+			summary: 'Get a store purchase entry',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase entry',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					purchase_uuid: SE.uuid(),
+					purchase_id: SE.integer(),
+					stock_uuid: SE.uuid(),
+					stock_name: SE.string('stock_name'),
+					serial_no: SE.string('serial_no'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.purchase_entry'],
+			summary: 'Update a store purchase entry',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase entry',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('store/purchase_entry'),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/purchase_entry'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.purchase_entry'],
+			summary: 'Delete a store purchase entry',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase entry',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
+export const pathStoreWarehouse = {
+	'/store/warehouse': {
+		get: {
+			tags: ['store.warehouse'],
+			summary: 'Get all store warehouses',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.warehouse'],
+			summary: 'Create a store warehouse',
+			requestBody: SE.requestBody_schema_ref('store/warehouse'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'store/warehouse'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/store/warehouse/{uuid}': {
+		get: {
+			tags: ['store.warehouse'],
+			summary: 'Get a store warehouse',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store warehouse',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.warehouse'],
+			summary: 'Update a store warehouse',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store warehouse',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('store/warehouse'),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/warehouse'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.warehouse'],
+			summary: 'Delete a store warehouse',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store warehouse',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
+export const pathStoreRoom = {
+	'/store/room': {
+		get: {
+			tags: ['store.room'],
+			summary: 'Get all store rooms',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.room'],
+			summary: 'Create a store room',
+			requestBody: SE.requestBody_schema_ref('store/room'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'store/room'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/store/room/{uuid}': {
+		get: {
+			tags: ['store.room'],
+			summary: 'Get a store room',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store room',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.room'],
+			summary: 'Update a store room',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store room',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('store/room'),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/room'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.room'],
+			summary: 'Delete a store room',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store room',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
+export const pathStoreRack = {
+	'/store/rack': {
+		get: {
+			tags: ['store.rack'],
+			summary: 'Get all store racks',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('name'),
+					room_uuid: SE.uuid(),
+					room_name: SE.string('room_name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.rack'],
+			summary: 'Create a store rack',
+			requestBody: SE.requestBody_schema_ref('store/rack'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'store/rack'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/store/rack/{uuid}': {
+		get: {
+			tags: ['store.rack'],
+			summary: 'Get a store rack',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store rack',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('name'),
+					room_uuid: SE.uuid(),
+					room_name: SE.string('room_name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.rack'],
+			summary: 'Update a store rack',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store rack',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('store/rack'),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/rack'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.rack'],
+			summary: 'Delete a store rack',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store rack',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
+export const pathStoreFloor = {
+	'/store/floor': {
+		get: {
+			tags: ['store.floor'],
+			summary: 'Get all store floors',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.floor'],
+			summary: 'Create a store floor',
+			requestBody: SE.requestBody_schema_ref('store/floor'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'store/floor'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/store/floor/{uuid}': {
+		get: {
+			tags: ['store.floor'],
+			summary: 'Get a store floor',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store floor',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.floor'],
+			summary: 'Update a store floor',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store floor',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('store/floor'),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/floor'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.floor'],
+			summary: 'Delete a store floor',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store floor',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
+export const pathStoreBox = {
+	'/store/box': {
+		get: {
+			tags: ['store.box'],
+			summary: 'Get all store boxes',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					floor_uuid: SE.uuid(),
+					floor_name: SE.string('floor_name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.box'],
+			summary: 'Create a store box',
+			requestBody: SE.requestBody_schema_ref('store/box'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'store/box'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/store/box/{uuid}': {
+		get: {
+			tags: ['store.box'],
+			summary: 'Get a store box',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store box',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					floor_uuid: SE.uuid(),
+					floor_name: SE.string('floor_name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.box'],
+			summary: 'Update a store box',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store box',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('store/box'),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/box'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.box'],
+			summary: 'Delete a store box',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store box',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
 export const pathStore = {
 	...pathStoreGroup,
 	...pathStoreCategory,
@@ -728,4 +1540,12 @@ export const pathStore = {
 	...pathStoreVendor,
 	...pathStoreProduct,
 	...pathStoreBranch,
+	...pathStorePurchase,
+	...pathStoreStock,
+	...pathStorePurchaseEntry,
+	...pathStoreWarehouse,
+	...pathStoreRoom,
+	...pathStoreRack,
+	...pathStoreFloor,
+	...pathStoreBox,
 };
