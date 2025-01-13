@@ -10,12 +10,17 @@ const pathGroup = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('group'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -31,12 +36,17 @@ const pathCategory = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('category'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -52,12 +62,17 @@ const pathBrand = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('brand'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -73,12 +88,17 @@ const pathSize = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('size'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -94,12 +114,17 @@ const pathVendor = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('vendor'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -115,12 +140,17 @@ const pathProduct = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('product'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -136,80 +166,100 @@ const pathBranch = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('branch'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
 	},
 };
 
-const pathPurchase = {
-	'/other/purchase/value/label': {
-		get: {
-			tags: ['others'],
-			summary: 'Get all purchase',
-			description: 'Get all purchase',
-			responses: {
-				200: {
-					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
-				},
-			},
-		},
-	},
-};
+// const pathPurchase = {
+// 	'/other/purchase/value/label': {
+// 		get: {
+// 			tags: ['others'],
+// 			summary: 'Get all purchase',
+// 			description: 'Get all purchase',
+// 			responses: {
+// 				200: {
+// 					description: 'Success',
+// 					content: {
+// 						'application/json': {
+// 							schema: {
+// 								type: 'object',
+// 								properties: {
+// 									value: SE.uuid(),
+// 									label: SE.string('purchase'),
+// 								},
+// 							},
+// 						},
+// 					},
+// 				},
+// 			},
+// 		},
+// 	},
+// };
 
-const pathStock = {
-	'/other/stock/value/label': {
-		get: {
-			tags: ['others'],
-			summary: 'Get all stock',
-			description: 'Get all stock',
-			responses: {
-				200: {
-					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
-				},
-			},
-		},
-	},
-};
+// const pathStock = {
+// 	'/other/stock/value/label': {
+// 		get: {
+// 			tags: ['others'],
+// 			summary: 'Get all stock',
+// 			description: 'Get all stock',
+// 			responses: {
+// 				200: {
+// 					description: 'Success',
+// 					content: {
+// 						'application/json': {
+// 							schema: {
+// 								type: 'object',
+// 								properties: {
+// 									value: SE.uuid(),
+// 									label: SE.string('stock'),
+// 								},
+// 							},
+// 						},
+// 					},
+// 				},
+// 			},
+// 		},
+// 	},
+// };
 
-const pathPurchaseEntry = {
-	'/other/purchase-entry/value/label': {
-		get: {
-			tags: ['others'],
-			summary: 'Get all purchase entry',
-			description: 'Get all purchase entry',
-			responses: {
-				200: {
-					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
-				},
-			},
-		},
-	},
-};
+// const pathPurchaseEntry = {
+// 	'/other/purchase-entry/value/label': {
+// 		get: {
+// 			tags: ['others'],
+// 			summary: 'Get all purchase entry',
+// 			description: 'Get all purchase entry',
+// 			responses: {
+// 				200: {
+// 					description: 'Success',
+// 					content: {
+// 						'application/json': {
+// 							schema: {
+// 								type: 'object',
+// 								properties: {
+// 									value: SE.uuid(),
+// 									label: SE.string('purchase entry'),
+// 								},
+// 							},
+// 						},
+// 					},
+// 				},
+// 			},
+// 		},
+// 	},
+// };
 
 const pathWarehouse = {
 	'/other/warehouse/value/label': {
@@ -220,12 +270,17 @@ const pathWarehouse = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('warehouse'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -241,12 +296,17 @@ const pathRoom = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('room'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -262,12 +322,17 @@ const pathRack = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('rack'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -283,12 +348,17 @@ const pathFloor = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('floor'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -304,12 +374,17 @@ const pathBox = {
 			responses: {
 				200: {
 					description: 'Success',
-					content: SED({
-						data: SE.array({
-							value: SE.string(),
-							label: SE.string(),
-						}),
-					}),
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('box'),
+								},
+							},
+						},
+					},
 				},
 			},
 		},
@@ -324,9 +399,6 @@ export const pathOthers = {
 	...pathVendor,
 	...pathProduct,
 	...pathBranch,
-	...pathPurchase,
-	...pathStock,
-	...pathPurchaseEntry,
 	...pathWarehouse,
 	...pathRoom,
 	...pathRack,

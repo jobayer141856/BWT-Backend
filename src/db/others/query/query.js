@@ -234,23 +234,22 @@ export async function selectFloor(req, res, next) {
 }
 
 export async function selectBox(req, res, next) {
-    const boxPromise = db
-        .select({
-            value: storeSchema.box.uuid,
-            label: storeSchema.box.name,
-        })
-        .from(storeSchema.box);
+	const boxPromise = db
+		.select({
+			value: storeSchema.box.uuid,
+			label: storeSchema.box.name,
+		})
+		.from(storeSchema.box);
 
-    try {
-        const data = await boxPromise;
-        const toast = {
-            status: 200,
-            type: 'select all',
-            message: 'Box list',
-        };
-        return await res.status(200).json({ toast, data });
-    } catch (error) {
-        next(error);
-    }
+	try {
+		const data = await boxPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Box list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
 }
-
