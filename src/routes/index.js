@@ -1,5 +1,6 @@
 import express from 'express';
 import { hrRouter } from '../db/hr/route.js';
+import { storeRouter } from '../db/store/route.js';
 
 const route = express.Router();
 
@@ -14,7 +15,10 @@ const route = express.Router();
 // WARNING: Add your routes here
 // REVIEW: Add your routes here
 
-// hr routes
+//* hr routes
 route.use('/hr', hrRouter);
+
+//* store routes
+route.use('/store', storeRouter);
 
 export default route;
