@@ -11,7 +11,7 @@ import { pathStore } from './db/store/swagger/route.js';
 
 //* Others
 
-import { tagOthers, pathOthers } from './db/others/swagger/route.js';
+import { pathOthers, tagOthers } from './db/others/swagger/route.js';
 
 const tags = [...tagHr, ...tagStore, ...tagOthers];
 
@@ -32,9 +32,9 @@ const swaggerSpec = swaggerJSDoc({
 		basePath: SERVER_URL,
 		openapi: '3.0.0',
 		info: {
-			title: 'FZL ERP API',
-			description: 'FZL API Documentation',
-			contact: { name: 'RBR', email: 'rafsan@fortunezip.com' },
+			title: 'BWT API',
+			description: 'BWT API Documentation',
+			contact: { name: 'SynapTech Team', email: 'rafsan@fortunezip.com' },
 			version: '0.1.1',
 		},
 		servers: [
