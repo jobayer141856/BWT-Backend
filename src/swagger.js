@@ -1,18 +1,24 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import { PRODUCTION_URL, SERVER_URL } from './lib/secret.js';
 
-// HR
+//* HR
 import { defHr, tagHr } from './db/hr/swagger/def.js';
 import { pathHr } from './db/hr/swagger/route.js';
 
-const tags = [...tagHr];
+//* Store
+import { defStore, tagStore } from './db/store/swagger/def.js';
+import { pathStore } from './db/store/swagger/route.js';
+
+const tags = [...tagHr, ...tagStore];
 
 const definitions = {
 	hr: defHr,
+	store: defStore,
 };
 
 const paths = {
 	...pathHr,
+	...pathStore,
 };
 
 const swaggerSpec = swaggerJSDoc({

@@ -60,6 +60,11 @@ const SE = {
 		type: 'array',
 		items,
 	}),
+	type_enum: (enumVal = ['product']) => ({
+		type: 'string',
+		enum: enumVal,
+		default: enumVal[0],
+	}),
 
 	// * Others
 	xml: (name = '') => ({ name }),
