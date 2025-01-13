@@ -3,15 +3,15 @@ import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 
-import { purchaseEntry, stock } from '../schema.js';
+import { purchase_entry, stock } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const purchaseEntryPromise = db
-		.insert(purchaseEntry)
+		.insert(purchase_entry)
 		.values(req.body)
-		.returning({ insertedUuid: purchaseEntry.uuid });
+		.returning({ insertedUuid: purchase_entry.uuid });
 
 	try {
 		const data = await purchaseEntryPromise;
@@ -31,10 +31,10 @@ export async function update(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const purchaseEntryPromise = db
-		.update(purchaseEntry)
+		.update(purchase_entry)
 		.set(req.body)
-		.where(eq(purchaseEntry.uuid, req.params.uuid))
-		.returning({ updatedUuid: purchaseEntry.uuid });
+		.where(eq(purchase_entry.uuid, req.params.uuid))
+		.returning({ updatedUuid: purchase_entry.uuid });
 
 	try {
 		const data = await purchaseEntryPromise;
@@ -54,9 +54,9 @@ export async function remove(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const purchaseEntryPromise = db
-		.delete(purchaseEntry)
-		.where(eq(purchaseEntry.uuid, req.params.uuid))
-		.returning({ deletedUuid: purchaseEntry.uuid });
+		.delete(purchase_entry)
+		.where(eq(purchase_entry.uuid, req.params.uuid))
+		.returning({ deletedUuid: purchase_entry.uuid });
 
 	try {
 		const data = await purchaseEntryPromise;
@@ -75,25 +75,25 @@ export async function remove(req, res, next) {
 export async function selectAll(req, res, next) {
 	const purchaseEntryPromise = db
 		.select({
-			uuid: purchaseEntry.uuid,
-			purchase_uuid: purchaseEntry.purchase_uuid,
-			stock_uuid: purchaseEntry.stock_uuid,
-			serial_no: purchaseEntry.serial_no,
-			quantity: purchaseEntry.quantity,
-			price_per_unit: purchaseEntry.price_per_unit,
-			discount: purchaseEntry.discount,
-			created_by: purchaseEntry.created_by,
+			uuid: purchase_entry.uuid,
+			purchase_uuid: purchase_entry.purchase_uuid,
+			stock_uuid: purchase_entry.stock_uuid,
+			serial_no: purchase_entry.serial_no,
+			quantity: purchase_entry.quantity,
+			price_per_unit: purchase_entry.price_per_unit,
+			discount: purchase_entry.discount,
+			created_by: purchase_entry.created_by,
 			created_by_name: hrSchema.users.name,
-			created_at: purchaseEntry.created_at,
-			updated_at: purchaseEntry.updated_at,
-			remarks: purchaseEntry.remarks,
+			created_at: purchase_entry.created_at,
+			updated_at: purchase_entry.updated_at,
+			remarks: purchase_entry.remarks,
 		})
-		.from(purchaseEntry)
+		.from(purchase_entry)
 		.leftJoin(
 			hrSchema.users,
-			eq(purchaseEntry.created_by, hrSchema.users.uuid)
+			eq(purchase_entry.created_by, hrSchema.users.uuid)
 		)
-		.orderBy(desc(purchaseEntry.created_at));
+		.orderBy(desc(purchase_entry.created_at));
 
 	try {
 		const data = await purchaseEntryPromise;
@@ -111,25 +111,25 @@ export async function selectAll(req, res, next) {
 export async function select(req, res, next) {
 	const purchaseEntryPromise = db
 		.select({
-			uuid: purchaseEntry.uuid,
-			purchase_uuid: purchaseEntry.purchase_uuid,
-			stock_uuid: purchaseEntry.stock_uuid,
-			serial_no: purchaseEntry.serial_no,
-			quantity: purchaseEntry.quantity,
-			price_per_unit: purchaseEntry.price_per_unit,
-			discount: purchaseEntry.discount,
-			created_by: purchaseEntry.created_by,
+			uuid: purchase_entry.uuid,
+			purchase_uuid: purchase_entry.purchase_uuid,
+			stock_uuid: purchase_entry.stock_uuid,
+			serial_no: purchase_entry.serial_no,
+			quantity: purchase_entry.quantity,
+			price_per_unit: purchase_entry.price_per_unit,
+			discount: purchase_entry.discount,
+			created_by: purchase_entry.created_by,
 			created_by_name: hrSchema.users.name,
-			created_at: purchaseEntry.created_at,
-			updated_at: purchaseEntry.updated_at,
-			remarks: purchaseEntry.remarks,
+			created_at: purchase_entry.created_at,
+			updated_at: purchase_entry.updated_at,
+			remarks: purchase_entry.remarks,
 		})
-		.from(purchaseEntry)
+		.from(purchase_entry)
 		.leftJoin(
 			hrSchema.users,
-			eq(purchaseEntry.created_by, hrSchema.users.uuid)
+			eq(purchase_entry.created_by, hrSchema.users.uuid)
 		)
-		.where(eq(purchaseEntry.uuid, req.params.uuid));
+		.where(eq(purchase_entry.uuid, req.params.uuid));
 
 	try {
 		const data = await purchaseEntryPromise;
