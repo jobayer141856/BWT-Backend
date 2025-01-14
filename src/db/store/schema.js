@@ -76,6 +76,7 @@ export const product = store.table('product', {
 	category_uuid: defaultUUID('category_uuid').references(() => category.uuid),
 	brand_uuid: defaultUUID('brand_uuid').references(() => brand.uuid),
 	size_uuid: defaultUUID('size_uuid').references(() => size.uuid),
+	name: text('name').notNull(),
 	warranty_days: integer('warranty_days').default(null),
 	service_warranty_days: integer('service_warranty_days').notNull(),
 	type: typeEnum('type'),

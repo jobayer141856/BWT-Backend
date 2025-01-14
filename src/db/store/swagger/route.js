@@ -515,6 +515,7 @@ export const pathStoreProduct = {
 			responses: {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
+					name: SE.string('product_name'),
 					brand_uuid: SE.uuid(),
 					brand_name: SE.string('brand_name'),
 					category_uuid: SE.uuid(),
@@ -564,6 +565,7 @@ export const pathStoreProduct = {
 			responses: {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
+					name: SE.string('product_name'),
 					brand_uuid: SE.uuid(),
 					brand_name: SE.string('brand_name'),
 					category_uuid: SE.uuid(),

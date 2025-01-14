@@ -1,6 +1,49 @@
 import db from '../../index.js';
 
 import * as storeSchema from '../../store/schema.js';
+import * as hrSchema from '../../hr/schema.js';
+
+export async function selectDesignation(req, res, next) {
+	const designationPromise = db
+		.select({
+			value: hrSchema.designation.uuid,
+			label: hrSchema.designation.designation,
+		})
+		.from(hrSchema.designation);
+
+	try {
+		const data = await designationPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Designation list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectDepartment(req, res, next) {
+	const departmentPromise = db
+		.select({
+			value: hrSchema.department.uuid,
+			label: hrSchema.department.department,
+		})
+		.from(hrSchema.department);
+
+	try {
+		const data = await departmentPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Department list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
 
 export async function selectGroup(req, res, next) {
 	const groupPromise = db
