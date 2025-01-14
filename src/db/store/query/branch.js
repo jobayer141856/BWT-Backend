@@ -90,7 +90,13 @@ export async function selectAll(req, res, next) {
 
 	try {
 		const data = await branchPromise;
-		return res.status(200).json(data);
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'branch list',
+		};
+
+		return res.status(200).json({ toast, data });
 	} catch (error) {
 		next(error);
 	}
