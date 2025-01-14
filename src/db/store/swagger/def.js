@@ -82,12 +82,13 @@ const defVendor = SED({
 });
 
 export const defProduct = SED({
-	required: ['uuid', 'created_at', 'type', 'service_warranty_days'],
+	required: ['uuid', 'name', 'created_at', 'type', 'service_warranty_days'],
 	properties: {
 		uuid: SE.uuid(),
 		category_uuid: SE.uuid(),
 		brand_uuid: SE.uuid(),
 		size_uuid: SE.uuid(),
+		name: SE.string('Product 1'),
 		warranty_days: SE.integer(),
 		service_warranty_days: SE.integer(),
 		type: SE.string('product'),

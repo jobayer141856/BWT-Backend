@@ -1,6 +1,58 @@
 import SE, { SED } from '../../../util/swagger_example.js';
 
 import { Router } from 'express';
+
+const pathDesignation = {
+	'/other/designation/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all designation',
+			description: 'Get all designation',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('designation'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+const pathDepartment = {
+	'/other/department/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all department',
+			description: 'Get all department',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('department'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
 const pathGroup = {
 	'/other/group/value/label': {
 		get: {
@@ -392,6 +444,8 @@ const pathBox = {
 };
 
 export const pathOthers = {
+	...pathDesignation,
+	...pathDepartment,
 	...pathGroup,
 	...pathCategory,
 	...pathBrand,

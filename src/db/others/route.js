@@ -6,6 +6,12 @@ const otherRouter = Router();
 
 //* others routes *//
 
+// designation routes
+otherRouter.get('/designation/value/label', otherOperations.selectDesignation);
+
+// department routes
+otherRouter.get('/department/value/label', otherOperations.selectDepartment);
+
 // group routes
 otherRouter.get('/group/value/label', otherOperations.selectGroup);
 

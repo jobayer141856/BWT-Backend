@@ -76,6 +76,7 @@ export async function selectAll(req, res, next) {
 	const productPromise = db
 		.select({
 			uuid: product.uuid,
+			name: product.name,
 			category_uuid: product.category_uuid,
 			category_name: category.name,
 			brand_uuid: product.brand_uuid,
@@ -116,6 +117,7 @@ export async function select(req, res, next) {
 	const productPromise = db
 		.select({
 			uuid: product.uuid,
+			name: product.name,
 			category_uuid: product.category_uuid,
 			category_name: category.name,
 			brand_uuid: product.brand_uuid,
