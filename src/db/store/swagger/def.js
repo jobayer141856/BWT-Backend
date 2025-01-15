@@ -1,4 +1,5 @@
 import SE, { SED } from '../../../util/swagger_example.js';
+import { warehouse } from '../schema.js';
 
 const defGroup = SED({
 	required: ['uuid', 'name', 'created_at'],
@@ -146,7 +147,19 @@ export const defStock = SED({
 });
 
 export const defPurchaseEntry = SED({
-	required: ['uuid', 'created_at', 'purchase_uuid', 'stock_uuid'],
+	required: [
+		'uuid',
+		'created_at',
+		'purchase_uuid',
+		'stock_uuid',
+		'quantity',
+		'price_per_unit',
+		'warehouse_uuid',
+		'room_uuid',
+		'rack_uuid',
+		'floor_uuid',
+		'box_uuid',
+	],
 	properties: {
 		uuid: SE.uuid(),
 		purchase_uuid: SE.uuid(),
@@ -155,6 +168,11 @@ export const defPurchaseEntry = SED({
 		quantity: SE.number(),
 		price_per_unit: SE.number(),
 		discount: SE.number(),
+		warehouse_uuid: SE.uuid(),
+		room_uuid: SE.uuid(),
+		rack_uuid: SE.uuid(),
+		floor_uuid: SE.uuid(),
+		box_uuid: SE.uuid(),
 		created_by: SE.uuid(),
 		created_at: SE.date_time(),
 		updated_at: SE.date_time(),
