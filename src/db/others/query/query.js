@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import db from '../../index.js';
 
 import * as storeSchema from '../../store/schema.js';
@@ -185,6 +186,32 @@ export async function selectBranch(req, res, next) {
 			status: 200,
 			type: 'select all',
 			message: 'Branch list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectStock(req, res, next) {
+	const stockPromise = db
+		.select({
+			value: storeSchema.stock.uuid,
+			label: sql`CONCAT(
+                'SS',
+                TO_CHAR(${storeSchema.stock.created_at}, 'YY'),
+                ' - ',
+                TO_CHAR(${storeSchema.stock.id}, 'FM0000')
+			)`,
+		})
+		.from(storeSchema.stock);
+
+	try {
+		const data = await stockPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Stock list',
 		};
 		return await res.status(200).json({ toast, data });
 	} catch (error) {

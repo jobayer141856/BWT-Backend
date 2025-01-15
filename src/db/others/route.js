@@ -37,7 +37,7 @@ otherRouter.get('/branch/value/label', otherOperations.selectBranch);
 // otherRouter.get('/purchase/value/label', otherOperations.selectPurchase);
 
 // stock routes
-// otherRouter.get('/stock/value/label', otherOperations.selectStock);
+otherRouter.get('/stock/value/label', otherOperations.selectStock);
 
 // purchase entry routes
 // otherRouter.get(
