@@ -90,6 +90,7 @@ export async function selectAll(req, res, next) {
 		})
 		.from(stock)
 		.leftJoin(hrSchema.users, eq(stock.created_by, hrSchema.users.uuid))
+		.leftJoin(product, eq(stock.product_uuid, product.uuid))
 		.orderBy(desc(stock.created_at));
 
 	try {
@@ -123,6 +124,7 @@ export async function select(req, res, next) {
 		})
 		.from(stock)
 		.leftJoin(hrSchema.users, eq(stock.created_by, hrSchema.users.uuid))
+		.leftJoin(product, eq(stock.product_uuid, product.uuid))
 		.where(eq(stock.uuid, req.params.uuid));
 
 	try {
