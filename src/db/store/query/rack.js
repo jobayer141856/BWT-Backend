@@ -117,6 +117,8 @@ export async function select(req, res, next) {
 			remarks: rack.remarks,
 		})
 		.from(rack)
+		.leftJoin(room, eq(rack.room_uuid, room.uuid))
+		.leftJoin(hrSchema.users, eq(rack.created_by, hrSchema.users.uuid))
 		.where(eq(rack.uuid, req.params.uuid));
 
 	try {
