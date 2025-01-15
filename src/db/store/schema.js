@@ -196,4 +196,50 @@ export const box = store.table('box', {
 	remarks: text('remarks').default(null),
 });
 
+export const purchase_return = store.table('purchase_return', {
+	uuid: uuid_primary,
+	id: serial('id').notNull().unique(),
+	purchase_uuid: defaultUUID('purchase_uuid').references(() => purchase.uuid),
+	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+export const purchase_return_entry = store.table('purchase_return_entry', {
+	uuid: uuid_primary,
+	purchase_return_uuid: defaultUUID('purchase_return_uuid').references(
+		() => purchase_return.uuid
+	),
+	product_uuid: defaultUUID('product_uuid').references(() => product.uuid),
+	quantity: PG_DECIMAL('quantity').notNull(),
+	price_per_unit: PG_DECIMAL('price_per_unit').notNull(),
+	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+export const internal_transfer = store.table('internal_transfer', {
+	uuid: uuid_primary,
+	id: serial('id').notNull().unique(),
+	stock_uuid: defaultUUID('stock_uuid').references(() => stock.uuid),
+	from_branch_uuid: defaultUUID('from_branch_uuid').references(
+		() => branch.uuid
+	),
+	to_branch_uuid: defaultUUID('to_branch_uuid').references(() => branch.uuid),
+	warehouse_uuid: defaultUUID('warehouse_uuid').references(
+		() => warehouse.uuid
+	),
+	room_uuid: defaultUUID('room_uuid').references(() => room.uuid),
+	rack_uuid: defaultUUID('rack_uuid').references(() => rack.uuid),
+	floor_uuid: defaultUUID('floor_uuid').references(() => floor.uuid),
+	box_uuid: defaultUUID('box_uuid').references(() => box.uuid),
+	quantity: PG_DECIMAL('quantity').notNull(),
+	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
 export default store;
