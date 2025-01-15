@@ -78,13 +78,6 @@ export async function selectAll(req, res, next) {
 	const purchaseReturnEntryPromise = db
 		.select({
 			uuid: purchase_return_entry.uuid,
-			id: purchase_return_entry.id,
-			purchase_return_entry_id: sql`CONCAT(
-                        'SPRE',
-                            TO_CHAR(${purchase_return_entry.created_at}, 'YY'),
-                            ' - ',
-                            TO_CHAR(${purchase_return_entry.id}, 'FM0000')
-                        )`,
 			purchase_return_uuid: purchase_return_entry.purchase_return_uuid,
 			purchase_return_id: sql`CONCAT(
                         'SPR',
@@ -136,13 +129,6 @@ export async function select(req, res, next) {
 	const purchaseReturnEntryPromise = db
 		.select({
 			uuid: purchase_return_entry.uuid,
-			id: purchase_return_entry.id,
-			purchase_return_entry_id: sql`CONCAT(
-                        'SPRE',
-                            TO_CHAR(${purchase_return_entry.created_at}, 'YY'),
-                            ' - ',
-                            TO_CHAR(${purchase_return_entry.id}, 'FM0000')
-                        )`,
 			purchase_return_uuid: purchase_return_entry.purchase_return_uuid,
 			purchase_return_id: sql`CONCAT(
                         'SPR',
@@ -196,13 +182,6 @@ export async function selectByPurchaseReturnUuid(req, res, next) {
 	const purchaseReturnEntryPromise = db
 		.select({
 			uuid: purchase_return_entry.uuid,
-			id: purchase_return_entry.id,
-			purchase_return_entry_id: sql`CONCAT(
-                        'SPRE',
-                            TO_CHAR(${purchase_return_entry.created_at}, 'YY'),
-                            ' - ',
-                            TO_CHAR(${purchase_return_entry.id}, 'FM0000')
-                        )`,
 			purchase_return_uuid: purchase_return_entry.purchase_return_uuid,
 			purchase_return_id: sql`CONCAT(
                         'SPR',

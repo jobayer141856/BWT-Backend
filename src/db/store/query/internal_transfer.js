@@ -13,6 +13,8 @@ import {
 	rack,
 	stock,
 	warehouse,
+	room,
+	floor,
 } from '../schema.js';
 
 const fromBranch = alias(branch, 'from_branch');

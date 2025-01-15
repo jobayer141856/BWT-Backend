@@ -251,6 +251,74 @@ export const defBox = SED({
 	xml: 'Store/Box',
 });
 
+export const defPurchaseReturn = SED({
+	required: ['uuid', 'created_at', 'purchase_uuid'],
+	properties: {
+		uuid: SE.uuid(),
+		purchase_uuid: SE.uuid(),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Store/PurchaseReturn',
+});
+
+export const defPurchaseReturnEntry = SED({
+	required: [
+		'uuid',
+		'created_at',
+		'purchase_entry_uuid',
+		'quantity',
+		'price_per_unit',
+	],
+	properties: {
+		uuid: SE.uuid(),
+		purchase_return_uuid: SE.uuid(),
+		quantity: SE.number(),
+		price_per_unit: SE.number(),
+		discount: SE.number(),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Store/PurchaseReturnEntry',
+});
+
+export const defInternalTransfer = SED({
+	required: [
+		'uuid',
+		'created_at',
+		'stock_uuid',
+		'from_warehouse_uuid',
+		'to_warehouse_uuid',
+		'quantity',
+		'warehouse_uuid',
+		'room_uuid',
+		'rack_uuid',
+		'floor_uuid',
+		'box_uuid',
+	],
+	properties: {
+		uuid: SE.uuid(),
+		stock_uuid: SE.uuid(),
+		from_warehouse_uuid: SE.uuid(),
+		to_warehouse_uuid: SE.uuid(),
+		warehouse_uuid: SE.uuid(),
+		room_uuid: SE.uuid(),
+		rack_uuid: SE.uuid(),
+		floor_uuid: SE.uuid(),
+		box_uuid: SE.uuid(),
+		quantity: SE.number(),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Store/InternalTransfer',
+});
+
 //* Marge all
 export const defStore = {
 	group: defGroup,
@@ -268,6 +336,9 @@ export const defStore = {
 	rack: defRack,
 	floor: defFloor,
 	box: defBox,
+	purchase_return: defPurchaseReturn,
+	purchase_return_entry: defPurchaseReturnEntry,
+	internal_transfer: defInternalTransfer,
 };
 
 //* Tag
@@ -332,5 +403,17 @@ export const tagStore = [
 	{
 		name: 'store.box',
 		description: 'Operations about box',
+	},
+	{
+		name: 'store.purchase_return',
+		description: 'Operations about purchase_return',
+	},
+	{
+		name: 'store.purchase_return_entry',
+		description: 'Operations about purchase_return_entry',
+	},
+	{
+		name: 'store.internal_transfer',
+		description: 'Operations about internal_transfer',
 	},
 ];

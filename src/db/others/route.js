@@ -60,4 +60,24 @@ otherRouter.get('/floor/value/label', otherOperations.selectFloor);
 // box routes
 otherRouter.get('/box/value/label', otherOperations.selectBox);
 
+// purchase return routes
+otherRouter.get(
+	'/purchase-return/value/label',
+	otherOperations.selectPurchaseReturn
+);
+
+// purchase return entry routes
+
+// otherRouter.get(
+// 	'/purchase-return-entry/value/label',
+// 	otherOperations.selectPurchaseReturnEntry
+// );
+
+// internal transfer routes
+
+otherRouter.get(
+	'/internal-transfer/value/label',
+	otherOperations.selectInternalTransfer
+);
+
 export { otherRouter };

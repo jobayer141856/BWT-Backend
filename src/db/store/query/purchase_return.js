@@ -178,6 +178,7 @@ export async function selectPurchaseReturnEntryDetailsByPurchaseReturnUuid(
 	if (!(await validateRequest(req, next))) return;
 
 	const { purchase_return_uuid } = req.params;
+	//console.log('purchase_return_uuid', purchase_return_uuid);
 
 	try {
 		const api = await createApi(req);
@@ -191,8 +192,8 @@ export async function selectPurchaseReturnEntryDetailsByPurchaseReturnUuid(
 				});
 
 		const [purchase_return, purchase_return_entry] = await Promise.all([
-			fetchData('/store/purchase_return'),
-			fetchData('/store/purchase_return_entry/by'),
+			fetchData('/store/purchase-return'),
+			fetchData('/store/purchase-return-entry/by'),
 		]);
 
 		const response = {
