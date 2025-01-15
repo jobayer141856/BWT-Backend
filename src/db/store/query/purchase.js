@@ -147,7 +147,6 @@ export async function selectPurchaseEntryDetailsByPurchaseUuid(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const { purchase_uuid } = req.params;
-	console.log('purchase_uuid', purchase_uuid);
 
 	try {
 		const api = await createApi(req);
@@ -162,8 +161,10 @@ export async function selectPurchaseEntryDetailsByPurchaseUuid(req, res, next) {
 			fetchData('/store/purchase-entry/by'),
 		]);
 
+		//console.log('Purchase data:', purchase);
+		//console.log('Purchase entry data:', purchase_entry);
 		const response = {
-			...(purchase?.data?.data?.[0] || []),
+			...purchase?.data?.data,
 			purchase_entry: purchase_entry?.data?.data || [],
 		};
 
