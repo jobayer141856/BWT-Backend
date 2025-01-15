@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
@@ -77,6 +77,7 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: stock.uuid,
 			id: stock.id,
+			stock_id: sql`CONCAT('SS',TO_CHAR(${stock.created_at}, 'YY'), ' - ', TO_CHAR(${stock.id}, 'FM0000'))`,
 			product_uuid: stock.product_uuid,
 			product_name: product.name,
 			warehouse_1: stock.warehouse_1,
@@ -111,6 +112,7 @@ export async function select(req, res, next) {
 		.select({
 			uuid: stock.uuid,
 			id: stock.id,
+			stock_id: sql`CONCAT('SS',TO_CHAR(${stock.created_at}, 'YY'), ' - ', TO_CHAR(${stock.id}, 'FM0000'))`,
 			product_uuid: stock.product_uuid,
 			product_name: product.name,
 			warehouse_1: stock.warehouse_1,

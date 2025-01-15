@@ -1,6 +1,7 @@
 import { desc, eq } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
+import { decimalToNumber } from '../../variables.js';
 import * as hrSchema from '../../hr/schema.js';
 
 import {
@@ -89,9 +90,9 @@ export async function selectAll(req, res, next) {
 			purchase_uuid: purchase_entry.purchase_uuid,
 			stock_uuid: purchase_entry.stock_uuid,
 			serial_no: purchase_entry.serial_no,
-			quantity: purchase_entry.quantity,
-			price_per_unit: purchase_entry.price_per_unit,
-			discount: purchase_entry.discount,
+			quantity: decimalToNumber(purchase_entry.quantity),
+			price_per_unit: decimalToNumber(purchase_entry.price_per_unit),
+			discount: decimalToNumber(purchase_entry.discount),
 			warehouse_uuid: purchase_entry.warehouse_uuid,
 			warehouse_name: warehouse.name,
 			room_uuid: purchase_entry.room_uuid,
@@ -142,9 +143,9 @@ export async function select(req, res, next) {
 			purchase_uuid: purchase_entry.purchase_uuid,
 			stock_uuid: purchase_entry.stock_uuid,
 			serial_no: purchase_entry.serial_no,
-			quantity: purchase_entry.quantity,
-			price_per_unit: purchase_entry.price_per_unit,
-			discount: purchase_entry.discount,
+			quantity: decimalToNumber(purchase_entry.quantity),
+			price_per_unit: decimalToNumber(purchase_entry.price_per_unit),
+			discount: decimalToNumber(purchase_entry.discount),
 			warehouse_uuid: purchase_entry.warehouse_uuid,
 			warehouse_name: warehouse.name,
 			room_uuid: purchase_entry.room_uuid,
@@ -195,9 +196,9 @@ export async function selectByPurchaseUuid(req, res, next) {
 			purchase_uuid: purchase_entry.purchase_uuid,
 			stock_uuid: purchase_entry.stock_uuid,
 			serial_no: purchase_entry.serial_no,
-			quantity: purchase_entry.quantity,
-			price_per_unit: purchase_entry.price_per_unit,
-			discount: purchase_entry.discount,
+			quantity: decimalToNumber(purchase_entry.quantity),
+			price_per_unit: decimalToNumber(purchase_entry.price_per_unit),
+			discount: decimalToNumber(purchase_entry.discount),
 			warehouse_uuid: purchase_entry.warehouse_uuid,
 			warehouse_name: warehouse.name,
 			room_uuid: purchase_entry.room_uuid,
