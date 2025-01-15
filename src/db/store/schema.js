@@ -131,6 +131,13 @@ export const purchase_entry = store.table('purchase_entry', {
 	quantity: PG_DECIMAL('quantity').notNull(),
 	price_per_unit: PG_DECIMAL('price_per_unit').notNull(),
 	discount: PG_DECIMAL('discount').default(0),
+	warehouse_uuid: defaultUUID('warehouse_uuid').references(
+		() => warehouse.uuid
+	),
+	room_uuid: defaultUUID('room_uuid').references(() => room.uuid),
+	rack_uuid: defaultUUID('rack_uuid').references(() => rack.uuid),
+	floor_uuid: defaultUUID('floor_uuid').references(() => floor.uuid),
+	box_uuid: defaultUUID('box_uuid').references(() => box.uuid),
 	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
