@@ -3,7 +3,7 @@ import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 
-import { stock } from '../schema.js';
+import { product, stock } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -78,6 +78,7 @@ export async function selectAll(req, res, next) {
 			uuid: stock.uuid,
 			id: stock.id,
 			product_uuid: stock.product_uuid,
+			product_name: product.name,
 			warehouse_1: stock.warehouse_1,
 			warehouse_2: stock.warehouse_2,
 			warehouse_3: stock.warehouse_3,
@@ -110,6 +111,7 @@ export async function select(req, res, next) {
 			uuid: stock.uuid,
 			id: stock.id,
 			product_uuid: stock.product_uuid,
+			product_name: product.name,
 			warehouse_1: stock.warehouse_1,
 			warehouse_2: stock.warehouse_2,
 			warehouse_3: stock.warehouse_3,
