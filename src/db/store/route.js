@@ -16,6 +16,7 @@ import * as rackOperations from './query/rack.js';
 import * as roomOperations from './query/room.js';
 import * as stockOperations from './query/stock.js';
 import * as warehouseOperations from './query/warehouse.js';
+import store from './schema.js';
 
 const storeRouter = Router();
 
@@ -130,6 +131,10 @@ storeRouter.delete(
 	validateUuidParam(),
 	purchaseEntryOperations.remove
 );
+storeRouter.get(
+	'/purchase-entry/by/:purchase_uuid',
+	purchaseEntryOperations.selectByPurchaseUuid
+);
 
 //* purchase routes *//
 
@@ -145,6 +150,10 @@ storeRouter.delete(
 	'/purchase/:uuid',
 	validateUuidParam(),
 	purchaseOperations.remove
+);
+storeRouter.get(
+	'/purchase/purchase-entry-details/by/:purchase_uuid',
+	purchaseOperations.selectPurchaseEntryDetailsByPurchaseUuid
 );
 
 //* rack routes *//

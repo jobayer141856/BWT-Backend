@@ -2,7 +2,7 @@ import { desc, eq } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
-
+import { createApi } from '../../../util/api.js';
 import { branch, purchase, vendor } from '../schema.js';
 
 export async function insert(req, res, next) {
@@ -138,6 +138,42 @@ export async function select(req, res, next) {
 			message: 'purchase',
 		};
 		return res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectPurchaseEntryDetailsByPurchaseUuid(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { purchase_uuid } = req.params;
+	console.log('purchase_uuid', purchase_uuid);
+
+	try {
+		const api = await createApi(req);
+
+		const fetchData = async (endpoint) =>
+			await api
+				.get(`${endpoint}/${purchase_uuid}`)
+				.then((response) => response);
+
+		const [purchase, purchase_entry] = await Promise.all([
+			fetchData('/store/purchase'),
+			fetchData('/store/purchase-entry/by'),
+		]);
+
+		const response = {
+			...(purchase?.data?.data?.[0] || []),
+			purchase_entry: purchase_entry?.data?.data || [],
+		};
+
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'purchase entry details',
+		};
+
+		return res.status(200).json({ toast, data: response });
 	} catch (error) {
 		next(error);
 	}
