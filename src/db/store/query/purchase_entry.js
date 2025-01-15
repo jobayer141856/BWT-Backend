@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import { decimalToNumber } from '../../variables.js';
@@ -89,6 +89,7 @@ export async function selectAll(req, res, next) {
 			uuid: purchase_entry.uuid,
 			purchase_uuid: purchase_entry.purchase_uuid,
 			stock_uuid: purchase_entry.stock_uuid,
+			stock_id: sql`CONCAT('SS',TO_CHAR(${stock.created_at}, 'YY'), ' - ', TO_CHAR(${stock.id}, 'FM0000'))`,
 			serial_no: purchase_entry.serial_no,
 			quantity: decimalToNumber(purchase_entry.quantity),
 			price_per_unit: decimalToNumber(purchase_entry.price_per_unit),
@@ -119,6 +120,7 @@ export async function selectAll(req, res, next) {
 		.leftJoin(rack, eq(purchase_entry.rack_uuid, rack.uuid))
 		.leftJoin(floor, eq(purchase_entry.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))
+		.leftJoin(stock, eq(purchase_entry.stock_uuid, stock.uuid))
 		.orderBy(desc(purchase_entry.created_at));
 
 	try {
@@ -142,6 +144,7 @@ export async function select(req, res, next) {
 			uuid: purchase_entry.uuid,
 			purchase_uuid: purchase_entry.purchase_uuid,
 			stock_uuid: purchase_entry.stock_uuid,
+			stock_id: sql`CONCAT('SS',TO_CHAR(${stock.created_at}, 'YY'), ' - ', TO_CHAR(${stock.id}, 'FM0000'))`,
 			serial_no: purchase_entry.serial_no,
 			quantity: decimalToNumber(purchase_entry.quantity),
 			price_per_unit: decimalToNumber(purchase_entry.price_per_unit),
@@ -172,6 +175,7 @@ export async function select(req, res, next) {
 		.leftJoin(rack, eq(purchase_entry.rack_uuid, rack.uuid))
 		.leftJoin(floor, eq(purchase_entry.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))
+		.leftJoin(stock, eq(purchase_entry.stock_uuid, stock.uuid))
 		.where(eq(purchase_entry.uuid, req.params.uuid));
 
 	try {
@@ -195,6 +199,7 @@ export async function selectByPurchaseUuid(req, res, next) {
 			uuid: purchase_entry.uuid,
 			purchase_uuid: purchase_entry.purchase_uuid,
 			stock_uuid: purchase_entry.stock_uuid,
+			stock_id: sql`CONCAT('SS',TO_CHAR(${stock.created_at}, 'YY'), ' - ', TO_CHAR(${stock.id}, 'FM0000'))`,
 			serial_no: purchase_entry.serial_no,
 			quantity: decimalToNumber(purchase_entry.quantity),
 			price_per_unit: decimalToNumber(purchase_entry.price_per_unit),
@@ -225,6 +230,7 @@ export async function selectByPurchaseUuid(req, res, next) {
 		.leftJoin(rack, eq(purchase_entry.rack_uuid, rack.uuid))
 		.leftJoin(floor, eq(purchase_entry.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))
+		.leftJoin(stock, eq(purchase_entry.stock_uuid, stock.uuid))
 		.where(eq(purchase_entry.purchase_uuid, req.params.purchase_uuid));
 
 	try {
