@@ -2,6 +2,7 @@ import SE from '../../../util/swagger_example.js';
 import {
 	box,
 	floor,
+	purchase,
 	purchase_entry,
 	rack,
 	room,
@@ -643,6 +644,8 @@ export const pathStoreBranch = {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
 					name: SE.string('name'),
+					id: SE.integer(),
+					brand_id: SE.string('SB25-0001'),
 					created_by: SE.uuid(),
 					created_by_name: SE.string('created_by_name'),
 					created_at: SE.date_time(),
@@ -681,6 +684,8 @@ export const pathStoreBranch = {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
 					name: SE.string('name'),
+					id: SE.integer(),
+					brand_id: SE.string('SB25-0001'),
 					created_by: SE.uuid(),
 					created_by_name: SE.string('created_by_name'),
 					created_at: SE.date_time(),
@@ -850,10 +855,13 @@ export const pathStorePurchase = {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
 					purchase_uuid: SE.uuid(),
-					purchase_id: SE.integer(),
-					stock_uuid: SE.uuid(),
-					stock_name: SE.string('stock_name'),
-					serial_no: SE.string('serial_no'),
+					id: SE.integer(),
+					purchase_id: SE.string('SP25-0001'),
+					vendor_uuid: SE.uuid(),
+					vendor_name: SE.string('vendor_name'),
+					branch_uuid: SE.uuid(),
+					branch_name: SE.string('branch_name'),
+					date: SE.date_time(),
 					created_by: SE.uuid(),
 					created_by_name: SE.string('created_by_name'),
 					created_at: SE.date_time(),
@@ -862,7 +870,6 @@ export const pathStorePurchase = {
 						{
 							uuid: SE.uuid(),
 							purchase_uuid: SE.uuid(),
-							purchase_id: SE.integer(),
 							stock_uuid: SE.uuid(),
 							stock_name: SE.string('stock_name'),
 							serial_no: SE.string('serial_no'),
@@ -900,6 +907,8 @@ export const pathStoreStock = {
 			responses: {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
+					id: SE.integer(),
+					stock_id: SE.string('SS25-0001'),
 					product_uuid: SE.uuid(),
 					product_name: SE.string('product_name'),
 					warehouse_1: SE.number(),
@@ -941,6 +950,8 @@ export const pathStoreStock = {
 			responses: {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
+					id: SE.integer(),
+					stock_id: SE.string('SS25-0001'),
 					product_uuid: SE.uuid(),
 					product_name: SE.string('product_name'),
 					warehouse_1: SE.number(),
