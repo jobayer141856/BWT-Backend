@@ -3,7 +3,7 @@ import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 
-import { branch, warehouse } from '../schema.js';
+import { branch, brand, warehouse } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -78,7 +78,7 @@ export async function selectAll(req, res, next) {
 			uuid: warehouse.uuid,
 			name: warehouse.name,
 			branch_uuid: warehouse.branch_uuid,
-			branch_name: warehouse.branch_name,
+			branch_name: branch.name,
 			created_by: warehouse.created_by,
 			created_by_name: hrSchema.users.name,
 			created_at: warehouse.created_at,
@@ -109,7 +109,7 @@ export async function select(req, res, next) {
 			uuid: warehouse.uuid,
 			name: warehouse.name,
 			branch_uuid: warehouse.branch_uuid,
-			branch_name: warehouse.branch_name,
+			branch_name: branch.name,
 			created_by: warehouse.created_by,
 			created_by_name: hrSchema.users.name,
 			created_at: warehouse.created_at,

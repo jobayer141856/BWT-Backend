@@ -120,6 +120,7 @@ export async function select(req, res, next) {
 		})
 		.from(box)
 		.leftJoin(hrSchema.users, eq(box.created_by, hrSchema.users.uuid))
+		.leftJoin(floor, eq(box.floor_uuid, floor.uuid))
 		.where(eq(box.uuid, req.params.uuid));
 
 	try {
@@ -130,7 +131,7 @@ export async function select(req, res, next) {
 			message: 'box',
 		};
 
-		return await res.status(200).json({ toast, data : data[0] });
+		return await res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
 		next(error);
 	}
