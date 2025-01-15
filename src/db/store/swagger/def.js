@@ -92,6 +92,7 @@ export const defProduct = SED({
 		warranty_days: SE.integer(),
 		service_warranty_days: SE.integer(),
 		type: SE.string('product'),
+		is_maintaining_stock: SE.boolean(),
 		created_by: SE.uuid(),
 		created_at: SE.date_time(),
 		updated_at: SE.date_time(),
