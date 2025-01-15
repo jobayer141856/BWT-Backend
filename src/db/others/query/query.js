@@ -323,3 +323,55 @@ export async function selectBox(req, res, next) {
 		next(error);
 	}
 }
+
+export async function selectPurchaseReturn(req, res, next) {
+	const purchaseReturnPromise = db
+		.select({
+			value: storeSchema.purchase_return.uuid,
+			label: sql`CONCAT(
+				'SPR',
+				TO_CHAR(${storeSchema.purchase_return.created_at}, 'YY'),
+				' - ',
+				TO_CHAR(${storeSchema.purchase_return.id}, 'FM0000')
+			)`,
+		})
+		.from(storeSchema.purchase_return);
+
+	try {
+		const data = await purchaseReturnPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Purchase Return list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectInternalTransfer(req, res, next) {
+	const internalTransferPromise = db
+		.select({
+			value: storeSchema.internal_transfer.uuid,
+			label: sql`CONCAT(
+				'SIT',
+				TO_CHAR(${storeSchema.internal_transfer.created_at}, 'YY'),
+				' - ',
+				TO_CHAR(${storeSchema.internal_transfer.id}, 'FM0000')
+			)`,
+		})
+		.from(storeSchema.internal_transfer);
+
+	try {
+		const data = await internalTransferPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Internal Transfer list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}

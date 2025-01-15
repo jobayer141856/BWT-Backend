@@ -16,7 +16,9 @@ import * as rackOperations from './query/rack.js';
 import * as roomOperations from './query/room.js';
 import * as stockOperations from './query/stock.js';
 import * as warehouseOperations from './query/warehouse.js';
-import store from './schema.js';
+import * as purchaseReturnOperations from './query/purchase_return.js';
+import * as purchaseReturnEntryOperations from './query/purchase_return_entry.js';
+import * as internalTransferOperations from './query/internal_transfer.js';
 
 const storeRouter = Router();
 
@@ -194,6 +196,71 @@ storeRouter.delete(
 	'/warehouse/:uuid',
 	validateUuidParam(),
 	warehouseOperations.remove
+);
+
+//* purchase_return routes *//
+
+storeRouter.get('/purchase-return', purchaseReturnOperations.selectAll);
+storeRouter.get(
+	'/purchase-return/:uuid',
+	validateUuidParam(),
+	purchaseReturnOperations.select
+);
+storeRouter.post('/purchase-return', purchaseReturnOperations.insert);
+storeRouter.put('/purchase-return/:uuid', purchaseReturnOperations.update);
+storeRouter.delete(
+	'/purchase-return/:uuid',
+	validateUuidParam(),
+	purchaseReturnOperations.remove
+);
+storeRouter.get(
+	'/purchase-return/purchase-return-entry-details/by/:purchase_return_uuid',
+	purchaseReturnOperations.selectPurchaseReturnEntryDetailsByPurchaseReturnUuid
+);
+
+//* purchase_return_entry routes *//
+
+storeRouter.get(
+	'/purchase-return-entry',
+	purchaseReturnEntryOperations.selectAll
+);
+storeRouter.get(
+	'/purchase-return-entry/:uuid',
+	validateUuidParam(),
+	purchaseReturnEntryOperations.select
+);
+storeRouter.post(
+	'/purchase-return-entry',
+	purchaseReturnEntryOperations.insert
+);
+storeRouter.put(
+	'/purchase-return-entry/:uuid',
+	purchaseReturnEntryOperations.update
+);
+storeRouter.delete(
+	'/purchase-return-entry/:uuid',
+	validateUuidParam(),
+	purchaseReturnEntryOperations.remove
+);
+storeRouter.get(
+	'/purchase-return-entry/by/:purchase_return_uuid',
+	purchaseReturnEntryOperations.selectByPurchaseReturnUuid
+);
+
+//* internal_transfer routes *//
+
+storeRouter.get('/internal-transfer', internalTransferOperations.selectAll);
+storeRouter.get(
+	'/internal-transfer/:uuid',
+	validateUuidParam(),
+	internalTransferOperations.select
+);
+storeRouter.post('/internal-transfer', internalTransferOperations.insert);
+storeRouter.put('/internal-transfer/:uuid', internalTransferOperations.update);
+storeRouter.delete(
+	'/internal-transfer/:uuid',
+	validateUuidParam(),
+	internalTransferOperations.remove
 );
 
 export { storeRouter };

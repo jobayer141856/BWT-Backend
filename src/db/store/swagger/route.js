@@ -2,10 +2,12 @@ import SE from '../../../util/swagger_example.js';
 import {
 	box,
 	floor,
+	internal_transfer,
 	purchase,
 	purchase_entry,
 	rack,
 	room,
+	stock,
 	warehouse,
 } from '../schema.js';
 
@@ -1682,6 +1684,423 @@ export const pathStoreBox = {
 	},
 };
 
+export const pathStorePurchaseReturn = {
+	'/store/purchase-return': {
+		get: {
+			tags: ['store.purchase_return'],
+			summary: 'Get all store purchase returns',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					id: SE.string('SPR25-0001'),
+					purchase_uuid: SE.uuid(),
+					purchase_id: SE.string('SP25-0001'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.purchase_return'],
+			summary: 'Create a store purchase return',
+			requestBody: SE.requestBody_schema_ref('store/purchase_return'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'store/purchase_return'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/store/purchase-return/{uuid}': {
+		get: {
+			tags: ['store.purchase_return'],
+			summary: 'Get a store purchase return',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase return',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					id: SE.string('SPR25-0001'),
+					purchase_uuid: SE.uuid(),
+					purchase_id: SE.string('SP25-0001'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.purchase_return'],
+			summary: 'Update a store purchase return',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase return',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('store/purchase_return'),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/purchase_return'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.purchase_return'],
+			summary: 'Delete a store purchase return',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase return',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+	'/store/purchase-return/purchase-return-entry-details/by/{purchase_return_uuid}':
+		{
+			get: {
+				tags: ['store.purchase_return'],
+				summary:
+					'Get purchase return entry details by purchase return UUID',
+				parameters: [
+					{
+						name: 'purchase_return_uuid',
+						in: 'path',
+						description: 'UUID of the store purchase return',
+						required: true,
+						type: 'string',
+						format: 'uuid',
+					},
+				],
+				responses: {
+					200: SE.response_schema(200, {
+						uuid: SE.uuid(),
+						id: SE.string('SPR25-0001'),
+						purchase_uuid: SE.uuid(),
+						purchase_id: SE.string('SP25-0001'),
+						created_by: SE.uuid(),
+						created_by_name: SE.string('created_by_name'),
+						created_at: SE.date_time(),
+						remarks: SE.string('remarks'),
+						purchase_return_entry: [
+							{
+								uuid: SE.uuid(),
+								purchase_return_uuid: SE.uuid(),
+								purchase_return_id: SE.string('SPR25-0001'),
+								product_uuid: SE.uuid(),
+								product_name: SE.string('product_name'),
+								quantity: SE.number(),
+								price_per_unit: SE.number(),
+								created_by: SE.uuid(),
+								created_by_name: SE.string('created_by_name'),
+								created_at: SE.date_time(),
+								remarks: SE.string('remarks'),
+							},
+						],
+					}),
+					404: SE.response(404),
+				},
+			},
+		},
+};
+
+export const pathStorePurchaseReturnEntry = {
+	'/store/purchase-return-entry': {
+		get: {
+			tags: ['store.purchase_return_entry'],
+			summary: 'Get all store purchase return entries',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					purchase_return_uuid: SE.uuid(),
+					purchase_return_id: SE.string('SPR25-0001'),
+					product_uuid: SE.uuid(),
+					product_name: SE.string('product_name'),
+					quantity: SE.number(),
+					price_per_unit: SE.number(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.purchase_return_entry'],
+			summary: 'Create a store purchase return entry',
+			requestBody: SE.requestBody_schema_ref(
+				'store/purchase_return_entry'
+			),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(
+						200,
+						'store/purchase_return_entry'
+					),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/store/purchase-return-entry/{uuid}': {
+		get: {
+			tags: ['store.purchase_return_entry'],
+			summary: 'Get a store purchase return entry',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase return entry',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					purchase_return_uuid: SE.uuid(),
+					purchase_return_id: SE.string('SPR25-0001'),
+					product_uuid: SE.uuid(),
+					product_name: SE.string('product_name'),
+					quantity: SE.number(),
+					price_per_unit: SE.number(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.purchase_return_entry'],
+			summary: 'Update a store purchase return entry',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase return entry',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref(
+				'store/purchase_return_entry'
+			),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/purchase_return_entry'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.purchase_return_entry'],
+			summary: 'Delete a store purchase return entry',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store purchase return entry',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+	'/store/purchase-return-entry/by/{purchase_return_uuid}': {
+		get: {
+			tags: ['store.purchase_return_entry'],
+			summary: 'Get all store purchase return entries by purchase return',
+			parameters: [
+				{
+					name: 'purchase_return_uuid',
+					in: 'path',
+					description: 'UUID of the store purchase return',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					purchase_return_uuid: SE.uuid(),
+					purchase_return_id: SE.string('SPR25-0001'),
+					product_uuid: SE.uuid(),
+					product_name: SE.string('product_name'),
+					quantity: SE.number(),
+					price_per_unit: SE.number(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
+export const pathStoreInternalTransfer = {
+	'/store/internal-transfer': {
+		get: {
+			tags: ['store.internal_transfer'],
+			summary: 'Get all store internal transfers',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					id: SE.integer(),
+					internal_transfer_id: SE.string('SIT25-0001'),
+					stock_uuid: SE.uuid(),
+					stock_id: SE.string('SS25-0001'),
+					from_branch_uuid: SE.uuid(),
+					from_branch_name: SE.string('from_branch_name'),
+					to_branch_uuid: SE.uuid(),
+					to_branch_name: SE.string('to_branch_name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					room_uuid: SE.uuid(),
+					room_name: SE.string('room_name'),
+					rack_uuid: SE.uuid(),
+					rack_name: SE.string('rack_name'),
+					floor_uuid: SE.uuid(),
+					floor_name: SE.string('floor_name'),
+					box_uuid: SE.uuid(),
+					box_name: SE.string('box_name'),
+					quantity: SE.number(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.internal_transfer'],
+			summary: 'Create a store internal transfer',
+			requestBody: SE.requestBody_schema_ref('store/internal_transfer'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'store/internal_transfer'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/store/internal-transfer/{uuid}': {
+		get: {
+			tags: ['store.internal_transfer'],
+			summary: 'Get a store internal transfer',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store internal transfer',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					id: SE.integer(),
+					internal_transfer_id: SE.string('SIT25-0001'),
+					stock_uuid: SE.uuid(),
+					stock_id: SE.string('SS25-0001'),
+					from_branch_uuid: SE.uuid(),
+					from_branch_name: SE.string('from_branch_name'),
+					to_branch_uuid: SE.uuid(),
+					to_branch_name: SE.string('to_branch_name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					room_uuid: SE.uuid(),
+					room_name: SE.string('room_name'),
+					rack_uuid: SE.uuid(),
+					rack_name: SE.string('rack_name'),
+					floor_uuid: SE.uuid(),
+					floor_name: SE.string('floor_name'),
+					box_uuid: SE.uuid(),
+					box_name: SE.string('box_name'),
+					quantity: SE.number(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.internal_transfer'],
+			summary: 'Update a store internal transfer',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store internal transfer',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('store/internal_transfer'),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/internal_transfer'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.internal_transfer'],
+			summary: 'Delete a store internal transfer',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store internal transfer',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
 export const pathStore = {
 	...pathStoreGroup,
 	...pathStoreCategory,
@@ -1698,4 +2117,7 @@ export const pathStore = {
 	...pathStoreRack,
 	...pathStoreFloor,
 	...pathStoreBox,
+	...pathStorePurchaseReturn,
+	...pathStorePurchaseReturnEntry,
+	...pathStoreInternalTransfer,
 };

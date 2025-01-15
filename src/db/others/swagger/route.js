@@ -442,6 +442,57 @@ const pathBox = {
 		},
 	},
 };
+const pathPurchaseReturn = {
+	'/other/purchase-return/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all purchase return',
+			description: 'Get all purchase return',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('SPR25-0001'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+const pathInternalTransfer = {
+	'/other/internal-transfer/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all internal transfer',
+			description: 'Get all internal transfer',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('SIT21 - 0001'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
 
 export const pathOthers = {
 	...pathDesignation,
@@ -461,6 +512,8 @@ export const pathOthers = {
 	...pathRack,
 	...pathFloor,
 	...pathBox,
+	...pathPurchaseReturn,
+	...pathInternalTransfer,
 };
 
 export const tagOthers = [
