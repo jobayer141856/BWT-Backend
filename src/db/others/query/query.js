@@ -1,8 +1,8 @@
 import { sql } from 'drizzle-orm';
 import db from '../../index.js';
 
-import * as storeSchema from '../../store/schema.js';
 import * as hrSchema from '../../hr/schema.js';
+import * as storeSchema from '../../store/schema.js';
 
 export async function selectDesignation(req, res, next) {
 	const designationPromise = db
@@ -343,6 +343,31 @@ export async function selectPurchaseReturn(req, res, next) {
 			status: 200,
 			type: 'select all',
 			message: 'Purchase Return list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+export async function selectPurchase(req, res, next) {
+	const purchasePromise = db
+		.select({
+			value: storeSchema.purchase.uuid,
+			label: sql`CONCAT(
+				'SPR',
+				TO_CHAR(${storeSchema.purchase.created_at}, 'YY'),
+				' - ',
+				TO_CHAR(${storeSchema.purchase.id}, 'FM0000')
+			)`,
+		})
+		.from(storeSchema.purchase);
+
+	try {
+		const data = await purchasePromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Purchase list',
 		};
 		return await res.status(200).json({ toast, data });
 	} catch (error) {
