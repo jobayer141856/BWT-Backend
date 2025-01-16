@@ -65,6 +65,7 @@ otherRouter.get(
 	'/purchase-return/value/label',
 	otherOperations.selectPurchaseReturn
 );
+otherRouter.get('/purchase/value/label', otherOperations.selectPurchase);
 
 // purchase return entry routes
 
