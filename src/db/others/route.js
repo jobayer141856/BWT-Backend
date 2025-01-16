@@ -33,8 +33,8 @@ otherRouter.get('/product/value/label', otherOperations.selectProduct);
 // branch routes
 otherRouter.get('/branch/value/label', otherOperations.selectBranch);
 
-// // purchase routes
-// otherRouter.get('/purchase/value/label', otherOperations.selectPurchase);
+// purchase routes
+otherRouter.get('/purchase/value/label', otherOperations.selectPurchase);
 
 // stock routes
 otherRouter.get('/stock/value/label', otherOperations.selectStock);
@@ -65,7 +65,7 @@ otherRouter.get(
 	'/purchase-return/value/label',
 	otherOperations.selectPurchaseReturn
 );
-otherRouter.get('/purchase/value/label', otherOperations.selectPurchase);
+//otherRouter.get('/purchase/value/label', otherOperations.selectPurchase);
 
 // purchase return entry routes
 

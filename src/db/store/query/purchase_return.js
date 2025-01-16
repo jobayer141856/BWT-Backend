@@ -123,7 +123,7 @@ export async function selectAll(req, res, next) {
 
 export async function select(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
-
+	//console.log('req.params', req.params.uuid);
 	const purchaseReturnPromise = db
 		.select({
 			uuid: purchase_return.uuid,
@@ -178,7 +178,7 @@ export async function selectPurchaseReturnEntryDetailsByPurchaseReturnUuid(
 	if (!(await validateRequest(req, next))) return;
 
 	const { purchase_return_uuid } = req.params;
-	//console.log('purchase_return_uuid', purchase_return_uuid);
+	console.log('purchase_return_uuid', purchase_return_uuid);
 
 	try {
 		const api = await createApi(req);
@@ -195,7 +195,7 @@ export async function selectPurchaseReturnEntryDetailsByPurchaseReturnUuid(
 			fetchData('/store/purchase-return'),
 			fetchData('/store/purchase-return-entry/by'),
 		]);
-
+		console.log('purchase_return', purchase_return);
 		const response = {
 			...purchase_return?.data?.data,
 			purchase_return_entry: purchase_return_entry?.data?.data || [],
