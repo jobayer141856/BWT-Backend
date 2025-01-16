@@ -80,7 +80,7 @@ export async function selectAll(req, res, next) {
 			uuid: purchase_return_entry.uuid,
 			purchase_return_uuid: purchase_return_entry.purchase_return_uuid,
 			purchase_return_id: sql`CONCAT(
-                        'SPR',
+                        'SPRE',
                             TO_CHAR(${purchase_return.created_at}, 'YY'),
                             ' - ',
                             TO_CHAR(${purchase_return.id}, 'FM0000')
@@ -131,7 +131,7 @@ export async function select(req, res, next) {
 			uuid: purchase_return_entry.uuid,
 			purchase_return_uuid: purchase_return_entry.purchase_return_uuid,
 			purchase_return_id: sql`CONCAT(
-                        'SPR',
+                        'SPRE',
                             TO_CHAR(${purchase_return.created_at}, 'YY'),
                             ' - ',
                             TO_CHAR(${purchase_return.id}, 'FM0000')
@@ -184,7 +184,7 @@ export async function selectByPurchaseReturnUuid(req, res, next) {
 			uuid: purchase_return_entry.uuid,
 			purchase_return_uuid: purchase_return_entry.purchase_return_uuid,
 			purchase_return_id: sql`CONCAT(
-                        'SPR',
+                        'SPRE',
                             TO_CHAR(${purchase_return.created_at}, 'YY'),
                             ' - ',
                             TO_CHAR(${purchase_return.id}, 'FM0000')
