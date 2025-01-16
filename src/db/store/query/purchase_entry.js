@@ -12,6 +12,7 @@ import {
 	room,
 	floor,
 	rack,
+	purchase,
 } from '../schema.js';
 
 export async function insert(req, res, next) {
@@ -88,6 +89,7 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: purchase_entry.uuid,
 			purchase_uuid: purchase_entry.purchase_uuid,
+			purchase_id: sql`CONCAT('SP',TO_CHAR(${purchase.created_at}, 'YY'), ' - ', TO_CHAR(${purchase.id}, 'FM0000'))`,
 			stock_uuid: purchase_entry.stock_uuid,
 			stock_id: sql`CONCAT('SS',TO_CHAR(${stock.created_at}, 'YY'), ' - ', TO_CHAR(${stock.id}, 'FM0000'))`,
 			serial_no: purchase_entry.serial_no,
@@ -143,6 +145,7 @@ export async function select(req, res, next) {
 		.select({
 			uuid: purchase_entry.uuid,
 			purchase_uuid: purchase_entry.purchase_uuid,
+			purchase_id: sql`CONCAT('SP',TO_CHAR(${purchase.created_at}, 'YY'), ' - ', TO_CHAR(${purchase.id}, 'FM0000'))`,
 			stock_uuid: purchase_entry.stock_uuid,
 			stock_id: sql`CONCAT('SS',TO_CHAR(${stock.created_at}, 'YY'), ' - ', TO_CHAR(${stock.id}, 'FM0000'))`,
 			serial_no: purchase_entry.serial_no,
@@ -198,6 +201,7 @@ export async function selectByPurchaseUuid(req, res, next) {
 		.select({
 			uuid: purchase_entry.uuid,
 			purchase_uuid: purchase_entry.purchase_uuid,
+			purchase_id: sql`CONCAT('SP',TO_CHAR(${purchase.created_at}, 'YY'), ' - ', TO_CHAR(${purchase.id}, 'FM0000'))`,
 			stock_uuid: purchase_entry.stock_uuid,
 			stock_id: sql`CONCAT('SS',TO_CHAR(${stock.created_at}, 'YY'), ' - ', TO_CHAR(${stock.id}, 'FM0000'))`,
 			serial_no: purchase_entry.serial_no,
