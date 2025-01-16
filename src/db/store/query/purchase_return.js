@@ -196,9 +196,10 @@ export async function selectPurchaseReturnEntryDetailsByPurchaseReturnUuid(
 			fetchData('/store/purchase-return-entry/by'),
 		]);
 		console.log('purchase_return', purchase_return);
+		console.log('purchase_return_entry', purchase_return_entry);
 		const response = {
-			...purchase_return?.data?.data,
-			purchase_return_entry: purchase_return_entry?.data?.data || [],
+			...purchase_return?.data,
+			purchase_return_entry: purchase_return_entry?.data || [],
 		};
 
 		const toast = {
