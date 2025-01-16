@@ -235,31 +235,31 @@ const pathBranch = {
 	},
 };
 
-// const pathPurchase = {
-// 	'/other/purchase/value/label': {
-// 		get: {
-// 			tags: ['others'],
-// 			summary: 'Get all purchase',
-// 			description: 'Get all purchase',
-// 			responses: {
-// 				200: {
-// 					description: 'Success',
-// 					content: {
-// 						'application/json': {
-// 							schema: {
-// 								type: 'object',
-// 								properties: {
-// 									value: SE.uuid(),
-// 									label: SE.string('purchase'),
-// 								},
-// 							},
-// 						},
-// 					},
-// 				},
-// 			},
-// 		},
-// 	},
-// };
+const pathPurchase = {
+	'/other/purchase/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all purchase',
+			description: 'Get all purchase',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('SP25-0001'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
 
 const pathStock = {
 	'/other/stock/value/label': {
@@ -504,7 +504,7 @@ export const pathOthers = {
 	...pathVendor,
 	...pathProduct,
 	...pathBranch,
-	// ...pathPurchase,
+	...pathPurchase,
 	...pathStock,
 	// ...pathPurchaseEntry,
 	...pathWarehouse,
