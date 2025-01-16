@@ -80,7 +80,7 @@ export async function selectAll(req, res, next) {
 			uuid: purchase_return_entry.uuid,
 			purchase_return_uuid: purchase_return_entry.purchase_return_uuid,
 			purchase_return_id: sql`CONCAT(
-                        'SPRE',
+                        'SPR',
                             TO_CHAR(${purchase_return.created_at}, 'YY'),
                             ' - ',
                             TO_CHAR(${purchase_return.id}, 'FM0000')
