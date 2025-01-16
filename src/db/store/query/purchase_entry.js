@@ -235,6 +235,7 @@ export async function selectByPurchaseUuid(req, res, next) {
 		.leftJoin(floor, eq(purchase_entry.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))
 		.leftJoin(stock, eq(purchase_entry.stock_uuid, stock.uuid))
+		.leftJoin(purchase, eq(purchase_entry.purchase_uuid, purchase.uuid))
 		.where(eq(purchase_entry.purchase_uuid, req.params.purchase_uuid));
 
 	try {
