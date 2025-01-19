@@ -3,7 +3,7 @@ import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 
-import { rack, room } from '../schema.js';
+import { rack, warehouse } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -77,8 +77,8 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: rack.uuid,
 			name: rack.name,
-			room_uuid: rack.room_uuid,
-			room_name: room.name,
+			warehouse_uuid: rack.warehouse_uuid,
+			warehouse_name: warehouse.name,
 			created_by: rack.created_by,
 			created_by_name: hrSchema.users.name,
 			created_at: rack.created_at,
@@ -86,7 +86,7 @@ export async function selectAll(req, res, next) {
 			remarks: rack.remarks,
 		})
 		.from(rack)
-		.leftJoin(room, eq(rack.room_uuid, room.uuid))
+		.leftJoin(warehouse, eq(rack.warehouse_uuid, warehouse.uuid))
 		.leftJoin(hrSchema.users, eq(rack.created_by, hrSchema.users.uuid))
 		.orderBy(desc(rack.created_at));
 
@@ -109,15 +109,15 @@ export async function select(req, res, next) {
 		.select({
 			uuid: rack.uuid,
 			name: rack.name,
-			room_uuid: rack.room_uuid,
-			room_name: room.name,
+			warehouse_uuid: rack.warehouse_uuid,
+			warehouse_name: warehouse.name,
 			created_by: rack.created_by,
 			created_at: rack.created_at,
 			updated_at: rack.updated_at,
 			remarks: rack.remarks,
 		})
 		.from(rack)
-		.leftJoin(room, eq(rack.room_uuid, room.uuid))
+		.leftJoin(warehouse, eq(rack.warehouse_uuid, warehouse.uuid))
 		.leftJoin(hrSchema.users, eq(rack.created_by, hrSchema.users.uuid))
 		.where(eq(rack.uuid, req.params.uuid));
 

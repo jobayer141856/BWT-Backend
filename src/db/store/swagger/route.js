@@ -1,15 +1,4 @@
 import SE from '../../../util/swagger_example.js';
-import {
-	box,
-	floor,
-	internal_transfer,
-	purchase,
-	purchase_entry,
-	rack,
-	room,
-	stock,
-	warehouse,
-} from '../schema.js';
 
 //* Store Group *//
 
@@ -415,8 +404,8 @@ export const pathStoreVendor = {
 			responses: {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
-					brand_uuid: SE.uuid(),
-					brand_name: SE.string('brand_name'),
+					model_uuid: SE.uuid(),
+					model_name: SE.string('model_name'),
 					name: SE.string('name'),
 					company_name: SE.string('company_name'),
 					phone: SE.string('phone'),
@@ -461,8 +450,8 @@ export const pathStoreVendor = {
 			responses: {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
-					brand_uuid: SE.uuid(),
-					brand_name: SE.string('brand_name'),
+					model_uuid: SE.uuid(),
+					model_name: SE.string('model_name'),
 					name: SE.string('name'),
 					company_name: SE.string('company_name'),
 					phone: SE.string('phone'),
@@ -527,8 +516,8 @@ export const pathStoreProduct = {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
 					name: SE.string('product_name'),
-					brand_uuid: SE.uuid(),
-					brand_name: SE.string('brand_name'),
+					model_uuid: SE.uuid(),
+					model_name: SE.string('model_name'),
 					category_uuid: SE.uuid(),
 					category_name: SE.string('category_name'),
 					size_uuid: SE.uuid(),
@@ -577,8 +566,8 @@ export const pathStoreProduct = {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
 					name: SE.string('product_name'),
-					brand_uuid: SE.uuid(),
-					brand_name: SE.string('brand_name'),
+					model_uuid: SE.uuid(),
+					model_name: SE.string('model_name'),
 					category_uuid: SE.uuid(),
 					category_name: SE.string('category_name'),
 					size_uuid: SE.uuid(),
@@ -1025,8 +1014,6 @@ export const pathStorePurchaseEntry = {
 					discount: SE.number(),
 					warehouse_uuid: SE.uuid(),
 					warehouse_name: SE.string('warehouse_name'),
-					room_uuid: SE.uuid(),
-					room_name: SE.string('room_name'),
 					rack_uuid: SE.uuid(),
 					rack_name: SE.string('rack_name'),
 					floor_uuid: SE.uuid(),
@@ -1079,8 +1066,6 @@ export const pathStorePurchaseEntry = {
 					discount: SE.number(),
 					warehouse_uuid: SE.uuid(),
 					warehouse_name: SE.string('warehouse_name'),
-					room_uuid: SE.uuid(),
-					room_name: SE.string('room_name'),
 					rack_uuid: SE.uuid(),
 					rack_name: SE.string('rack_name'),
 					floor_uuid: SE.uuid(),
@@ -1161,8 +1146,6 @@ export const pathStorePurchaseEntry = {
 					discount: SE.number(),
 					warehouse_uuid: SE.uuid(),
 					warehouse_name: SE.string('warehouse_name'),
-					room_uuid: SE.uuid(),
-					room_name: SE.string('room_name'),
 					rack_uuid: SE.uuid(),
 					rack_name: SE.string('rack_name'),
 					floor_uuid: SE.uuid(),
@@ -1276,17 +1259,17 @@ export const pathStoreWarehouse = {
 	},
 };
 
-export const pathStoreRoom = {
-	'/store/room': {
+export const pathStoreModel = {
+	'/store/model': {
 		get: {
-			tags: ['store.room'],
-			summary: 'Get all store rooms',
+			tags: ['store.model'],
+			summary: 'Get all store models',
 			responses: {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
 					name: SE.string('name'),
-					warehouse_uuid: SE.uuid(),
-					warehouse_name: SE.string('warehouse_name'),
+					brand_uuid: SE.uuid(),
+					brand_name: SE.string('brand_name'),
 					created_by: SE.uuid(),
 					created_by_name: SE.string('created_by_name'),
 					created_at: SE.date_time(),
@@ -1296,26 +1279,26 @@ export const pathStoreRoom = {
 			},
 		},
 		post: {
-			tags: ['store.room'],
-			summary: 'Create a store room',
-			requestBody: SE.requestBody_schema_ref('store/room'),
+			tags: ['store.model'],
+			summary: 'Create a store model',
+			requestBody: SE.requestBody_schema_ref('store/model'),
 			responses: {
 				responses: {
-					200: SE.response_schema_ref(200, 'store/room'),
+					200: SE.response_schema_ref(200, 'store/model'),
 					405: SE.response(405),
 				},
 			},
 		},
 	},
-	'/store/room/{uuid}': {
+	'/store/model/{uuid}': {
 		get: {
-			tags: ['store.room'],
-			summary: 'Get a store room',
+			tags: ['store.model'],
+			summary: 'Get a store model',
 			parameters: [
 				{
 					name: 'uuid',
 					in: 'path',
-					description: 'UUID of the store room',
+					description: 'UUID of the store model',
 					required: true,
 					type: 'string',
 					format: 'uuid',
@@ -1325,8 +1308,8 @@ export const pathStoreRoom = {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
 					name: SE.string('name'),
-					warehouse_uuid: SE.uuid(),
-					warehouse_name: SE.string('warehouse_name'),
+					brand_uuid: SE.uuid(),
+					brand_name: SE.string('brand_name'),
 					created_by: SE.uuid(),
 					created_by_name: SE.string('created_by_name'),
 					created_at: SE.date_time(),
@@ -1337,32 +1320,32 @@ export const pathStoreRoom = {
 			},
 		},
 		put: {
-			tags: ['store.room'],
-			summary: 'Update a store room',
+			tags: ['store.model'],
+			summary: 'Update a store model',
 			parameters: [
 				{
 					name: 'uuid',
 					in: 'path',
-					description: 'UUID of the store room',
+					description: 'UUID of the store model',
 					required: true,
 					type: 'string',
 					format: 'uuid',
 				},
 			],
-			requestBody: SE.requestBody_schema_ref('store/room'),
+			requestBody: SE.requestBody_schema_ref('store/model'),
 			responses: {
-				200: SE.response_schema_ref(200, 'store/room'),
+				200: SE.response_schema_ref(200, 'store/model'),
 				404: SE.response(404),
 			},
 		},
 		delete: {
-			tags: ['store.room'],
-			summary: 'Delete a store room',
+			tags: ['store.model'],
+			summary: 'Delete a store model',
 			parameters: [
 				{
 					name: 'uuid',
 					in: 'path',
-					description: 'UUID of the store room',
+					description: 'UUID of the store model',
 					required: true,
 					type: 'string',
 					format: 'uuid',
@@ -1385,8 +1368,6 @@ export const pathStoreRack = {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
 					name: SE.string('name'),
-					room_uuid: SE.uuid(),
-					room_name: SE.string('room_name'),
 					warehouse_uuid: SE.uuid(),
 					warehouse_name: SE.string('warehouse_name'),
 					created_by: SE.uuid(),
@@ -1427,8 +1408,6 @@ export const pathStoreRack = {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
 					name: SE.string('name'),
-					room_uuid: SE.uuid(),
-					room_name: SE.string('room_name'),
 					warehouse_uuid: SE.uuid(),
 					warehouse_name: SE.string('warehouse_name'),
 					created_by: SE.uuid(),
@@ -1989,8 +1968,6 @@ export const pathStoreInternalTransfer = {
 					to_branch_name: SE.string('to_branch_name'),
 					warehouse_uuid: SE.uuid(),
 					warehouse_name: SE.string('warehouse_name'),
-					room_uuid: SE.uuid(),
-					room_name: SE.string('room_name'),
 					rack_uuid: SE.uuid(),
 					rack_name: SE.string('rack_name'),
 					floor_uuid: SE.uuid(),
@@ -2044,8 +2021,6 @@ export const pathStoreInternalTransfer = {
 					to_branch_name: SE.string('to_branch_name'),
 					warehouse_uuid: SE.uuid(),
 					warehouse_name: SE.string('warehouse_name'),
-					room_uuid: SE.uuid(),
-					room_name: SE.string('room_name'),
 					rack_uuid: SE.uuid(),
 					rack_name: SE.string('rack_name'),
 					floor_uuid: SE.uuid(),
@@ -2113,7 +2088,7 @@ export const pathStore = {
 	...pathStoreStock,
 	...pathStorePurchaseEntry,
 	...pathStoreWarehouse,
-	...pathStoreRoom,
+	...pathStoreModel,
 	...pathStoreRack,
 	...pathStoreFloor,
 	...pathStoreBox,

@@ -13,7 +13,6 @@ import {
 	rack,
 	stock,
 	warehouse,
-	room,
 	floor,
 } from '../schema.js';
 
@@ -113,8 +112,6 @@ export async function selectAll(req, res, next) {
 			to_branch_name: toBranch.name,
 			warehouse_uuid: internal_transfer.warehouse_uuid,
 			warehouse_name: warehouse.name,
-			room_uuid: internal_transfer.room_uuid,
-			room_name: room.name,
 			rack_uuid: internal_transfer.rack_uuid,
 			rack_name: rack.name,
 			floor_uuid: internal_transfer.floor_uuid,
@@ -138,7 +135,6 @@ export async function selectAll(req, res, next) {
 			warehouse,
 			eq(internal_transfer.warehouse_uuid, warehouse.uuid)
 		)
-		.leftJoin(room, eq(internal_transfer.room_uuid, room.uuid))
 		.leftJoin(floor, eq(internal_transfer.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(internal_transfer.box_uuid, box.uuid))
 		.leftJoin(stock, eq(internal_transfer.stock_uuid, stock.uuid))
@@ -191,8 +187,6 @@ export async function select(req, res, next) {
 			to_branch_name: toBranch.name,
 			warehouse_uuid: internal_transfer.warehouse_uuid,
 			warehouse_name: warehouse.name,
-			room_uuid: internal_transfer.room_uuid,
-			room_name: room.name,
 			rack_uuid: internal_transfer.rack_uuid,
 			rack_name: rack.name,
 			floor_uuid: internal_transfer.floor_uuid,
@@ -216,7 +210,6 @@ export async function select(req, res, next) {
 			warehouse,
 			eq(internal_transfer.warehouse_uuid, warehouse.uuid)
 		)
-		.leftJoin(room, eq(internal_transfer.room_uuid, room.uuid))
 		.leftJoin(floor, eq(internal_transfer.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(internal_transfer.box_uuid, box.uuid))
 		.leftJoin(stock, eq(internal_transfer.stock_uuid, stock.uuid))

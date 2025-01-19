@@ -2,7 +2,7 @@ import { desc, eq } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
-import { brand, vendor } from '../schema.js';
+import { model, vendor } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -78,8 +78,8 @@ export async function selectAll(req, res, next) {
 	const vendorPromise = db
 		.select({
 			uuid: vendor.uuid,
-			brand_uuid: vendor.brand_uuid,
-			brand_name: brand.name,
+			model_uuid: vendor.brand_uuid,
+			model_name: model.name,
 			name: vendor.name,
 			company_name: vendor.company_name,
 			phone: vendor.phone,
@@ -93,7 +93,7 @@ export async function selectAll(req, res, next) {
 			remarks: vendor.remarks,
 		})
 		.from(vendor)
-		.leftJoin(brand, eq(vendor.brand_uuid, brand.uuid))
+		.leftJoin(model, eq(vendor.brand_uuid, model.uuid))
 		.leftJoin(hrSchema.users, eq(vendor.created_by, hrSchema.users.uuid))
 		.orderBy(desc(vendor.created_at));
 	try {
@@ -115,8 +115,8 @@ export async function select(req, res, next) {
 	const vendorPromise = db
 		.select({
 			uuid: vendor.uuid,
-			brand_uuid: vendor.brand_uuid,
-			brand_name: brand.name,
+			model_uuid: vendor.brand_uuid,
+			model_name: model.name,
 			name: vendor.name,
 			company_name: vendor.company_name,
 			phone: vendor.phone,
@@ -130,7 +130,7 @@ export async function select(req, res, next) {
 			remarks: vendor.remarks,
 		})
 		.from(vendor)
-		.leftJoin(brand, eq(vendor.brand_uuid, brand.uuid))
+		.leftJoin(model, eq(vendor.brand_uuid, model.uuid))
 		.leftJoin(hrSchema.users, eq(vendor.created_by, hrSchema.users.uuid))
 		.where(eq(vendor.uuid, req.params.uuid));
 
