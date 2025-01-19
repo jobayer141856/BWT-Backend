@@ -13,12 +13,12 @@ import * as floorOperations from './query/floor.js';
 import * as purchaseEntryOperations from './query/purchase_entry.js';
 import * as purchaseOperations from './query/purchase.js';
 import * as rackOperations from './query/rack.js';
-import * as roomOperations from './query/room.js';
 import * as stockOperations from './query/stock.js';
 import * as warehouseOperations from './query/warehouse.js';
 import * as purchaseReturnOperations from './query/purchase_return.js';
 import * as purchaseReturnEntryOperations from './query/purchase_return_entry.js';
 import * as internalTransferOperations from './query/internal_transfer.js';
+import * as modelOperations from './query/model.js';
 
 const storeRouter = Router();
 
@@ -53,6 +53,14 @@ storeRouter.get('/brand/:uuid', validateUuidParam(), brandOperations.select);
 storeRouter.post('/brand', brandOperations.insert);
 storeRouter.put('/brand/:uuid', brandOperations.update);
 storeRouter.delete('/brand/:uuid', validateUuidParam(), brandOperations.remove);
+
+//* model routes *//
+
+storeRouter.get('/model', modelOperations.selectAll);
+storeRouter.get('/model/:uuid', validateUuidParam(), modelOperations.select);
+storeRouter.post('/model', modelOperations.insert);
+storeRouter.put('/model/:uuid', modelOperations.update);
+storeRouter.delete('/model/:uuid', validateUuidParam(), modelOperations.remove);
 
 //* size routes *//
 
@@ -168,11 +176,11 @@ storeRouter.delete('/rack/:uuid', validateUuidParam(), rackOperations.remove);
 
 //* room routes *//
 
-storeRouter.get('/room', roomOperations.selectAll);
-storeRouter.get('/room/:uuid', validateUuidParam(), roomOperations.select);
-storeRouter.post('/room', roomOperations.insert);
-storeRouter.put('/room/:uuid', roomOperations.update);
-storeRouter.delete('/room/:uuid', validateUuidParam(), roomOperations.remove);
+// storeRouter.get('/room', roomOperations.selectAll);
+// storeRouter.get('/room/:uuid', validateUuidParam(), roomOperations.select);
+// storeRouter.post('/room', roomOperations.insert);
+// storeRouter.put('/room/:uuid', roomOperations.update);
+// storeRouter.delete('/room/:uuid', validateUuidParam(), roomOperations.remove);
 
 //* stock routes *//
 

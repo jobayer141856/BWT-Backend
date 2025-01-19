@@ -1,5 +1,5 @@
 import SE, { SED } from '../../../util/swagger_example.js';
-import { warehouse } from '../schema.js';
+import { branch, model, warehouse } from '../schema.js';
 
 const defGroup = SED({
 	required: ['uuid', 'name', 'created_at'],
@@ -67,7 +67,7 @@ const defVendor = SED({
 	],
 	properties: {
 		uuid: SE.uuid(),
-		brand_uuid: SE.uuid(),
+		model_uuid: SE.uuid(),
 		name: SE.string('Vendor 1'),
 		company_name: SE.string('Company 1'),
 		phone: SE.string('01521533595'),
@@ -87,7 +87,7 @@ export const defProduct = SED({
 	properties: {
 		uuid: SE.uuid(),
 		category_uuid: SE.uuid(),
-		brand_uuid: SE.uuid(),
+		model_uuid: SE.uuid(),
 		size_uuid: SE.uuid(),
 		name: SE.string('Product 1'),
 		warranty_days: SE.integer(),
@@ -155,7 +155,6 @@ export const defPurchaseEntry = SED({
 		'quantity',
 		'price_per_unit',
 		'warehouse_uuid',
-		'room_uuid',
 		'rack_uuid',
 		'floor_uuid',
 		'box_uuid',
@@ -169,7 +168,6 @@ export const defPurchaseEntry = SED({
 		price_per_unit: SE.number(),
 		discount: SE.number(),
 		warehouse_uuid: SE.uuid(),
-		room_uuid: SE.uuid(),
 		rack_uuid: SE.uuid(),
 		floor_uuid: SE.uuid(),
 		box_uuid: SE.uuid(),
@@ -195,25 +193,25 @@ export const defWarehouse = SED({
 	xml: 'Store/Warehouse',
 });
 
-export const defRoom = SED({
-	required: ['uuid', 'created_at', 'warehouse_uuid', 'name'],
+export const defModel = SED({
+	required: ['uuid', 'created_at', 'brand_uuid', 'name'],
 	properties: {
 		uuid: SE.uuid(),
-		warehouse_uuid: SE.uuid(),
+		brand_uuid: SE.uuid(),
 		name: SE.string('Room 1'),
 		created_by: SE.uuid(),
 		created_at: SE.date_time(),
 		updated_at: SE.date_time(),
 		remarks: SE.string('remarks'),
 	},
-	xml: 'Store/Room',
+	xml: 'Store/Model',
 });
 
 export const defRack = SED({
-	required: ['uuid', 'created_at', 'room_uuid', 'name'],
+	required: ['uuid', 'created_at', 'warehouse_uuid', 'name'],
 	properties: {
 		uuid: SE.uuid(),
-		room_uuid: SE.uuid(),
+		warehouse_uuid: SE.uuid(),
 		name: SE.string('Rack 1'),
 		created_by: SE.uuid(),
 		created_at: SE.date_time(),
@@ -291,11 +289,10 @@ export const defInternalTransfer = SED({
 		'uuid',
 		'created_at',
 		'stock_uuid',
-		'from_warehouse_uuid',
-		'to_warehouse_uuid',
+		'from_branch_uuid',
+		'to_branch_uuid',
 		'quantity',
 		'warehouse_uuid',
-		'room_uuid',
 		'rack_uuid',
 		'floor_uuid',
 		'box_uuid',
@@ -303,10 +300,9 @@ export const defInternalTransfer = SED({
 	properties: {
 		uuid: SE.uuid(),
 		stock_uuid: SE.uuid(),
-		from_warehouse_uuid: SE.uuid(),
-		to_warehouse_uuid: SE.uuid(),
+		from_branch_uuid: SE.uuid(),
+		to_branch_uuid: SE.uuid(),
 		warehouse_uuid: SE.uuid(),
-		room_uuid: SE.uuid(),
 		rack_uuid: SE.uuid(),
 		floor_uuid: SE.uuid(),
 		box_uuid: SE.uuid(),
@@ -332,7 +328,7 @@ export const defStore = {
 	stock: defStock,
 	purchase_entry: defPurchaseEntry,
 	warehouse: defWarehouse,
-	room: defRoom,
+	model: defModel,
 	rack: defRack,
 	floor: defFloor,
 	box: defBox,
@@ -389,8 +385,8 @@ export const tagStore = [
 		description: 'Operations about warehouse',
 	},
 	{
-		name: 'store.room',
-		description: 'Operations about room',
+		name: 'store.model',
+		description: 'Operations about model',
 	},
 	{
 		name: 'store.rack',

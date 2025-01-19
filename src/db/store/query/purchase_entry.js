@@ -9,7 +9,6 @@ import {
 	purchase_entry,
 	stock,
 	warehouse,
-	room,
 	floor,
 	rack,
 	purchase,
@@ -98,8 +97,6 @@ export async function selectAll(req, res, next) {
 			discount: decimalToNumber(purchase_entry.discount),
 			warehouse_uuid: purchase_entry.warehouse_uuid,
 			warehouse_name: warehouse.name,
-			room_uuid: purchase_entry.room_uuid,
-			room_name: room.name,
 			rack_uuid: purchase_entry.rack_uuid,
 			rack_name: rack.name,
 			floor_uuid: purchase_entry.floor_uuid,
@@ -118,7 +115,6 @@ export async function selectAll(req, res, next) {
 			eq(purchase_entry.created_by, hrSchema.users.uuid)
 		)
 		.leftJoin(warehouse, eq(purchase_entry.warehouse_uuid, warehouse.uuid))
-		.leftJoin(room, eq(purchase_entry.room_uuid, room.uuid))
 		.leftJoin(rack, eq(purchase_entry.rack_uuid, rack.uuid))
 		.leftJoin(floor, eq(purchase_entry.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))
@@ -154,8 +150,6 @@ export async function select(req, res, next) {
 			discount: decimalToNumber(purchase_entry.discount),
 			warehouse_uuid: purchase_entry.warehouse_uuid,
 			warehouse_name: warehouse.name,
-			room_uuid: purchase_entry.room_uuid,
-			room_name: room.name,
 			rack_uuid: purchase_entry.rack_uuid,
 			rack_name: rack.name,
 			floor_uuid: purchase_entry.floor_uuid,
@@ -174,7 +168,6 @@ export async function select(req, res, next) {
 			eq(purchase_entry.created_by, hrSchema.users.uuid)
 		)
 		.leftJoin(warehouse, eq(purchase_entry.warehouse_uuid, warehouse.uuid))
-		.leftJoin(room, eq(purchase_entry.room_uuid, room.uuid))
 		.leftJoin(rack, eq(purchase_entry.rack_uuid, rack.uuid))
 		.leftJoin(floor, eq(purchase_entry.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))
@@ -210,8 +203,6 @@ export async function selectByPurchaseUuid(req, res, next) {
 			discount: decimalToNumber(purchase_entry.discount),
 			warehouse_uuid: purchase_entry.warehouse_uuid,
 			warehouse_name: warehouse.name,
-			room_uuid: purchase_entry.room_uuid,
-			room_name: room.name,
 			rack_uuid: purchase_entry.rack_uuid,
 			rack_name: rack.name,
 			floor_uuid: purchase_entry.floor_uuid,
@@ -230,7 +221,6 @@ export async function selectByPurchaseUuid(req, res, next) {
 			eq(purchase_entry.created_by, hrSchema.users.uuid)
 		)
 		.leftJoin(warehouse, eq(purchase_entry.warehouse_uuid, warehouse.uuid))
-		.leftJoin(room, eq(purchase_entry.room_uuid, room.uuid))
 		.leftJoin(rack, eq(purchase_entry.rack_uuid, rack.uuid))
 		.leftJoin(floor, eq(purchase_entry.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))

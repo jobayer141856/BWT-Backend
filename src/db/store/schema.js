@@ -54,9 +54,19 @@ export const size = store.table('size', {
 	remarks: text('remarks').default(null),
 });
 
-export const vendor = store.table('vendor', {
+export const model = store.table('model', {
 	uuid: uuid_primary,
 	brand_uuid: defaultUUID('brand_uuid').references(() => brand.uuid),
+	name: text('name').notNull(),
+	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+export const vendor = store.table('vendor', {
+	uuid: uuid_primary,
+	model_uuid: defaultUUID('model_uuid').references(() => model.uuid),
 	name: text('name').notNull(),
 	company_name: text('company_name').notNull(),
 	phone: text('phone').notNull(),
@@ -74,7 +84,7 @@ export const typeEnum = pgEnum('type', ['product', 'service']);
 export const product = store.table('product', {
 	uuid: uuid_primary,
 	category_uuid: defaultUUID('category_uuid').references(() => category.uuid),
-	brand_uuid: defaultUUID('brand_uuid').references(() => brand.uuid),
+	model_uuid: defaultUUID('model_uuid').references(() => model.uuid),
 	size_uuid: defaultUUID('size_uuid').references(() => size.uuid),
 	name: text('name').notNull(),
 	warranty_days: integer('warranty_days').default(null),
@@ -134,7 +144,6 @@ export const purchase_entry = store.table('purchase_entry', {
 	warehouse_uuid: defaultUUID('warehouse_uuid').references(
 		() => warehouse.uuid
 	),
-	room_uuid: defaultUUID('room_uuid').references(() => room.uuid),
 	rack_uuid: defaultUUID('rack_uuid').references(() => rack.uuid),
 	floor_uuid: defaultUUID('floor_uuid').references(() => floor.uuid),
 	box_uuid: defaultUUID('box_uuid').references(() => box.uuid),
@@ -154,21 +163,11 @@ export const warehouse = store.table('warehouse', {
 	remarks: text('remarks').default(null),
 });
 
-export const room = store.table('room', {
+export const rack = store.table('rack', {
 	uuid: uuid_primary,
 	warehouse_uuid: defaultUUID('warehouse_uuid').references(
 		() => warehouse.uuid
 	),
-	name: text('name').notNull(),
-	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
-	created_at: DateTime('created_at').notNull(),
-	updated_at: DateTime('updated_at').default(null),
-	remarks: text('remarks').default(null),
-});
-
-export const rack = store.table('rack', {
-	uuid: uuid_primary,
-	room_uuid: defaultUUID('room_uuid').references(() => room.uuid),
 	name: text('name').notNull(),
 	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
 	created_at: DateTime('created_at').notNull(),
@@ -231,7 +230,6 @@ export const internal_transfer = store.table('internal_transfer', {
 	warehouse_uuid: defaultUUID('warehouse_uuid').references(
 		() => warehouse.uuid
 	),
-	room_uuid: defaultUUID('room_uuid').references(() => room.uuid),
 	rack_uuid: defaultUUID('rack_uuid').references(() => rack.uuid),
 	floor_uuid: defaultUUID('floor_uuid').references(() => floor.uuid),
 	box_uuid: defaultUUID('box_uuid').references(() => box.uuid),
