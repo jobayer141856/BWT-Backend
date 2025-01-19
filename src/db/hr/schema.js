@@ -26,7 +26,7 @@ export const designation = hr.table('designation', {
 	remarks: text('remarks').default(null),
 });
 
-export const userTypeEnum = pgEnum('user_type', ['employ', 'customer']);
+export const userTypeEnum = pgEnum('user_type', ['employee', 'customer']);
 
 export const users = hr.table('users', {
 	uuid: uuid_primary,
