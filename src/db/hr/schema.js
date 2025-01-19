@@ -1,4 +1,11 @@
-import { integer, pgSchema, text, uuid } from 'drizzle-orm/pg-core';
+import {
+	integer,
+	pgEnum,
+	pgSchema,
+	serial,
+	text,
+	uuid,
+} from 'drizzle-orm/pg-core';
 import { DateTime, defaultUUID, uuid_primary } from '../variables.js';
 
 const hr = pgSchema('hr');
@@ -19,6 +26,8 @@ export const designation = hr.table('designation', {
 	remarks: text('remarks').default(null),
 });
 
+export const userTypeEnum = pgEnum('user_type', ['employ', 'customer']);
+
 export const users = hr.table('users', {
 	uuid: uuid_primary,
 	name: text('name').notNull(),
@@ -37,6 +46,8 @@ export const users = hr.table('users', {
 	updated_at: text('updated_at').default(null),
 	status: text('status').default(0),
 	remarks: text('remarks').default(null),
+	id: serial('id').notNull().unique(),
+	user_type: userTypeEnum('user_type').default('customer'),
 });
 
 export const policy_and_notice = hr.table('policy_and_notice', {
