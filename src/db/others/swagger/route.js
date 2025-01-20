@@ -494,6 +494,32 @@ const pathInternalTransfer = {
 	},
 };
 
+const pathModel = {
+	'/other/model/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all model',
+			description: 'Get all model',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('model'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 export const pathOthers = {
 	...pathDesignation,
 	...pathDepartment,
@@ -514,6 +540,7 @@ export const pathOthers = {
 	...pathBox,
 	...pathPurchaseReturn,
 	...pathInternalTransfer,
+	...pathModel,
 };
 
 export const tagOthers = [

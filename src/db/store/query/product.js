@@ -79,8 +79,8 @@ export async function selectAll(req, res, next) {
 			name: product.name,
 			category_uuid: product.category_uuid,
 			category_name: category.name,
-			model_uuid: product.brand_uuid,
-			model_name: brand.name,
+			model_uuid: product.model_uuid,
+			model_name: model.name,
 			size_uuid: product.size_uuid,
 			size_name: size.name,
 			warranty_days: product.warranty_days,
@@ -95,7 +95,7 @@ export async function selectAll(req, res, next) {
 		})
 		.from(product)
 		.leftJoin(category, eq(product.category_uuid, category.uuid))
-		.leftJoin(model, eq(product.brand_uuid, brand.uuid))
+		.leftJoin(model, eq(product.model_uuid, model.uuid))
 		.leftJoin(size, eq(product.size_uuid, size.uuid))
 		.leftJoin(hrSchema.users, eq(product.created_by, hrSchema.users.uuid))
 		.orderBy(desc(product.created_at));
@@ -120,8 +120,8 @@ export async function select(req, res, next) {
 			name: product.name,
 			category_uuid: product.category_uuid,
 			category_name: category.name,
-			model_uuid: product.brand_uuid,
-			model_name: brand.name,
+			model_uuid: product.model_uuid,
+			model_name: model.name,
 			size_uuid: product.size_uuid,
 			size_name: size.name,
 			warranty_days: product.warranty_days,
@@ -136,7 +136,7 @@ export async function select(req, res, next) {
 		})
 		.from(product)
 		.leftJoin(category, eq(product.category_uuid, category.uuid))
-		.leftJoin(model, eq(product.brand_uuid, brand.uuid))
+		.leftJoin(model, eq(product.model_uuid, model.uuid))
 		.leftJoin(size, eq(product.size_uuid, size.uuid))
 		.leftJoin(hrSchema.users, eq(product.created_by, hrSchema.users.uuid))
 		.where(eq(product.uuid, req.params.uuid));

@@ -400,3 +400,24 @@ export async function selectInternalTransfer(req, res, next) {
 		next(error);
 	}
 }
+
+export async function selectModel(req, res, next) {
+	const modelPromise = db
+		.select({
+			value: storeSchema.model.uuid,
+			label: storeSchema.model.name,
+		})
+		.from(storeSchema.model);
+
+	try {
+		const data = await modelPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Model list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
