@@ -119,6 +119,7 @@ export async function selectAll(req, res, next) {
 		.leftJoin(floor, eq(purchase_entry.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))
 		.leftJoin(stock, eq(purchase_entry.stock_uuid, stock.uuid))
+		.leftJoin(purchase, eq(purchase_entry.purchase_uuid, purchase.uuid))
 		.orderBy(desc(purchase_entry.created_at));
 
 	try {

@@ -78,7 +78,7 @@ export async function selectAll(req, res, next) {
 	const vendorPromise = db
 		.select({
 			uuid: vendor.uuid,
-			model_uuid: vendor.brand_uuid,
+			model_uuid: vendor.model_uuid,
 			model_name: model.name,
 			name: vendor.name,
 			company_name: vendor.company_name,
@@ -93,7 +93,7 @@ export async function selectAll(req, res, next) {
 			remarks: vendor.remarks,
 		})
 		.from(vendor)
-		.leftJoin(model, eq(vendor.brand_uuid, model.uuid))
+		.leftJoin(model, eq(vendor.model_uuid, model.uuid))
 		.leftJoin(hrSchema.users, eq(vendor.created_by, hrSchema.users.uuid))
 		.orderBy(desc(vendor.created_at));
 	try {
@@ -115,7 +115,7 @@ export async function select(req, res, next) {
 	const vendorPromise = db
 		.select({
 			uuid: vendor.uuid,
-			model_uuid: vendor.brand_uuid,
+			model_uuid: vendor.model_uuid,
 			model_name: model.name,
 			name: vendor.name,
 			company_name: vendor.company_name,
@@ -130,7 +130,7 @@ export async function select(req, res, next) {
 			remarks: vendor.remarks,
 		})
 		.from(vendor)
-		.leftJoin(model, eq(vendor.brand_uuid, model.uuid))
+		.leftJoin(model, eq(vendor.model_uuid, model.uuid))
 		.leftJoin(hrSchema.users, eq(vendor.created_by, hrSchema.users.uuid))
 		.where(eq(vendor.uuid, req.params.uuid));
 

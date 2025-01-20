@@ -81,4 +81,6 @@ otherRouter.get(
 	otherOperations.selectInternalTransfer
 );
 
+otherRouter.get('/model/value/label', otherOperations.selectModel);
+
 export { otherRouter };
