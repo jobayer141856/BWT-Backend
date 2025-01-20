@@ -1,5 +1,4 @@
 import SE, { SED } from '../../../util/swagger_example.js';
-import { branch, model, warehouse } from '../schema.js';
 
 const defGroup = SED({
 	required: ['uuid', 'name', 'created_at'],

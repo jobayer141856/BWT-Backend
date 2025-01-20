@@ -9,21 +9,28 @@ import { pathHr } from './db/hr/swagger/route.js';
 import { defStore, tagStore } from './db/store/swagger/def.js';
 import { pathStore } from './db/store/swagger/route.js';
 
+//* Work
+
+import { defWork, tagWork } from './db/work/swagger/def.js';
+import { pathWork } from './db/work/swagger/route.js';
+
 //* Others
 
 import { pathOthers, tagOthers } from './db/others/swagger/route.js';
 
-const tags = [...tagHr, ...tagStore, ...tagOthers];
+const tags = [...tagHr, ...tagStore, ...tagOthers, ...tagWork];
 
 const definitions = {
 	hr: defHr,
 	store: defStore,
+	work: defWork,
 };
 
 const paths = {
 	...pathHr,
 	...pathStore,
 	...pathOthers,
+	...pathWork,
 };
 
 const swaggerSpec = swaggerJSDoc({
