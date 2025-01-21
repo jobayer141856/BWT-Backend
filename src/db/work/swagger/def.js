@@ -81,11 +81,25 @@ const defDiagnosis = SED({
 	xml: 'Work/Diagnosis',
 });
 
+const defSection = SED({
+	required: ['uuid', 'name', 'created_at'],
+	properties: {
+		uuid: SE.uuid(),
+		name: SE.string('Section 1'),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Work/Section',
+});
+
 //* Marge all
 export const defWork = {
 	problem: defProblem,
 	order: defOrder,
 	diagnosis: defDiagnosis,
+	section: defSection,
 };
 
 //* Tag
@@ -101,5 +115,9 @@ export const tagWork = [
 	{
 		name: 'work.diagnosis',
 		description: 'Work Diagnosis',
+	},
+	{
+		name: 'work.section',
+		description: 'Work Section',
 	},
 ];

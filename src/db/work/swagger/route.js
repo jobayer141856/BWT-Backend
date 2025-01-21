@@ -398,8 +398,112 @@ export const pathWorkDiagnosis = {
 	},
 };
 
+export const pathWorkSection = {
+	'/work/section': {
+		get: {
+			tags: ['work.section'],
+			summary: 'Get all work sections',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('work section name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['work.section'],
+			summary: 'Create a work section',
+			requestBody: SE.requestBody_schema_ref('work/section'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'work/section'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/work/section/{uuid}': {
+		get: {
+			tags: ['work.section'],
+			summary: 'Get a work section by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work section to get',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('work section name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		put: {
+			tags: ['work.section'],
+			summary: 'Update a work section by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work section to update',
+					required: true,
+					type: 'string',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('work/section'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'work/section'),
+					405: SE.response(405),
+				},
+			},
+		},
+		delete: {
+			tags: ['work.section'],
+			summary: 'Delete a work section by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work section to delete',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('work section name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+	},
+};
+
 export const pathWork = {
 	...pathWorkProblem,
 	...pathWorkOrder,
 	...pathWorkDiagnosis,
+	...pathWorkSection,
 };
