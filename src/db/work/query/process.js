@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
@@ -99,14 +99,13 @@ export async function selectAll(req, res, next) {
 			box_uuid: process.box_uuid,
 			box_name: storeSchema.box.name,
 			process_uuid: process.uuid,
-			created_by: process.created,
+			created_by: process.created_by,
 			created_by_name: hrSchema.users.name,
 			created_at: process.created_at,
 			updated_at: process.updated_at,
 			remarks: process.remarks,
 		})
 		.from(process)
-
 		.leftJoin(hrSchema.users, eq(process.created_by, hrSchema.users.uuid))
 		.leftJoin(section, eq(process.section_uuid, section.uuid))
 		.leftJoin(
