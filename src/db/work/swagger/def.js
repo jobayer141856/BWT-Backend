@@ -50,10 +50,42 @@ const defOrder = SED({
 	},
 	xml: 'Work/Order',
 });
+
+const defDiagnosis = SED({
+	required: [
+		'id',
+		'uuid',
+		'order_uuid',
+		'engineer_uuid',
+		'problem_statement',
+		'status',
+		'status_update_date',
+		'created_at',
+	],
+	properties: {
+		id: SE.integer(),
+		uuid: SE.uuid(),
+		order_uuid: SE.uuid(),
+		engineer_uuid: SE.uuid(),
+		problems_uuid: SE.array(),
+		problem_statement: SE.string('problem_statement'),
+		status: SE.boolean(),
+		status_update_date: SE.date_time(),
+		proposed_cost: SE.number(),
+		is_proceed_to_repair: SE.boolean(),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Work/Diagnosis',
+});
+
 //* Marge all
 export const defWork = {
 	problem: defProblem,
 	order: defOrder,
+	diagnosis: defDiagnosis,
 };
 
 //* Tag
@@ -65,5 +97,9 @@ export const tagWork = [
 	{
 		name: 'work.order',
 		description: 'Work Order',
+	},
+	{
+		name: 'work.diagnosis',
+		description: 'Work Diagnosis',
 	},
 ];

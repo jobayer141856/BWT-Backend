@@ -110,3 +110,41 @@ export async function selectAll(req, res, next) {
 		next(error);
 	}
 }
+
+export async function select(req, res, next) {
+	const diagnosisPromise = db
+		.select({
+			uuid: diagnosis.uuid,
+			id: diagnosis.id,
+			diagnosis_id: sql`CONCAT('WD', TO_CHAR(${diagnosis.created_at}, 'YY'), TO_CHAR(${diagnosis.id}, 'FM0000'))`,
+			order_uuid: diagnosis.order_uuid,
+			engineer_uuid: diagnosis.engineer_uuid,
+			problems_uuid: diagnosis.problems_uuid,
+			problem_statement: diagnosis.problem_statement,
+			status: diagnosis.status,
+			status_update_date: diagnosis.status_update_date,
+			proposed_cost: diagnosis.proposed_cost,
+			is_proceed_to_repair: diagnosis.is_proceed_to_repair,
+			created_by: diagnosis.created_by,
+			created_by_name: hrSchema.users.name,
+			created_at: diagnosis.created_at,
+			updated_at: diagnosis.updated_at,
+			remarks: diagnosis.remarks,
+		})
+		.from(diagnosis)
+		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
+		.where(eq(diagnosis.uuid, req.params.uuid));
+
+	try {
+		const data = await diagnosisPromise;
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'diagnosis detail',
+		};
+
+		return await res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
