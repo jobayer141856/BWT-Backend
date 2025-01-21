@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { validateUuidParam } from '../../lib/validator.js';
 
 import * as problemOperations from './query/problem.js';
+import * as orderOperations from './query/order.js';
 
 const workRouter = Router();
 
@@ -15,5 +16,12 @@ workRouter.delete(
 	validateUuidParam(),
 	problemOperations.remove
 );
+
+//* order routes *//
+workRouter.get('/order', orderOperations.selectAll);
+workRouter.get('/order/:uuid', validateUuidParam(), orderOperations.select);
+workRouter.post('/order', orderOperations.insert);
+workRouter.put('/order/:uuid', orderOperations.update);
+workRouter.delete('/order/:uuid', validateUuidParam(), orderOperations.remove);
 
 export { workRouter };
