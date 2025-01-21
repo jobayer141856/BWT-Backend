@@ -25,7 +25,7 @@ export const pathWorkProblem = {
 			requestBody: SE.requestBody_schema_ref('work/problem'),
 			responses: {
 				responses: {
-					200: SE.response_schema_ref(200, 'store/group'),
+					200: SE.response_schema_ref(200, 'work/problem'),
 					405: SE.response(405),
 				},
 			},
@@ -72,7 +72,7 @@ export const pathWorkProblem = {
 			requestBody: SE.requestBody_schema_ref('work/problem'),
 			responses: {
 				responses: {
-					200: SE.response_schema_ref(200, 'store/group'),
+					200: SE.response_schema_ref(200, 'work/problem'),
 					405: SE.response(405),
 				},
 			},
@@ -148,7 +148,7 @@ export const pathWorkOrder = {
 			requestBody: SE.requestBody_schema_ref('work/order'),
 			responses: {
 				responses: {
-					200: SE.response_schema_ref(200, 'store/group'),
+					200: SE.response_schema_ref(200, 'work/order'),
 					405: SE.response(405),
 				},
 			},
@@ -215,7 +215,7 @@ export const pathWorkOrder = {
 			requestBody: SE.requestBody_schema_ref('work/order'),
 			responses: {
 				responses: {
-					200: SE.response_schema_ref(200, 'store/group'),
+					200: SE.response_schema_ref(200, 'work/order'),
 					405: SE.response(405),
 				},
 			},
@@ -268,7 +268,138 @@ export const pathWorkOrder = {
 	},
 };
 
+export const pathWorkDiagnosis = {
+	'/work/diagnosis': {
+		get: {
+			tags: ['work.diagnosis'],
+			summary: 'Get all work diagnosis',
+			responses: {
+				200: SE.response_schema(200, {
+					id: SE.integer(),
+					diagnosis_id: SE.string('WD25-0001'),
+					uuid: SE.uuid(),
+					order_uuid: SE.uuid(),
+					engineer_uuid: SE.uuid(),
+					problems_uuid: SE.array(),
+					problem_statement: SE.string('problem_statement'),
+					status: SE.boolean(),
+					status_update_date: SE.date_time(),
+					proposed_cost: SE.number(),
+					is_proceed_to_repair: SE.boolean(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['work.diagnosis'],
+			summary: 'Create a work diagnosis',
+			requestBody: SE.requestBody_schema_ref('work/diagnosis'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'work/diagnosis'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/work/diagnosis/{uuid}': {
+		get: {
+			tags: ['work.diagnosis'],
+			summary: 'Get a work diagnosis by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work diagnosis to get',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					id: SE.integer(),
+					diagnosis_id: SE.string('WD25-0001'),
+					uuid: SE.uuid(),
+					order_uuid: SE.uuid(),
+					engineer_uuid: SE.uuid(),
+					problems_uuid: SE.array(),
+					problem_statement: SE.string('problem_statement'),
+					status: SE.boolean(),
+					status_update_date: SE.date_time(),
+					proposed_cost: SE.number(),
+					is_proceed_to_repair: SE.boolean(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		put: {
+			tags: ['work.diagnosis'],
+			summary: 'Update a work diagnosis by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work diagnosis to update',
+					required: true,
+					type: 'string',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('work/diagnosis'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'work/diagnosis'),
+					405: SE.response(405),
+				},
+			},
+		},
+		delete: {
+			tags: ['work.diagnosis'],
+			summary: 'Delete a work diagnosis by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work diagnosis to delete',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					id: SE.integer(),
+					diagnosis_id: SE.string('WD25-0001'),
+					uuid: SE.uuid(),
+					order_uuid: SE.uuid(),
+					engineer_uuid: SE.uuid(),
+					problems_uuid: SE.array(),
+					problem_statement: SE.string('problem_statement'),
+					status: SE.boolean(),
+					status_update_date: SE.date_time(),
+					proposed_cost: SE.number(),
+					is_proceed_to_repair: SE.boolean(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+	},
+};
+
 export const pathWork = {
 	...pathWorkProblem,
 	...pathWorkOrder,
+	...pathWorkDiagnosis,
 };
