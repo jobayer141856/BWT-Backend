@@ -94,12 +94,57 @@ const defSection = SED({
 	xml: 'Work/Section',
 });
 
+const defProcess = SED({
+	required: [
+		'id',
+		'uuid',
+		'section_uuid',
+		'diagnosis_uuid',
+		'engineer_uuid',
+		'problems_uuid',
+		'problem_statement',
+		'status',
+		'status_update_date',
+		'proposed_cost',
+		'is_proceed_to_repair',
+		'warehouse_uuid',
+		'rack_uuid',
+		'floor_uuid',
+		'box_uuid',
+		'created_by',
+		'created_at',
+	],
+	properties: {
+		id: SE.integer(),
+		uuid: SE.uuid(),
+		section_uuid: SE.uuid(),
+		diagnosis_uuid: SE.uuid(),
+		engineer_uuid: SE.uuid(),
+		problems_uuid: SE.array(),
+		problem_statement: SE.string('problem_statement'),
+		status: SE.boolean(),
+		status_update_date: SE.date_time(),
+		proposed_cost: SE.number(),
+		is_proceed_to_repair: SE.boolean(),
+		warehouse_uuid: SE.uuid(),
+		rack_uuid: SE.uuid(),
+		floor_uuid: SE.uuid(),
+		box_uuid: SE.uuid(),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Work/Process',
+});
+
 //* Marge all
 export const defWork = {
 	problem: defProblem,
 	order: defOrder,
 	diagnosis: defDiagnosis,
 	section: defSection,
+	process: defProcess,
 };
 
 //* Tag
@@ -119,5 +164,9 @@ export const tagWork = [
 	{
 		name: 'work.section',
 		description: 'Work Section',
+	},
+	{
+		name: 'work.process',
+		description: 'Work Process',
 	},
 ];
