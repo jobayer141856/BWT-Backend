@@ -4,7 +4,7 @@ import * as otherOperations from './query/query.js';
 
 const otherRouter = Router();
 
-//* others routes *//
+//* Store others routes *//
 
 // designation routes
 otherRouter.get('/designation/value/label', otherOperations.selectDesignation);
@@ -82,5 +82,22 @@ otherRouter.get(
 );
 
 otherRouter.get('/model/value/label', otherOperations.selectModel);
+
+//* Work others routes *//
+
+// problem routes
+otherRouter.get('/problem/value/label', otherOperations.selectProblem);
+
+// order routes
+otherRouter.get('/order/value/label', otherOperations.selectOrder);
+
+// diagnosis routes
+otherRouter.get('/diagnosis/value/label', otherOperations.selectDiagnosis);
+
+// section routes
+otherRouter.get('/section/value/label', otherOperations.selectSection);
+
+// process routes
+otherRouter.get('/process/value/label', otherOperations.selectProcess);
 
 export { otherRouter };
