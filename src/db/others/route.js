@@ -4,7 +4,7 @@ import * as otherOperations from './query/query.js';
 
 const otherRouter = Router();
 
-//* Store others routes *//
+//* HR others routes *//
 
 // designation routes
 otherRouter.get('/designation/value/label', otherOperations.selectDesignation);
@@ -12,6 +12,7 @@ otherRouter.get('/designation/value/label', otherOperations.selectDesignation);
 // department routes
 otherRouter.get('/department/value/label', otherOperations.selectDepartment);
 
+//* Store others routes *//
 // group routes
 otherRouter.get('/group/value/label', otherOperations.selectGroup);
 
