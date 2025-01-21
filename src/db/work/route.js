@@ -4,6 +4,7 @@ import { validateUuidParam } from '../../lib/validator.js';
 import * as problemOperations from './query/problem.js';
 import * as orderOperations from './query/order.js';
 import * as diagnosisOperations from './query/diagnosis.js';
+import * as sectionOperations from './query/section.js';
 
 const workRouter = Router();
 
@@ -27,13 +28,28 @@ workRouter.delete('/order/:uuid', validateUuidParam(), orderOperations.remove);
 
 //* diagnosis routes *//
 workRouter.get('/diagnosis', diagnosisOperations.selectAll);
-workRouter.get('/diagnosis/:uuid', validateUuidParam(), diagnosisOperations.select);
+workRouter.get(
+	'/diagnosis/:uuid',
+	validateUuidParam(),
+	diagnosisOperations.select
+);
 workRouter.post('/diagnosis', diagnosisOperations.insert);
 workRouter.put('/diagnosis/:uuid', diagnosisOperations.update);
 workRouter.delete(
 	'/diagnosis/:uuid',
 	validateUuidParam(),
 	diagnosisOperations.remove
+);
+
+//* section routes *//
+workRouter.get('/section', sectionOperations.selectAll);
+workRouter.get('/section/:uuid', validateUuidParam(), sectionOperations.select);
+workRouter.post('/section', sectionOperations.insert);
+workRouter.put('/section/:uuid', sectionOperations.update);
+workRouter.delete(
+	'/section/:uuid',
+	validateUuidParam(),
+	sectionOperations.remove
 );
 
 export { workRouter };
