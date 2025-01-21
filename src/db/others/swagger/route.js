@@ -2,6 +2,8 @@ import SE, { SED } from '../../../util/swagger_example.js';
 
 import { Router } from 'express';
 
+//* HR others routes *//
+
 const pathDesignation = {
 	'/other/designation/value/label': {
 		get: {
@@ -53,6 +55,9 @@ const pathDepartment = {
 		},
 	},
 };
+
+//* Store others routes *//
+
 const pathGroup = {
 	'/other/group/value/label': {
 		get: {
@@ -520,6 +525,142 @@ const pathModel = {
 	},
 };
 
+//* Work others routes *//
+
+const pathProblem = {
+	'/other/problem/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all problem',
+			description: 'Get all problem',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('problem'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+const pathOrder = {
+	'/other/order/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all order',
+			description: 'Get all order',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									id: SE.number(),
+									value: SE.uuid(),
+									label: SE.string('WO25-0001'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+const pathDiagnosis = {
+	'/other/diagnosis/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all diagnosis',
+			description: 'Get all diagnosis',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									id: SE.number(),
+									value: SE.uuid(),
+									label: SE.string('WD25-0001'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+const pathSection = {
+	'/other/section/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all section',
+			description: 'Get all section',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									id: SE.number(),
+									value: SE.uuid(),
+									label: SE.string('section'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+const pathProcess = {
+	'/other/process/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all process',
+			description: 'Get all process',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									id: SE.number(),
+									value: SE.uuid(),
+									label: SE.string('WP25-0001'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 export const pathOthers = {
 	...pathDesignation,
 	...pathDepartment,
@@ -541,6 +682,11 @@ export const pathOthers = {
 	...pathPurchaseReturn,
 	...pathInternalTransfer,
 	...pathModel,
+	...pathProblem,
+	...pathOrder,
+	...pathDiagnosis,
+	...pathSection,
+	...pathProcess,
 };
 
 export const tagOthers = [

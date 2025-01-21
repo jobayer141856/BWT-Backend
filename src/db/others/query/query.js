@@ -3,7 +3,9 @@ import db from '../../index.js';
 
 import * as hrSchema from '../../hr/schema.js';
 import * as storeSchema from '../../store/schema.js';
+import * as workSchema from '../../work/schema.js';
 
+//* HR others routes *//
 export async function selectDesignation(req, res, next) {
 	const designationPromise = db
 		.select({
@@ -45,6 +47,8 @@ export async function selectDepartment(req, res, next) {
 		next(error);
 	}
 }
+
+//* Store others routes *//
 
 export async function selectGroup(req, res, next) {
 	const groupPromise = db
@@ -415,6 +419,128 @@ export async function selectModel(req, res, next) {
 			status: 200,
 			type: 'select all',
 			message: 'Model list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+//* Work others routes *//
+
+export async function selectProblem(req, res, next) {
+	const problemPromise = db
+		.select({
+			value: workSchema.problem.uuid,
+			label: workSchema.problem.name,
+		})
+		.from(workSchema.problem);
+
+	try {
+		const data = await problemPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Problem list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectOrder(req, res, next) {
+	const orderPromise = db
+		.select({
+			value: workSchema.order.uuid,
+			label: sql`CONCAT(
+				'WO',
+				TO_CHAR(${workSchema.order.created_at}, 'YY'),
+				' - ',
+				TO_CHAR(${workSchema.order.id}, 'FM0000')
+			)`,
+		})
+		.from(workSchema.order);
+
+	try {
+		const data = await orderPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Order list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectDiagnosis(req, res, next) {
+	const diagnosisPromise = db
+		.select({
+			value: workSchema.diagnosis.uuid,
+			label: sql`CONCAT(
+				'WD',
+				TO_CHAR(${workSchema.diagnosis.created_at}, 'YY'),
+				' - ',
+				TO_CHAR(${workSchema.diagnosis.id}, 'FM0000')
+			)`,
+		})
+		.from(workSchema.diagnosis);
+
+	try {
+		const data = await diagnosisPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Diagnosis list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectSection(req, res, next) {
+	const sectionPromise = db
+		.select({
+			value: workSchema.section.uuid,
+			label: workSchema.section.name,
+		})
+		.from(workSchema.section);
+
+	try {
+		const data = await sectionPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Section list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectProcess(req, res, next) {
+	const processPromise = db
+		.select({
+			value: workSchema.process.uuid,
+			label: sql`CONCAT(
+				'WP',
+				TO_CHAR(${workSchema.process.created_at}, 'YY'),
+				' - ',
+				TO_CHAR(${workSchema.process.id}, 'FM0000')
+			)`,
+		})
+		.from(workSchema.process);
+
+	try {
+		const data = await processPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Process list',
 		};
 		return await res.status(200).json({ toast, data });
 	} catch (error) {
