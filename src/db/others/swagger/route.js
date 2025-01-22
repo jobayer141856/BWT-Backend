@@ -1,8 +1,46 @@
 import SE, { SED } from '../../../util/swagger_example.js';
 
-import { Router } from 'express';
-
 //* HR others routes *//
+const pathUser = {
+	'/other/user/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all user',
+			description: 'Get all user',
+			parameters: [
+				SE.parameter_query('type', 'type', ['employee', 'customer']),
+				SE.parameter_query('department', 'department', [
+					'admin',
+					'hr',
+					'it',
+					'account',
+				]),
+				SE.parameter_query('designation', 'designation', [
+					'admin',
+					'officer',
+					'assistant',
+					'supervisor',
+				]),
+			],
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('user'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
 
 const pathDesignation = {
 	'/other/designation/value/label': {
@@ -662,6 +700,7 @@ const pathProcess = {
 };
 
 export const pathOthers = {
+	...pathUser,
 	...pathDesignation,
 	...pathDepartment,
 	...pathGroup,

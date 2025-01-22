@@ -1,11 +1,72 @@
-import { sql } from 'drizzle-orm';
+import { sql, eq, and } from 'drizzle-orm';
 import db from '../../index.js';
-
+import { handleError, validateRequest } from '../../../util/index.js';
 import * as hrSchema from '../../hr/schema.js';
 import * as storeSchema from '../../store/schema.js';
 import * as workSchema from '../../work/schema.js';
 
 //* HR others routes *//
+
+export async function selectUser(req, res, next) {
+	const { type, designation, department } = req.query;
+
+	console.log(type, designation, department);
+
+	// let whereClause = [];
+
+	// if (type) {
+	// 	whereClause.push({ 'hr.users.user_type': type });
+	// }
+	// if (department) {
+	// 	whereClause.push(hrSchema.department.department.eq(department));
+	// }
+	// if (designation) {
+	// 	whereClause.push(hrSchema.designation.designation.eq(designation));
+	// }
+
+	const userPromise = db
+		.select({
+			value: hrSchema.users.uuid,
+			label: hrSchema.users.name,
+		})
+		.from(hrSchema.users)
+		.leftJoin(
+			hrSchema.designation,
+			eq(hrSchema.users.designation_uuid, hrSchema.designation.uuid)
+		)
+		.leftJoin(
+			hrSchema.department,
+			eq(hrSchema.users.department_uuid, hrSchema.department.uuid)
+		);
+
+	const filters = [];
+	if (type) {
+		filters.push(eq(hrSchema.users.user_type, type));
+	}
+	if (department) {
+		filters.push(eq(hrSchema.department.department, department));
+	}
+	if (designation) {
+		filters.push(eq(hrSchema.designation.designation, designation));
+	}
+
+	if (filters.length > 0) {
+		userPromise.where(and(...filters));
+	}
+
+	try {
+		const data = await userPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'User list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
 export async function selectDesignation(req, res, next) {
 	const designationPromise = db
 		.select({
