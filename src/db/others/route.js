@@ -5,7 +5,8 @@ import * as otherOperations from './query/query.js';
 const otherRouter = Router();
 
 //* HR others routes *//
-
+// user
+otherRouter.get('/user/value/label', otherOperations.selectUser);
 // designation routes
 otherRouter.get('/designation/value/label', otherOperations.selectDesignation);
 
