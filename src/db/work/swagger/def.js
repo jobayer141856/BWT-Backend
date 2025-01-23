@@ -5,6 +5,7 @@ const defProblem = SED({
 	properties: {
 		uuid: SE.uuid(),
 		name: SE.string('Problem 1'),
+		category: SE.type_enum('customer', 'employee'),
 		created_by: SE.uuid(),
 		created_at: SE.date_time(),
 		updated_at: SE.date_time(),

@@ -78,6 +78,7 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: problem.uuid,
 			name: problem.name,
+			category: problem.category,
 			created_by: problem.created_by,
 			created_by_name: hrSchema.users.name,
 			created_at: problem.created_at,
@@ -107,6 +108,7 @@ export async function select(req, res, next) {
 		.select({
 			uuid: problem.uuid,
 			name: problem.name,
+			category: problem.category,
 			created_by: problem.created_by,
 			created_by_name: hrSchema.users.name,
 			created_at: problem.created_at,
