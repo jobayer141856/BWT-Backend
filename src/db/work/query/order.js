@@ -3,10 +3,11 @@ import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
-
+import { alias } from 'drizzle-orm/pg-core';
 import { order } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
 
+const user = alias(hrSchema.users, 'user');
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
@@ -81,6 +82,7 @@ export async function selectAll(req, res, next) {
 			order_id: sql`CONCAT('WO', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 			uuid: order.uuid,
 			user_uuid: order.user_uuid,
+			user_name: user.name,
 			model_uuid: order.model_uuid,
 			model_name: storeSchema.model.name,
 			size_uuid: order.size_uuid,
@@ -122,6 +124,7 @@ export async function selectAll(req, res, next) {
 			eq(order.floor_uuid, storeSchema.floor.uuid)
 		)
 		.leftJoin(storeSchema.box, eq(order.box_uuid, storeSchema.box.uuid))
+		.leftJoin(user, eq(order.user_uuid, user.uuid))
 
 		.orderBy(desc(order.created_at));
 
@@ -145,6 +148,7 @@ export async function select(req, res, next) {
 			order_id: sql`CONCAT('WO', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 			uuid: order.uuid,
 			user_uuid: order.user_uuid,
+			user_name: user.name,
 			model_uuid: order.model_uuid,
 			model_name: storeSchema.model.name,
 			size_uuid: order.size_uuid,
@@ -186,6 +190,7 @@ export async function select(req, res, next) {
 			eq(order.floor_uuid, storeSchema.floor.uuid)
 		)
 		.leftJoin(storeSchema.box, eq(order.box_uuid, storeSchema.box.uuid))
+		.leftJoin(user, eq(order.user_uuid, user.uuid))
 		.where(eq(order.uuid, req.params.uuid));
 
 	try {
