@@ -56,6 +56,12 @@ export const order = work.table('order', {
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
 });
+export const statusEnum = pgEnum('status', [
+	'pending',
+	'rejected',
+	'accepted',
+	'not_repairable',
+]);
 
 export const diagnosis = work.table('diagnosis', {
 	id: serial('id').notNull().unique(),
@@ -66,7 +72,7 @@ export const diagnosis = work.table('diagnosis', {
 	),
 	problems_uuid: text('problems_uuid').array(),
 	problem_statement: text('problem_statement').notNull(),
-	status: boolean('status').default(false),
+	status: statusEnum('status').default('pending'),
 	status_update_date: DateTime('status_update_date').default(null),
 	proposed_cost: PG_DECIMAL('proposed_cost').default(0),
 	is_proceed_to_repair: boolean('is_proceed_to_repair').default(false),
