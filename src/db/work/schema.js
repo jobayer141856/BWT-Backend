@@ -20,9 +20,12 @@ import * as storeSchema from '../store/schema.js';
 
 const work = pgSchema('work');
 
+export const categoryEnum = pgEnum('category', ['customer', 'employee']);
+
 export const problem = work.table('problem', {
 	uuid: uuid_primary,
 	name: text('name').notNull(),
+	category: categoryEnum('category').default('employee'),
 	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),

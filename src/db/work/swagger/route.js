@@ -11,6 +11,7 @@ export const pathWorkProblem = {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
 					name: SE.string('work problem name'),
+					category: SE.type_enum('customer', 'employee'),
 					created_by: SE.uuid(),
 					created_by_name: SE.string('created_by_name'),
 					created_at: SE.date_time(),
