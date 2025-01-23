@@ -4,7 +4,7 @@ import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 
-import { diagnosis } from '../schema.js';
+import { diagnosis, order } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -80,6 +80,7 @@ export async function selectAll(req, res, next) {
 			id: diagnosis.id,
 			diagnosis_id: sql`CONCAT('WD', TO_CHAR(${diagnosis.created_at}, 'YY'), TO_CHAR(${diagnosis.id}, 'FM0000'))`,
 			order_uuid: diagnosis.order_uuid,
+			order_id: sql`CONCAT('WO', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 			engineer_uuid: diagnosis.engineer_uuid,
 			problems_uuid: diagnosis.problems_uuid,
 			problem_statement: diagnosis.problem_statement,
@@ -95,6 +96,7 @@ export async function selectAll(req, res, next) {
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
+		.leftJoin(order, eq(diagnosis.order_uuid, order.uuid))
 		.orderBy(desc(diagnosis.created_at));
 
 	try {
@@ -118,6 +120,7 @@ export async function select(req, res, next) {
 			id: diagnosis.id,
 			diagnosis_id: sql`CONCAT('WD', TO_CHAR(${diagnosis.created_at}, 'YY'), TO_CHAR(${diagnosis.id}, 'FM0000'))`,
 			order_uuid: diagnosis.order_uuid,
+			order_id: sql`CONCAT('WO', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 			engineer_uuid: diagnosis.engineer_uuid,
 			problems_uuid: diagnosis.problems_uuid,
 			problem_statement: diagnosis.problem_statement,
@@ -133,6 +136,7 @@ export async function select(req, res, next) {
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
+		.leftJoin(order, eq(diagnosis.order_uuid, order.uuid))
 		.where(eq(diagnosis.uuid, req.params.uuid));
 
 	try {
