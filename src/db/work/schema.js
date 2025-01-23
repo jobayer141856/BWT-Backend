@@ -71,7 +71,7 @@ export const diagnosis = work.table('diagnosis', {
 		() => hrSchema.users.uuid
 	),
 	problems_uuid: text('problems_uuid').array(),
-	problem_statement: text('problem_statement').notNull(),
+	problem_statement: text('problem_statement'),
 	status: statusEnum('status').default('pending'),
 	status_update_date: DateTime('status_update_date').default(null),
 	proposed_cost: PG_DECIMAL('proposed_cost').default(0),
