@@ -5,6 +5,7 @@ import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 
 import { diagnosis, order } from '../schema.js';
+import { box, floor, rack, warehouse } from '../../store/schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -93,10 +94,22 @@ export async function selectAll(req, res, next) {
 			created_at: diagnosis.created_at,
 			updated_at: diagnosis.updated_at,
 			remarks: diagnosis.remarks,
+			warehouse_uuid: order.warehouse_uuid,
+			warehouse_name: warehouse.name,
+			rack_uuid: order.rack_uuid,
+			rack_name: rack.name,
+			floor_uuid: order.floor_uuid,
+			floor_name: floor.name,
+			box_uuid: order.box_uuid,
+			box_name: box.name,
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
 		.leftJoin(order, eq(diagnosis.order_uuid, order.uuid))
+		.leftJoin(warehouse, eq(order.warehouse_uuid, warehouse.uuid))
+		.leftJoin(rack, eq(order.rack_uuid, rack.uuid))
+		.leftJoin(floor, eq(order.floor_uuid, floor.uuid))
+		.leftJoin(box, eq(order.box_uuid, box.uuid))
 		.orderBy(desc(diagnosis.created_at));
 
 	try {
@@ -133,10 +146,22 @@ export async function select(req, res, next) {
 			created_at: diagnosis.created_at,
 			updated_at: diagnosis.updated_at,
 			remarks: diagnosis.remarks,
+			warehouse_uuid: order.warehouse_uuid,
+			warehouse_name: warehouse.name,
+			rack_uuid: order.rack_uuid,
+			rack_name: rack.name,
+			floor_uuid: order.floor_uuid,
+			floor_name: floor.name,
+			box_uuid: order.box_uuid,
+			box_name: box.name,
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
 		.leftJoin(order, eq(diagnosis.order_uuid, order.uuid))
+		.leftJoin(warehouse, eq(order.warehouse_uuid, warehouse.uuid))
+		.leftJoin(rack, eq(order.rack_uuid, rack.uuid))
+		.leftJoin(floor, eq(order.floor_uuid, floor.uuid))
+		.leftJoin(box, eq(order.box_uuid, box.uuid))
 		.where(eq(diagnosis.uuid, req.params.uuid));
 
 	try {
