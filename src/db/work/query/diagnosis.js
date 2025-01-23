@@ -74,6 +74,18 @@ export async function remove(req, res, next) {
 	}
 }
 
+// Assuming you have a function to fetch problem_name by problem_uuid
+async function getProblemNameByUuid(problem_uuid) {
+	// Implement the logic to fetch problem_name using problem_uuid
+	// This could be a database query or an API call
+	// For example:
+	const result = await db.query(
+		'SELECT problem.name FROM work.problem WHERE problem_uuid = $1',
+		[problem_uuid]
+	);
+	return result.rows[0].problem_name;
+}
+
 export async function selectAll(req, res, next) {
 	const diagnosisPromise = db
 		.select({
@@ -114,6 +126,31 @@ export async function selectAll(req, res, next) {
 
 	try {
 		const data = await diagnosisPromise;
+
+		// Ensure problems_uuid is an array or handle object
+		let problems_uuid = data.problems_uuid;
+		if (problems_uuid === null || problems_uuid === undefined) {
+			problems_uuid = [];
+		} else if (typeof problems_uuid === 'object') {
+			problems_uuid = Object.keys(problems_uuid); // Convert object keys to array
+		} else if (typeof problems_uuid === 'string') {
+			problems_uuid = problems_uuid.split(','); // Assuming comma-separated string
+		} else if (!Array.isArray(problems_uuid)) {
+			throw new Error(
+				'problems_uuid is not an array, object, or a comma-separated string'
+			);
+		}
+
+		// Fetch problem names
+		const problems_name = [];
+		for (const problem_uuid of problems_uuid) {
+			const problem_name = await getProblemNameByUuid(problem_uuid);
+			problems_name.push(problem_name);
+		}
+
+		// Add problems_name to the diagnosis data
+		data.problems_name = problems_name;
+
 		const toast = {
 			status: 200,
 			type: 'select all',
