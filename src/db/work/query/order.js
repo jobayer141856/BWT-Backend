@@ -152,6 +152,7 @@ export async function select(req, res, next) {
 			user_uuid: order.user_uuid,
 			user_id: sql`CONCAT('HU', TO_CHAR(${user.created_at}::timestamp, 'YY'), '-', TO_CHAR(${user.id}::integer, 'FM0000'))`,
 			user_name: user.name,
+			user_phone: user.phone,
 			model_uuid: order.model_uuid,
 			model_name: storeSchema.model.name,
 			size_uuid: order.size_uuid,
