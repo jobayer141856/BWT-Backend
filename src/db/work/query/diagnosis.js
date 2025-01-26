@@ -1,10 +1,10 @@
-import { desc, eq, sql } from 'drizzle-orm';
+import { desc, eq, sql, inArray } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 import { createApi } from '../../../util/api.js';
-import { diagnosis, order } from '../schema.js';
+import { diagnosis, order, problem } from '../schema.js';
 import { box, floor, rack, warehouse } from '../../store/schema.js';
 
 export async function insert(req, res, next) {
@@ -74,18 +74,6 @@ export async function remove(req, res, next) {
 	}
 }
 
-// Assuming you have a function to fetch problem_name by problem_uuid
-// async function getProblemNameByUuid(problem_uuid) {
-// 	// Implement the logic to fetch problem_name using problem_uuid
-// 	// This could be a database query or an API call
-// 	// For example:
-// 	const result = await db.query(
-// 		'SELECT problem.name FROM work.problem WHERE problem_uuid = $1',
-// 		[problem_uuid]
-// 	);
-// 	return result.rows[0].problem_name;
-// }
-
 export async function selectAll(req, res, next) {
 	const diagnosisPromise = db
 		.select({
@@ -126,31 +114,28 @@ export async function selectAll(req, res, next) {
 
 	try {
 		const data = await diagnosisPromise;
+		const problems_uuid = data
+			.map((diagnosis) => diagnosis.problems_uuid)
+			.flat();
 
-		// // Ensure problems_uuid is an array or handle object
-		// let problems_uuid = data.problems_uuid;
-		// if (problems_uuid === null || problems_uuid === undefined) {
-		// 	problems_uuid = [];
-		// } else if (typeof problems_uuid === 'object') {
-		// 	problems_uuid = Object.keys(problems_uuid); // Convert object keys to array
-		// } else if (typeof problems_uuid === 'string') {
-		// 	problems_uuid = problems_uuid.split(','); // Assuming comma-separated string
-		// } else if (!Array.isArray(problems_uuid)) {
-		// 	throw new Error(
-		// 		'problems_uuid is not an array, object, or a comma-separated string'
-		// 	);
-		// }
+		const problems = await db
+			.select({
+				name: problem.name,
+				uuid: problem.uuid,
+			})
+			.from(problem)
+			.where(inArray(problem.uuid, problems_uuid));
 
-		// // Fetch problem names
-		// const problems_name = [];
-		// for (const problem_uuid of problems_uuid) {
-		// 	const problem_name = await getProblemNameByUuid(problem_uuid);
-		// 	problems_name.push(problem_name);
-		// }
+		const problemsMap = problems.reduce((acc, problem) => {
+			acc[problem.uuid] = problem.name;
+			return acc;
+		}, {});
 
-		// // Add problems_name to the diagnosis data
-		// data.problems_name = problems_name;
-
+		data.forEach((diagnosis) => {
+			diagnosis.problems_name = diagnosis.problems_uuid.map(
+				(uuid) => problemsMap[uuid]
+			);
+		});
 		const toast = {
 			status: 200,
 			type: 'select all',
@@ -203,6 +188,28 @@ export async function select(req, res, next) {
 
 	try {
 		const data = await diagnosisPromise;
+		const problems_uuid = data
+			.map((diagnosis) => diagnosis.problems_uuid)
+			.flat();
+
+		const problems = await db
+			.select({
+				name: problem.name,
+				uuid: problem.uuid,
+			})
+			.from(problem)
+			.where(inArray(problem.uuid, problems_uuid));
+
+		const problemsMap = problems.reduce((acc, problem) => {
+			acc[problem.uuid] = problem.name;
+			return acc;
+		}, {});
+
+		data.forEach((diagnosis) => {
+			diagnosis.problems_name = diagnosis.problems_uuid.map(
+				(uuid) => problemsMap[uuid]
+			);
+		});
 		const toast = {
 			status: 200,
 			type: 'select',
@@ -255,6 +262,30 @@ export async function selectByOrder(req, res, next) {
 
 	try {
 		const data = await diagnosisPromise;
+
+		const problems_uuid = data
+			.map((diagnosis) => diagnosis.problems_uuid)
+			.flat();
+
+		const problems = await db
+			.select({
+				name: problem.name,
+				uuid: problem.uuid,
+			})
+			.from(problem)
+			.where(inArray(problem.uuid, problems_uuid));
+
+		const problemsMap = problems.reduce((acc, problem) => {
+			acc[problem.uuid] = problem.name;
+			return acc;
+		}, {});
+
+		data.forEach((diagnosis) => {
+			diagnosis.problems_name = diagnosis.problems_uuid.map(
+				(uuid) => problemsMap[uuid]
+			);
+		});
+
 		const toast = {
 			status: 200,
 			type: 'select by order',
