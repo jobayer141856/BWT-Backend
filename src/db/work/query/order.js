@@ -3,6 +3,7 @@ import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
+import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
 import { order } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
@@ -202,6 +203,97 @@ export async function select(req, res, next) {
 		};
 		return await res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
+		next(error);
+	}
+}
+
+// export async function selectDiagnosisDetailsByOrder(req, res, next) {
+// 	if (!(await validateRequest(req, next))) return;
+
+// 	const { order_uuid } = req.params;
+// 	console.log('Order uuid:', order_uuid);
+// 	try {
+// 		const api = await createApi(req);
+
+// 		const fetchData = async (endpoint) =>
+// 			await api
+// 				.get(`${endpoint}/${order_uuid}`)
+// 				.then((response) => response.data)
+// 				.catch((error) => {
+// 					throw error;
+// 				});
+
+// 		const [order, diagnosis] = await Promise.all([
+// 			fetchData('/work/order'),
+// 			fetchData('/work/diagnosis/by-order'),
+// 		]);
+
+// 		console.log('Order data:', order);
+// 		console.log('Diagnosis data:', diagnosis);
+
+// 		const response = {
+// 			...order?.data,
+// 			diagnosis: diagnosis?.data || [],
+// 		};
+
+// 		const toast = {
+// 			status: 200,
+// 			type: 'select',
+// 			message: 'diagnosis details by order',
+// 		};
+
+// 		return res.status(200).json({ toast, data: response });
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// }
+
+export async function selectDiagnosisDetailsByOrder(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { order_uuid } = req.params;
+	console.log('Order uuid:', order_uuid);
+	try {
+		const api = await createApi(req);
+
+		const fetchData = async (endpoint) =>
+			await api
+				.get(`${endpoint}/${order_uuid}`)
+				.then((response) => response.data)
+				.catch((error) => {
+					console.error(
+						`Error fetching data from ${endpoint}:`,
+						error.message
+					);
+					throw error;
+				});
+
+		const [order, diagnosis] = await Promise.all([
+			fetchData('/work/order'),
+			fetchData('/work/diagnosis-by-order'),
+		]);
+
+		console.log('Order data:', order);
+		console.log('Diagnosis data:', diagnosis);
+
+		const response = {
+			...order?.data,
+			diagnosis: diagnosis?.data || [],
+		};
+
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'diagnosis details by order',
+		};
+
+		return res.status(200).json({ toast, data: response });
+	} catch (error) {
+		if (error.response && error.response.status === 404) {
+			return res
+				.status(404)
+				.json({ message: 'Resource not found', error: error.message });
+		}
 		next(error);
 	}
 }
