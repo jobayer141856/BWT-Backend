@@ -83,6 +83,7 @@ export async function selectAll(req, res, next) {
 			order_id: sql`CONCAT('WO', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 			uuid: order.uuid,
 			user_uuid: order.user_uuid,
+			user_id: sql`CONCAT('HU', TO_CHAR(${user.created_at}::timestamp, 'YY'), '-', TO_CHAR(${user.id}::integer, 'FM0000'))`,
 			user_name: user.name,
 			model_uuid: order.model_uuid,
 			model_name: storeSchema.model.name,
@@ -149,6 +150,7 @@ export async function select(req, res, next) {
 			order_id: sql`CONCAT('WO', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 			uuid: order.uuid,
 			user_uuid: order.user_uuid,
+			user_id: sql`CONCAT('HU', TO_CHAR(${user.created_at}::timestamp, 'YY'), '-', TO_CHAR(${user.id}::integer, 'FM0000'))`,
 			user_name: user.name,
 			model_uuid: order.model_uuid,
 			model_name: storeSchema.model.name,
@@ -207,13 +209,11 @@ export async function select(req, res, next) {
 	}
 }
 
-
-
 export async function selectDiagnosisDetailsByOrder(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const { order_uuid } = req.params;
-	
+
 	try {
 		const api = await createApi(req);
 
