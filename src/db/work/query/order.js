@@ -1,11 +1,11 @@
-import { desc, eq, sql } from 'drizzle-orm';
+import { desc, eq, sql, inArray } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
-import { order } from '../schema.js';
+import { order, problem } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
 
 const user = alias(hrSchema.users, 'user');
@@ -132,6 +132,28 @@ export async function selectAll(req, res, next) {
 
 	try {
 		const data = await orderPromise;
+
+		const problems_uuid = data.map((order) => order.problems_uuid).flat();
+
+		const problems = await db
+			.select({
+				name: problem.name,
+				uuid: problem.uuid,
+			})
+			.from(problem)
+			.where(inArray(problem.uuid, problems_uuid));
+
+		const problemsMap = problems.reduce((acc, problem) => {
+			acc[problem.uuid] = problem.name;
+			return acc;
+		}, {});
+
+		data.forEach((order) => {
+			order.problems_name = order.problems_uuid.map(
+				(uuid) => problemsMap[uuid]
+			);
+		});
+
 		const toast = {
 			status: 200,
 			type: 'select all',
@@ -205,6 +227,27 @@ export async function select(req, res, next) {
 
 	try {
 		const data = await orderPromise;
+		const problems_uuid = data.map((order) => order.problems_uuid).flat();
+
+		const problems = await db
+			.select({
+				name: problem.name,
+				uuid: problem.uuid,
+			})
+			.from(problem)
+			.where(inArray(problem.uuid, problems_uuid));
+
+		const problemsMap = problems.reduce((acc, problem) => {
+			acc[problem.uuid] = problem.name;
+			return acc;
+		}, {});
+
+		data.forEach((order) => {
+			order.problems_name = order.problems_uuid.map(
+				(uuid) => problemsMap[uuid]
+			);
+		});
+
 		const toast = {
 			status: 200,
 			type: 'select',
