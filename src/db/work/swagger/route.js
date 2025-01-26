@@ -1,4 +1,5 @@
 import SE from '../../../util/swagger_example.js';
+import { diagnosis } from '../schema.js';
 
 //* Work Problem *//
 
@@ -267,6 +268,72 @@ export const pathWorkOrder = {
 			},
 		},
 	},
+	'/work/diagnosis-details-by-order/{order_uuid}': {
+		get: {
+			tags: ['work.order'],
+			summary: 'Get diagnosis details by order uuid',
+			parameters: [
+				{
+					name: 'order_uuid',
+					in: 'path',
+					description: 'UUID of the order to get diagnosis details',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					id: SE.integer(),
+					order_id: SE.string('WO25-0001'),
+					uuid: SE.uuid(),
+					user_uuid: SE.uuid(),
+					model_uuid: SE.uuid(),
+					model_name: SE.string('model_name'),
+					size_uuid: SE.uuid(),
+					size_name: SE.string('size_name'),
+					serial_no: SE.string('serial_no'),
+					problems_uuid: SE.array(),
+					problem_statement: SE.string('problem_statement'),
+					accessories: SE.array(),
+					is_product_received: SE.boolean(),
+					receive_date: SE.date_time(),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					rack_uuid: SE.uuid(),
+					rack_name: SE.string('rack_name'),
+					floor_uuid: SE.uuid(),
+					floor_name: SE.string('floor_name'),
+					box_uuid: SE.uuid(),
+					box_name: SE.string('box_name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+					diagnosis: SE.array({
+						id: SE.integer(),
+						diagnosis_id: SE.string('WD25-0001'),
+						uuid: SE.uuid(),
+						order_uuid: SE.uuid(),
+						order_id: SE.string('WO25-0001'),
+						engineer_uuid: SE.uuid(),
+						problems_uuid: SE.array(),
+						problem_statement: SE.string('problem_statement'),
+						status: SE.boolean(),
+						status_update_date: SE.date_time(),
+						proposed_cost: SE.number(),
+						is_proceed_to_repair: SE.boolean(),
+						created_by: SE.uuid(),
+						created_by_name: SE.string('created_by_name'),
+						created_at: SE.date_time(),
+						updated_at: SE.date_time(),
+						remarks: SE.string('remarks'),
+					}),
+				}),
+			},
+		},
+	},
 };
 
 export const pathWorkDiagnosis = {
@@ -280,6 +347,7 @@ export const pathWorkDiagnosis = {
 					diagnosis_id: SE.string('WD25-0001'),
 					uuid: SE.uuid(),
 					order_uuid: SE.uuid(),
+					order_id: SE.string('WO25-0001'),
 					engineer_uuid: SE.uuid(),
 					problems_uuid: SE.array(),
 					problem_statement: SE.string('problem_statement'),
@@ -327,6 +395,7 @@ export const pathWorkDiagnosis = {
 					diagnosis_id: SE.string('WD25-0001'),
 					uuid: SE.uuid(),
 					order_uuid: SE.uuid(),
+					order_id: SE.string('WO25-0001'),
 					engineer_uuid: SE.uuid(),
 					problems_uuid: SE.array(),
 					problem_statement: SE.string('problem_statement'),
@@ -370,6 +439,43 @@ export const pathWorkDiagnosis = {
 					name: 'uuid',
 					in: 'path',
 					description: 'UUID of the work diagnosis to delete',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					id: SE.integer(),
+					diagnosis_id: SE.string('WD25-0001'),
+					uuid: SE.uuid(),
+					order_uuid: SE.uuid(),
+					engineer_uuid: SE.uuid(),
+					problems_uuid: SE.array(),
+					problem_statement: SE.string('problem_statement'),
+					status: SE.boolean(),
+					status_update_date: SE.date_time(),
+					proposed_cost: SE.number(),
+					is_proceed_to_repair: SE.boolean(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+	},
+
+	'/work/diagnosis-by-order/{order_uuid}': {
+		get: {
+			tags: ['work.diagnosis'],
+			summary: 'Get a work diagnosis by order uuid',
+			parameters: [
+				{
+					name: 'order_uuid',
+					in: 'path',
+					description: 'UUID of the order to get diagnosis',
 					required: true,
 					type: 'string',
 					format: 'uuid',

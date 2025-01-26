@@ -3,7 +3,7 @@ import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
-
+import { createApi } from '../../../util/api.js';
 import { diagnosis, order } from '../schema.js';
 import { box, floor, rack, warehouse } from '../../store/schema.js';
 
@@ -210,6 +210,58 @@ export async function select(req, res, next) {
 		};
 
 		return await res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectByOrder(req, res, next) {
+	const diagnosisPromise = db
+		.select({
+			uuid: diagnosis.uuid,
+			id: diagnosis.id,
+			diagnosis_id: sql`CONCAT('WD', TO_CHAR(${diagnosis.created_at}, 'YY'), TO_CHAR(${diagnosis.id}, 'FM0000'))`,
+			order_uuid: diagnosis.order_uuid,
+			order_id: sql`CONCAT('WO', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
+			engineer_uuid: diagnosis.engineer_uuid,
+			problems_uuid: diagnosis.problems_uuid,
+			problem_statement: diagnosis.problem_statement,
+			status: diagnosis.status,
+			status_update_date: diagnosis.status_update_date,
+			proposed_cost: decimalToNumber(diagnosis.proposed_cost),
+			is_proceed_to_repair: diagnosis.is_proceed_to_repair,
+			created_by: diagnosis.created_by,
+			created_by_name: hrSchema.users.name,
+			created_at: diagnosis.created_at,
+			updated_at: diagnosis.updated_at,
+			remarks: diagnosis.remarks,
+			warehouse_uuid: order.warehouse_uuid,
+			warehouse_name: warehouse.name,
+			rack_uuid: order.rack_uuid,
+			rack_name: rack.name,
+			floor_uuid: order.floor_uuid,
+			floor_name: floor.name,
+			box_uuid: order.box_uuid,
+			box_name: box.name,
+		})
+		.from(diagnosis)
+		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
+		.leftJoin(order, eq(diagnosis.order_uuid, order.uuid))
+		.leftJoin(warehouse, eq(order.warehouse_uuid, warehouse.uuid))
+		.leftJoin(rack, eq(order.rack_uuid, rack.uuid))
+		.leftJoin(floor, eq(order.floor_uuid, floor.uuid))
+		.leftJoin(box, eq(order.box_uuid, box.uuid))
+		.where(eq(diagnosis.order_uuid, req.params.order_uuid));
+
+	try {
+		const data = await diagnosisPromise;
+		const toast = {
+			status: 200,
+			type: 'select by order',
+			message: 'diagnosis list',
+		};
+
+		return await res.status(200).json({ toast, data });
 	} catch (error) {
 		next(error);
 	}

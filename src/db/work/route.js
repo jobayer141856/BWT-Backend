@@ -7,6 +7,7 @@ import * as diagnosisOperations from './query/diagnosis.js';
 import * as sectionOperations from './query/section.js';
 import * as processOperations from './query/process.js';
 
+
 const workRouter = Router();
 
 //* problem routes *//
@@ -26,6 +27,10 @@ workRouter.get('/order/:uuid', validateUuidParam(), orderOperations.select);
 workRouter.post('/order', orderOperations.insert);
 workRouter.put('/order/:uuid', orderOperations.update);
 workRouter.delete('/order/:uuid', validateUuidParam(), orderOperations.remove);
+workRouter.get(
+	'/diagnosis-details-by-order/:order_uuid',
+	orderOperations.selectDiagnosisDetailsByOrder
+);
 
 //* diagnosis routes *//
 workRouter.get('/diagnosis', diagnosisOperations.selectAll);
@@ -40,6 +45,10 @@ workRouter.delete(
 	'/diagnosis/:uuid',
 	validateUuidParam(),
 	diagnosisOperations.remove
+);
+workRouter.get(
+	'/diagnosis-by-order/:order_uuid',
+	diagnosisOperations.selectByOrder
 );
 
 //* section routes *//
