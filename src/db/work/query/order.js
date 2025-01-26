@@ -207,52 +207,13 @@ export async function select(req, res, next) {
 	}
 }
 
-// export async function selectDiagnosisDetailsByOrder(req, res, next) {
-// 	if (!(await validateRequest(req, next))) return;
 
-// 	const { order_uuid } = req.params;
-// 	console.log('Order uuid:', order_uuid);
-// 	try {
-// 		const api = await createApi(req);
-
-// 		const fetchData = async (endpoint) =>
-// 			await api
-// 				.get(`${endpoint}/${order_uuid}`)
-// 				.then((response) => response.data)
-// 				.catch((error) => {
-// 					throw error;
-// 				});
-
-// 		const [order, diagnosis] = await Promise.all([
-// 			fetchData('/work/order'),
-// 			fetchData('/work/diagnosis/by-order'),
-// 		]);
-
-// 		console.log('Order data:', order);
-// 		console.log('Diagnosis data:', diagnosis);
-
-// 		const response = {
-// 			...order?.data,
-// 			diagnosis: diagnosis?.data || [],
-// 		};
-
-// 		const toast = {
-// 			status: 200,
-// 			type: 'select',
-// 			message: 'diagnosis details by order',
-// 		};
-
-// 		return res.status(200).json({ toast, data: response });
-// 	} catch (error) {
-// 		next(error);
-// 	}
-// }
 
 export async function selectDiagnosisDetailsByOrder(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const { order_uuid } = req.params;
-	console.log('Order uuid:', order_uuid);
+	
 	try {
 		const api = await createApi(req);
 
@@ -272,9 +233,6 @@ export async function selectDiagnosisDetailsByOrder(req, res, next) {
 			fetchData('/work/order'),
 			fetchData('/work/diagnosis-by-order'),
 		]);
-
-		console.log('Order data:', order);
-		console.log('Diagnosis data:', diagnosis);
 
 		const response = {
 			...order?.data,
