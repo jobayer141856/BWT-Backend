@@ -261,7 +261,7 @@ export async function selectByOrder(req, res, next) {
 			message: 'diagnosis list',
 		};
 
-		return await res.status(200).json({ toast, data });
+		return await res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
 		next(error);
 	}
