@@ -114,7 +114,9 @@ export async function selectAll(req, res, next) {
 
 	try {
 		const data = await diagnosisPromise;
+
 		const problems_uuid = data
+			.filter((diagnosis) => diagnosis.problems_uuid != null)
 			.map((diagnosis) => diagnosis.problems_uuid)
 			.flat();
 
@@ -132,10 +134,18 @@ export async function selectAll(req, res, next) {
 		}, {});
 
 		data.forEach((diagnosis) => {
-			diagnosis.problems_name = diagnosis.problems_uuid.map(
-				(uuid) => problemsMap[uuid]
-			);
+			if (
+				diagnosis.problems_uuid &&
+				Array.isArray(diagnosis.problems_uuid)
+			) {
+				diagnosis.problems_name = diagnosis.problems_uuid.map(
+					(uuid) => problemsMap[uuid]
+				);
+			} else {
+				diagnosis.problems_name = [];
+			}
 		});
+
 		const toast = {
 			status: 200,
 			type: 'select all',
@@ -188,7 +198,9 @@ export async function select(req, res, next) {
 
 	try {
 		const data = await diagnosisPromise;
+
 		const problems_uuid = data
+			.filter((diagnosis) => diagnosis.problems_uuid != null)
 			.map((diagnosis) => diagnosis.problems_uuid)
 			.flat();
 
@@ -206,10 +218,18 @@ export async function select(req, res, next) {
 		}, {});
 
 		data.forEach((diagnosis) => {
-			diagnosis.problems_name = diagnosis.problems_uuid.map(
-				(uuid) => problemsMap[uuid]
-			);
+			if (
+				diagnosis.problems_uuid &&
+				Array.isArray(diagnosis.problems_uuid)
+			) {
+				diagnosis.problems_name = diagnosis.problems_uuid.map(
+					(uuid) => problemsMap[uuid]
+				);
+			} else {
+				diagnosis.problems_name = [];
+			}
 		});
+
 		const toast = {
 			status: 200,
 			type: 'select',
@@ -264,6 +284,7 @@ export async function selectByOrder(req, res, next) {
 		const data = await diagnosisPromise;
 
 		const problems_uuid = data
+			.filter((diagnosis) => diagnosis.problems_uuid != null)
 			.map((diagnosis) => diagnosis.problems_uuid)
 			.flat();
 
@@ -281,9 +302,16 @@ export async function selectByOrder(req, res, next) {
 		}, {});
 
 		data.forEach((diagnosis) => {
-			diagnosis.problems_name = diagnosis.problems_uuid.map(
-				(uuid) => problemsMap[uuid]
-			);
+			if (
+				diagnosis.problems_uuid &&
+				Array.isArray(diagnosis.problems_uuid)
+			) {
+				diagnosis.problems_name = diagnosis.problems_uuid.map(
+					(uuid) => problemsMap[uuid]
+				);
+			} else {
+				diagnosis.problems_name = [];
+			}
 		});
 
 		const toast = {
