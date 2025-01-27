@@ -7,17 +7,35 @@ import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
 import { order, problem } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
-
+import { users } from '../../hr/schema.js';
 const user = alias(hrSchema.users, 'user');
+
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
+	const { is_new_customer, user_uuid, name, phone, created_at } = req.body;
 
-	const orderPromise = db
-		.insert(order)
-		.values(req.body)
-		.returning({ insertedUuid: order.uuid });
+	// console.log('is_new_customer', req.body);
 
 	try {
+		if (is_new_customer) {
+			await db.insert(users).values({
+				uuid: user_uuid,
+				name: name,
+				phone: phone,
+				user_type: 'customer',
+				pass: phone,
+				department_uuid: null,
+				designation_uuid: null,
+				email: `${user_uuid}@bwt.com`,
+				ext: '+880',
+				created_at: created_at,
+			});
+		}
+		const orderPromise = db
+			.insert(order)
+			.values(req.body)
+			.returning({ insertedUuid: order.uuid });
+
 		const data = await orderPromise;
 		const toast = {
 			status: 201,
