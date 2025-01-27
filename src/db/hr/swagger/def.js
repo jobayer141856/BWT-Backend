@@ -36,6 +36,7 @@ export const defHrUser = SED({
 		'can_access',
 		'created_at',
 		'status',
+		'user_type',
 	],
 	properties: {
 		uuid: SE.uuid(),
@@ -51,6 +52,7 @@ export const defHrUser = SED({
 		updated_at: SE.date_time(),
 		status: SE.string('active'),
 		remarks: SE.string('remarks'),
+		user_type: SE.string('employee'),
 	},
 	xml: 'Hr/User',
 });
