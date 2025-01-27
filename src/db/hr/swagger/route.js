@@ -112,6 +112,7 @@ export const pathHrUser = {
 				updated_at: SE.date_time(),
 				status: SE.integer(1),
 				remarks: SE.string('remarks'),
+				user_type: SE.string('employee'),
 			}),
 			responses: {
 				200: {
