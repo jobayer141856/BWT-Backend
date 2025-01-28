@@ -470,9 +470,13 @@ export async function selectModel(req, res, next) {
 	const modelPromise = db
 		.select({
 			value: storeSchema.model.uuid,
-			label: storeSchema.model.name,
+			label: sql`CONCAT(${storeSchema.brand.name}, '-', ${storeSchema.model.name})`,
 		})
-		.from(storeSchema.model);
+		.from(storeSchema.model)
+		.leftJoin(
+			storeSchema.brand,
+			eq(storeSchema.model.brand_uuid, storeSchema.brand.uuid)
+		);
 
 	try {
 		const data = await modelPromise;
