@@ -12,18 +12,6 @@ export async function selectUser(req, res, next) {
 
 	console.log(type, designation, department);
 
-	// let whereClause = [];
-
-	// if (type) {
-	// 	whereClause.push({ 'hr.users.user_type': type });
-	// }
-	// if (department) {
-	// 	whereClause.push(hrSchema.department.department.eq(department));
-	// }
-	// if (designation) {
-	// 	whereClause.push(hrSchema.designation.designation.eq(designation));
-	// }
-
 	const userPromise = db
 		.select({
 			value: hrSchema.users.uuid,
@@ -494,12 +482,22 @@ export async function selectModel(req, res, next) {
 //* Work others routes *//
 
 export async function selectProblem(req, res, next) {
+	const { category } = req.query;
 	const problemPromise = db
 		.select({
 			value: workSchema.problem.uuid,
 			label: workSchema.problem.name,
 		})
 		.from(workSchema.problem);
+
+	const filters = [];
+	if (category) {
+		filters.push(eq(workSchema.problem.category, category));
+	}
+
+	if (filters.length > 0) {
+		problemPromise.where(and(...filters));
+	}
 
 	try {
 		const data = await problemPromise;

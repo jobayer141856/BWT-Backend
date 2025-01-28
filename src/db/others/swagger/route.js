@@ -1,3 +1,4 @@
+import { param } from 'express-validator';
 import SE, { SED } from '../../../util/swagger_example.js';
 
 //* HR others routes *//
@@ -571,6 +572,12 @@ const pathProblem = {
 			tags: ['others'],
 			summary: 'Get all problem',
 			description: 'Get all problem',
+			parameters: [
+				SE.parameter_query('category', 'category', [
+					'employee',
+					'customer',
+				]),
+			],
 			responses: {
 				200: {
 					description: 'Success',
