@@ -1,4 +1,4 @@
-
+--inserted into the database
 CREATE OR REPLACE FUNCTION generate_15_digit_uuid()
 RETURNS VARCHAR AS $$
 DECLARE
@@ -26,3 +26,28 @@ CREATE OR REPLACE TRIGGER after_order_insert_update
 AFTER INSERT OR UPDATE ON work.order
 FOR EACH ROW
 EXECUTE FUNCTION insert_diagnosis_after_order();
+
+
+-- CREATE OR REPLACE FUNCTION insert_diagnosis_after_order()
+-- RETURNS TRIGGER AS $$
+-- BEGIN
+--     -- Delete diagnosis if transitioning from true to false
+--     IF TG_OP = 'UPDATE' AND OLD.is_product_received = TRUE AND NEW.is_product_received = FALSE THEN
+--         DELETE FROM work.diagnosis WHERE order_uuid = NEW.uuid;
+--     END IF;
+
+--     -- Insert new diagnosis if is_product_received is true (on insert or update)
+--     IF NEW.is_product_received THEN
+--         INSERT INTO work.diagnosis (order_uuid, uuid, created_by, created_at, updated_at)
+--         VALUES (NEW.uuid, generate_15_digit_uuid(), NEW.created_by, NEW.created_at, NEW.updated_at);
+--     END IF;
+
+--     RETURN NEW;
+-- END;
+-- $$ LANGUAGE plpgsql;
+
+-- -- Keep the existing trigger definition
+-- CREATE OR REPLACE TRIGGER after_order_insert_update
+-- AFTER INSERT OR UPDATE ON work.order
+-- FOR EACH ROW
+-- EXECUTE FUNCTION insert_diagnosis_after_order();

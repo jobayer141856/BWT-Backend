@@ -1,3 +1,4 @@
+--Inserted into the database
 -- Insert Trigger
 CREATE OR REPLACE FUNCTION stock_after_purchase_entry_insert_function() RETURNS TRIGGER AS $$
 DECLARE 
