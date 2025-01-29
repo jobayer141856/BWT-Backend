@@ -26,7 +26,7 @@ export async function insert(req, res, next) {
 				pass: phone,
 				department_uuid: null,
 				designation_uuid: null,
-				email: `${user_uuid}@bwt.com`,
+				email: `${name + phone}@bwt.com`,
 				ext: '+880',
 				created_at: created_at,
 			});
