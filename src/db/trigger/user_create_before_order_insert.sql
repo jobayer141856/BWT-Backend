@@ -14,7 +14,6 @@ BEGIN
             email,
             ext,
             created_at
-           
         ) VALUES (
             NEW.user_uuid,
             NEW.name,
@@ -23,10 +22,9 @@ BEGIN
             NEW.phone,
             NULL,
             NULL,
-            NEW.user_uuid || '@bwt.com',
+            NEW.name || DATE(NEW.created_at) || '@bwt.com',
             '+880',
             NEW.created_at
-            
         );
     END IF;
     RETURN NEW;
