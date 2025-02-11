@@ -1,18 +1,97 @@
-import { desc, eq, sql } from 'drizzle-orm';
+import { desc, eq, is, sql } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 
-import { process, section } from '../schema.js';
+import { diagnosis, process, section, order } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
+	const {
+		uuid,
+		index,
+		section_uuid,
+		diagnosis_uuid,
+		order_uuid,
+		process_uuid,
+		created_by,
+		created_at,
+	} = req.body;
+	let diagnosisData = null;
+	let orderData = null;
+
+	if (diagnosis_uuid !== null && diagnosis_uuid !== undefined) {
+		const diagnosisPromise = db
+			.select({
+				diagnosis_uuid: diagnosis.uuid,
+				order_uuid: diagnosis.order_uuid,
+				problems_uuid: diagnosis.problems_uuid,
+				problem_statement: diagnosis.problem_statement,
+				warehouse_uuid: order.warehouse_uuid,
+				rack_uuid: order.rack_uuid,
+				floor_uuid: order.floor_uuid,
+				box_uuid: order.box_uuid,
+			})
+			.from(diagnosis)
+			.leftJoin(order, eq(diagnosis.order_uuid, order.uuid))
+			.where(eq(diagnosis.uuid, diagnosis_uuid));
+
+		diagnosisData = await diagnosisPromise;
+	}
+
+	if (order_uuid !== null && order_uuid !== undefined) {
+		const orderPromise = db
+			.select({
+				order_uuid: order.uuid,
+				diagnosis_uuid: diagnosis.uuid,
+				warehouse_uuid: order.warehouse_uuid,
+				rack_uuid: order.rack_uuid,
+				floor_uuid: order.floor_uuid,
+				box_uuid: order.box_uuid,
+				problems_uuid: diagnosis.problems_uuid,
+				problem_statement: diagnosis.problem_statement,
+			})
+			.from(order)
+			.leftJoin(diagnosis, eq(order.uuid, diagnosis.order_uuid))
+			.where(eq(order.uuid, order_uuid));
+
+		orderData = await orderPromise;
+	}
+
+	const sourceData = diagnosisData
+		? diagnosisData[0]
+		: orderData
+			? orderData[0]
+			: {};
+
+	const processData = {
+		uuid: uuid,
+		index: index,
+		section_uuid: section_uuid,
+		diagnosis_uuid: diagnosis_uuid || sourceData.diagnosis_uuid,
+		engineer_uuid: null,
+		problems_uuid: sourceData.problems_uuid,
+		problem_statement: sourceData.problem_statement,
+		status: false,
+		status_update_date: null,
+		is_transferred_for_qc: false,
+		is_ready_for_delivery: false,
+		warehouse_uuid: sourceData.warehouse_uuid,
+		rack_uuid: sourceData.rack_uuid,
+		floor_uuid: sourceData.floor_uuid,
+		box_uuid: sourceData.box_uuid,
+		process_uuid: process_uuid,
+		created_by: created_by,
+		created_at: created_at,
+		updated_at: null,
+		remarks: null,
+	};
 
 	const processPromise = db
 		.insert(process)
-		.values(req.body)
+		.values(processData)
 		.returning({ insertedUuid: process.uuid });
 
 	try {
