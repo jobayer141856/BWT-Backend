@@ -62,13 +62,40 @@ export async function insert(req, res, next) {
 export async function update(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const orderPromise = db
-		.update(order)
-		.set(req.body)
-		.where(eq(order.uuid, req.params.uuid))
-		.returning({ updatedUuid: order.uuid });
+	const {
+		is_new_customer,
+		user_uuid,
+		name,
+		phone,
+		created_at,
+		department_uuid,
+		designation_uuid,
+		business_type,
+	} = req.body;
 
 	try {
+		if (is_new_customer) {
+			await db.insert(users).values({
+				uuid: user_uuid,
+				name: name,
+				phone: phone,
+				user_type: 'customer',
+				pass: phone,
+				department_uuid: department_uuid,
+				designation_uuid: designation_uuid,
+				email: `${name + phone}@bwt.com`,
+				ext: '+880',
+				created_at: created_at,
+				business_type: business_type,
+			});
+		}
+
+		const orderPromise = db
+			.update(order)
+			.set(req.body)
+			.where(eq(order.uuid, req.params.uuid))
+			.returning({ updatedUuid: order.uuid });
+
 		const data = await orderPromise;
 		const toast = {
 			status: 201,
