@@ -101,6 +101,7 @@ export async function selectAll(req, res, next) {
 			remarks: users.remarks,
 			id: users.id,
 			user_type: users.user_type,
+			business_type: users.business_type,
 		})
 		.from(users)
 		.leftJoin(designation, eq(users.designation_uuid, designation.uuid))
@@ -147,6 +148,7 @@ export async function select(req, res, next) {
 			remarks: users.remarks,
 			id: users.id,
 			user_type: users.user_type,
+			business_type: users.business_type,
 		})
 		.from(users)
 		.leftJoin(designation, eq(users.designation_uuid, designation.uuid))
