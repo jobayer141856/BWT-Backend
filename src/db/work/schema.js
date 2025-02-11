@@ -97,6 +97,7 @@ export const section = work.table('section', {
 export const process = work.table('process', {
 	id: serial('id').notNull().unique(),
 	uuid: uuid_primary,
+	index: integer('index').default(0),
 	section_uuid: defaultUUID('section_uuid').references(() => section.uuid),
 	diagnosis_uuid: defaultUUID('diagnosis_uuid').references(
 		() => diagnosis.uuid
