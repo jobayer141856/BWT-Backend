@@ -1,5 +1,4 @@
 import SE from '../../../util/swagger_example.js';
-import { diagnosis } from '../schema.js';
 
 //* Work Problem *//
 
@@ -613,6 +612,11 @@ export const pathWorkProcess = {
 		get: {
 			tags: ['work.process'],
 			summary: 'Get all work process',
+			parameters: [
+				SE.parameter_query('order_uuid', 'order_uuid', [
+					'c6mRD1fcb7qOs9O',
+				]),
+			],
 			responses: {
 				200: SE.response_schema(200, {
 					id: SE.integer(),

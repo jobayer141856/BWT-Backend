@@ -154,6 +154,27 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
+	const { order_uuid } = req.query;
+	console.log('order_uuid', order_uuid);
+
+	let diagnosisData = null;
+
+	if (order_uuid !== null && order_uuid !== undefined) {
+		const diagnosisPromise = db
+			.select({
+				diagnosis_uuid: diagnosis.uuid,
+			})
+			.from(diagnosis)
+			.where(eq(diagnosis.order_uuid, order_uuid));
+
+		diagnosisData = await diagnosisPromise;
+	}
+
+	const diagnosis_uuid =
+		diagnosisData && diagnosisData.length > 0
+			? diagnosisData[0].diagnosis_uuid
+			: null;
+
 	const processPromise = db
 		.select({
 			id: process.id,
@@ -200,8 +221,15 @@ export async function selectAll(req, res, next) {
 			eq(process.floor_uuid, storeSchema.floor.uuid)
 		)
 		.leftJoin(storeSchema.box, eq(process.box_uuid, storeSchema.box.uuid))
-
 		.orderBy(desc(process.created_at));
+
+	if (
+		order_uuid !== null &&
+		order_uuid !== undefined &&
+		diagnosis_uuid !== null
+	) {
+		processPromise.where(eq(process.diagnosis_uuid, diagnosis_uuid));
+	}
 
 	try {
 		const data = await processPromise;
