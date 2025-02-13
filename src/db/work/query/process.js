@@ -156,7 +156,7 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
-	const { order_uuid } = req.query;
+	const { order_uuid, diagnosis_uuid } = req.query;
 	//console.log('order_uuid', order_uuid);
 
 	let diagnosisData = null;
@@ -172,7 +172,7 @@ export async function selectAll(req, res, next) {
 		diagnosisData = await diagnosisPromise;
 	}
 
-	const diagnosis_uuid =
+	const diagnosisUuid =
 		diagnosisData && diagnosisData.length > 0
 			? diagnosisData[0].diagnosis_uuid
 			: null;
@@ -231,20 +231,41 @@ export async function selectAll(req, res, next) {
 	if (
 		order_uuid !== null &&
 		order_uuid !== undefined &&
-		diagnosis_uuid !== null
+		diagnosisUuid !== null
 	) {
+		processPromise.where(eq(process.diagnosis_uuid, diagnosisUuid));
+	}
+
+	if (diagnosis_uuid !== null && diagnosis_uuid !== undefined) {
 		processPromise.where(eq(process.diagnosis_uuid, diagnosis_uuid));
 	}
 
 	try {
-		const data = await processPromise;
+		const data1 = await processPromise;
+		const formattedData = data1.map((item) => ({
+			uuid: item.uuid,
+			diagnosis_uuid: item.diagnosis_uuid,
+			section_uuid: item.section_uuid,
+			remarks: item.remarks,
+		}));
 		const toast = {
 			status: 200,
 			type: 'select all',
 			message: 'process list',
 		};
+		let data = null;
+		if (diagnosis_uuid !== null && diagnosis_uuid !== undefined) {
+			data = formattedData;
+		} else {
+			data = data1;
+		}
 
-		return await res.status(200).json({ toast, data });
+		return await res.status(200).json({
+			toast,
+			...(diagnosis_uuid !== null && diagnosis_uuid !== undefined
+				? { entry: data }
+				: { data }),
+		});
 	} catch (error) {
 		next(error);
 	}
