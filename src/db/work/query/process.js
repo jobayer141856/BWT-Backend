@@ -157,14 +157,14 @@ export async function remove(req, res, next) {
 
 export async function selectAll(req, res, next) {
 	const { order_uuid, diagnosis_uuid } = req.query;
-	//console.log('order_uuid', order_uuid);
+	console.log('order_uuid', order_uuid);
 
 	let diagnosisData = null;
 
 	if (order_uuid !== null && order_uuid !== undefined) {
 		const diagnosisPromise = db
 			.select({
-				diagnosis_uuid: diagnosis.uuid,
+				diagnosis_Uuid: diagnosis.uuid,
 			})
 			.from(diagnosis)
 			.where(eq(diagnosis.order_uuid, order_uuid));
@@ -174,7 +174,7 @@ export async function selectAll(req, res, next) {
 
 	const diagnosisUuid =
 		diagnosisData && diagnosisData.length > 0
-			? diagnosisData[0].diagnosis_uuid
+			? diagnosisData[0].diagnosis_Uuid
 			: null;
 
 	const processPromise = db
