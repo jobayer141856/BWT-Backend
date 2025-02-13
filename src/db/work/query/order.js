@@ -334,14 +334,16 @@ export async function selectDiagnosisDetailsByOrder(req, res, next) {
 					throw error;
 				});
 
-		const [order, diagnosis] = await Promise.all([
+		const [order, diagnosis, process] = await Promise.all([
 			fetchData('/work/order'),
 			fetchData('/work/diagnosis-by-order'),
+			fetchData(`/work/process?order_uuid=${order_uuid}`),
 		]);
 
 		const response = {
 			...order?.data,
 			diagnosis: diagnosis?.data || [],
+			process: process?.data || [],
 		};
 
 		const toast = {
