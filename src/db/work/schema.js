@@ -107,7 +107,7 @@ export const process = work.table('process', {
 	engineer_uuid: defaultUUID('engineer_uuid').references(
 		() => hrSchema.users.uuid
 	),
-	problems_uuid: text('problems_uuid').array().default(null),
+	problems_uuid: text('problems_uuid').array().default([]),
 	problem_statement: text('problem_statement').default(null),
 	status: boolean('status').default(false),
 	status_update_date: DateTime('status_update_date').default(null),
