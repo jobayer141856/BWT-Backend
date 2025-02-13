@@ -3,7 +3,7 @@ import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
-import { alias } from 'drizzle-orm/pg-core';
+import { alias, index } from 'drizzle-orm/pg-core';
 import { diagnosis, process, section, order } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
 
@@ -207,6 +207,7 @@ export async function selectAll(req, res, next) {
 			created_at: process.created_at,
 			updated_at: process.updated_at,
 			remarks: process.remarks,
+			index: process.index,
 		})
 		.from(process)
 		.leftJoin(hrSchema.users, eq(process.created_by, hrSchema.users.uuid))
