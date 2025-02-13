@@ -6,7 +6,6 @@ import { decimalToNumber } from '../../variables.js';
 import { alias } from 'drizzle-orm/pg-core';
 import { diagnosis, process, section, order } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
-import * as hrSchema from '../../hr/schema.js';
 
 const engineer_user = alias(hrSchema.users, 'engineer_user');
 
