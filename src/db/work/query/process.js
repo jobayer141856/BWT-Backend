@@ -155,7 +155,7 @@ export async function remove(req, res, next) {
 
 export async function selectAll(req, res, next) {
 	const { order_uuid } = req.query;
-	console.log('order_uuid', order_uuid);
+	//console.log('order_uuid', order_uuid);
 
 	let diagnosisData = null;
 
