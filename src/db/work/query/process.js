@@ -3,9 +3,12 @@ import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
-
+import { alias } from 'drizzle-orm/pg-core';
 import { diagnosis, process, section, order } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
+import * as hrSchema from '../../hr/schema.js';
+
+const engineer_user = alias(hrSchema.users, 'engineer_user');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -184,6 +187,7 @@ export async function selectAll(req, res, next) {
 			section_name: section.name,
 			diagnosis_uuid: process.diagnosis_uuid,
 			engineer_uuid: process.engineer_uuid,
+			engineer_name: engineer_user.name,
 			problems_uuid: process.problems_uuid,
 			problem_statement: process.problem_statement,
 			status: process.status,
@@ -221,6 +225,7 @@ export async function selectAll(req, res, next) {
 			eq(process.floor_uuid, storeSchema.floor.uuid)
 		)
 		.leftJoin(storeSchema.box, eq(process.box_uuid, storeSchema.box.uuid))
+		.leftJoin(engineer_user, eq(process.engineer_uuid, engineer_user.uuid))
 		.orderBy(desc(process.created_at));
 
 	if (
@@ -254,6 +259,7 @@ export async function select(req, res, next) {
 			section_uuid: process.section_uuid,
 			diagnosis_uuid: process.diagnosis_uuid,
 			engineer_uuid: process.engineer_uuid,
+			engineer_name: engineer_user.name,
 			problems_uuid: process.problems_uuid,
 			problem_statement: process.problem_statement,
 			status: process.status,
@@ -265,9 +271,11 @@ export async function select(req, res, next) {
 			floor_uuid: process.floor_uuid,
 			box_uuid: process.box_uuid,
 			created_by: process.created_by,
+			created_by_name: hrSchema.users.name,
 			created_at: process.created_at,
 			updated_at: process.updated_at,
 			remarks: process.remarks,
+			index: process.index,
 		})
 		.from(process)
 		.leftJoin(hrSchema.users, eq(process.created_by, hrSchema.users.uuid))
@@ -285,7 +293,7 @@ export async function select(req, res, next) {
 			eq(process.floor_uuid, storeSchema.floor.uuid)
 		)
 		.leftJoin(storeSchema.box, eq(process.box_uuid, storeSchema.box.uuid))
-
+		.leftJoin(engineer_user, eq(process.engineer_uuid, engineer_user.uuid))
 		.where(eq(process.uuid, req.params.uuid));
 
 	try {
