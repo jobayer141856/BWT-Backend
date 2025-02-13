@@ -98,15 +98,17 @@ export const process = work.table('process', {
 	id: serial('id').notNull().unique(),
 	uuid: uuid_primary,
 	index: integer('index').default(0),
-	section_uuid: defaultUUID('section_uuid').references(() => section.uuid),
-	diagnosis_uuid: defaultUUID('diagnosis_uuid').references(
-		() => diagnosis.uuid
-	),
+	section_uuid: defaultUUID('section_uuid')
+		.references(() => section.uuid)
+		.notNull(),
+	diagnosis_uuid: defaultUUID('diagnosis_uuid')
+		.references(() => diagnosis.uuid)
+		.notNull(),
 	engineer_uuid: defaultUUID('engineer_uuid').references(
 		() => hrSchema.users.uuid
 	),
-	problems_uuid: text('problems_uuid').array(),
-	problem_statement: text('problem_statement').notNull(),
+	problems_uuid: text('problems_uuid').array().default(null),
+	problem_statement: text('problem_statement').default(null),
 	status: boolean('status').default(false),
 	status_update_date: DateTime('status_update_date').default(null),
 	is_transferred_for_qc: boolean('is_transferred_for_qc').default(false),
@@ -119,7 +121,6 @@ export const process = work.table('process', {
 		() => storeSchema.floor.uuid
 	),
 	box_uuid: defaultUUID('box_uuid').references(() => storeSchema.box.uuid),
-	process_uuid: defaultUUID('process_uuid').references(() => process.uuid),
 	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
