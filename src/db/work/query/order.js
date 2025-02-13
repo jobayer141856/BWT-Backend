@@ -325,7 +325,7 @@ export async function selectDiagnosisDetailsByOrder(req, res, next) {
 
 		const fetchData = async (endpoint) =>
 			await api
-				.get(`${endpoint}/${order_uuid}`)
+				.get(`${endpoint}`)
 				.then((response) => response.data)
 				.catch((error) => {
 					console.error(
@@ -336,8 +336,8 @@ export async function selectDiagnosisDetailsByOrder(req, res, next) {
 				});
 
 		const [order, diagnosis, process] = await Promise.all([
-			fetchData('/work/order'),
-			fetchData('/work/diagnosis-by-order'),
+			fetchData(`/work/order/${order_uuid}`),
+			fetchData(`/work/diagnosis-by-order/${order_uuid}`),
 			fetchData(`/work/process?order_uuid=${order_uuid}`),
 		]);
 
