@@ -156,115 +156,131 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
-	const { order_uuid, diagnosis_uuid } = req.query;
-	console.log('order_uuid', order_uuid);
-
-	let diagnosisData = null;
-
-	if (order_uuid !== null && order_uuid !== undefined) {
-		const diagnosisPromise = db
-			.select({
-				diagnosis_Uuid: diagnosis.uuid,
-			})
-			.from(diagnosis)
-			.where(eq(diagnosis.order_uuid, order_uuid));
-
-		diagnosisData = await diagnosisPromise;
-	}
-
-	const diagnosisUuid =
-		diagnosisData && diagnosisData.length > 0
-			? diagnosisData[0].diagnosis_Uuid
-			: null;
-
-	const processPromise = db
-		.select({
-			id: process.id,
-			process_id: sql`CONCAT('WP-', TO_CHAR(${process.created_at}, 'YY'), '-', TO_CHAR(${process.id}, 'FM0000'))`,
-			uuid: process.uuid,
-			section_uuid: process.section_uuid,
-			section_name: section.name,
-			diagnosis_uuid: process.diagnosis_uuid,
-			engineer_uuid: process.engineer_uuid,
-			engineer_name: engineer_user.name,
-			problems_uuid: process.problems_uuid,
-			problem_statement: process.problem_statement,
-			status: process.status,
-			status_update_date: process.status_update_date,
-			is_transferred_for_qc: process.is_transferred_for_qc,
-			is_ready_for_delivery: process.is_ready_for_delivery,
-			warehouse_uuid: process.warehouse_uuid,
-			warehouse_name: storeSchema.warehouse.name,
-			rack_uuid: process.rack_uuid,
-			rack_name: storeSchema.rack.name,
-			floor_uuid: process.floor_uuid,
-			floor_name: storeSchema.floor.name,
-			box_uuid: process.box_uuid,
-			box_name: storeSchema.box.name,
-			process_uuid: process.uuid,
-			created_by: process.created_by,
-			created_by_name: hrSchema.users.name,
-			created_at: process.created_at,
-			updated_at: process.updated_at,
-			remarks: process.remarks,
-			index: process.index,
-		})
-		.from(process)
-		.leftJoin(hrSchema.users, eq(process.created_by, hrSchema.users.uuid))
-		.leftJoin(section, eq(process.section_uuid, section.uuid))
-		.leftJoin(
-			storeSchema.warehouse,
-			eq(process.warehouse_uuid, storeSchema.warehouse.uuid)
-		)
-		.leftJoin(
-			storeSchema.rack,
-			eq(process.rack_uuid, storeSchema.rack.uuid)
-		)
-		.leftJoin(
-			storeSchema.floor,
-			eq(process.floor_uuid, storeSchema.floor.uuid)
-		)
-		.leftJoin(storeSchema.box, eq(process.box_uuid, storeSchema.box.uuid))
-		.leftJoin(engineer_user, eq(process.engineer_uuid, engineer_user.uuid))
-		.orderBy(desc(process.created_at));
-
-	if (
-		order_uuid !== null &&
-		order_uuid !== undefined &&
-		diagnosisUuid !== null
-	) {
-		processPromise.where(eq(process.diagnosis_uuid, diagnosisUuid));
-	}
-
-	if (diagnosis_uuid !== null && diagnosis_uuid !== undefined) {
-		processPromise.where(eq(process.diagnosis_uuid, diagnosis_uuid));
-	}
-
 	try {
-		const data1 = await processPromise;
-		const formattedData = data1.map((item) => ({
+		const { order_uuid, diagnosis_uuid } = req.query;
+
+		//console.log('Received request with:', { order_uuid, diagnosis_uuid });
+
+		let processPromise = db
+			.select({
+				id: process.id,
+				process_id: sql`CONCAT('WP-', TO_CHAR(${process.created_at}, 'YY'), '-', TO_CHAR(${process.id}, 'FM0000'))`,
+				uuid: process.uuid,
+				section_uuid: process.section_uuid,
+				section_name: section.name,
+				diagnosis_uuid: process.diagnosis_uuid,
+				engineer_uuid: process.engineer_uuid,
+				engineer_name: engineer_user.name,
+				problems_uuid: process.problems_uuid,
+				problem_statement: process.problem_statement,
+				status: process.status,
+				status_update_date: process.status_update_date,
+				is_transferred_for_qc: process.is_transferred_for_qc,
+				is_ready_for_delivery: process.is_ready_for_delivery,
+				warehouse_uuid: process.warehouse_uuid,
+				warehouse_name: storeSchema.warehouse.name,
+				rack_uuid: process.rack_uuid,
+				rack_name: storeSchema.rack.name,
+				floor_uuid: process.floor_uuid,
+				floor_name: storeSchema.floor.name,
+				box_uuid: process.box_uuid,
+				box_name: storeSchema.box.name,
+				process_uuid: process.uuid,
+				created_by: process.created_by,
+				created_by_name: hrSchema.users.name,
+				created_at: process.created_at,
+				updated_at: process.updated_at,
+				remarks: process.remarks,
+				index: process.index,
+			})
+			.from(process)
+			.leftJoin(
+				hrSchema.users,
+				eq(process.created_by, hrSchema.users.uuid)
+			)
+			.leftJoin(section, eq(process.section_uuid, section.uuid))
+			.leftJoin(
+				storeSchema.warehouse,
+				eq(process.warehouse_uuid, storeSchema.warehouse.uuid)
+			)
+			.leftJoin(
+				storeSchema.rack,
+				eq(process.rack_uuid, storeSchema.rack.uuid)
+			)
+			.leftJoin(
+				storeSchema.floor,
+				eq(process.floor_uuid, storeSchema.floor.uuid)
+			)
+			.leftJoin(
+				storeSchema.box,
+				eq(process.box_uuid, storeSchema.box.uuid)
+			)
+			.leftJoin(
+				engineer_user,
+				eq(process.engineer_uuid, engineer_user.uuid)
+			)
+			.orderBy(desc(process.created_at));
+
+		if (diagnosis_uuid) {
+			processPromise = processPromise.where(
+				eq(process.diagnosis_uuid, diagnosis_uuid)
+			);
+		}
+		if (order_uuid) {
+			if (
+				processPromise.order_uuid !== null &&
+				processPromise.order_uuid !== undefined
+			) {
+				processPromise = processPromise.where(
+					eq(process.order_uuid, order_uuid)
+				);
+			} else {
+				const diagnosisPromise = db
+					.select({ diagnosis_uuid: diagnosis.uuid })
+					.from(diagnosis)
+					.where(eq(diagnosis.order_uuid, order_uuid));
+
+				const diagnosisData = await diagnosisPromise;
+
+				if (
+					diagnosisData.length > 0 &&
+					diagnosisData[0]?.diagnosis_uuid
+				) {
+					const diagnosisUuid = diagnosisData[0].diagnosis_uuid;
+					processPromise = processPromise.where(
+						eq(process.diagnosis_uuid, diagnosisUuid)
+					);
+				} else {
+					console.warn(
+						'No diagnosis found for order_uuid:',
+						order_uuid
+					);
+				}
+			}
+		}
+
+		const processData = await processPromise;
+
+		const formattedData = processData.map((item) => ({
 			uuid: item.uuid,
 			diagnosis_uuid: item.diagnosis_uuid,
 			section_uuid: item.section_uuid,
 			remarks: item.remarks,
 		}));
+
 		const toast = {
 			status: 200,
 			type: 'select all',
-			message: 'process list',
+			message: 'Process list',
 		};
-		let data = null;
-		if (diagnosis_uuid !== null && diagnosis_uuid !== undefined) {
-			data = formattedData;
-		} else {
-			data = data1;
-		}
 
-		return await res.status(200).json({
+		let responseData = diagnosis_uuid ? formattedData : processData;
+
+		return res.status(200).json({
 			toast,
-			...(diagnosis_uuid !== null && diagnosis_uuid !== undefined
-				? { data: { entry: data } }
-				: { data }),
+			...(diagnosis_uuid
+				? { data: { entry: responseData } }
+				: { data: responseData }),
 		});
 	} catch (error) {
 		next(error);
