@@ -234,7 +234,11 @@ export async function selectAll(req, res, next) {
 				processPromise = processPromise.where(
 					eq(process.order_uuid, order_uuid)
 				);
-			} else {
+			}
+			if (
+				processPromise.diagnosis_uuid !== null &&
+				processPromise.diagnosis_uuid !== undefined
+			) {
 				const diagnosisPromise = db
 					.select({ diagnosis_uuid: diagnosis.uuid })
 					.from(diagnosis)
