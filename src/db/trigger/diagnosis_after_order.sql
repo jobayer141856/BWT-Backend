@@ -12,7 +12,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION insert_diagnosis_after_order()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF NEW.is_product_received = true THEN
+    IF NEW.is_diagnosis_need = true THEN
         INSERT INTO work.diagnosis (order_uuid, uuid, created_by, created_at, updated_at)
         VALUES (NEW.uuid, generate_15_digit_uuid(), new.created_by, new.created_at, new.updated_at);
     END IF;
