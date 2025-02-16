@@ -168,6 +168,7 @@ export async function selectAll(req, res, next) {
 				uuid: process.uuid,
 				section_uuid: process.section_uuid,
 				section_name: section.name,
+				order_uuid: process.order_uuid,
 				diagnosis_uuid: process.diagnosis_uuid,
 				engineer_uuid: process.engineer_uuid,
 				engineer_name: engineer_user.name,
