@@ -68,7 +68,7 @@ export async function update(req, res, next) {
 		user_uuid,
 		name,
 		phone,
-		created_at,
+		updated_at,
 		department_uuid,
 		designation_uuid,
 		business_type,
@@ -86,7 +86,7 @@ export async function update(req, res, next) {
 				designation_uuid: designation_uuid,
 				email: `${name + phone}@bwt.com`,
 				ext: '+880',
-				created_at: created_at,
+				created_at: updated_at,
 				business_type: business_type,
 			});
 		}
