@@ -1,4 +1,4 @@
-import { desc, eq, is, sql } from 'drizzle-orm';
+import { desc, eq, is, or, sql } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
@@ -228,39 +228,23 @@ export async function selectAll(req, res, next) {
 			);
 		}
 		if (order_uuid) {
-			if (
-				processPromise.order_uuid !== null &&
-				processPromise.order_uuid !== undefined
-			) {
+			const diagnosisPromise = db
+				.select({
+					uuid: diagnosis.uuid,
+				})
+				.from(diagnosis)
+				.where(eq(diagnosis.order_uuid, order_uuid));
+
+			const diagnosisData = await diagnosisPromise;
+			console.log('diagnosisData:', diagnosisData);
+
+			if (diagnosisData.length > 0 || diagnosisData.length === 0) {
 				processPromise = processPromise.where(
-					eq(process.order_uuid, order_uuid)
+					or(
+						eq(process.diagnosis_uuid, diagnosisData[0].uuid),
+						eq(process.order_uuid, order_uuid)
+					)
 				);
-			}
-			if (
-				processPromise.order_uuid === null ||
-				processPromise.order_uuid === undefined
-			) {
-				const diagnosisPromise = db
-					.select({ diagnosis_uuid: diagnosis.uuid })
-					.from(diagnosis)
-					.where(eq(diagnosis.order_uuid, order_uuid));
-
-				const diagnosisData = await diagnosisPromise;
-
-				if (
-					diagnosisData.length > 0 &&
-					diagnosisData[0]?.diagnosis_uuid
-				) {
-					const diagnosisUuid = diagnosisData[0].diagnosis_uuid;
-					processPromise = processPromise.where(
-						eq(process.diagnosis_uuid, diagnosisUuid)
-					);
-				} else {
-					console.warn(
-						'No diagnosis found for order_uuid:',
-						order_uuid
-					);
-				}
 			}
 		}
 
