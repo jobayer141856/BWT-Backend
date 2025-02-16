@@ -164,6 +164,7 @@ export async function selectAll(req, res, next) {
 			created_at: order.created_at,
 			updated_at: order.updated_at,
 			remarks: order.remarks,
+			is_diagnosis_need: order.is_diagnosis_need,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -256,6 +257,7 @@ export async function select(req, res, next) {
 			remarks: order.remarks,
 			brand_uuid: storeSchema.model.brand_uuid,
 			brand_name: storeSchema.brand.name,
+			is_diagnosis_need: order.is_diagnosis_need,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
