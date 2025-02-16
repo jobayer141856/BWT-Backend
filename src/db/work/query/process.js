@@ -263,7 +263,7 @@ export async function selectAll(req, res, next) {
 		return await res.status(200).json({
 			toast,
 			...(diagnosis_uuid !== null && diagnosis_uuid !== undefined
-				? { entry: data }
+				? { data: { entry: data } }
 				: { data }),
 		});
 	} catch (error) {
