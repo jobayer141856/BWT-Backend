@@ -101,9 +101,10 @@ export const process = work.table('process', {
 	section_uuid: defaultUUID('section_uuid')
 		.references(() => section.uuid)
 		.notNull(),
-	diagnosis_uuid: defaultUUID('diagnosis_uuid')
-		.references(() => diagnosis.uuid)
-		.notNull(),
+	order_uuid: defaultUUID('order_uuid').references(() => order.uuid),
+	diagnosis_uuid: defaultUUID('diagnosis_uuid').references(
+		() => diagnosis.uuid
+	),
 	engineer_uuid: defaultUUID('engineer_uuid').references(
 		() => hrSchema.users.uuid
 	),
