@@ -237,8 +237,8 @@ export async function selectAll(req, res, next) {
 				);
 			}
 			if (
-				processPromise.diagnosis_uuid !== null &&
-				processPromise.diagnosis_uuid !== undefined
+				processPromise.order_uuid === null &&
+				processPromise.order_uuid === undefined
 			) {
 				const diagnosisPromise = db
 					.select({ diagnosis_uuid: diagnosis.uuid })
