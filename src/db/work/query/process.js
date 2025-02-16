@@ -157,7 +157,7 @@ export async function remove(req, res, next) {
 
 export async function selectAll(req, res, next) {
 	try {
-		const { order_uuid, diagnosis_uuid } = req.query;
+		const { order_uuid, orderUUID } = req.query;
 
 		//console.log('Received request with:', { order_uuid, diagnosis_uuid });
 
@@ -222,9 +222,9 @@ export async function selectAll(req, res, next) {
 			)
 			.orderBy(desc(process.created_at));
 
-		if (diagnosis_uuid) {
+		if (orderUUID) {
 			processPromise = processPromise.where(
-				eq(process.diagnosis_uuid, diagnosis_uuid)
+				eq(process.order_uuid, orderUUID)
 			);
 		}
 		if (order_uuid) {
@@ -267,11 +267,11 @@ export async function selectAll(req, res, next) {
 			message: 'Process list',
 		};
 
-		let responseData = diagnosis_uuid ? formattedData : processData;
+		let responseData = orderUUID ? formattedData : processData;
 
 		return res.status(200).json({
 			toast,
-			...(diagnosis_uuid
+			...(orderUUID
 				? { data: { entry: responseData } }
 				: { data: responseData }),
 		});
