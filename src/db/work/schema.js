@@ -45,6 +45,7 @@ export const order = work.table('order', {
 	problem_statement: text('problem_statement').notNull(),
 	accessories: text('accessories').array().default(null),
 	is_product_received: boolean('is_product_received').default(false),
+	is_diagnosis_need: boolean('is_diagnosis_need').default(false),
 	receive_date: DateTime('receive_date').default(null),
 	warehouse_uuid: defaultUUID('warehouse_uuid').references(
 		() => storeSchema.warehouse.uuid
