@@ -238,12 +238,16 @@ export async function selectAll(req, res, next) {
 			const diagnosisData = await diagnosisPromise;
 			console.log('diagnosisData:', diagnosisData);
 
-			if (diagnosisData.length > 0 || diagnosisData.length === 0) {
+			if (diagnosisData.length > 0) {
 				processPromise = processPromise.where(
 					or(
 						eq(process.diagnosis_uuid, diagnosisData[0].uuid),
 						eq(process.order_uuid, order_uuid)
 					)
+				);
+			} else {
+				processPromise = processPromise.where(
+					eq(process.order_uuid, order_uuid)
 				);
 			}
 		}
