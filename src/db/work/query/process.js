@@ -1,4 +1,4 @@
-import { desc, eq, is, or, sql } from 'drizzle-orm';
+import { asc, desc, eq, is, or, sql } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
@@ -220,7 +220,7 @@ export async function selectAll(req, res, next) {
 				engineer_user,
 				eq(process.engineer_uuid, engineer_user.uuid)
 			)
-			.orderBy(desc(process.created_at));
+			.orderBy(asc(process.index));
 
 		if (order_uuid) {
 			const diagnosisPromise = db
