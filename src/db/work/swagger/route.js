@@ -616,9 +616,7 @@ export const pathWorkProcess = {
 				SE.parameter_query('order_uuid', 'order_uuid', [
 					'c6mRD1fcb7qOs9O',
 				]),
-				SE.parameter_query('orderUUID', 'orderUUID', [
-					'c6mRD1fcb7qOs9O',
-				]),
+				SE.parameter_query('entry', 'entry', [true, false]),
 			],
 			responses: {
 				200: SE.response_schema(200, {
