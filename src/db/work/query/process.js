@@ -249,7 +249,9 @@ export async function selectAll(req, res, next) {
 
 		const processData = await processPromise;
 
-		const problems_uuid = processData.map((item) => item.problems_uuid);
+		const problems_uuid = processData
+			.map((process) => process.problems_uuid)
+			.flat();
 		const problemPromise = await db
 			.select({
 				name: problem.name,
@@ -258,13 +260,13 @@ export async function selectAll(req, res, next) {
 			.from(problem)
 			.where(inArray(problem.uuid, problems_uuid));
 
-		const problemsMap = problemPromise.reduce((acc, item) => {
-			acc[item.uuid] = item.name;
+		const problemsMap = problemPromise.reduce((acc, problem) => {
+			acc[problem.uuid] = problem.name;
 			return acc;
 		}, {});
 
-		processData.forEach((item) => {
-			item.problems_name = item.problems_uuid.map(
+		processData.forEach((process) => {
+			process.problems_name = process.problems_uuid.map(
 				(uuid) => problemsMap[uuid]
 			);
 		});
