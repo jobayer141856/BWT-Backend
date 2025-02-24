@@ -103,6 +103,8 @@ export async function selectAll(req, res, next) {
 			box_uuid: order.box_uuid,
 			box_name: box.name,
 			is_diagnosis_need: order.is_diagnosis_need,
+			customer_problem_statement: diagnosis.customer_problem_statement,
+			customer_remarks: diagnosis.customer_remarks,
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
@@ -188,6 +190,8 @@ export async function select(req, res, next) {
 			box_uuid: order.box_uuid,
 			box_name: box.name,
 			is_diagnosis_need: order.is_diagnosis_need,
+			customer_problem_statement: diagnosis.customer_problem_statement,
+			customer_remarks: diagnosis.customer_remarks,
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
@@ -273,6 +277,8 @@ export async function selectByOrder(req, res, next) {
 			box_uuid: order.box_uuid,
 			box_name: box.name,
 			is_diagnosis_need: order.is_diagnosis_need,
+			customer_problem_statement: diagnosis.customer_problem_statement,
+			customer_remarks: diagnosis.customer_remarks,
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
