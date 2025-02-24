@@ -36,8 +36,8 @@ BEGIN
         DELETE FROM work.diagnosis WHERE order_uuid = NEW.uuid;
     END IF;
 
-    -- Insert new diagnosis if is_product_received is true (on insert or update)
-    IF NEW.is_diagnosis_need = true THEN
+    -- Insert new diagnosis if is_diagnosis_need is true and it has changed from false to true
+    IF NEW.is_diagnosis_need = TRUE AND (TG_OP = 'INSERT' OR OLD.is_diagnosis_need = FALSE) THEN
         INSERT INTO work.diagnosis (order_uuid, uuid, created_by, created_at, updated_at)
         VALUES (NEW.uuid, generate_15_digit_uuid(), NEW.created_by, NEW.created_at, NEW.updated_at);
     END IF;

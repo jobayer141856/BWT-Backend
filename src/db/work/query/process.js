@@ -1,10 +1,10 @@
-import { asc, desc, eq, is, or, sql } from 'drizzle-orm';
+import { asc, desc, eq, inArray, is, or, sql } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 import { alias, index } from 'drizzle-orm/pg-core';
-import { diagnosis, process, section, order } from '../schema.js';
+import { diagnosis, process, section, order, problem } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
 
 const engineer_user = alias(hrSchema.users, 'engineer_user');
@@ -193,7 +193,6 @@ export async function selectAll(req, res, next) {
 				updated_at: process.updated_at,
 				remarks: process.remarks,
 				index: process.index,
-				order_id: sql`CONCAT('WO-', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 			})
 			.from(process)
 			.leftJoin(
@@ -221,7 +220,6 @@ export async function selectAll(req, res, next) {
 				engineer_user,
 				eq(process.engineer_uuid, engineer_user.uuid)
 			)
-			.leftJoin(order, eq(process.order_uuid, order.uuid))
 			.orderBy(asc(process.index));
 
 		if (order_uuid) {
@@ -251,12 +249,31 @@ export async function selectAll(req, res, next) {
 
 		const processData = await processPromise;
 
+		const problems_uuid = processData.map((item) => item.problems_uuid);
+		const problemPromise = await db
+			.select({
+				name: problem.name,
+				uuid: problem.uuid,
+			})
+			.from(problem)
+			.where(inArray(problem.uuid, problems_uuid));
+
+		const problemsMap = problemPromise.reduce((acc, item) => {
+			acc[item.uuid] = item.name;
+			return acc;
+		}, {});
+
+		processData.forEach((item) => {
+			item.problems_name = item.problems_uuid.map(
+				(uuid) => problemsMap[uuid]
+			);
+		});
+
 		const formattedData = processData.map((item) => ({
 			uuid: item.uuid,
 			diagnosis_uuid: item.diagnosis_uuid,
 			section_uuid: item.section_uuid,
 			remarks: item.remarks,
-			order_id: item.order_id,
 		}));
 
 		const toast = {
