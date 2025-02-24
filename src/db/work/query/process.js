@@ -193,6 +193,7 @@ export async function selectAll(req, res, next) {
 				updated_at: process.updated_at,
 				remarks: process.remarks,
 				index: process.index,
+				order_id: sql`CONCAT('WO-', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 			})
 			.from(process)
 			.leftJoin(
@@ -220,6 +221,7 @@ export async function selectAll(req, res, next) {
 				engineer_user,
 				eq(process.engineer_uuid, engineer_user.uuid)
 			)
+			.leftJoin(order, eq(process.order_uuid, order.uuid))
 			.orderBy(asc(process.index));
 
 		if (order_uuid) {
@@ -254,6 +256,7 @@ export async function selectAll(req, res, next) {
 			diagnosis_uuid: item.diagnosis_uuid,
 			section_uuid: item.section_uuid,
 			remarks: item.remarks,
+			order_id: item.order_id,
 		}));
 
 		const toast = {
