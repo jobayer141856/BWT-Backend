@@ -84,6 +84,8 @@ export const diagnosis = work.table('diagnosis', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	customer_problem_statement: text('customer_problem_statement'),
+	customer_remarks: text('customer_remarks').default(null),
 });
 
 export const section = work.table('section', {

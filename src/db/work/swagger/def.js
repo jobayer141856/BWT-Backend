@@ -78,6 +78,8 @@ const defDiagnosis = SED({
 		created_at: SE.date_time(),
 		updated_at: SE.date_time(),
 		remarks: SE.string('remarks'),
+		customer_problem_statement: SE.string('customer_problem_statement'),
+		customer_remarks: SE.string('customer_remarks'),
 	},
 	xml: 'Work/Diagnosis',
 });
