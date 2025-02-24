@@ -458,7 +458,7 @@ export async function selectModel(req, res, next) {
 	const modelPromise = db
 		.select({
 			value: storeSchema.model.uuid,
-			label: sql`CONCAT(${storeSchema.brand.name}, '-', ${storeSchema.model.name})`,
+			label: sql`CONCAT(${storeSchema.model.name}, '(', ${storeSchema.brand.name} ,')')`,
 		})
 		.from(storeSchema.model)
 		.leftJoin(
