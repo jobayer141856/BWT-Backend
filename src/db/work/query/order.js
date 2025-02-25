@@ -138,7 +138,8 @@ export async function selectAll(req, res, next) {
 			id: order.id,
 			order_id: sql`CONCAT('WO', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 			uuid: order.uuid,
-			user_uuid: order.user_uuid,
+			info_uuid: order.info_uuid,
+			user_uuid: info.user_uuid,
 			user_id: sql`CONCAT('HU', TO_CHAR(${user.created_at}::timestamp, 'YY'), '-', TO_CHAR(${user.id}::integer, 'FM0000'))`,
 			user_name: user.name,
 			model_uuid: order.model_uuid,
@@ -149,8 +150,8 @@ export async function selectAll(req, res, next) {
 			problems_uuid: order.problems_uuid,
 			problem_statement: order.problem_statement,
 			accessories: order.accessories,
-			is_product_received: order.is_product_received,
-			receive_date: order.receive_date,
+			is_product_received: info.is_product_received,
+			received_date: info.received_date,
 			warehouse_uuid: order.warehouse_uuid,
 			warehouse_name: storeSchema.warehouse.name,
 			rack_uuid: order.rack_uuid,
@@ -183,7 +184,8 @@ export async function selectAll(req, res, next) {
 			eq(order.floor_uuid, storeSchema.floor.uuid)
 		)
 		.leftJoin(storeSchema.box, eq(order.box_uuid, storeSchema.box.uuid))
-		.leftJoin(user, eq(order.user_uuid, user.uuid))
+		.leftJoin(info, eq(order.info_uuid, info.uuid))
+		.leftJoin(user, eq(info.user_uuid, user.uuid))
 
 		.orderBy(desc(order.created_at));
 
@@ -228,7 +230,8 @@ export async function select(req, res, next) {
 			id: order.id,
 			order_id: sql`CONCAT('WO', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 			uuid: order.uuid,
-			user_uuid: order.user_uuid,
+			info_uuid: order.info_uuid,
+			user_uuid: info.user_uuid,
 			user_id: sql`CONCAT('HU', TO_CHAR(${user.created_at}::timestamp, 'YY'), '-', TO_CHAR(${user.id}::integer, 'FM0000'))`,
 			user_name: user.name,
 			user_phone: user.phone,
@@ -240,8 +243,8 @@ export async function select(req, res, next) {
 			problems_uuid: order.problems_uuid,
 			problem_statement: order.problem_statement,
 			accessories: order.accessories,
-			is_product_received: order.is_product_received,
-			receive_date: order.receive_date,
+			is_product_received: info.is_product_received,
+			received_date: info.received_date,
 			warehouse_uuid: order.warehouse_uuid,
 			warehouse_name: storeSchema.warehouse.name,
 			rack_uuid: order.rack_uuid,
@@ -276,7 +279,8 @@ export async function select(req, res, next) {
 			eq(order.floor_uuid, storeSchema.floor.uuid)
 		)
 		.leftJoin(storeSchema.box, eq(order.box_uuid, storeSchema.box.uuid))
-		.leftJoin(user, eq(order.user_uuid, user.uuid))
+		.leftJoin(info, eq(order.info_uuid, info.uuid))
+		.leftJoin(user, eq(info.user_uuid, user.uuid))
 		.leftJoin(
 			storeSchema.brand,
 			eq(storeSchema.model.brand_uuid, storeSchema.brand.uuid)
