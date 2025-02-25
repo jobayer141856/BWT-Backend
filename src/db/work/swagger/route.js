@@ -106,6 +106,118 @@ export const pathWorkProblem = {
 	},
 };
 
+export const pathWorkInfo = {
+	'/work/info': {
+		get: {
+			tags: ['work.info'],
+			summary: 'Get all work info',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					user_uuid: SE.uuid(),
+					user_name: SE.string('user_name'),
+					received_date: SE.date_time(),
+					is_product_received: SE.boolean(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['work.info'],
+			summary: 'Create a work info',
+			requestBody: SE.requestBody_schema_ref('work/info'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'work/info'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/work/info/{uuid}': {
+		get: {
+			tags: ['work.info'],
+			summary: 'Get a work info by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work info to get',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					user_uuid: SE.uuid(),
+					user_name: SE.string('user_name'),
+					received_date: SE.date_time(),
+					is_product_received: SE.boolean(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		put: {
+			tags: ['work.info'],
+			summary: 'Update a work info by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work info to update',
+					required: true,
+					type: 'string',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('work/info'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'work/info'),
+					405: SE.response(405),
+				},
+			},
+		},
+		delete: {
+			tags: ['work.info'],
+			summary: 'Delete a work info by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work info to delete',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					user_uuid: SE.uuid(),
+					user_name: SE.string('user_name'),
+					received_date: SE.date_time(),
+					is_product_received: SE.boolean(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+	},
+};
+
 export const pathWorkOrder = {
 	'/work/order': {
 		get: {
@@ -783,6 +895,7 @@ export const pathWorkProcess = {
 
 export const pathWork = {
 	...pathWorkProblem,
+	...pathWorkInfo,
 	...pathWorkOrder,
 	...pathWorkDiagnosis,
 	...pathWorkSection,
