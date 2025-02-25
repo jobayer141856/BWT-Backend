@@ -32,21 +32,32 @@ export const problem = work.table('problem', {
 	remarks: text('remarks').default(null),
 });
 
-export const order = work.table('order', {
+export const info = work.table('info', {
 	id: serial('id').notNull().unique(),
 	uuid: uuid_primary,
 	user_uuid: defaultUUID('user_uuid').references(() => hrSchema.users.uuid),
+	received_date: DateTime('received_date').default(null),
+	is_product_received: boolean('is_product_received').default(false),
+	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+export const order = work.table('order', {
+	id: serial('id').notNull().unique(),
+	uuid: uuid_primary,
+	info_uuid: defaultUUID('info_uuid').references(() => info.uuid),
 	model_uuid: defaultUUID('model_uuid').references(
 		() => storeSchema.model.uuid
 	),
 	size_uuid: defaultUUID('size_uuid').references(() => storeSchema.size.uuid),
 	serial_no: text('serial_no').notNull(),
+	quantity: integer('quantity').default(0),
 	problems_uuid: text('problems_uuid').array(),
 	problem_statement: text('problem_statement').notNull(),
 	accessories: text('accessories').array().default(null),
-	is_product_received: boolean('is_product_received').default(false),
 	is_diagnosis_need: boolean('is_diagnosis_need').default(false),
-	receive_date: DateTime('receive_date').default(null),
 	warehouse_uuid: defaultUUID('warehouse_uuid').references(
 		() => storeSchema.warehouse.uuid
 	),

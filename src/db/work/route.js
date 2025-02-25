@@ -6,7 +6,7 @@ import * as orderOperations from './query/order.js';
 import * as diagnosisOperations from './query/diagnosis.js';
 import * as sectionOperations from './query/section.js';
 import * as processOperations from './query/process.js';
-
+import * as infoOperations from './query/info.js';
 
 const workRouter = Router();
 
@@ -20,6 +20,13 @@ workRouter.delete(
 	validateUuidParam(),
 	problemOperations.remove
 );
+
+//* info routes *//
+workRouter.get('/info', infoOperations.selectAll);
+workRouter.get('/info/:uuid', validateUuidParam(), infoOperations.select);
+workRouter.post('/info', infoOperations.insert);
+workRouter.put('/info/:uuid', infoOperations.update);
+workRouter.delete('/info/:uuid', validateUuidParam(), infoOperations.remove);
 
 //* order routes *//
 workRouter.get('/order', orderOperations.selectAll);

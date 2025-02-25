@@ -14,10 +14,32 @@ const defProblem = SED({
 	xml: 'Work/Problem',
 });
 
+const defInfo = SED({
+	required: [
+		'id',
+		'uuid',
+		'user_uuid',
+		'received_date',
+		'is_product_received',
+		'created_at',
+	],
+	properties: {
+		id: SE.integer(),
+		uuid: SE.uuid(),
+		user_uuid: SE.uuid(),
+		received_date: SE.date_time(),
+		is_product_received: SE.boolean(),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Work/Info',
+});
+
 const defOrder = SED({
 	required: [
 		'uuid',
-		'user_uuid',
 		'model_uuid',
 		'size_uuid',
 		'serial_no',
@@ -31,15 +53,12 @@ const defOrder = SED({
 	properties: {
 		id: SE.integer(),
 		uuid: SE.uuid(),
-		user_uuid: SE.uuid(),
 		model_uuid: SE.uuid(),
 		size_uuid: SE.uuid(),
 		serial_no: SE.string('serial_no'),
 		problems_uuid: SE.array(),
 		problem_statement: SE.string('problem_statement'),
 		accessories: SE.array(),
-		is_product_received: SE.boolean(),
-		receive_date: SE.date_time(),
 		warehouse_uuid: SE.uuid(),
 		rack_uuid: SE.uuid(),
 		floor_uuid: SE.uuid(),
@@ -48,6 +67,8 @@ const defOrder = SED({
 		created_at: SE.date_time(),
 		updated_at: SE.date_time(),
 		remarks: SE.string('remarks'),
+		is_diagnosis_need: SE.boolean(),
+		quantity: SE.integer(),
 	},
 	xml: 'Work/Order',
 });
@@ -144,6 +165,7 @@ const defProcess = SED({
 //* Marge all
 export const defWork = {
 	problem: defProblem,
+	info: defInfo,
 	order: defOrder,
 	diagnosis: defDiagnosis,
 	section: defSection,
@@ -155,6 +177,10 @@ export const tagWork = [
 	{
 		name: 'work.problem',
 		description: 'Work Problem',
+	},
+	{
+		name: 'work.info',
+		description: 'Work Info',
 	},
 	{
 		name: 'work.order',
