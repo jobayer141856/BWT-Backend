@@ -5,7 +5,7 @@ import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
-import { order, problem } from '../schema.js';
+import { order, problem, info } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
 import { users } from '../../hr/schema.js';
 
