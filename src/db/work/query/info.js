@@ -7,6 +7,7 @@ import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
 
 import { info } from '../schema.js';
+const user = alias(hrSchema.users, 'user');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -81,15 +82,18 @@ export async function selectAll(req, res, next) {
 			id: info.id,
 			uuid: info.uuid,
 			user_uuid: info.user_uuid,
+			user_name: user.name,
 			received_date: info.received_date,
 			is_product_received: info.is_product_received,
 			created_by: info.created_by,
+			created_by_name: hrSchema.users.name,
 			created_at: info.created_at,
 			updated_at: info.updated_at,
 			remarks: info.remarks,
 		})
-		.from(info);
-
+		.from(info)
+		.leftJoin(user, eq(info.user_uuid, user.uuid))
+		.leftJoin(hrSchema.users, eq(info.created_by, hrSchema.users.uuid));
 	try {
 		const data = await infoPromise;
 		const toast = {
@@ -111,14 +115,18 @@ export async function select(req, res, next) {
 			id: info.id,
 			uuid: info.uuid,
 			user_uuid: info.user_uuid,
+			user_name: user.name,
 			received_date: info.received_date,
 			is_product_received: info.is_product_received,
 			created_by: info.created_by,
+			created_by_name: hrSchema.users.name,
 			created_at: info.created_at,
 			updated_at: info.updated_at,
 			remarks: info.remarks,
 		})
 		.from(info)
+		.leftJoin(user, eq(info.user_uuid, user.uuid))
+		.leftJoin(hrSchema.users, eq(info.created_by, hrSchema.users.uuid))
 		.where(eq(info.uuid, req.params.uuid));
 
 	try {
