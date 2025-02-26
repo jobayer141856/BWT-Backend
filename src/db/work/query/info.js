@@ -5,7 +5,7 @@ import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
-
+import { users } from '../../hr/schema.js';
 import { info } from '../schema.js';
 const user = alias(hrSchema.users, 'user');
 
