@@ -27,6 +27,10 @@ workRouter.get('/info/:uuid', validateUuidParam(), infoOperations.select);
 workRouter.post('/info', infoOperations.insert);
 workRouter.put('/info/:uuid', infoOperations.update);
 workRouter.delete('/info/:uuid', validateUuidParam(), infoOperations.remove);
+workRouter.get(
+	'/order-details-by-info/:info_uuid',
+	infoOperations.selectOrderDetailsByInfo
+);
 
 //* order routes *//
 workRouter.get('/order', orderOperations.selectAll);
@@ -38,6 +42,7 @@ workRouter.get(
 	'/diagnosis-details-by-order/:order_uuid',
 	orderOperations.selectDiagnosisDetailsByOrder
 );
+workRouter.get('/order-by-info/:info_uuid', orderOperations.selectByInfo);
 
 //* diagnosis routes *//
 workRouter.get('/diagnosis', diagnosisOperations.selectAll);
