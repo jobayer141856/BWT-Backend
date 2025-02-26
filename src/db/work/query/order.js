@@ -13,35 +13,8 @@ const user = alias(hrSchema.users, 'user');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
-	const {
-		is_new_customer,
-		user_uuid,
-		name,
-		phone,
-		created_at,
-		department_uuid,
-		designation_uuid,
-		business_type,
-	} = req.body;
-
-	// console.log('is_new_customer', req.body);
 
 	try {
-		if (is_new_customer) {
-			await db.insert(users).values({
-				uuid: user_uuid,
-				name: name,
-				phone: phone,
-				user_type: 'customer',
-				pass: phone,
-				department_uuid: department_uuid,
-				designation_uuid: designation_uuid,
-				email: `${name + phone}@bwt.com`,
-				ext: '+880',
-				created_at: created_at,
-				business_type: business_type,
-			});
-		}
 		const orderPromise = db
 			.insert(order)
 			.values(req.body)
@@ -63,33 +36,10 @@ export async function insert(req, res, next) {
 export async function update(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const {
-		is_new_customer,
-		user_uuid,
-		name,
-		phone,
-		updated_at,
-		department_uuid,
-		designation_uuid,
-		business_type,
-	} = req.body;
+	
 
 	try {
-		if (is_new_customer) {
-			await db.insert(users).values({
-				uuid: user_uuid,
-				name: name,
-				phone: phone,
-				user_type: 'customer',
-				pass: phone,
-				department_uuid: department_uuid,
-				designation_uuid: designation_uuid,
-				email: `${name + phone}@bwt.com`,
-				ext: '+880',
-				created_at: updated_at,
-				business_type: business_type,
-			});
-		}
+		
 
 		const orderPromise = db
 			.update(order)
