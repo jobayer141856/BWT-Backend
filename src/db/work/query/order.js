@@ -369,3 +369,98 @@ export async function selectDiagnosisDetailsByOrder(req, res, next) {
 		next(error);
 	}
 }
+
+export async function selectByInfo(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { info_uuid } = req.params;
+
+	const orderPromise = db
+		.select({
+			id: order.id,
+			order_id: sql`CONCAT('WO', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
+			uuid: order.uuid,
+			info_uuid: order.info_uuid,
+			user_uuid: info.user_uuid,
+			user_id: sql`CONCAT('HU', TO_CHAR(${user.created_at}::timestamp, 'YY'), '-', TO_CHAR(${user.id}::integer, 'FM0000'))`,
+			user_name: user.name,
+			model_uuid: order.model_uuid,
+			model_name: storeSchema.model.name,
+			size_uuid: order.size_uuid,
+			size_name: storeSchema.size.name,
+			serial_no: order.serial_no,
+			problems_uuid: order.problems_uuid,
+			problem_statement: order.problem_statement,
+			accessories: order.accessories,
+			is_product_received: info.is_product_received,
+			received_date: info.received_date,
+			warehouse_uuid: order.warehouse_uuid,
+			warehouse_name: storeSchema.warehouse.name,
+			rack_uuid: order.rack_uuid,
+			rack_name: storeSchema.rack.name,
+			floor_uuid: order.floor_uuid,
+			floor_name: storeSchema.floor.name,
+			box_uuid: order.box_uuid,
+			box_name: storeSchema.box.name,
+			created_by: order.created_by,
+			created_by_name: hrSchema.users.name,
+			created_at: order.created_at,
+			updated_at: order.updated_at,
+			remarks: order.remarks,
+			is_diagnosis_need: order.is_diagnosis_need,
+		})
+		.from(order)
+		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
+		.leftJoin(
+			storeSchema.model,
+			eq(order.model_uuid, storeSchema.model.uuid)
+		)
+		.leftJoin(storeSchema.size, eq(order.size_uuid, storeSchema.size.uuid))
+		.leftJoin(
+			storeSchema.warehouse,
+			eq(order.warehouse_uuid, storeSchema.warehouse.uuid)
+		)
+		.leftJoin(storeSchema.rack, eq(order.rack_uuid, storeSchema.rack.uuid))
+		.leftJoin(
+			storeSchema.floor,
+			eq(order.floor_uuid, storeSchema.floor.uuid)
+		)
+		.leftJoin(storeSchema.box, eq(order.box_uuid, storeSchema.box.uuid))
+		.leftJoin(info, eq(order.info_uuid, info.uuid))
+		.leftJoin(user, eq(info.user_uuid, user.uuid))
+		.where(eq(order.info_uuid, info_uuid));
+
+	try {
+		const data = await orderPromise;
+
+		const problems_uuid = data.map((order) => order.problems_uuid).flat();
+
+		const problems = await db
+			.select({
+				name: problem.name,
+				uuid: problem.uuid,
+			})
+			.from(problem)
+			.where(inArray(problem.uuid, problems_uuid));
+
+		const problemsMap = problems.reduce((acc, problem) => {
+			acc[problem.uuid] = problem.name;
+			return acc;
+		}, {});
+
+		data.forEach((order) => {
+			order.problems_name = order.problems_uuid.map(
+				(uuid) => problemsMap[uuid]
+			);
+		});
+
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'order',
+		};
+		return res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}

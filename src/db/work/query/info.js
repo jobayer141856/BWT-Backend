@@ -141,3 +141,50 @@ export async function select(req, res, next) {
 		next(error);
 	}
 }
+
+export async function selectOrderDetailsByInfo(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { info_uuid } = req.params;
+
+	try {
+		const api = await createApi(req);
+
+		const fetchData = async (endpoint) =>
+			await api
+				.get(`${endpoint}`)
+				.then((response) => response.data)
+				.catch((error) => {
+					console.error(
+						`Error fetching data from ${endpoint}:`,
+						error.message
+					);
+					throw error;
+				});
+
+		const [info, order] = await Promise.all([
+			fetchData(`/work/info/${info_uuid}`),
+			fetchData(`/work/order-by-info/${info_uuid}`),
+		]);
+
+		const response = {
+			...info?.data,
+			order_entry: order?.data || [],
+		};
+
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'order details by info',
+		};
+
+		return await res.status(200).json({ toast, data: response });
+	} catch (error) {
+		if (error.response && error.response.status === 404) {
+			return res
+				.status(404)
+				.json({ message: 'Resource not found', error: error.message });
+		}
+		next(error);
+	}
+}
