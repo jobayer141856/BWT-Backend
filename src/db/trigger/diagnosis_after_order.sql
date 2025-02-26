@@ -1,13 +1,13 @@
 --inserted into the database
--- CREATE OR REPLACE FUNCTION generate_15_digit_uuid()
--- RETURNS VARCHAR AS $$
--- DECLARE
---     result VARCHAR;
--- BEGIN
---     SELECT substring(md5(random()::text), 1, 15) INTO result;
---     RETURN result;
--- END;
--- $$ LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION generate_15_digit_uuid()
+RETURNS VARCHAR AS $$
+DECLARE
+    result VARCHAR;
+BEGIN
+    SELECT substring(md5(random()::text), 1, 15) INTO result;
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
 
 -- CREATE OR REPLACE FUNCTION insert_diagnosis_after_order()
 -- RETURNS TRIGGER AS $$
