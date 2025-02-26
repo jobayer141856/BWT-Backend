@@ -4,7 +4,14 @@ import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 import { alias, index } from 'drizzle-orm/pg-core';
-import { diagnosis, process, section, order, problem } from '../schema.js';
+import {
+	diagnosis,
+	process,
+	section,
+	order,
+	problem,
+	info,
+} from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
 
 const engineer_user = alias(hrSchema.users, 'engineer_user');
@@ -246,6 +253,23 @@ export async function selectAll(req, res, next) {
 				);
 			}
 		}
+		let resultIdData = null;
+		if (order_uuid) {
+			const resultIdPromise = db
+				.select({
+					id: order.id,
+					order_id: sql`CONCAT('WO-', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
+					info_id: sql`CONCAT('WI-', TO_CHAR(${info.created_at}, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
+					diagnosis_id: sql`CONCAT('WD-', TO_CHAR(${diagnosis.created_at}, 'YY'), '-', TO_CHAR(${diagnosis.id}, 'FM0000'))`,
+				})
+				.from(order)
+				.leftJoin(diagnosis, eq(order.uuid, diagnosis.order_uuid))
+				.leftJoin(info, eq(order.info_uuid, info.uuid))
+				.where(eq(order.uuid, order_uuid));
+
+			resultIdData = await resultIdPromise;
+			//console.log('resultIdData:', resultIdData);
+		}
 
 		const processData = await processPromise;
 
@@ -284,13 +308,16 @@ export async function selectAll(req, res, next) {
 			message: 'Process list',
 		};
 
-		let responseData = entry ? formattedData : processData;
+		const formattedDataWithId = {
+			...resultIdData,
+			entry: formattedData,
+		};
+
+		let responseData = entry ? formattedDataWithId : processData;
 
 		return res.status(200).json({
 			toast,
-			...(entry
-				? { data: { entry: responseData } }
-				: { data: responseData }),
+			data: responseData,
 		});
 	} catch (error) {
 		next(error);
