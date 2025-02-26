@@ -4,7 +4,7 @@ import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 import { createApi } from '../../../util/api.js';
-import { diagnosis, order, problem } from '../schema.js';
+import { diagnosis, order, problem, info } from '../schema.js';
 import { box, floor, rack, warehouse } from '../../store/schema.js';
 
 export async function insert(req, res, next) {
@@ -106,6 +106,7 @@ export async function selectAll(req, res, next) {
 			customer_problem_statement: diagnosis.customer_problem_statement,
 			customer_remarks: diagnosis.customer_remarks,
 			info_uuid: order.info_uuid,
+			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
@@ -114,6 +115,7 @@ export async function selectAll(req, res, next) {
 		.leftJoin(rack, eq(order.rack_uuid, rack.uuid))
 		.leftJoin(floor, eq(order.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(order.box_uuid, box.uuid))
+		.leftJoin(info, eq(order.info_uuid, info.uuid))
 		.orderBy(desc(diagnosis.created_at));
 
 	try {
@@ -194,6 +196,7 @@ export async function select(req, res, next) {
 			customer_problem_statement: diagnosis.customer_problem_statement,
 			customer_remarks: diagnosis.customer_remarks,
 			info_uuid: order.info_uuid,
+			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
@@ -202,6 +205,7 @@ export async function select(req, res, next) {
 		.leftJoin(rack, eq(order.rack_uuid, rack.uuid))
 		.leftJoin(floor, eq(order.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(order.box_uuid, box.uuid))
+		.leftJoin(info, eq(order.info_uuid, info.uuid))
 		.where(eq(diagnosis.uuid, req.params.uuid));
 
 	try {
@@ -282,6 +286,7 @@ export async function selectByOrder(req, res, next) {
 			customer_problem_statement: diagnosis.customer_problem_statement,
 			customer_remarks: diagnosis.customer_remarks,
 			info_uuid: order.info_uuid,
+			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
@@ -290,6 +295,7 @@ export async function selectByOrder(req, res, next) {
 		.leftJoin(rack, eq(order.rack_uuid, rack.uuid))
 		.leftJoin(floor, eq(order.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(order.box_uuid, box.uuid))
+		.leftJoin(info, eq(order.info_uuid, info.uuid))
 		.where(eq(diagnosis.order_uuid, req.params.order_uuid));
 
 	try {
