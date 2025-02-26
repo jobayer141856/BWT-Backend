@@ -257,7 +257,6 @@ export async function selectAll(req, res, next) {
 		if (order_uuid) {
 			const resultIdPromise = db
 				.select({
-					id: order.id,
 					order_id: sql`CONCAT('WO-', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 					info_id: sql`CONCAT('WI-', TO_CHAR(${info.created_at}, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 					diagnosis_id: sql`CONCAT('WD-', TO_CHAR(${diagnosis.created_at}, 'YY'), '-', TO_CHAR(${diagnosis.id}, 'FM0000'))`,
