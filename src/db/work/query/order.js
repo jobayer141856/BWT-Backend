@@ -36,11 +36,7 @@ export async function insert(req, res, next) {
 export async function update(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	
-
 	try {
-		
-
 		const orderPromise = db
 			.update(order)
 			.set(req.body)
@@ -116,6 +112,7 @@ export async function selectAll(req, res, next) {
 			updated_at: order.updated_at,
 			remarks: order.remarks,
 			is_diagnosis_need: order.is_diagnosis_need,
+			quantity: order.quantity,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -211,6 +208,7 @@ export async function select(req, res, next) {
 			brand_uuid: storeSchema.model.brand_uuid,
 			brand_name: storeSchema.brand.name,
 			is_diagnosis_need: order.is_diagnosis_need,
+			quantity: order.quantity,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -358,6 +356,7 @@ export async function selectByInfo(req, res, next) {
 			updated_at: order.updated_at,
 			remarks: order.remarks,
 			is_diagnosis_need: order.is_diagnosis_need,
+			quantity: order.quantity,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
