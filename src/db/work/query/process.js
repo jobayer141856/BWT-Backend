@@ -309,7 +309,7 @@ export async function selectAll(req, res, next) {
 		};
 
 		const formattedDataWithId = {
-			...resultIdData,
+			...resultIdData[0],
 			entry: formattedData,
 		};
 
