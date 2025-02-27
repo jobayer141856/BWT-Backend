@@ -142,7 +142,7 @@ export async function selectAll(req, res, next) {
 
 	if (qc === 'true') {
 		orderPromise
-			.where(eq(order.is_transferred_for_qc, qc === 'true'))
+			.where(eq(order.is_transferred_for_qc, true))
 			.where(eq(order.is_ready_for_delivery, false));
 	}
 
