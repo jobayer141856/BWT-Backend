@@ -69,6 +69,8 @@ const defOrder = SED({
 		remarks: SE.string('remarks'),
 		is_diagnosis_need: SE.boolean(),
 		quantity: SE.integer(),
+		is_transferred_for_qc: SE.boolean(),
+		is_ready_for_delivery: SE.boolean(),
 	},
 	xml: 'Work/Order',
 });
