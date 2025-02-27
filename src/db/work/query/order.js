@@ -1,4 +1,4 @@
-import { desc, eq, sql, inArray } from 'drizzle-orm';
+import { desc, eq, sql, inArray, and } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
@@ -141,9 +141,12 @@ export async function selectAll(req, res, next) {
 		.orderBy(desc(order.created_at));
 
 	if (qc === 'true') {
-		orderPromise
-			.where(eq(order.is_transferred_for_qc, true))
-			.where(eq(order.is_ready_for_delivery, false));
+		orderPromise.where(
+			and(
+				eq(order.is_transferred_for_qc, true),
+				eq(order.is_ready_for_delivery, false)
+			)
+		);
 	}
 
 	if (is_delivered === 'true') {
