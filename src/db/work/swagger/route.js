@@ -1,3 +1,4 @@
+import { param } from 'express-validator';
 import SE from '../../../util/swagger_example.js';
 
 //* Work Problem *//
@@ -271,6 +272,13 @@ export const pathWorkOrder = {
 		get: {
 			tags: ['work.order'],
 			summary: 'Get all work orders',
+			parameters: [
+				SE.parameter_query('qc', 'qc', ['true', 'false']),
+				SE.parameter_query('is_delivered', 'is_delivered', [
+					'true',
+					'false',
+				]),
+			],
 			responses: {
 				200: SE.response_schema(200, {
 					id: SE.integer(),
