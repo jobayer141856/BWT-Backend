@@ -359,6 +359,7 @@ export async function selectByInfo(req, res, next) {
 			remarks: order.remarks,
 			is_diagnosis_need: order.is_diagnosis_need,
 			quantity: order.quantity,
+			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
