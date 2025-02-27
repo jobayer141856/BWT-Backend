@@ -79,6 +79,7 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
+	const { qc, is_delivered } = req.query;
 	const orderPromise = db
 		.select({
 			id: order.id,
@@ -138,6 +139,18 @@ export async function selectAll(req, res, next) {
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
 
 		.orderBy(desc(order.created_at));
+
+	if (qc === 'true') {
+		orderPromise
+			.where(eq(order.is_transferred_for_qc, qc === 'true'))
+			.where(eq(order.is_ready_for_delivery, false));
+	}
+
+	if (is_delivered === 'true') {
+		orderPromise.where(
+			eq(order.is_ready_for_delivery, is_delivered === 'true')
+		);
+	}
 
 	try {
 		const data = await orderPromise;
