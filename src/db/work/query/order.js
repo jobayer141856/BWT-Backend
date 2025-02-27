@@ -114,6 +114,8 @@ export async function selectAll(req, res, next) {
 			is_diagnosis_need: order.is_diagnosis_need,
 			quantity: order.quantity,
 			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
+			is_transferred_for_qc: order.is_transferred_for_qc,
+			is_ready_for_delivery: order.is_ready_for_delivery,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -211,6 +213,8 @@ export async function select(req, res, next) {
 			is_diagnosis_need: order.is_diagnosis_need,
 			quantity: order.quantity,
 			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
+			is_transferred_for_qc: order.is_transferred_for_qc,
+			is_ready_for_delivery: order.is_ready_for_delivery,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -360,6 +364,8 @@ export async function selectByInfo(req, res, next) {
 			is_diagnosis_need: order.is_diagnosis_need,
 			quantity: order.quantity,
 			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
+			is_transferred_for_qc: order.is_transferred_for_qc,
+			is_ready_for_delivery: order.is_ready_for_delivery,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))

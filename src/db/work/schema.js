@@ -70,6 +70,8 @@ export const order = work.table('order', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	is_transferred_for_qc: boolean('is_transferred_for_qc').default(false),
+	is_ready_for_delivery: boolean('is_ready_for_delivery').default(false),
 });
 export const statusEnum = pgEnum('status', [
 	'pending',
