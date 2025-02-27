@@ -147,9 +147,7 @@ export async function selectAll(req, res, next) {
 	}
 
 	if (is_delivered === 'true') {
-		orderPromise.where(
-			eq(order.is_ready_for_delivery, is_delivered === 'true')
-		);
+		orderPromise.where(eq(order.is_ready_for_delivery, true));
 	}
 
 	try {
