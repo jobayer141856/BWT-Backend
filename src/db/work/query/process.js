@@ -307,10 +307,15 @@ export async function selectAll(req, res, next) {
 			message: 'Process list',
 		};
 
-		const formattedDataWithId = {
-			...resultIdData[0],
-			entry: formattedData,
-		};
+		const formattedDataWithId =
+			resultIdData && resultIdData.length > 0
+				? {
+						...resultIdData[0],
+						entry: formattedData,
+					}
+				: {
+						entry: formattedData,
+					};
 
 		let responseData = entry ? formattedDataWithId : processData;
 
