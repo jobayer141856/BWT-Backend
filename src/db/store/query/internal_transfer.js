@@ -102,9 +102,6 @@ export async function selectAll(req, res, next) {
                                     )`,
 			product_uuid: internal_transfer.product_uuid,
 			product_name: product.name,
-			warehouse_1: decimalToNumber(product.warehouse_1),
-			warehouse_2: decimalToNumber(product.warehouse_2),
-			warehouse_3: decimalToNumber(product.warehouse_3),
 			rack_uuid: internal_transfer.rack_uuid,
 			rack_name: rack.name,
 			floor_uuid: internal_transfer.floor_uuid,
@@ -119,8 +116,22 @@ export async function selectAll(req, res, next) {
 			remarks: internal_transfer.remarks,
 			from_warehouse_uuid: internal_transfer.from_warehouse_uuid,
 			from_warehouse_name: fromWarehouse.name,
+			from_warehouse: decimalToNumber(
+				sql`CASE WHEN ${
+					fromWarehouse.assigned
+				} ='warehouse_1' THEN ${product.warehouse_1} WHEN ${
+					fromWarehouse.assigned
+				} = 'warehouse_2' THEN ${product.warehouse_2} ELSE ${product.warehouse_3} END`
+			),
 			to_warehouse_uuid: internal_transfer.to_warehouse_uuid,
 			to_warehouse_name: toWarehouse.name,
+			to_warehouse: decimalToNumber(
+				sql`CASE WHEN ${
+					toWarehouse.assigned
+				} = 'warehouse_1' THEN ${product.warehouse_1} WHEN ${
+					toWarehouse.assigned
+				} = 'warehouse_2' THEN ${product.warehouse_2} ELSE ${product.warehouse_3} END`
+			),
 		})
 		.from(internal_transfer)
 		.leftJoin(floor, eq(internal_transfer.floor_uuid, floor.uuid))
@@ -171,9 +182,6 @@ export async function select(req, res, next) {
             )`,
 			product_uuid: internal_transfer.product_uuid,
 			product_name: product.name,
-			warehouse_1: decimalToNumber(product.warehouse_1),
-			warehouse_2: decimalToNumber(product.warehouse_2),
-			warehouse_3: decimalToNumber(product.warehouse_3),
 			rack_uuid: internal_transfer.rack_uuid,
 			rack_name: rack.name,
 			floor_uuid: internal_transfer.floor_uuid,
@@ -188,8 +196,22 @@ export async function select(req, res, next) {
 			remarks: internal_transfer.remarks,
 			from_warehouse_uuid: internal_transfer.from_warehouse_uuid,
 			from_warehouse_name: fromWarehouse.name,
+			from_warehouse: decimalToNumber(
+				sql`CASE WHEN ${
+					fromWarehouse.assigned
+				} ='warehouse_1' THEN ${product.warehouse_1} WHEN ${
+					fromWarehouse.assigned
+				} = 'warehouse_2' THEN ${product.warehouse_2} ELSE ${product.warehouse_3} END`
+			),
 			to_warehouse_uuid: internal_transfer.to_warehouse_uuid,
 			to_warehouse_name: toWarehouse.name,
+			to_warehouse: decimalToNumber(
+				sql`CASE WHEN ${
+					toWarehouse.assigned
+				} = 'warehouse_1' THEN ${product.warehouse_1} WHEN ${
+					toWarehouse.assigned
+				} = 'warehouse_2' THEN ${product.warehouse_2} ELSE ${product.warehouse_3} END`
+			),
 		})
 		.from(internal_transfer)
 		.leftJoin(floor, eq(internal_transfer.floor_uuid, floor.uuid))
