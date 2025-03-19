@@ -235,7 +235,7 @@ export const purchase_return_entry = store.table('purchase_return_entry', {
 export const internal_transfer = store.table('internal_transfer', {
 	uuid: uuid_primary,
 	id: serial('id').notNull().unique(),
-	stock_uuid: defaultUUID('stock_uuid').references(() => stock.uuid),
+	product_uuid: defaultUUID('product_uuid').references(() => product.uuid),
 	from_warehouse_uuid: defaultUUID('from_warehouse_uuid').references(
 		() => warehouse.uuid
 	),
