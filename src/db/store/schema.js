@@ -156,6 +156,12 @@ export const purchase_entry = store.table('purchase_entry', {
 	remarks: text('remarks').default(null),
 });
 
+export const assignedEnum = pgEnum('assigned', [
+	'warehouse_1',
+	'warehouse_2',
+	'warehouse_3',
+]);
+
 export const warehouse = store.table('warehouse', {
 	uuid: uuid_primary,
 	branch_uuid: defaultUUID('branch_uuid').references(() => branch.uuid),
@@ -164,6 +170,7 @@ export const warehouse = store.table('warehouse', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	assigned: assignedEnum('assigned').default('warehouse_1'),
 });
 
 export const rack = store.table('rack', {
@@ -229,11 +236,10 @@ export const internal_transfer = store.table('internal_transfer', {
 	uuid: uuid_primary,
 	id: serial('id').notNull().unique(),
 	stock_uuid: defaultUUID('stock_uuid').references(() => stock.uuid),
-	from_branch_uuid: defaultUUID('from_branch_uuid').references(
-		() => branch.uuid
+	from_warehouse_uuid: defaultUUID('from_warehouse_uuid').references(
+		() => warehouse.uuid
 	),
-	to_branch_uuid: defaultUUID('to_branch_uuid').references(() => branch.uuid),
-	warehouse_uuid: defaultUUID('warehouse_uuid').references(
+	to_warehouse_uuid: defaultUUID('to_warehouse_uuid').references(
 		() => warehouse.uuid
 	),
 	rack_uuid: defaultUUID('rack_uuid').references(() => rack.uuid),

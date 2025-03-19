@@ -16,8 +16,8 @@ import {
 	floor,
 } from '../schema.js';
 
-const fromBranch = alias(branch, 'from_branch');
-const toBranch = alias(branch, 'to_branch');
+const fromWarehouse = alias(warehouse, 'from_warehouse');
+const toWarehouse = alias(warehouse, 'to_warehouse');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -106,12 +106,6 @@ export async function selectAll(req, res, next) {
                             ' - ',
                             TO_CHAR(${stock.id}, 'FM0000')
                         )`,
-			from_branch_uuid: internal_transfer.from_branch_uuid,
-			from_branch_name: fromBranch.name,
-			to_branch_uuid: internal_transfer.to_branch_uuid,
-			to_branch_name: toBranch.name,
-			warehouse_uuid: internal_transfer.warehouse_uuid,
-			warehouse_name: warehouse.name,
 			rack_uuid: internal_transfer.rack_uuid,
 			rack_name: rack.name,
 			floor_uuid: internal_transfer.floor_uuid,
@@ -124,17 +118,13 @@ export async function selectAll(req, res, next) {
 			created_at: internal_transfer.created_at,
 			updated_at: internal_transfer.updated_at,
 			remarks: internal_transfer.remarks,
+			from_warehouse_uuid: internal_transfer.from_warehouse_uuid,
+			from_warehouse_name: fromWarehouse.name,
+			to_warehouse_uuid: internal_transfer.to_warehouse_uuid,
+			to_warehouse_name: toWarehouse.name,
 		})
 		.from(internal_transfer)
-		.leftJoin(
-			fromBranch,
-			eq(internal_transfer.from_branch_uuid, fromBranch.uuid)
-		)
-		.leftJoin(toBranch, eq(internal_transfer.to_branch_uuid, toBranch.uuid))
-		.leftJoin(
-			warehouse,
-			eq(internal_transfer.warehouse_uuid, warehouse.uuid)
-		)
+
 		.leftJoin(floor, eq(internal_transfer.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(internal_transfer.box_uuid, box.uuid))
 		.leftJoin(stock, eq(internal_transfer.stock_uuid, stock.uuid))
@@ -143,7 +133,14 @@ export async function selectAll(req, res, next) {
 			eq(internal_transfer.created_by, hrSchema.users.uuid)
 		)
 		.leftJoin(rack, eq(internal_transfer.rack_uuid, rack.uuid))
-
+		.leftJoin(
+			fromWarehouse,
+			eq(internal_transfer.from_warehouse_uuid, fromWarehouse.uuid)
+		)
+		.leftJoin(
+			toWarehouse,
+			eq(internal_transfer.to_warehouse_uuid, toWarehouse.uuid)
+		)
 		.orderBy(internal_transfer.created_at, desc);
 
 	try {
@@ -181,12 +178,6 @@ export async function select(req, res, next) {
                 ' - ',
                 TO_CHAR(${stock.id}, 'FM0000')
             )`,
-			from_branch_uuid: internal_transfer.from_branch_uuid,
-			from_branch_name: fromBranch.name,
-			to_branch_uuid: internal_transfer.to_branch_uuid,
-			to_branch_name: toBranch.name,
-			warehouse_uuid: internal_transfer.warehouse_uuid,
-			warehouse_name: warehouse.name,
 			rack_uuid: internal_transfer.rack_uuid,
 			rack_name: rack.name,
 			floor_uuid: internal_transfer.floor_uuid,
@@ -199,17 +190,12 @@ export async function select(req, res, next) {
 			created_at: internal_transfer.created_at,
 			updated_at: internal_transfer.updated_at,
 			remarks: internal_transfer.remarks,
+			from_warehouse_uuid: internal_transfer.from_warehouse_uuid,
+			from_warehouse_name: fromWarehouse.name,
+			to_warehouse_uuid: internal_transfer.to_warehouse_uuid,
+			to_warehouse_name: toWarehouse.name,
 		})
 		.from(internal_transfer)
-		.leftJoin(
-			fromBranch,
-			eq(internal_transfer.from_branch_uuid, fromBranch.uuid)
-		)
-		.leftJoin(toBranch, eq(internal_transfer.to_branch_uuid, toBranch.uuid))
-		.leftJoin(
-			warehouse,
-			eq(internal_transfer.warehouse_uuid, warehouse.uuid)
-		)
 		.leftJoin(floor, eq(internal_transfer.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(internal_transfer.box_uuid, box.uuid))
 		.leftJoin(stock, eq(internal_transfer.stock_uuid, stock.uuid))
@@ -218,6 +204,14 @@ export async function select(req, res, next) {
 			eq(internal_transfer.created_by, hrSchema.users.uuid)
 		)
 		.leftJoin(rack, eq(internal_transfer.rack_uuid, rack.uuid))
+		.leftJoin(
+			fromWarehouse,
+			eq(internal_transfer.from_warehouse_uuid, fromWarehouse.uuid)
+		)
+		.leftJoin(
+			toWarehouse,
+			eq(internal_transfer.to_warehouse_uuid, toWarehouse.uuid)
+		)
 		.where(eq(internal_transfer.uuid, req.params.uuid));
 
 	try {

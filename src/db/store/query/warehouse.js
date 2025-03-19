@@ -84,6 +84,7 @@ export async function selectAll(req, res, next) {
 			created_at: warehouse.created_at,
 			updated_at: warehouse.created_at,
 			remarks: warehouse.remarks,
+			assigned: warehouse.assigned,
 		})
 		.from(warehouse)
 		.leftJoin(branch, eq(warehouse.branch_uuid, branch.uuid))
@@ -115,6 +116,7 @@ export async function select(req, res, next) {
 			created_at: warehouse.created_at,
 			updated_at: warehouse.updated_at,
 			remarks: warehouse.remarks,
+			assigned: warehouse.assigned,
 		})
 		.from(warehouse)
 		.leftJoin(branch, eq(warehouse.branch_uuid, branch.uuid))
