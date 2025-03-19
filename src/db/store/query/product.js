@@ -3,7 +3,7 @@ import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 
-import { brand, category, model, product, size } from '../schema.js';
+import { brand, category, model, product, size, warehouse } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -92,6 +92,9 @@ export async function selectAll(req, res, next) {
 			created_at: product.created_at,
 			updated_at: product.updated_at,
 			remarks: product.remarks,
+			warehouse_1: product.warehouse_1,
+			warehouse_2: product.warehouse_2,
+			warehouse_3: product.warehouse_3,
 		})
 		.from(product)
 		.leftJoin(category, eq(product.category_uuid, category.uuid))
@@ -133,6 +136,9 @@ export async function select(req, res, next) {
 			created_at: product.created_at,
 			updated_at: product.updated_at,
 			remarks: product.remarks,
+			warehouse_1: product.warehouse_1,
+			warehouse_2: product.warehouse_2,
+			warehouse_3: product.warehouse_3,
 		})
 		.from(product)
 		.leftJoin(category, eq(product.category_uuid, category.uuid))
