@@ -14,6 +14,7 @@ import {
 	stock,
 	warehouse,
 	floor,
+	product,
 } from '../schema.js';
 
 const fromWarehouse = alias(warehouse, 'from_warehouse');

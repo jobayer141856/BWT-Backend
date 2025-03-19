@@ -1,3 +1,4 @@
+-- inserted into database
 CREATE OR REPLACE FUNCTION product_after_internal_transfer_insert_function() RETURNS TRIGGER AS $$
 DECLARE 
     from_warehouse_name TEXT;
