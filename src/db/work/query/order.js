@@ -79,7 +79,7 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
-	const { qc, is_delivered } = req.query;
+	const { qc, is_delivered, work_in_hand } = req.query;
 	const orderPromise = db
 		.select({
 			id: order.id,
@@ -151,6 +151,14 @@ export async function selectAll(req, res, next) {
 
 	if (is_delivered === 'true') {
 		orderPromise.where(eq(order.is_ready_for_delivery, true));
+	}
+	if (work_in_hand === 'true') {
+		orderPromise.where(
+			and(
+				eq(order.is_transferred_for_qc, false),
+				eq(order.is_ready_for_delivery, false)
+			)
+		);
 	}
 
 	try {
