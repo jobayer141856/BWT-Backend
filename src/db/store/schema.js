@@ -95,6 +95,9 @@ export const product = store.table('product', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	warehouse_1: PG_DECIMAL('warehouse_1').default(0),
+	warehouse_2: PG_DECIMAL('warehouse_2').default(0),
+	warehouse_3: PG_DECIMAL('warehouse_3').default(0),
 });
 
 export const branch = store.table('branch', {
@@ -136,7 +139,7 @@ export const stock = store.table('stock', {
 export const purchase_entry = store.table('purchase_entry', {
 	uuid: uuid_primary,
 	purchase_uuid: defaultUUID('purchase_uuid').references(() => purchase.uuid),
-	stock_uuid: defaultUUID('stock_uuid').references(() => stock.uuid),
+	product_uuid: defaultUUID('product_uuid').references(() => product.uuid),
 	serial_no: text('serial_no').notNull(),
 	quantity: PG_DECIMAL('quantity').notNull(),
 	price_per_unit: PG_DECIMAL('price_per_unit').notNull(),
@@ -203,6 +206,9 @@ export const purchase_return = store.table('purchase_return', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	warehouse_uuid: defaultUUID('warehouse_uuid').references(
+		() => warehouse.uuid
+	),
 });
 
 export const purchase_return_entry = store.table('purchase_return_entry', {

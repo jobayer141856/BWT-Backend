@@ -1,42 +1,40 @@
-
--- Insert Trigger
-CREATE OR REPLACE FUNCTION stock_after_purchase_entry_insert_function() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION product_after_purchase_entry_insert_function() RETURNS TRIGGER AS $$
 DECLARE 
-    warehouse_name TEXT; 
+    warehouse_name TEXT;
 BEGIN
     SELECT name INTO warehouse_name FROM store.warehouse WHERE uuid = NEW.warehouse_uuid;
     
-    UPDATE store.stock
+    UPDATE store.product
     SET
         warehouse_1 = CASE WHEN warehouse_name = 'warehouse_1' THEN warehouse_1 + NEW.quantity ELSE warehouse_1 END,
         warehouse_2 = CASE WHEN warehouse_name = 'warehouse_2' THEN warehouse_2 + NEW.quantity ELSE warehouse_2 END,
         warehouse_3 = CASE WHEN warehouse_name = 'warehouse_3' THEN warehouse_3 + NEW.quantity ELSE warehouse_3 END
-    WHERE uuid = NEW.stock_uuid;
+    WHERE uuid = NEW.product_uuid;
     
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 -- Delete Trigger
-CREATE OR REPLACE FUNCTION stock_after_purchase_entry_delete_function() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION product_after_purchase_entry_delete_function() RETURNS TRIGGER AS $$
 DECLARE 
-    warehouse_name TEXT; 
+    warehouse_name TEXT;
 BEGIN
     SELECT name INTO warehouse_name FROM store.warehouse WHERE uuid = OLD.warehouse_uuid;
     
-    UPDATE store.stock
+    UPDATE store.product
     SET
         warehouse_1 = CASE WHEN warehouse_name = 'warehouse_1' THEN warehouse_1 - OLD.quantity ELSE warehouse_1 END,
         warehouse_2 = CASE WHEN warehouse_name = 'warehouse_2' THEN warehouse_2 - OLD.quantity ELSE warehouse_2 END,
         warehouse_3 = CASE WHEN warehouse_name = 'warehouse_3' THEN warehouse_3 - OLD.quantity ELSE warehouse_3 END
-    WHERE uuid = OLD.stock_uuid;
+    WHERE uuid = OLD.product_uuid;
     
     RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
 -- Update Trigger (handles warehouse changes)
-CREATE OR REPLACE FUNCTION stock_after_purchase_entry_update_function() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION product_after_purchase_entry_update_function() RETURNS TRIGGER AS $$
 DECLARE 
     old_warehouse_name TEXT;
     new_warehouse_name TEXT;
@@ -47,46 +45,48 @@ BEGIN
 
     IF old_warehouse_name <> new_warehouse_name THEN
         -- Subtract from old warehouse
-        UPDATE store.stock
+        UPDATE store.product
         SET
             warehouse_1 = CASE WHEN old_warehouse_name = 'warehouse_1' THEN warehouse_1 - OLD.quantity ELSE warehouse_1 END,
             warehouse_2 = CASE WHEN old_warehouse_name = 'warehouse_2' THEN warehouse_2 - OLD.quantity ELSE warehouse_2 END,
             warehouse_3 = CASE WHEN old_warehouse_name = 'warehouse_3' THEN warehouse_3 - OLD.quantity ELSE warehouse_3 END
-        WHERE uuid = OLD.stock_uuid;
+        WHERE uuid = OLD.product_uuid;
 
         -- Add to new warehouse
-        UPDATE store.stock
+        UPDATE store.product
         SET
             warehouse_1 = CASE WHEN new_warehouse_name = 'warehouse_1' THEN warehouse_1 + NEW.quantity ELSE warehouse_1 END,
             warehouse_2 = CASE WHEN new_warehouse_name = 'warehouse_2' THEN warehouse_2 + NEW.quantity ELSE warehouse_2 END,
             warehouse_3 = CASE WHEN new_warehouse_name = 'warehouse_3' THEN warehouse_3 + NEW.quantity ELSE warehouse_3 END
-        WHERE uuid = NEW.stock_uuid;
+        WHERE uuid = NEW.product_uuid;
     ELSE
-        -- Same warehouse, update quantity difference
-        UPDATE store.stock
+        -- Update the quantity in the same warehouse
+        UPDATE store.product
         SET
-            warehouse_1 = CASE WHEN new_warehouse_name = 'warehouse_1' THEN warehouse_1 + (NEW.quantity - OLD.quantity) ELSE warehouse_1 END,
-            warehouse_2 = CASE WHEN new_warehouse_name = 'warehouse_2' THEN warehouse_2 + (NEW.quantity - OLD.quantity) ELSE warehouse_2 END,
-            warehouse_3 = CASE WHEN new_warehouse_name = 'warehouse_3' THEN warehouse_3 + (NEW.quantity - OLD.quantity) ELSE warehouse_3 END
-        WHERE uuid = NEW.stock_uuid;
+            warehouse_1 = CASE WHEN old_warehouse_name = 'warehouse_1' THEN warehouse_1 - OLD.quantity + NEW.quantity ELSE warehouse_1 END,
+            warehouse_2 = CASE WHEN old_warehouse_name = 'warehouse_2' THEN warehouse_2 - OLD.quantity + NEW.quantity ELSE warehouse_2 END,
+            warehouse_3 = CASE WHEN old_warehouse_name = 'warehouse_3' THEN warehouse_3 - OLD.quantity + NEW.quantity ELSE warehouse_3 END
+        WHERE uuid = NEW.product_uuid;
     END IF;
-    
+
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- Triggers remain the same
-CREATE OR REPLACE TRIGGER stock_after_purchase_entry
+-- Trigger for insert
+CREATE OR REPLACE TRIGGER product_after_purchase_entry_insert
 AFTER INSERT ON store.purchase_entry
 FOR EACH ROW
-EXECUTE FUNCTION stock_after_purchase_entry_insert_function();
+EXECUTE FUNCTION product_after_purchase_entry_insert_function();
 
-CREATE OR REPLACE TRIGGER stock_after_purchase_entry_delete
+-- Trigger for delete
+CREATE OR REPLACE TRIGGER product_after_purchase_entry_delete
 AFTER DELETE ON store.purchase_entry
 FOR EACH ROW
-EXECUTE FUNCTION stock_after_purchase_entry_delete_function();
+EXECUTE FUNCTION product_after_purchase_entry_delete_function();
 
-CREATE OR REPLACE TRIGGER stock_after_purchase_entry_update
+-- Trigger for update
+CREATE OR REPLACE TRIGGER product_after_purchase_entry_update
 AFTER UPDATE ON store.purchase_entry
 FOR EACH ROW
-EXECUTE FUNCTION stock_after_purchase_entry_update_function();
+EXECUTE FUNCTION product_after_purchase_entry_update_function();
