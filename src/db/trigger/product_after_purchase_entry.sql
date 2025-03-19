@@ -60,6 +60,7 @@ BEGIN
             warehouse_2 = CASE WHEN new_warehouse_name = 'warehouse_2' THEN warehouse_2 + NEW.quantity ELSE warehouse_2 END,
             warehouse_3 = CASE WHEN new_warehouse_name = 'warehouse_3' THEN warehouse_3 + NEW.quantity ELSE warehouse_3 END
         WHERE uuid = NEW.product_uuid;
+        
     ELSE
         -- Update the quantity in the same warehouse
         UPDATE store.product
