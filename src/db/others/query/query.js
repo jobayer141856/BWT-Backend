@@ -277,6 +277,7 @@ export async function selectWarehouse(req, res, next) {
 		.select({
 			value: storeSchema.warehouse.uuid,
 			label: storeSchema.warehouse.name,
+			assigned: storeSchema.warehouse.assigned,
 		})
 		.from(storeSchema.warehouse);
 
