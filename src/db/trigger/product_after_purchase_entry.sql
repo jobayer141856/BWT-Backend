@@ -3,7 +3,7 @@ CREATE OR REPLACE FUNCTION product_after_purchase_entry_insert_function() RETURN
 DECLARE 
     warehouse_name TEXT;
 BEGIN
-    SELECT name INTO warehouse_name FROM store.warehouse WHERE uuid = NEW.warehouse_uuid;
+    SELECT assigned INTO warehouse_name FROM store.warehouse WHERE uuid = NEW.warehouse_uuid;
     
     UPDATE store.product
     SET
@@ -21,7 +21,7 @@ CREATE OR REPLACE FUNCTION product_after_purchase_entry_delete_function() RETURN
 DECLARE 
     warehouse_name TEXT;
 BEGIN
-    SELECT name INTO warehouse_name FROM store.warehouse WHERE uuid = OLD.warehouse_uuid;
+    SELECT assigned INTO warehouse_name FROM store.warehouse WHERE uuid = OLD.warehouse_uuid;
     
     UPDATE store.product
     SET
@@ -41,8 +41,8 @@ DECLARE
     new_warehouse_name TEXT;
 BEGIN
     -- Get old and new warehouse names
-    SELECT name INTO old_warehouse_name FROM store.warehouse WHERE uuid = OLD.warehouse_uuid;
-    SELECT name INTO new_warehouse_name FROM store.warehouse WHERE uuid = NEW.warehouse_uuid;
+    SELECT assigned INTO old_warehouse_name FROM store.warehouse WHERE uuid = OLD.warehouse_uuid;
+    SELECT assigned INTO new_warehouse_name FROM store.warehouse WHERE uuid = NEW.warehouse_uuid;
 
     IF old_warehouse_name <> new_warehouse_name THEN
         -- Subtract from old warehouse

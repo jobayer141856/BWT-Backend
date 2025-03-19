@@ -99,13 +99,8 @@ export async function selectAll(req, res, next) {
                                         ' - ',
                                         TO_CHAR(${internal_transfer.id}, 'FM0000')
                                     )`,
-			stock_uuid: internal_transfer.stock_uuid,
-			stock_id: sql`CONCAT(
-                            'SS',
-                            TO_CHAR(${stock.created_at}, 'YY'),
-                            ' - ',
-                            TO_CHAR(${stock.id}, 'FM0000')
-                        )`,
+			product_uuid: internal_transfer.product_uuid,
+			product_name: product.name,
 			rack_uuid: internal_transfer.rack_uuid,
 			rack_name: rack.name,
 			floor_uuid: internal_transfer.floor_uuid,
@@ -124,10 +119,8 @@ export async function selectAll(req, res, next) {
 			to_warehouse_name: toWarehouse.name,
 		})
 		.from(internal_transfer)
-
 		.leftJoin(floor, eq(internal_transfer.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(internal_transfer.box_uuid, box.uuid))
-		.leftJoin(stock, eq(internal_transfer.stock_uuid, stock.uuid))
 		.leftJoin(
 			hrSchema.users,
 			eq(internal_transfer.created_by, hrSchema.users.uuid)
@@ -141,6 +134,7 @@ export async function selectAll(req, res, next) {
 			toWarehouse,
 			eq(internal_transfer.to_warehouse_uuid, toWarehouse.uuid)
 		)
+		.leftJoin(product, eq(internal_transfer.product_uuid, product.uuid))
 		.orderBy(internal_transfer.created_at, desc);
 
 	try {
@@ -171,13 +165,8 @@ export async function select(req, res, next) {
                 ' - ',
                 TO_CHAR(${internal_transfer.id}, 'FM0000')
             )`,
-			stock_uuid: internal_transfer.stock_uuid,
-			stock_id: sql`CONCAT(
-                'SS',
-                TO_CHAR(${stock.created_at}, 'YY'),
-                ' - ',
-                TO_CHAR(${stock.id}, 'FM0000')
-            )`,
+			product_uuid: internal_transfer.product_uuid,
+			product_name: product.name,
 			rack_uuid: internal_transfer.rack_uuid,
 			rack_name: rack.name,
 			floor_uuid: internal_transfer.floor_uuid,
@@ -198,7 +187,6 @@ export async function select(req, res, next) {
 		.from(internal_transfer)
 		.leftJoin(floor, eq(internal_transfer.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(internal_transfer.box_uuid, box.uuid))
-		.leftJoin(stock, eq(internal_transfer.stock_uuid, stock.uuid))
 		.leftJoin(
 			hrSchema.users,
 			eq(internal_transfer.created_by, hrSchema.users.uuid)
@@ -212,6 +200,7 @@ export async function select(req, res, next) {
 			toWarehouse,
 			eq(internal_transfer.to_warehouse_uuid, toWarehouse.uuid)
 		)
+		.leftJoin(product, eq(internal_transfer.product_uuid, product.uuid))
 		.where(eq(internal_transfer.uuid, req.params.uuid));
 
 	try {
