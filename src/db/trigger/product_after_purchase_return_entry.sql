@@ -1,3 +1,4 @@
+--inserted into database
 CREATE OR REPLACE FUNCTION product_after_purchase_return_entry_insert_function() RETURNS TRIGGER AS $$
 DECLARE 
     warehouse_name TEXT;
