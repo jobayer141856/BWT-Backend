@@ -4,7 +4,13 @@ import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { createApi } from '../../../util/api.js';
 
-import { branch, purchase, vendor, purchase_return } from '../schema.js';
+import {
+	branch,
+	purchase,
+	vendor,
+	purchase_return,
+	warehouse,
+} from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -97,6 +103,8 @@ export async function selectAll(req, res, next) {
 			created_at: purchase_return.created_at,
 			updated_at: purchase_return.updated_at,
 			remarks: purchase_return.remarks,
+			warehouse_uuid: purchase_return.warehouse_uuid,
+			warehouse_name: warehouse.name,
 		})
 		.from(purchase_return)
 		.leftJoin(
@@ -104,6 +112,7 @@ export async function selectAll(req, res, next) {
 			eq(purchase_return.created_by, hrSchema.users.uuid)
 		)
 		.leftJoin(purchase, eq(purchase_return.purchase_uuid, purchase.uuid))
+		.leftJoin(warehouse, eq(purchase_return.warehouse_uuid, warehouse.uuid))
 		.orderBy(purchase_return.created_at, desc);
 
 	try {
@@ -146,6 +155,8 @@ export async function select(req, res, next) {
 			created_at: purchase_return.created_at,
 			updated_at: purchase_return.updated_at,
 			remarks: purchase_return.remarks,
+			warehouse_uuid: purchase_return.warehouse_uuid,
+			warehouse_name: warehouse.name,
 		})
 		.from(purchase_return)
 		.leftJoin(
@@ -153,6 +164,7 @@ export async function select(req, res, next) {
 			eq(purchase_return.created_by, hrSchema.users.uuid)
 		)
 		.leftJoin(purchase, eq(purchase_return.purchase_uuid, purchase.uuid))
+		.leftJoin(warehouse, eq(purchase_return.warehouse_uuid, warehouse.uuid))
 		.where(eq(purchase_return.uuid, req.params.uuid));
 
 	try {
