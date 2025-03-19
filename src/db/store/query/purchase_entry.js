@@ -90,8 +90,8 @@ export async function selectAll(req, res, next) {
 			uuid: purchase_entry.uuid,
 			purchase_uuid: purchase_entry.purchase_uuid,
 			purchase_id: sql`CONCAT('SP',TO_CHAR(${purchase.created_at}, 'YY'), ' - ', TO_CHAR(${purchase.id}, 'FM0000'))`,
-			stock_uuid: purchase_entry.stock_uuid,
-			stock_id: sql`CONCAT('SS',TO_CHAR(${stock.created_at}, 'YY'), ' - ', TO_CHAR(${stock.id}, 'FM0000'))`,
+			product_uuid: purchase_entry.product_uuid,
+			product_name: product.name,
 			serial_no: purchase_entry.serial_no,
 			quantity: decimalToNumber(purchase_entry.quantity),
 			price_per_unit: decimalToNumber(purchase_entry.price_per_unit),
@@ -119,8 +119,9 @@ export async function selectAll(req, res, next) {
 		.leftJoin(rack, eq(purchase_entry.rack_uuid, rack.uuid))
 		.leftJoin(floor, eq(purchase_entry.floor_uuid, floor.uuid))
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))
-		.leftJoin(stock, eq(purchase_entry.stock_uuid, stock.uuid))
+		.leftJoin(product, eq(purchase_entry.product_uuid, product.uuid))
 		.leftJoin(purchase, eq(purchase_entry.purchase_uuid, purchase.uuid))
+		.where(eq(purchase_entry.uuid, req.params.uuid))
 		.orderBy(desc(purchase_entry.created_at));
 
 	try {
