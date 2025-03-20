@@ -115,7 +115,7 @@ export async function select(req, res, next) {
 		})
 		.from(vehicle)
 		.leftJoin(hrSchema.users, eq(vehicle.created_by, hrSchema.users.uuid))
-		.where(vehicle.uuid.eq(req.params.uuid));
+		.where(eq(vehicle.uuid, req.params.uuid));
 
 	try {
 		const data = await vehiclePromise;

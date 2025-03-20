@@ -5,7 +5,7 @@ import SE from '../../../util/swagger_example.js';
 export const pathDeliveryVehicle = {
 	'/delivery/vehicle': {
 		get: {
-			tags: ['Delivery'],
+			tags: ['delivery.vehicle'],
 			summary: 'Get all vehicles',
 			responses: {
 				200: SE.response_schema(200, {
@@ -34,7 +34,7 @@ export const pathDeliveryVehicle = {
 	},
 	'/delivery/vehicle/{uuid}': {
 		get: {
-			tags: ['Delivery'],
+			tags: ['delivery.vehicle'],
 			summary: 'Get a vehicle',
 			parameters: [
 				{
@@ -60,7 +60,7 @@ export const pathDeliveryVehicle = {
 			},
 		},
 		put: {
-			tags: ['Delivery'],
+			tags: ['delivery.vehicle'],
 			summary: 'Update a vehicle',
 			parameters: [
 				{
@@ -78,7 +78,7 @@ export const pathDeliveryVehicle = {
 			},
 		},
 		delete: {
-			tags: ['Delivery'],
+			tags: ['delivery.vehicle'],
 			summary: 'Delete a vehicle',
 			parameters: [
 				{
@@ -111,7 +111,7 @@ export const pathDeliveryVehicle = {
 export const pathDeliveryCourier = {
 	'/delivery/courier': {
 		get: {
-			tags: ['Delivery'],
+			tags: ['delivery.courier'],
 			summary: 'Get all couriers',
 			responses: {
 				200: SE.response_schema(200, {
@@ -140,7 +140,7 @@ export const pathDeliveryCourier = {
 	},
 	'/delivery/courier/{uuid}': {
 		get: {
-			tags: ['Delivery'],
+			tags: ['delivery.courier'],
 			summary: 'Get a courier',
 			parameters: [
 				{
@@ -166,7 +166,7 @@ export const pathDeliveryCourier = {
 			},
 		},
 		put: {
-			tags: ['Delivery'],
+			tags: ['delivery.courier'],
 			summary: 'Update a courier',
 			parameters: [
 				{
@@ -184,7 +184,7 @@ export const pathDeliveryCourier = {
 			},
 		},
 		delete: {
-			tags: ['Delivery'],
+			tags: ['delivery.courier'],
 			summary: 'Delete a courier',
 			parameters: [
 				{
@@ -217,7 +217,7 @@ export const pathDeliveryCourier = {
 export const pathDeliveryChallan = {
 	'/delivery/challan': {
 		get: {
-			tags: ['Delivery'],
+			tags: ['delivery.challan'],
 			summary: 'Get all challan',
 			responses: {
 				200: SE.response_schema(200, {
@@ -256,7 +256,7 @@ export const pathDeliveryChallan = {
 	},
 	'/delivery/challan/{uuid}': {
 		get: {
-			tags: ['Delivery'],
+			tags: ['delivery.challan'],
 			summary: 'Get a challan',
 			parameters: [
 				{
@@ -294,7 +294,7 @@ export const pathDeliveryChallan = {
 			},
 		},
 		put: {
-			tags: ['Delivery'],
+			tags: ['delivery.challan'],
 			summary: 'Update a challan',
 			parameters: [
 				{
@@ -312,7 +312,7 @@ export const pathDeliveryChallan = {
 			},
 		},
 		delete: {
-			tags: ['Delivery'],
+			tags: ['delivery.challan'],
 			summary: 'Delete a challan',
 			parameters: [
 				{
@@ -357,7 +357,7 @@ export const pathDeliveryChallan = {
 export const pathDeliveryChallanEntry = {
 	'/delivery/challan-entry': {
 		get: {
-			tags: ['Delivery'],
+			tags: ['delivery.challan_entry'],
 			summary: 'Get all challan entries',
 			responses: {
 				200: SE.response_schema(200, {
@@ -375,7 +375,7 @@ export const pathDeliveryChallanEntry = {
 			},
 		},
 		post: {
-			tags: ['delivery.challan-entry'],
+			tags: ['delivery.challan_entry'],
 			summary: 'Create a new challan entry',
 			requestBody: SE.requestBody_schema_ref('delivery/challan-entry'),
 			responses: {
@@ -388,7 +388,7 @@ export const pathDeliveryChallanEntry = {
 	},
 	'/delivery/challan-entry/{uuid}': {
 		get: {
-			tags: ['Delivery'],
+			tags: ['delivery.challan_entry'],
 			summary: 'Get a challan entry',
 			parameters: [
 				{
@@ -416,7 +416,7 @@ export const pathDeliveryChallanEntry = {
 			},
 		},
 		put: {
-			tags: ['Delivery'],
+			tags: ['delivery.challan_entry'],
 			summary: 'Update a challan entry',
 			parameters: [
 				{
@@ -434,7 +434,7 @@ export const pathDeliveryChallanEntry = {
 			},
 		},
 		delete: {
-			tags: ['Delivery'],
+			tags: ['delivery.challan_entry'],
 			summary: 'Delete a challan entry',
 			parameters: [
 				{

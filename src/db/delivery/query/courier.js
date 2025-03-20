@@ -114,7 +114,7 @@ export async function select(req, res, next) {
 		})
 		.from(courier)
 		.leftJoin(hrSchema.users, eq(courier.created_by, hrSchema.users.uuid))
-		.where(courier.uuid.eq(req.params.uuid));
+		.where(eq(courier.uuid, req.params.uuid));
 
 	try {
 		const data = await courierPromise;
