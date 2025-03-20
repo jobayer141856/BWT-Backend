@@ -134,7 +134,7 @@ export async function select(req, res, next) {
 			workSchema.order,
 			eq(challan_entry.order_uuid, workSchema.order.uuid)
 		)
-		.where(challan_entry.uuid.eq(req.params.uuid));
+		.where(eq(challan_entry.uuid, req.params.uuid));
 
 	try {
 		const data = await challanEntryPromise;
