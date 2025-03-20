@@ -14,16 +14,22 @@ import { pathStore } from './db/store/swagger/route.js';
 import { defWork, tagWork } from './db/work/swagger/def.js';
 import { pathWork } from './db/work/swagger/route.js';
 
+//* Delivery
+
+import { defDelivery, tagDelivery } from './db/delivery/swagger/def.js';
+import { pathDelivery } from './db/delivery/swagger/route.js';
+
 //* Others
 
 import { pathOthers, tagOthers } from './db/others/swagger/route.js';
 
-const tags = [...tagHr, ...tagStore, ...tagOthers, ...tagWork];
+const tags = [...tagHr, ...tagStore, ...tagOthers, ...tagWork, ...tagDelivery];
 
 const definitions = {
 	hr: defHr,
 	store: defStore,
 	work: defWork,
+	delivery: defDelivery,
 };
 
 const paths = {
@@ -31,6 +37,7 @@ const paths = {
 	...pathStore,
 	...pathOthers,
 	...pathWork,
+	...pathDelivery,
 };
 
 const swaggerSpec = swaggerJSDoc({
