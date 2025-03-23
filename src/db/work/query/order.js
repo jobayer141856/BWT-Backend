@@ -138,11 +138,6 @@ export async function selectAll(req, res, next) {
 		.leftJoin(storeSchema.box, eq(order.box_uuid, storeSchema.box.uuid))
 		.leftJoin(info, eq(order.info_uuid, info.uuid))
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
-		.leftJoin(
-			deliverySchema.challan_entry,
-			eq(order.uuid, deliverySchema.challan_entry.order_uuid)
-		)
-
 		.orderBy(desc(order.created_at));
 
 	if (qc === 'true') {
@@ -169,7 +164,11 @@ export async function selectAll(req, res, next) {
 		orderPromise.where(
 			and(
 				eq(info.user_uuid, customer_uuid),
-				deliverySchema.challan_entry.challan_uuid == null
+				eq(order.is_ready_for_delivery, true),
+				sql`${order.uuid} NOT IN (
+                SELECT ${deliverySchema.challan_entry.order_uuid}
+                FROM ${deliverySchema.challan_entry}
+            		)`
 			)
 		);
 	}
