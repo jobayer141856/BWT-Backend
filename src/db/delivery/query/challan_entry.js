@@ -144,7 +144,7 @@ export async function select(req, res, next) {
 			message: 'Challan Entry detail',
 		};
 
-		return await res.status(200).json({ toast, data });
+		return await res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
 		next(error);
 	}

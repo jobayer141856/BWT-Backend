@@ -4,6 +4,7 @@ import { handleError, validateRequest } from '../../../util/index.js';
 import * as hrSchema from '../../hr/schema.js';
 import * as storeSchema from '../../store/schema.js';
 import * as workSchema from '../../work/schema.js';
+import * as deliverySchema from '../../delivery/schema.js';
 
 //* HR others routes *//
 
@@ -605,6 +606,50 @@ export async function selectProcess(req, res, next) {
 			status: 200,
 			type: 'select all',
 			message: 'Process list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+//* Delivery others routes *//
+
+export async function selectCourier(req, res, next) {
+	const courierPromise = db
+		.select({
+			value: deliverySchema.courier.uuid,
+			label: deliverySchema.courier.name,
+		})
+		.from(deliverySchema.courier);
+
+	try {
+		const data = await courierPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Courier list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectVehicle(req, res, next) {
+	const vehiclePromise = db
+		.select({
+			value: deliverySchema.vehicle.uuid,
+			label: deliverySchema.vehicle.name,
+		})
+		.from(deliverySchema.vehicle);
+
+	try {
+		const data = await vehiclePromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Vehicle list',
 		};
 		return await res.status(200).json({ toast, data });
 	} catch (error) {
