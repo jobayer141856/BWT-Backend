@@ -27,16 +27,27 @@ export async function selectUser(req, res, next) {
 			hrSchema.department,
 			eq(hrSchema.users.department_uuid, hrSchema.department.uuid)
 		);
-
 	const filters = [];
 	if (type) {
-		filters.push(eq(hrSchema.users.user_type, type));
+		filters.push(
+			eq(sql`LOWER(${hrSchema.users.user_type})`, type.toLowerCase())
+		);
 	}
 	if (department) {
-		filters.push(eq(hrSchema.department.department, department));
+		filters.push(
+			eq(
+				sql`LOWER(${hrSchema.department.department})`,
+				department.toLowerCase()
+			)
+		);
 	}
 	if (designation) {
-		filters.push(eq(hrSchema.designation.designation, designation));
+		filters.push(
+			eq(
+				sql`LOWER(${hrSchema.designation.designation})`,
+				designation.toLowerCase()
+			)
+		);
 	}
 
 	if (filters.length > 0) {

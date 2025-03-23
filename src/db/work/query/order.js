@@ -7,6 +7,7 @@ import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
 import { order, problem, info } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
+import * as deliverySchema from '../../delivery/schema.js';
 import { users } from '../../hr/schema.js';
 
 const user = alias(hrSchema.users, 'user');
@@ -79,7 +80,7 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
-	const { qc, is_delivered, work_in_hand } = req.query;
+	const { qc, is_delivered, work_in_hand, customer_uuid } = req.query;
 	const orderPromise = db
 		.select({
 			id: order.id,
@@ -137,6 +138,10 @@ export async function selectAll(req, res, next) {
 		.leftJoin(storeSchema.box, eq(order.box_uuid, storeSchema.box.uuid))
 		.leftJoin(info, eq(order.info_uuid, info.uuid))
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
+		.leftJoin(
+			deliverySchema.challan_entry,
+			eq(order.uuid, deliverySchema.challan_entry.order_uuid)
+		)
 
 		.orderBy(desc(order.created_at));
 
@@ -157,6 +162,14 @@ export async function selectAll(req, res, next) {
 			and(
 				eq(order.is_transferred_for_qc, false),
 				eq(order.is_ready_for_delivery, false)
+			)
+		);
+	}
+	if (customer_uuid) {
+		orderPromise.where(
+			and(
+				eq(info.user_uuid, customer_uuid),
+				deliverySchema.challan_entry.challan_uuid == null
 			)
 		);
 	}

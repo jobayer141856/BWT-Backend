@@ -101,8 +101,8 @@ export async function selectAll(req, res, next) {
 		.leftJoin(customerUser, eq(challan.customer_uuid, customerUser.uuid))
 		.leftJoin(employeeUser, eq(challan.employee_uuid, employeeUser.uuid))
 		.leftJoin(vehicle, eq(challan.vehicle_uuid, vehicle.uuid))
-		.leftJoin(courier, eq(challan.courier_uuid, courier.uuid));
-
+		.leftJoin(courier, eq(challan.courier_uuid, courier.uuid))
+		.leftJoin(hrSchema.users, eq(challan.created_by, hrSchema.users.uuid));
 	try {
 		const data = await challanPromise;
 		const toast = {
@@ -158,6 +158,46 @@ export async function select(req, res, next) {
 		};
 
 		return await res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectChallanDetailsByChallan(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { uuid } = req.params;
+
+	try {
+		const api = await createApi(req);
+		const fetchData = async (endpoint) =>
+			await api
+				.get(`${endpoint}`)
+				.then((response) => response.data)
+				.catch((error) => {
+					console.error(
+						`Error fetching data from ${endpoint}:`,
+						error.message
+					);
+					throw error;
+				});
+		const [challan, challan_entries] = await Promise.all([
+			fetchData(`/delivery/challan/${uuid}`),
+			fetchData(`/delivery/challan-entry/by/challan/${uuid}`),
+		]);
+
+		const response = {
+			...challan?.data,
+			challan_entries: challan_entries?.data || [],
+		};
+
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'Challan details',
+		};
+
+		return await res.status(200).json({ toast, data: response });
 	} catch (error) {
 		next(error);
 	}
