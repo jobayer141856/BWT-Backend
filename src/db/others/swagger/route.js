@@ -1,4 +1,3 @@
-import { param } from 'express-validator';
 import SE, { SED } from '../../../util/swagger_example.js';
 
 //* HR others routes *//
@@ -706,6 +705,68 @@ const pathProcess = {
 	},
 };
 
+//* delivery others routes *//
+
+const pathVehicle = {
+	'/other/vehicle/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all vehicle',
+			description: 'Get all vehicle',
+			parameters: [
+				SE.parameter_query('type', 'type', ['bike', 'car', 'truck']),
+			],
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									id: SE.number(),
+									value: SE.uuid(),
+									label: SE.string('vehicle'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+const pathCourier = {
+	'/other/courier/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all courier',
+			description: 'Get all courier',
+			parameters: [
+				SE.parameter_query('type', 'type', ['local', 'international']),
+			],
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									id: SE.number(),
+									value: SE.uuid(),
+									label: SE.string('courier'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 export const pathOthers = {
 	...pathUser,
 	...pathDesignation,
@@ -733,6 +794,8 @@ export const pathOthers = {
 	...pathDiagnosis,
 	...pathSection,
 	...pathProcess,
+	...pathVehicle,
+	...pathCourier,
 };
 
 export const tagOthers = [
