@@ -278,6 +278,11 @@ export const pathWorkOrder = {
 					'true',
 					'false',
 				]),
+				SE.parameter_query('customer_uuid', 'customer_uuid', ['uuid']),
+				SE.parameter_query('work_in_hand', 'work_in_hand', [
+					'true',
+					'false',
+				]),
 			],
 			responses: {
 				200: SE.response_schema(200, {

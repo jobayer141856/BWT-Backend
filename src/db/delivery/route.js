@@ -37,6 +37,11 @@ deliveryRouter.delete(
 	validateUuidParam(),
 	challanOperations.remove
 );
+deliveryRouter.get(
+	'/challan-details/by/challan/:uuid',
+	validateUuidParam(),
+	challanOperations.selectChallanDetailsByChallan
+);
 
 //* challan_entry routes *//
 deliveryRouter.get('/challan-entry', challanEntryOperations.selectAll);
@@ -51,6 +56,12 @@ deliveryRouter.delete(
 	'/challan-entry/:uuid',
 	validateUuidParam(),
 	challanEntryOperations.remove
+);
+
+deliveryRouter.get(
+	'/challan-entry/by/challan/:uuid',
+	validateUuidParam(),
+	challanEntryOperations.selectChallanEntryByChallan
 );
 
 //* courier routes *//

@@ -350,6 +350,46 @@ export const pathDeliveryChallan = {
 			},
 		},
 	},
+	'/delivery/challan-details/by/challan/{uuid}': {
+		get: {
+			tags: ['delivery.challan'],
+			summary: 'Get all challan details by challan',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the delivery challan',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					challan_uuid: SE.uuid(),
+					order_uuid: SE.uuid(),
+					order_no: SE.string('WO21-0001'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('User 1'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+					challan_entries: SE.array({
+						uuid: SE.uuid(),
+						challan_uuid: SE.uuid(),
+						order_uuid: SE.uuid(),
+						order_no: SE.string('WO21-0001'),
+						created_by: SE.uuid(),
+						created_by_name: SE.string('User 1'),
+						created_at: SE.date_time(),
+						updated_at: SE.date_time(),
+						remarks: SE.string('remarks'),
+					}),
+				}),
+			},
+		},
+	},
 };
 
 //* deliver Challan Entry *//
@@ -441,6 +481,36 @@ export const pathDeliveryChallanEntry = {
 					name: 'uuid',
 					in: 'path',
 					description: 'UUID of the delivery challan entry',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					challan_uuid: SE.uuid(),
+					challan_no: SE.string('CH21-0001'),
+					order_uuid: SE.uuid(),
+					order_no: SE.string('WO21-0001'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('User 1'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+	},
+	'/delivery/challan-entry/by/challan/{uuid}': {
+		get: {
+			tags: ['delivery.challan_entry'],
+			summary: 'Get all challan entries by challan',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the delivery challan',
 					required: true,
 					type: 'string',
 					format: 'uuid',
