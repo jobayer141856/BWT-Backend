@@ -30,7 +30,10 @@ export async function selectUser(req, res, next) {
 	const filters = [];
 	if (type) {
 		filters.push(
-			eq(sql`LOWER(${hrSchema.users.user_type})`, type.toLowerCase())
+			eq(
+				sql`LOWER(CAST(${hrSchema.users.user_type} AS TEXT))`,
+				type.toLowerCase()
+			)
 		);
 	}
 	if (department) {
