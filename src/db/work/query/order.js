@@ -166,9 +166,9 @@ export async function selectAll(req, res, next) {
 				eq(info.user_uuid, customer_uuid),
 				eq(order.is_ready_for_delivery, true),
 				sql`${order.uuid} NOT IN (
-                SELECT ${deliverySchema.challan_entry.order_uuid}
-                FROM ${deliverySchema.challan_entry}
-            		)`
+					SELECT ${deliverySchema.challan_entry.order_uuid}
+					FROM ${deliverySchema.challan_entry}
+					)`
 			)
 		);
 	}

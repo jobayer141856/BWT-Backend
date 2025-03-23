@@ -21,6 +21,10 @@ const pathUser = {
 					'assistant',
 					'supervisor',
 				]),
+				SE.parameter_query('is_delivered', 'is_delivered', [
+					'true',
+					'false',
+				]),
 			],
 			responses: {
 				200: {
