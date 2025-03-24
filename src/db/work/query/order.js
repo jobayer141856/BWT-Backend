@@ -1,4 +1,4 @@
-import { desc, eq, sql, inArray, and } from 'drizzle-orm';
+import { desc, eq, sql, inArray, and, not, exists } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
@@ -81,6 +81,7 @@ export async function remove(req, res, next) {
 
 export async function selectAll(req, res, next) {
 	const { qc, is_delivered, work_in_hand, customer_uuid } = req.query;
+	console.log('customer_uuid', customer_uuid);
 	const orderPromise = db
 		.select({
 			id: order.id,
@@ -140,8 +141,10 @@ export async function selectAll(req, res, next) {
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
 		.orderBy(desc(order.created_at));
 
+	const filters = [];
+
 	if (qc === 'true') {
-		orderPromise.where(
+		filters.push(
 			and(
 				eq(order.is_transferred_for_qc, true),
 				eq(order.is_ready_for_delivery, false)
@@ -150,27 +153,42 @@ export async function selectAll(req, res, next) {
 	}
 
 	if (is_delivered === 'true') {
-		orderPromise.where(eq(order.is_ready_for_delivery, true));
+		filters.push(eq(order.is_ready_for_delivery, true));
 	}
+
 	if (work_in_hand === 'true') {
-		orderPromise.where(
+		filters.push(
 			and(
 				eq(order.is_transferred_for_qc, false),
 				eq(order.is_ready_for_delivery, false)
 			)
 		);
 	}
+
 	if (customer_uuid) {
-		orderPromise.where(
+		filters.push(
 			and(
 				eq(info.user_uuid, customer_uuid),
 				eq(order.is_ready_for_delivery, true),
-				sql`${order.uuid} NOT IN (
-					SELECT ${deliverySchema.challan_entry.order_uuid}
-					FROM ${deliverySchema.challan_entry}
-					)`
+				not(
+					exists(
+						db
+							.select()
+							.from(deliverySchema.challan_entry)
+							.where(
+								eq(
+									deliverySchema.challan_entry.order_uuid,
+									order.uuid
+								)
+							)
+					)
+				)
 			)
 		);
+	}
+
+	if (filters.length > 0) {
+		orderPromise.where(and(...filters));
 	}
 
 	try {
