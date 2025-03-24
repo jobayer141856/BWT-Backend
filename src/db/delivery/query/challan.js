@@ -14,6 +14,8 @@ import { challan, courier, vehicle } from '../schema.js';
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	console.log('req.body', req.body);
+
 	try {
 		const data = await db
 			.insert(challan)
@@ -81,7 +83,7 @@ export async function selectAll(req, res, next) {
 			uuid: challan.uuid,
 			customer_uuid: challan.customer_uuid,
 			customer_name: customerUser.name,
-			type: challan.type,
+			challan_type: challan.challan_type,
 			employee_uuid: challan.employee_uuid,
 			employee_name: employeeUser.name,
 			vehicle_uuid: challan.vehicle_uuid,
@@ -125,7 +127,7 @@ export async function select(req, res, next) {
 			uuid: challan.uuid,
 			customer_uuid: challan.customer_uuid,
 			customer_name: customerUser.name,
-			type: challan.type,
+			challan_type: challan.challan_type,
 			employee_uuid: challan.employee_uuid,
 			employee_name: employeeUser.name,
 			vehicle_uuid: challan.vehicle_uuid,

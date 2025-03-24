@@ -47,7 +47,7 @@ export const courier = delivery.table(
 	(table) => [unique().on(table.name, table.branch)]
 );
 
-export const typeEnum = pgEnum('type', [
+export const challanTypeEnum = pgEnum('challan_type', [
 	'customer_pickup',
 	'courier_delivery',
 	'employee_delivery',
@@ -60,7 +60,7 @@ export const challan = delivery.table('challan', {
 	customer_uuid: defaultUUID('customer_uuid').references(
 		() => hrSchema.users.uuid
 	),
-	type: typeEnum('type').notNull(),
+	challan_type: challanTypeEnum('challan_type').notNull(),
 	employee_uuid: defaultUUID('employee_uuid').references(
 		() => hrSchema.users.uuid
 	),
