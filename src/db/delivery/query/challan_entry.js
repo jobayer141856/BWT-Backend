@@ -253,8 +253,13 @@ export async function selectChallanEntryByChallan(req, res, next) {
 		}, {});
 
 		data.forEach((item) => {
-			item.problems = item.problems_uuid.map((uuid) => problemsMap[uuid]);
-			delete item.problems_uuid;
+			if (Array.isArray(item.problems_uuid)) {
+				item.problems_name = item.problems_uuid.map(
+					(uuid) => problemsMap[uuid]
+				);
+			} else {
+				item.problems_name = [];
+			}
 		});
 
 		const toast = {
