@@ -40,7 +40,7 @@ export async function update(req, res, next) {
 		const data = await db
 			.update(challan_entry)
 			.set(req.body)
-			.where(challan_entry.uuid.eq(req.params.uuid))
+			.where(eq(challan_entry.uuid, req.params.uuid))
 			.returning({ updatedUuid: challan_entry.uuid });
 
 		const toast = {
@@ -59,7 +59,7 @@ export async function remove(req, res, next) {
 	try {
 		const data = await db
 			.delete(challan_entry)
-			.where(challan_entry.uuid.eq(req.params.uuid))
+			.where(eq(challan_entry.uuid, req.params.uuid))
 			.returning({ deletedUuid: challan_entry.uuid });
 
 		const toast = {
