@@ -81,7 +81,7 @@ export async function remove(req, res, next) {
 
 export async function selectAll(req, res, next) {
 	const { qc, is_delivered, work_in_hand, customer_uuid } = req.query;
-	console.log('customer_uuid', customer_uuid);
+	// console.log('customer_uuid', customer_uuid);
 	const orderPromise = db
 		.select({
 			id: order.id,
