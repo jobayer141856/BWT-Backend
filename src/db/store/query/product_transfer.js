@@ -91,6 +91,8 @@ export async function selectAll(req, res, next) {
 			created_at: product_transfer.created_at,
 			updated_at: product_transfer.updated_at,
 			remarks: product_transfer.remarks,
+			info_uuid: workSchema.order.info_uuid,
+			info_id: sql`CONCAT('WI', TO_CHAR(${workSchema.info.created_at}, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'))`,
 		})
 		.from(product_transfer)
 		.leftJoin(product, eq(product_transfer.product_uuid, product.uuid))
@@ -105,8 +107,11 @@ export async function selectAll(req, res, next) {
 		.leftJoin(
 			hrSchema.users,
 			eq(product_transfer.created_by, hrSchema.users.uuid)
+		)
+		.leftJoin(
+			workSchema.info,
+			eq(workSchema.order.info_uuid, workSchema.info.uuid)
 		);
-
 	try {
 		const data = await productTransferPromise;
 		const toast = {
@@ -139,6 +144,8 @@ export async function select(req, res, next) {
 			created_at: product_transfer.created_at,
 			updated_at: product_transfer.updated_at,
 			remarks: product_transfer.remarks,
+			info_uuid: workSchema.order.info_uuid,
+			info_id: sql`CONCAT('WI', TO_CHAR(${workSchema.info.created_at}, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'))`,
 		})
 		.from(product_transfer)
 		.leftJoin(product, eq(product_transfer.product_uuid, product.uuid))
@@ -153,6 +160,10 @@ export async function select(req, res, next) {
 		.leftJoin(
 			hrSchema.users,
 			eq(product_transfer.created_by, hrSchema.users.uuid)
+		)
+		.leftJoin(
+			workSchema.info,
+			eq(workSchema.order.info_uuid, workSchema.info.uuid)
 		)
 		.where(eq(product_transfer.uuid, req.params.uuid));
 
