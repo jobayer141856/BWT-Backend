@@ -45,7 +45,7 @@ export async function update(req, res, next) {
 			message: `${data[0].updatedId} updated`,
 		};
 
-		return await res.status(201).json({ toast, data });
+		return await res.status(201).json({ toast, data: data[0] });
 	} catch (error) {
 		next(error);
 	}
