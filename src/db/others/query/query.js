@@ -533,13 +533,23 @@ export async function selectOrder(req, res, next) {
 		.select({
 			value: workSchema.order.uuid,
 			label: sql`CONCAT(
-				'WO',
-				TO_CHAR(${workSchema.order.created_at}, 'YY'),
-				' - ',
-				TO_CHAR(${workSchema.order.id}, 'FM0000')
-			)`,
+            'WO',
+            TO_CHAR(${workSchema.order.created_at}, 'YY'),
+            ' - ',
+            TO_CHAR(${workSchema.order.id}, 'FM0000'),
+            ' (',
+            'WI',
+            TO_CHAR(${workSchema.info.created_at}, 'YY'),
+            ' - ',
+            TO_CHAR(${workSchema.info.id}, 'FM0000'),
+            ')'
+        )`,
 		})
-		.from(workSchema.order);
+		.from(workSchema.order)
+		.leftJoin(
+			workSchema.info,
+			eq(workSchema.order.info_uuid, workSchema.info.uuid)
+		);
 
 	try {
 		const data = await orderPromise;
