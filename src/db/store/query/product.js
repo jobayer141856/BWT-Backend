@@ -1,9 +1,14 @@
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { handleError, validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 import { brand, category, model, product, size, warehouse } from '../schema.js';
+import { alias } from 'drizzle-orm/pg-core';
+
+const warehouse1 = alias(warehouse, 'warehouse_1');
+const warehouse2 = alias(warehouse, 'warehouse_2');
+const warehouse3 = alias(warehouse, 'warehouse_3');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -95,12 +100,21 @@ export async function selectAll(req, res, next) {
 			warehouse_1: decimalToNumber(product.warehouse_1),
 			warehouse_2: decimalToNumber(product.warehouse_2),
 			warehouse_3: decimalToNumber(product.warehouse_3),
+			warehouse_1_uuid: warehouse1.uuid,
+			warehouse_1_name: warehouse1.name,
+			warehouse_2_uuid: warehouse2.uuid,
+			warehouse_2_name: warehouse2.name,
+			warehouse_3_uuid: warehouse3.uuid,
+			warehouse_3_name: warehouse3.name,
 		})
 		.from(product)
 		.leftJoin(category, eq(product.category_uuid, category.uuid))
 		.leftJoin(model, eq(product.model_uuid, model.uuid))
 		.leftJoin(size, eq(product.size_uuid, size.uuid))
 		.leftJoin(hrSchema.users, eq(product.created_by, hrSchema.users.uuid))
+		.leftJoin(warehouse1, eq(warehouse1.assigned, 'warehouse_1'))
+		.leftJoin(warehouse2, eq(warehouse2.assigned, 'warehouse_2'))
+		.leftJoin(warehouse3, eq(warehouse3.assigned, 'warehouse_3'))
 		.orderBy(desc(product.created_at));
 
 	try {
@@ -139,12 +153,21 @@ export async function select(req, res, next) {
 			warehouse_1: decimalToNumber(product.warehouse_1),
 			warehouse_2: decimalToNumber(product.warehouse_2),
 			warehouse_3: decimalToNumber(product.warehouse_3),
+			warehouse_1_uuid: warehouse1.uuid,
+			warehouse_1_name: warehouse1.name,
+			warehouse_2_uuid: warehouse2.uuid,
+			warehouse_2_name: warehouse2.name,
+			warehouse_3_uuid: warehouse3.uuid,
+			warehouse_3_name: warehouse3.name,
 		})
 		.from(product)
 		.leftJoin(category, eq(product.category_uuid, category.uuid))
 		.leftJoin(model, eq(product.model_uuid, model.uuid))
 		.leftJoin(size, eq(product.size_uuid, size.uuid))
 		.leftJoin(hrSchema.users, eq(product.created_by, hrSchema.users.uuid))
+		.leftJoin(warehouse1, eq(warehouse1.assigned, 'warehouse_1'))
+		.leftJoin(warehouse2, eq(warehouse2.assigned, 'warehouse_2'))
+		.leftJoin(warehouse3, eq(warehouse3.assigned, 'warehouse_3'))
 		.where(eq(product.uuid, req.params.uuid));
 
 	try {
