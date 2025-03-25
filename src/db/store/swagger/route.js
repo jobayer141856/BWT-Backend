@@ -2076,6 +2076,117 @@ export const pathStoreInternalTransfer = {
 	},
 };
 
+export const pathStoreProductTransfer = {
+	'/store/product-transfer': {
+		get: {
+			tags: ['store.product_transfer'],
+			summary: 'Get all store product transfers',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					id: SE.integer(),
+					product_transfer_id: SE.string('SPT25-0001'),
+					product_uuid: SE.uuid(),
+					product_name: SE.string('product_name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					order_uuid: SE.uuid(),
+					order_id: SE.string('WO25-0001'),
+					quantity: SE.number(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['store.product_transfer'],
+			summary: 'Create a store product transfer',
+			requestBody: SE.requestBody_schema_ref('store/product_transfer'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'store/product_transfer'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+
+	'/store/product-transfer/{uuid}': {
+		get: {
+			tags: ['store.product_transfer'],
+			summary: 'Get a store product transfer',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store product transfer',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					id: SE.integer(),
+					product_transfer_id: SE.string('SPT25-0001'),
+					product_uuid: SE.uuid(),
+					product_name: SE.string('product_name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					order_uuid: SE.uuid(),
+					order_id: SE.string('WO25-0001'),
+					quantity: SE.number(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['store.product_transfer'],
+			summary: 'Update a store product transfer',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store product transfer',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('store/product_transfer'),
+			responses: {
+				200: SE.response_schema_ref(200, 'store/product_transfer'),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['store.product_transfer'],
+			summary: 'Delete a store product transfer',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the store product transfer',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response(200),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
 export const pathStore = {
 	...pathStoreGroup,
 	...pathStoreCategory,
@@ -2095,4 +2206,5 @@ export const pathStore = {
 	...pathStorePurchaseReturn,
 	...pathStorePurchaseReturnEntry,
 	...pathStoreInternalTransfer,
+	...pathStoreProductTransfer,
 };

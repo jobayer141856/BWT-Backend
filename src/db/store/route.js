@@ -19,6 +19,7 @@ import * as purchaseReturnOperations from './query/purchase_return.js';
 import * as purchaseReturnEntryOperations from './query/purchase_return_entry.js';
 import * as internalTransferOperations from './query/internal_transfer.js';
 import * as modelOperations from './query/model.js';
+import * as productTransferOperations from './query/product_transfer.js';
 
 const storeRouter = Router();
 
@@ -269,6 +270,22 @@ storeRouter.delete(
 	'/internal-transfer/:uuid',
 	validateUuidParam(),
 	internalTransferOperations.remove
+);
+
+//* product_transfer routes *//
+
+storeRouter.get('/product-transfer', productTransferOperations.selectAll);
+storeRouter.get(
+	'/product-transfer/:uuid',
+	validateUuidParam(),
+	productTransferOperations.select
+);
+storeRouter.post('/product-transfer', productTransferOperations.insert);
+storeRouter.put('/product-transfer/:uuid', productTransferOperations.update);
+storeRouter.delete(
+	'/product-transfer/:uuid',
+	validateUuidParam(),
+	productTransferOperations.remove
 );
 
 export { storeRouter };

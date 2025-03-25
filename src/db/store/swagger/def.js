@@ -314,6 +314,30 @@ export const defInternalTransfer = SED({
 	xml: 'Store/InternalTransfer',
 });
 
+export const defProductTransfer = SED({
+	required: [
+		'uuid',
+		'created_at',
+		'product_uuid',
+		'quantity',
+		'warehouse_uuid',
+		'order_uuid',
+	],
+	properties: {
+		id: SE.number(),
+		uuid: SE.uuid(),
+		product_uuid: SE.uuid(),
+		quantity: SE.number(),
+		warehouse_uuid: SE.uuid(),
+		order_uuid: SE.uuid(),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Store/ProductTransfer',
+});
+
 //* Marge all
 export const defStore = {
 	group: defGroup,
@@ -334,6 +358,7 @@ export const defStore = {
 	purchase_return: defPurchaseReturn,
 	purchase_return_entry: defPurchaseReturnEntry,
 	internal_transfer: defInternalTransfer,
+	product_transfer: defProductTransfer,
 };
 
 //* Tag
@@ -410,5 +435,9 @@ export const tagStore = [
 	{
 		name: 'store.internal_transfer',
 		description: 'Operations about internal_transfer',
+	},
+	{
+		name: 'store.product_transfer',
+		description: 'Operations about product_transfer',
 	},
 ];

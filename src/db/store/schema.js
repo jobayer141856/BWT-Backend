@@ -14,6 +14,7 @@ import {
 	uuid_primary,
 } from '../variables.js';
 import * as hrSchema from '../hr/schema.js';
+import * as workSchema from '../work/schema.js';
 
 const store = pgSchema('store');
 
@@ -245,6 +246,23 @@ export const internal_transfer = store.table('internal_transfer', {
 	rack_uuid: defaultUUID('rack_uuid').references(() => rack.uuid),
 	floor_uuid: defaultUUID('floor_uuid').references(() => floor.uuid),
 	box_uuid: defaultUUID('box_uuid').references(() => box.uuid),
+	quantity: PG_DECIMAL('quantity').notNull(),
+	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+export const product_transfer = store.table('product_transfer', {
+	id: serial('id').notNull().unique(),
+	uuid: uuid_primary,
+	product_uuid: defaultUUID('product_uuid').references(() => product.uuid),
+	warehouse_uuid: defaultUUID('warehouse_uuid').references(
+		() => warehouse.uuid
+	),
+	order_uuid: defaultUUID('order_uuid').references(
+		() => workSchema.order.uuid
+	),
 	quantity: PG_DECIMAL('quantity').notNull(),
 	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
 	created_at: DateTime('created_at').notNull(),
