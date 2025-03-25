@@ -171,7 +171,7 @@ export const warehouse = store.table('warehouse', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
-	assigned: assignedEnum('assigned').default('warehouse_1'),
+	assigned: assignedEnum('assigned').default('warehouse_1').unique(),
 });
 
 export const rack = store.table('rack', {
