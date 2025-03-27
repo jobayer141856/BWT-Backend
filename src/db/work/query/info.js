@@ -23,6 +23,7 @@ export async function insert(req, res, next) {
 	} = req.body;
 
 	try {
+		const formattedName = name.toLowerCase().replace(/\s+/g, '');
 		if (is_new_customer) {
 			await db.insert(users).values({
 				uuid: user_uuid,
@@ -32,7 +33,7 @@ export async function insert(req, res, next) {
 				pass: phone,
 				department_uuid: department_uuid,
 				designation_uuid: designation_uuid,
-				email: `${name + phone}@bwt.com`,
+				email: `${formattedName + phone}@bwt.com`,
 				ext: '+880',
 				created_at: created_at,
 				business_type: business_type,
@@ -71,6 +72,8 @@ export async function update(req, res, next) {
 	} = req.body;
 
 	try {
+		const formattedName = name.toLowerCase().replace(/\s+/g, '');
+
 		if (is_new_customer) {
 			await db.insert(users).values({
 				uuid: user_uuid,
@@ -80,7 +83,7 @@ export async function update(req, res, next) {
 				pass: phone,
 				department_uuid: department_uuid,
 				designation_uuid: designation_uuid,
-				email: `${name + phone}@bwt.com`,
+				email: `${formattedName + phone}@bwt.com`,
 				ext: '+880',
 				created_at: updated_at,
 				business_type: business_type,
