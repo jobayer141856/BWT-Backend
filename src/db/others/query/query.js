@@ -70,6 +70,28 @@ export async function selectUser(req, res, next) {
 	}
 }
 
+export async function selectUserWithCanAccess(req, res, next) {
+	const userPromise = db
+		.select({
+			value: hrSchema.users.uuid,
+			label: hrSchema.users.name,
+			can_access: hrSchema.users.can_access,
+		})
+		.from(hrSchema.users);
+
+	try {
+		const data = await userPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'User list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
 export async function selectDesignation(req, res, next) {
 	const designationPromise = db
 		.select({

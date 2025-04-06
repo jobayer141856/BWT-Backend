@@ -44,6 +44,30 @@ const pathUser = {
 			},
 		},
 	},
+	'/other/hr/users-can-access/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all user with can access',
+			description: 'Get all user with can access',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('user'),
+									can_access: SE.string('can access'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
 };
 
 const pathDesignation = {

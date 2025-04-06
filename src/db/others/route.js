@@ -7,6 +7,10 @@ const otherRouter = Router();
 //* HR others routes *//
 // user
 otherRouter.get('/user/value/label', otherOperations.selectUser);
+otherRouter.get(
+	'/hr/users-can-access/value/label',
+	otherOperations.selectUserWithCanAccess
+);
 // designation routes
 otherRouter.get('/designation/value/label', otherOperations.selectDesignation);
 
