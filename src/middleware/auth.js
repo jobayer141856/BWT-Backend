@@ -39,12 +39,20 @@ export const CreateToken = (user, time = '24h') => {
 	};
 };
 
+const publicUrls = [
+	{ url: '/hr/user/login', method: 'POST' },
+	{ url: '/public', method: 'GET' },
+];
+
 export const VerifyToken = (req, res, next) => {
 	const { authorization } = req?.headers;
 	const { originalUrl, method } = req;
 
 	if (
-		(originalUrl === '/hr/user/login' && method === 'POST') ||
+		publicUrls.some(
+			(route) =>
+				originalUrl.startsWith(route.url) && route.method === method
+		) ||
 		originalUrl.startsWith('/api-docs')
 	) {
 		return next();
