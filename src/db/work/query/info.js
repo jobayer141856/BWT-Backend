@@ -213,6 +213,8 @@ export async function select(req, res, next) {
 export async function selectOrderDetailsByInfo(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	const { diagnosis, process } = req.query;
+
 	const { info_uuid } = req.params;
 
 	try {
@@ -235,9 +237,39 @@ export async function selectOrderDetailsByInfo(req, res, next) {
 			fetchData(`/work/order-by-info/${info_uuid}`),
 		]);
 
+		// Process each order to fetch diagnosis and process data conditionally
+		const enrichedOrders = await Promise.all(
+			order.data.map(async (orderItem) => {
+				const { uuid: order_uuid } = orderItem;
+
+				const diagnosisData =
+					diagnosis === 'true'
+						? await fetchData(
+								`/work/diagnosis-by-order/${order_uuid}`
+							)
+						: null;
+						
+				const processData =
+					process === 'true'
+						? await fetchData(
+								`/work/process?order_uuid=${order_uuid}`
+							)
+						: null;
+
+				return {
+					...orderItem,
+					...(diagnosisData
+						? { diagnosis: diagnosisData?.data }
+						: {}),
+					...(processData ? { process: processData?.data } : []),
+				};
+			})
+		);
+
 		const response = {
 			...info?.data,
-			order_entry: order?.data || [],
+			// order_entry: order?.data || [],
+			order_entry: enrichedOrders || [],
 		};
 
 		const toast = {
