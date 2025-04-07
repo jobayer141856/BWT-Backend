@@ -418,7 +418,7 @@ export async function selectByInfo(req, res, next) {
 			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 			is_transferred_for_qc: order.is_transferred_for_qc,
 			is_ready_for_delivery: order.is_ready_for_delivery,
-			is_delivery_complete: deliverySchema.challan.is_delivery_complete,
+			is_delivery_complete: sql`COALESCE(${deliverySchema.challan.is_delivery_complete}, false)`,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
