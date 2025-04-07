@@ -15,11 +15,6 @@ export async function selectOrderDetailsByInfoForPublic(req, res, next) {
 
 	const { info_uuid } = req.params;
 
-	console.log('info_uuid', info_uuid);
-
-	console.log('diagnosis', diagnosis);
-	console.log('process', process);
-
 	try {
 		const api = await createApi(req);
 
