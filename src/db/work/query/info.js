@@ -132,6 +132,8 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+	const { customer_uuid } = req.query;
 	const infoPromise = db
 		.select({
 			id: info.id,
@@ -152,6 +154,11 @@ export async function selectAll(req, res, next) {
 		.from(info)
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
 		.leftJoin(hrSchema.users, eq(info.created_by, hrSchema.users.uuid));
+
+	if (customer_uuid) {
+		infoPromise.where(eq(info.user_uuid, customer_uuid));
+	}
+
 	try {
 		const data = await infoPromise;
 		const toast = {
