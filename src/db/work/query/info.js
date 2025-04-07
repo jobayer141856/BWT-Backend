@@ -8,6 +8,8 @@ import { alias } from 'drizzle-orm/pg-core';
 import { users } from '../../hr/schema.js';
 import { info } from '../schema.js';
 const user = alias(hrSchema.users, 'user');
+import * as deliverySchema from '../../delivery/schema.js';
+
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
