@@ -10,7 +10,6 @@ import { info } from '../schema.js';
 const user = alias(hrSchema.users, 'user');
 import * as deliverySchema from '../../delivery/schema.js';
 
-
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 	const {
@@ -266,7 +265,9 @@ export async function selectOrderDetailsByInfo(req, res, next) {
 				};
 			})
 		);
-
+		enrichedOrders.sort(
+			(a, b) => new Date(b.created_at) - new Date(a.created_at)
+		);
 		const response = {
 			...info?.data,
 			// order_entry: order?.data || [],
