@@ -4,6 +4,7 @@ import { storeRouter } from '../db/store/route.js';
 import { otherRouter } from '../db/others/route.js';
 import { workRouter } from '../db/work/route.js';
 import { deliveryRouter } from '../db/delivery/route.js';
+import { publicRouter } from '../db/public/route.js';
 
 const route = express.Router();
 
@@ -32,5 +33,8 @@ route.use('/work', workRouter);
 
 //* delivery routes
 route.use('/delivery', deliveryRouter);
+
+//* public routes
+route.use('/public', publicRouter);
 
 export default route;
