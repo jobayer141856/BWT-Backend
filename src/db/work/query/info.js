@@ -72,9 +72,8 @@ export async function update(req, res, next) {
 	} = req.body;
 
 	try {
-		const formattedName = name.toLowerCase().replace(/\s+/g, '');
-
 		if (is_new_customer) {
+			const formattedName = name.toLowerCase().replace(/\s+/g, '');
 			await db.insert(users).values({
 				uuid: user_uuid,
 				name: name,
@@ -248,7 +247,7 @@ export async function selectOrderDetailsByInfo(req, res, next) {
 								`/work/diagnosis-by-order/${order_uuid}`
 							)
 						: null;
-						
+
 				const processData =
 					process === 'true'
 						? await fetchData(
