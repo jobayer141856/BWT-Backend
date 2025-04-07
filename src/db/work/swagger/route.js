@@ -230,6 +230,8 @@ export const pathWorkInfo = {
 					type: 'string',
 					format: 'uuid',
 				},
+				SE.parameter_query('process', 'process', ['true', 'false']),
+				SE.parameter_query('diagnosis', 'diagnosis', ['true', 'false']),
 			],
 			responses: {
 				200: SE.response_schema(200, {
