@@ -12,7 +12,6 @@ export async function selectOrderDetailsByInfoForPublic(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const { diagnosis, process } = req.query;
-
 	const { info_uuid } = req.params;
 
 	try {
@@ -31,8 +30,8 @@ export async function selectOrderDetailsByInfoForPublic(req, res, next) {
 				});
 
 		const [info, order] = await Promise.all([
-			fetchData(`/work/info/${info_uuid}`),
-			fetchData(`/work/order-by-info/${info_uuid}`),
+			fetchData(`/work/info/${info_uuid}?public=true`),
+			fetchData(`/work/order-by-info/${info_uuid}?public=true`),
 		]);
 
 		// Process each order to fetch diagnosis and process data conditionally
@@ -43,14 +42,14 @@ export async function selectOrderDetailsByInfoForPublic(req, res, next) {
 				const diagnosisData =
 					diagnosis === 'true'
 						? await fetchData(
-								`/work/diagnosis-by-order/${order_uuid}`
+								`/work/diagnosis-by-order/${order_uuid}?public=true`
 							)
 						: null;
 
 				const processData =
 					process === 'true'
 						? await fetchData(
-								`/work/process?order_uuid=${order_uuid}`
+								`/work/process?order_uuid=${order_uuid}&public=true`
 							)
 						: null;
 

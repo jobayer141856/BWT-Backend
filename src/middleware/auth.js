@@ -41,15 +41,20 @@ export const CreateToken = (user, time = '24h') => {
 
 const publicUrls = [
 	{ url: '/hr/user/login', method: 'POST' },
-	{ url: '/work', method: 'GET' },
 	{ url: '/public', method: 'GET' },
 ];
 
 export const VerifyToken = (req, res, next) => {
 	const { authorization } = req?.headers;
-	const { originalUrl, method } = req;
+
+	const { originalUrl, method, query } = req; // Add query destructuring
+
+	// Dynamic public route check for /work endpoints
+	const isWorkPublic =
+		originalUrl.startsWith('/work') && query.public === 'true';
 
 	if (
+		isWorkPublic || // Check this first
 		publicUrls.some(
 			(route) =>
 				originalUrl.startsWith(route.url) && route.method === method
