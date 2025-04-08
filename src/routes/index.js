@@ -5,6 +5,7 @@ import { otherRouter } from '../db/others/route.js';
 import { workRouter } from '../db/work/route.js';
 import { deliveryRouter } from '../db/delivery/route.js';
 import { publicRouter } from '../db/public/route.js';
+import { messageRouter } from '../db/message/route.js';
 
 const route = express.Router();
 
@@ -36,5 +37,8 @@ route.use('/delivery', deliveryRouter);
 
 //* public routes
 route.use('/public', publicRouter);
+
+//* message routes
+route.use('/message', messageRouter);
 
 export default route;

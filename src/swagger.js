@@ -26,6 +26,9 @@ import { pathOthers, tagOthers } from './db/others/swagger/route.js';
 //* Public
 import { pathPublic, tagPublic } from './db/public/swagger/route.js';
 
+//* Message
+import { pathMessage, tagMessage } from './db/message/swagger/route.js';
+
 const tags = [
 	...tagHr,
 	...tagStore,
@@ -33,6 +36,7 @@ const tags = [
 	...tagWork,
 	...tagDelivery,
 	...tagPublic,
+	...tagMessage,
 ];
 
 const definitions = {
@@ -49,6 +53,7 @@ const paths = {
 	...pathWork,
 	...pathDelivery,
 	...pathPublic,
+	...pathMessage,
 };
 
 const swaggerSpec = swaggerJSDoc({
