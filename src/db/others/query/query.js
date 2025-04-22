@@ -665,7 +665,7 @@ export async function selectCourier(req, res, next) {
 	const courierPromise = db
 		.select({
 			value: deliverySchema.courier.uuid,
-			label: deliverySchema.courier.name,
+			label: sql`CONCAT(${deliverySchema.courier.name}, '-', ${deliverySchema.courier.branch})`,
 		})
 		.from(deliverySchema.courier);
 
