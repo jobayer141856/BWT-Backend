@@ -46,7 +46,7 @@ export const users = hr.table('users', {
 	department_uuid: defaultUUID('department_uuid').references(
 		() => department.uuid
 	),
-	can_access: text('can_access').default(null),
+	can_access: text('can_access').default('{"profile":["read"]}'),
 	ext: text('ext').default(null),
 	phone: text('phone').default(null),
 	created_at: text('created_at').notNull(),
