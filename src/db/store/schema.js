@@ -80,7 +80,7 @@ export const vendor = store.table('vendor', {
 	remarks: text('remarks').default(null),
 });
 
-export const typeEnum = pgEnum('type', ['product', 'service']);
+export const typeEnum = pgEnum('type', ['inventory', 'service']);
 
 export const product = store.table('product', {
 	uuid: uuid_primary,
