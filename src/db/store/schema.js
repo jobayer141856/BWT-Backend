@@ -96,9 +96,18 @@ export const product = store.table('product', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
-	warehouse_1: PG_DECIMAL('warehouse_1').default(0),
-	warehouse_2: PG_DECIMAL('warehouse_2').default(0),
-	warehouse_3: PG_DECIMAL('warehouse_3').default(0),
+	office: PG_DECIMAL('office').default(0),
+	receive_room: PG_DECIMAL('receive_room').default(0),
+	back_office: PG_DECIMAL('back_office').default(0),
+	store_1: PG_DECIMAL('store_1').default(0),
+	store_2: PG_DECIMAL('store_2').default(0),
+	store_3: PG_DECIMAL('store_3').default(0),
+	kitchen: PG_DECIMAL('kitchen').default(0),
+	service_1: PG_DECIMAL('service_1').default(0),
+	service_2: PG_DECIMAL('service_2').default(0),
+	matchine_room: PG_DECIMAL('matchine_room').default(0),
+	elephants_road: PG_DECIMAL('elephants_road').default(0),
+	gulisthan: PG_DECIMAL('gulisthan').default(0),
 });
 
 export const branch = store.table('branch', {
@@ -161,6 +170,18 @@ export const assignedEnum = pgEnum('assigned', [
 	'warehouse_1',
 	'warehouse_2',
 	'warehouse_3',
+	'office',
+	'receive_room',
+	'back_office',
+	'store_1',
+	'store_2',
+	'store_3',
+	'kitchen',
+	'service_1',
+	'service_2',
+	'matchine_room',
+	'elephants_road',
+	'gulisthan',
 ]);
 
 export const warehouse = store.table('warehouse', {

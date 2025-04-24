@@ -34,6 +34,9 @@ export const userTypeEnum = pgEnum('user_type', [
 export const businessTypeEnum = pgEnum('business_type', [
 	'individual',
 	'company',
+	'user',
+	'tv_company',
+	'corporate',
 ]);
 export const users = hr.table('users', {
 	uuid: uuid_primary,
