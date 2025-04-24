@@ -310,6 +310,7 @@ export async function selectStock(req, res, next) {
 }
 
 export async function selectWarehouse(req, res, next) {
+	const { branch_uuid } = req.query;
 	const warehousePromise = db
 		.select({
 			value: storeSchema.warehouse.uuid,
@@ -317,6 +318,12 @@ export async function selectWarehouse(req, res, next) {
 			assigned: storeSchema.warehouse.assigned,
 		})
 		.from(storeSchema.warehouse);
+
+	if (branch_uuid) {
+		warehousePromise.where(
+			eq(storeSchema.warehouse.branch_uuid, branch_uuid)
+		);
+	}
 
 	try {
 		const data = await warehousePromise;
