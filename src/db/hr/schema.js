@@ -58,7 +58,7 @@ export const users = hr.table('users', {
 	remarks: text('remarks').default(null),
 	id: serial('id').notNull().unique(),
 	user_type: userTypeEnum('user_type').default('customer'),
-	business_type: businessTypeEnum('business_type').default('individual'),
+	business_type: businessTypeEnum('business_type').default('user'),
 });
 
 export const policy_and_notice = hr.table('policy_and_notice', {
