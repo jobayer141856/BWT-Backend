@@ -6,7 +6,7 @@ import { decimalToNumber } from '../../variables.js';
 import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
 import { users } from '../../hr/schema.js';
-import { info } from '../schema.js';
+import { info, zone } from '../schema.js';
 const user = alias(hrSchema.users, 'user');
 import * as deliverySchema from '../../delivery/schema.js';
 
@@ -150,10 +150,14 @@ export async function selectAll(req, res, next) {
 			created_at: info.created_at,
 			updated_at: info.updated_at,
 			remarks: info.remarks,
+			location: info.location,
+			zone_uuid: info.zone_uuid,
+			zone_name: zone.name,
 		})
 		.from(info)
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
-		.leftJoin(hrSchema.users, eq(info.created_by, hrSchema.users.uuid));
+		.leftJoin(hrSchema.users, eq(info.created_by, hrSchema.users.uuid))
+		.leftJoin(zone, eq(info.zone_uuid, zone.uuid));
 
 	if (customer_uuid) {
 		infoPromise.where(eq(info.user_uuid, customer_uuid));
@@ -191,10 +195,14 @@ export async function select(req, res, next) {
 			created_at: info.created_at,
 			updated_at: info.updated_at,
 			remarks: info.remarks,
+			location: info.location,
+			zone_uuid: info.zone_uuid,
+			zone_name: zone.name,
 		})
 		.from(info)
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
 		.leftJoin(hrSchema.users, eq(info.created_by, hrSchema.users.uuid))
+		.leftJoin(zone, eq(info.zone_uuid, zone.uuid))
 		.where(eq(info.uuid, req.params.uuid));
 
 	try {

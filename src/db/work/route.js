@@ -7,6 +7,8 @@ import * as diagnosisOperations from './query/diagnosis.js';
 import * as sectionOperations from './query/section.js';
 import * as processOperations from './query/process.js';
 import * as infoOperations from './query/info.js';
+import * as accessoryOperations from './query/accessory.js';
+import * as zoneOperations from './query/zone.js';
 
 const workRouter = Router();
 
@@ -84,5 +86,28 @@ workRouter.delete(
 	validateUuidParam(),
 	processOperations.remove
 );
+
+//* accessory routes *//
+
+workRouter.get('/accessory', accessoryOperations.selectAll);
+workRouter.get(
+	'/accessory/:uuid',
+	validateUuidParam(),
+	accessoryOperations.select
+);
+workRouter.post('/accessory', accessoryOperations.insert);
+workRouter.put('/accessory/:uuid', accessoryOperations.update);
+workRouter.delete(
+	'/accessory/:uuid',
+	validateUuidParam(),
+	accessoryOperations.remove
+);
+
+//* zone routes *//
+workRouter.get('/zone', zoneOperations.selectAll);
+workRouter.get('/zone/:uuid', validateUuidParam(), zoneOperations.select);
+workRouter.post('/zone', zoneOperations.insert);
+workRouter.put('/zone/:uuid', zoneOperations.update);
+workRouter.delete('/zone/:uuid', validateUuidParam(), zoneOperations.remove);
 
 export { workRouter };

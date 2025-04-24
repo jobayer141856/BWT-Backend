@@ -659,6 +659,48 @@ export async function selectProcess(req, res, next) {
 	}
 }
 
+export async function selectAccessory(req, res, next) {
+	const accessoryPromise = db
+		.select({
+			value: workSchema.accessory.uuid,
+			label: workSchema.accessory.name,
+		})
+		.from(workSchema.accessory);
+
+	try {
+		const data = await accessoryPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Accessory list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectZone(req, res, next) {
+	const zonePromise = db
+		.select({
+			value: workSchema.zone.uuid,
+			label: workSchema.zone.name,
+		})
+		.from(workSchema.zone);
+
+	try {
+		const data = await zonePromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Zone list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
 //* Delivery others routes *//
 
 export async function selectCourier(req, res, next) {

@@ -106,6 +106,14 @@ otherRouter.get('/section/value/label', otherOperations.selectSection);
 // process routes
 otherRouter.get('/process/value/label', otherOperations.selectProcess);
 
+// accessory routes
+
+otherRouter.get('/accessory/value/label', otherOperations.selectAccessory);
+
+// zone routes
+
+otherRouter.get('/zone/value/label', otherOperations.selectZone);
+
 //* Delivery others routes *//
 
 // Vehicle routes

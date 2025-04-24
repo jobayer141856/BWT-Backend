@@ -33,6 +33,8 @@ const defInfo = SED({
 		created_at: SE.date_time(),
 		updated_at: SE.date_time(),
 		remarks: SE.string('remarks'),
+		location: SE.string('location'),
+		zone_uuid: SE.uuid(),
 	},
 	xml: 'Work/Info',
 });
@@ -164,6 +166,35 @@ const defProcess = SED({
 	xml: 'Work/Process',
 });
 
+const defAccessory = SED({
+	required: ['uuid', 'name', 'created_at'],
+	properties: {
+		uuid: SE.uuid(),
+		name: SE.string('Accessory 1'),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Work/Accessory',
+});
+
+const defZone = SED({
+	required: ['uuid', 'name', 'division', 'created_at'],
+	properties: {
+		uuid: SE.uuid(),
+		name: SE.string('Zone 1'),
+		division: SE.string('Zone 1 Division'),
+		latitude: SE.string('Zone 1 Latitude'),
+		longitude: SE.string('Zone 1 Longitude'),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Work/Zone',
+});
+
 //* Marge all
 export const defWork = {
 	problem: defProblem,
@@ -172,6 +203,8 @@ export const defWork = {
 	diagnosis: defDiagnosis,
 	section: defSection,
 	process: defProcess,
+	accessory: defAccessory,
+	zone: defZone,
 };
 
 //* Tag
@@ -199,5 +232,13 @@ export const tagWork = [
 	{
 		name: 'work.process',
 		description: 'Work Process',
+	},
+	{
+		name: 'work.accessory',
+		description: 'Work Accessory',
+	},
+	{
+		name: 'work.zone',
+		description: 'Work Zone',
 	},
 ];
