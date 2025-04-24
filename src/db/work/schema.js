@@ -42,6 +42,8 @@ export const info = work.table('info', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	zone_uuid: defaultUUID('zone_uuid').references(() => zone.uuid),
+	location: text('location').default(null),
 });
 
 export const order = work.table('order', {
@@ -138,6 +140,28 @@ export const process = work.table('process', {
 		() => storeSchema.floor.uuid
 	),
 	box_uuid: defaultUUID('box_uuid').references(() => storeSchema.box.uuid),
+	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+export const accessory = work.table('accessory', {
+	uuid: uuid_primary,
+	name: text('name').notNull(),
+	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+export const zone = work.table('zone', {
+	id: serial('id').notNull().unique(),
+	uuid: uuid_primary,
+	name: text('name').notNull(),
+	division: text('division').notNull(),
+	latitude: text('latitude').default(null),
+	longitude: text('longitude').default(null),
 	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),

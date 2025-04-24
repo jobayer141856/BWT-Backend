@@ -1005,6 +1005,223 @@ export const pathWorkProcess = {
 	},
 };
 
+export const pathWorkAccessory = {
+	'/work/accessory': {
+		get: {
+			tags: ['work.accessory'],
+			summary: 'Get all work accessories',
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('work accessory name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['work.accessory'],
+			summary: 'Create a work accessory',
+			requestBody: SE.requestBody_schema_ref('work/accessory'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'work/accessory'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/work/accessory/{uuid}': {
+		get: {
+			tags: ['work.accessory'],
+			summary: 'Get a work accessory by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work accessory to get',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('work accessory name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		put: {
+			tags: ['work.accessory'],
+			summary: 'Update a work accessory by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work accessory to update',
+					required: true,
+					type: 'string',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('work/accessory'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'work/accessory'),
+					405: SE.response(405),
+				},
+			},
+		},
+		delete: {
+			tags: ['work.accessory'],
+			summary: 'Delete a work accessory by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work accessory to delete',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('work accessory name'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+	},
+};
+
+export const pathWorkZone = {
+	'/work/zone': {
+		get: {
+			tags: ['work.zone'],
+			summary: 'Get all work zones',
+			responses: {
+				200: SE.response_schema(200, {
+					id: SE.integer(),
+					uuid: SE.uuid(),
+					name: SE.string('work zone name'),
+					division: SE.string('work zone division'),
+					latitude: SE.string('work zone latitude'),
+					longitude: SE.string('work zone longitude'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		post: {
+			tags: ['work.zone'],
+			summary: 'Create a work zone',
+			requestBody: SE.requestBody_schema_ref('work/zone'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'work/zone'),
+					405: SE.response(405),
+				},
+			},
+		},
+	},
+	'/work/zone/{uuid}': {
+		get: {
+			tags: ['work.zone'],
+			summary: 'Get a work zone by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work zone to get',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					id: SE.integer(),
+					uuid: SE.uuid(),
+					name: SE.string('work zone name'),
+					division: SE.string('work zone division'),
+					latitude: SE.string('work zone latitude'),
+					longitude: SE.string('work zone longitude'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+		put: {
+			tags: ['work.zone'],
+			summary: 'Update a work zone by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work zone to update',
+					required: true,
+					type: 'string',
+				},
+			],
+			requestBody: SE.requestBody_schema_ref('work/zone'),
+			responses: {
+				responses: {
+					200: SE.response_schema_ref(200, 'work/zone'),
+					405: SE.response(405),
+				},
+			},
+		},
+		delete: {
+			tags: ['work.zone'],
+			summary: 'Delete a work zone by uuid',
+			parameters: [
+				{
+					name: 'uuid',
+					in: 'path',
+					description: 'UUID of the work zone to delete',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					name: SE.string('work zone name'),
+					division: SE.string('work zone division'),
+					latitude: SE.string('work zone latitude'),
+					longitude: SE.string('work zone longitude'),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					updated_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+			},
+		},
+	},
+};
+
 export const pathWork = {
 	...pathWorkProblem,
 	...pathWorkInfo,
@@ -1012,4 +1229,6 @@ export const pathWork = {
 	...pathWorkDiagnosis,
 	...pathWorkSection,
 	...pathWorkProcess,
+	...pathWorkAccessory,
+	...pathWorkZone,
 };

@@ -733,6 +733,60 @@ const pathProcess = {
 	},
 };
 
+const pathAccessory = {
+	'/other/accessory/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all accessory',
+			description: 'Get all accessory',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									id: SE.number(),
+									value: SE.uuid(),
+									label: SE.string('accessory'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
+const pathZone = {
+	'/other/zone/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all zone',
+			description: 'Get all zone',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									id: SE.number(),
+									value: SE.uuid(),
+									label: SE.string('zone'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 //* delivery others routes *//
 
 const pathVehicle = {
@@ -824,6 +878,8 @@ export const pathOthers = {
 	...pathProcess,
 	...pathVehicle,
 	...pathCourier,
+	...pathAccessory,
+	...pathZone,
 };
 
 export const tagOthers = [
