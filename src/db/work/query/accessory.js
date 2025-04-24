@@ -107,7 +107,6 @@ export async function select(req, res, next) {
 		.select({
 			uuid: accessory.uuid,
 			name: accessory.name,
-			category: accessory.category,
 			created_by: accessory.created_by,
 			created_by_name: hrSchema.users.name,
 			created_at: accessory.created_at,

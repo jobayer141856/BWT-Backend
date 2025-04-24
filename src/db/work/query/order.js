@@ -5,7 +5,7 @@ import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
-import { order, problem, info } from '../schema.js';
+import { order, problem, info, accessory } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
 import * as deliverySchema from '../../delivery/schema.js';
 import { users } from '../../hr/schema.js';
@@ -209,9 +209,30 @@ export async function selectAll(req, res, next) {
 			return acc;
 		}, {});
 
+		const accessories_uuid = data.map((order) => order.accessories).flat();
+
+		const accessories = await db
+			.select({
+				name: accessory.name,
+				uuid: accessory.uuid,
+			})
+			.from(accessory)
+			.where(inArray(accessory.uuid, accessories_uuid));
+
+		const accessoriesMap = accessories.reduce((acc, accessory) => {
+			acc[accessory.uuid] = accessory.name;
+			return acc;
+		}, {});
+
 		data.forEach((order) => {
 			order.problems_name = order.problems_uuid.map(
 				(uuid) => problemsMap[uuid]
+			);
+		});
+
+		data.forEach((order) => {
+			order.accessories_name = order.accessories.map(
+				(uuid) => accessoriesMap[uuid]
 			);
 		});
 
