@@ -93,7 +93,8 @@ export async function selectAll(req, res, next) {
 			remarks: product_transfer.remarks,
 			info_uuid: workSchema.order.info_uuid,
 			info_id: sql`CONCAT('WI', TO_CHAR(${workSchema.info.created_at}, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'))`,
-			max_quantity: sql`CASE WHEN ${warehouse.assigned} = 'warehouse_1' THEN ${product.warehouse_1} + ${product_transfer.quantity} 
+			max_quantity:
+				decimalToNumber(sql`CASE WHEN ${warehouse.assigned} = 'warehouse_1' THEN ${product.warehouse_1} + ${product_transfer.quantity} 
 						WHEN ${warehouse.assigned} = 'warehouse_2' THEN ${product.warehouse_2} + ${product_transfer.quantity} 
 						WHEN ${warehouse.assigned} = 'warehouse_3' THEN ${product.warehouse_3} + ${product_transfer.quantity} 
 						WHEN ${warehouse.assigned} = 'warehouse_4' THEN ${product.warehouse_4} + ${product_transfer.quantity}
@@ -105,7 +106,7 @@ export async function selectAll(req, res, next) {
 						WHEN ${warehouse.assigned} = 'warehouse_10' THEN ${product.warehouse_10} + ${product_transfer.quantity}
 						WHEN ${warehouse.assigned} = 'warehouse_11' THEN ${product.warehouse_11} + ${product_transfer.quantity}
 						WHEN ${warehouse.assigned} = 'warehouse_12' THEN ${product.warehouse_12} + ${product_transfer.quantity}
-						END`,
+						END`),
 		})
 		.from(product_transfer)
 		.leftJoin(product, eq(product_transfer.product_uuid, product.uuid))
@@ -159,7 +160,8 @@ export async function select(req, res, next) {
 			remarks: product_transfer.remarks,
 			info_uuid: workSchema.order.info_uuid,
 			info_id: sql`CONCAT('WI', TO_CHAR(${workSchema.info.created_at}, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'))`,
-			max_quantity: sql`CASE WHEN ${warehouse.assigned} = 'warehouse_1' THEN ${product.warehouse_1} + ${product_transfer.quantity} 
+			max_quantity:
+				decimalToNumber(sql`CASE WHEN ${warehouse.assigned} = 'warehouse_1' THEN ${product.warehouse_1} + ${product_transfer.quantity} 
 						WHEN ${warehouse.assigned} = 'warehouse_2' THEN ${product.warehouse_2} + ${product_transfer.quantity} 
 						WHEN ${warehouse.assigned} = 'warehouse_3' THEN ${product.warehouse_3} + ${product_transfer.quantity} 
 						WHEN ${warehouse.assigned} = 'warehouse_4' THEN ${product.warehouse_4} + ${product_transfer.quantity}
@@ -171,7 +173,7 @@ export async function select(req, res, next) {
 						WHEN ${warehouse.assigned} = 'warehouse_10' THEN ${product.warehouse_10} + ${product_transfer.quantity}
 						WHEN ${warehouse.assigned} = 'warehouse_11' THEN ${product.warehouse_11} + ${product_transfer.quantity}
 						WHEN ${warehouse.assigned} = 'warehouse_12' THEN ${product.warehouse_12} + ${product_transfer.quantity}
-						END`,
+						END`),
 		})
 		.from(product_transfer)
 		.leftJoin(product, eq(product_transfer.product_uuid, product.uuid))
