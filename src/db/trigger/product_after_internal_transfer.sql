@@ -11,14 +11,33 @@ BEGIN
     SET
         warehouse_1 = CASE WHEN from_warehouse_name = 'warehouse_1' THEN warehouse_1 - NEW.quantity ELSE warehouse_1 END,
         warehouse_2 = CASE WHEN from_warehouse_name = 'warehouse_2' THEN warehouse_2 - NEW.quantity ELSE warehouse_2 END,
-        warehouse_3 = CASE WHEN from_warehouse_name = 'warehouse_3' THEN warehouse_3 - NEW.quantity ELSE warehouse_3 END
+        warehouse_3 = CASE WHEN from_warehouse_name = 'warehouse_3' THEN warehouse_3 - NEW.quantity ELSE warehouse_3 END,
+        warehouse_4 = CASE WHEN from_warehouse_name = 'warehouse_4' THEN warehouse_4 - NEW.quantity ELSE warehouse_4 END,
+        warehouse_5 = CASE WHEN from_warehouse_name = 'warehouse_5' THEN warehouse_5 - NEW.quantity ELSE warehouse_5 END,
+        warehouse_6 = CASE WHEN from_warehouse_name = 'warehouse_6' THEN warehouse_6 - NEW.quantity ELSE warehouse_6 END,
+        warehouse_7 = CASE WHEN from_warehouse_name = 'warehouse_7' THEN warehouse_7 - NEW.quantity ELSE warehouse_7 END,
+        warehouse_8 = CASE WHEN from_warehouse_name = 'warehouse_8' THEN warehouse_8 - NEW.quantity ELSE warehouse_8 END,
+        warehouse_9 = CASE WHEN from_warehouse_name = 'warehouse_7' THEN warehouse_9 - NEW.quantity ELSE warehouse_9 END,
+        warehouse_10 = CASE WHEN from_warehouse_name = 'warehouse_8' THEN warehouse_10 - NEW.quantity ELSE warehouse_10 END,
+        warehouse_11 = CASE WHEN from_warehouse_name = 'warehouse_9' THEN warehouse_11 - NEW.quantity ELSE warehouse_11 END,
+        warehouse_12 = CASE WHEN from_warehouse_name = 'warehouse_10' THEN warehouse_12 - NEW.quantity ELSE warehouse_12 END
+
     WHERE uuid = NEW.product_uuid;
     
     UPDATE store.product
     SET
         warehouse_1 = CASE WHEN to_warehouse_name = 'warehouse_1' THEN warehouse_1 + NEW.quantity ELSE warehouse_1 END,
         warehouse_2 = CASE WHEN to_warehouse_name = 'warehouse_2' THEN warehouse_2 + NEW.quantity ELSE warehouse_2 END,
-        warehouse_3 = CASE WHEN to_warehouse_name = 'warehouse_3' THEN warehouse_3 + NEW.quantity ELSE warehouse_3 END
+        warehouse_3 = CASE WHEN to_warehouse_name = 'warehouse_3' THEN warehouse_3 + NEW.quantity ELSE warehouse_3 END,
+        warehouse_4 = CASE WHEN to_warehouse_name = 'warehouse_4' THEN warehouse_4 + NEW.quantity ELSE warehouse_4 END,
+        warehouse_5 = CASE WHEN to_warehouse_name = 'warehouse_5' THEN warehouse_5 + NEW.quantity ELSE warehouse_5 END,
+        warehouse_6 = CASE WHEN to_warehouse_name = 'warehouse_6' THEN warehouse_6 + NEW.quantity ELSE warehouse_6 END,
+        warehouse_7 = CASE WHEN to_warehouse_name = 'warehouse_7' THEN warehouse_7 + NEW.quantity ELSE warehouse_7 END,
+        warehouse_8 = CASE WHEN to_warehouse_name = 'warehouse_8' THEN warehouse_8 + NEW.quantity ELSE warehouse_8 END,
+        warehouse_9 = CASE WHEN to_warehouse_name = 'warehouse_9' THEN warehouse_9 + NEW.quantity ELSE warehouse_9 END,
+        warehouse_10 = CASE WHEN to_warehouse_name = 'warehouse_10' THEN warehouse_10 + NEW.quantity ELSE warehouse_10 END,
+        warehouse_11 = CASE WHEN to_warehouse_name = 'warehouse_11' THEN warehouse_11 + NEW.quantity ELSE warehouse_11 END,
+        warehouse_12 = CASE WHEN to_warehouse_name = 'warehouse_12' THEN warehouse_12 + NEW.quantity ELSE warehouse_12 END
     WHERE uuid = NEW.product_uuid;
     
     RETURN NEW;
@@ -38,14 +57,32 @@ BEGIN
     SET
         warehouse_1 = CASE WHEN from_warehouse_name = 'warehouse_1' THEN warehouse_1 + OLD.quantity ELSE warehouse_1 END,
         warehouse_2 = CASE WHEN from_warehouse_name = 'warehouse_2' THEN warehouse_2 + OLD.quantity ELSE warehouse_2 END,
-        warehouse_3 = CASE WHEN from_warehouse_name = 'warehouse_3' THEN warehouse_3 + OLD.quantity ELSE warehouse_3 END
+        warehouse_3 = CASE WHEN from_warehouse_name = 'warehouse_3' THEN warehouse_3 + OLD.quantity ELSE warehouse_3 END,
+        warehouse_4 = CASE WHEN old_from_warehouse_name = 'warehouse_4' THEN warehouse_4 + OLD.quantity ELSE warehouse_4 END,
+        warehouse_5 = CASE WHEN old_from_warehouse_name = 'warehouse_5' THEN warehouse_5 + OLD.quantity ELSE warehouse_5 END,
+        warehouse_6 = CASE WHEN old_from_warehouse_name = 'warehouse_6' THEN warehouse_6 + OLD.quantity ELSE warehouse_6 END,
+        warehouse_7 = CASE WHEN old_from_warehouse_name = 'warehouse_7' THEN warehouse_7 + OLD.quantity ELSE warehouse_7 END,
+        warehouse_8 = CASE WHEN old_from_warehouse_name = 'warehouse_8' THEN warehouse_8 + OLD.quantity ELSE warehouse_8 END,
+        warehouse_9 = CASE WHEN old_from_warehouse_name = 'warehouse_9' THEN warehouse_9 + OLD.quantity ELSE warehouse_9 END,
+        warehouse_10 = CASE WHEN old_from_warehouse_name = 'warehouse_10' THEN warehouse_10 + OLD.quantity ELSE warehouse_10 END,
+        warehouse_11 = CASE WHEN old_from_warehouse_name = 'warehouse_11' THEN warehouse_11 + OLD.quantity ELSE warehouse_11 END,
+        warehouse_12 = CASE WHEN old_from_warehouse_name = 'warehouse_12' THEN warehouse_12 + OLD.quantity ELSE warehouse_12 END
     WHERE uuid = OLD.product_uuid;
     
     UPDATE store.product
     SET
         warehouse_1 = CASE WHEN to_warehouse_name = 'warehouse_1' THEN warehouse_1 - OLD.quantity ELSE warehouse_1 END,
         warehouse_2 = CASE WHEN to_warehouse_name = 'warehouse_2' THEN warehouse_2 - OLD.quantity ELSE warehouse_2 END,
-        warehouse_3 = CASE WHEN to_warehouse_name = 'warehouse_3' THEN warehouse_3 - OLD.quantity ELSE warehouse_3 END
+        warehouse_3 = CASE WHEN to_warehouse_name = 'warehouse_3' THEN warehouse_3 - OLD.quantity ELSE warehouse_3 END,
+        warehouse_4 = CASE WHEN old_to_warehouse_name = 'warehouse_4' THEN warehouse_4 - OLD.quantity ELSE warehouse_4 END,
+        warehouse_5 = CASE WHEN old_to_warehouse_name = 'warehouse_5' THEN warehouse_5 - OLD.quantity ELSE warehouse_5 END,
+        warehouse_6 = CASE WHEN old_to_warehouse_name = 'warehouse_6' THEN warehouse_6 - OLD.quantity ELSE warehouse_6 END,
+        warehouse_7 = CASE WHEN old_to_warehouse_name = 'warehouse_7' THEN warehouse_7 - OLD.quantity ELSE warehouse_7 END,
+        warehouse_8 = CASE WHEN old_to_warehouse_name = 'warehouse_8' THEN warehouse_9 - OLD.quantity ELSE warehouse_8 END,
+        warehouse_9 = CASE WHEN old_from_warehouse_name = 'warehouse_9' THEN warehouse_9 + OLD.quantity ELSE warehouse_9 END,
+        warehouse_10 = CASE WHEN old_to_warehouse_name = 'warehouse_10' THEN warehouse_10 - OLD.quantity ELSE warehouse_10 END,
+        warehouse_11 = CASE WHEN old_to_warehouse_name = 'warehouse_11' THEN warehouse_11 - OLD.quantity ELSE warehouse_11 END,
+        warehouse_12 = CASE WHEN old_to_warehouse_name = 'warehouse_12' THEN warehouse_12 + OLD.quantity ELSE warehouse_12 END
     WHERE uuid = OLD.product_uuid;
     
     RETURN OLD;
@@ -73,7 +110,16 @@ BEGIN
         SET
             warehouse_1 = CASE WHEN old_from_warehouse_name = 'warehouse_1' THEN warehouse_1 + OLD.quantity ELSE warehouse_1 END,
             warehouse_2 = CASE WHEN old_from_warehouse_name = 'warehouse_2' THEN warehouse_2 + OLD.quantity ELSE warehouse_2 END,
-            warehouse_3 = CASE WHEN old_from_warehouse_name = 'warehouse_3' THEN warehouse_3 + OLD.quantity ELSE warehouse_3 END
+            warehouse_3 = CASE WHEN old_from_warehouse_name = 'warehouse_3' THEN warehouse_3 + OLD.quantity ELSE warehouse_3 END,
+            warehouse_4 = CASE WHEN old_from_warehouse_name = 'warehouse_4' THEN warehouse_4 + OLD.quantity ELSE warehouse_4 END,
+            warehouse_5 = CASE WHEN old_from_warehouse_name = 'warehouse_5' THEN warehouse_5 + OLD.quantity ELSE warehouse_5 END,
+            warehouse_6 = CASE WHEN old_from_warehouse_name = 'warehouse_6' THEN warehouse_6 + OLD.quantity ELSE warehouse_6 END,
+            warehouse_7 = CASE WHEN old_from_warehouse_name = 'warehouse_7' THEN warehouse_7 + OLD.quantity ELSE warehouse_7 END,
+            warehouse_8 = CASE WHEN old_from_warehouse_name = 'warehouse_8' THEN warehouse_8 + OLD.quantity ELSE warehouse_8 END,
+            warehouse_9 = CASE WHEN old_from_warehouse_name = 'warehouse_9' THEN warehouse_9 + OLD.quantity ELSE warehouse_9 END,
+            warehouse_10 = CASE WHEN old_from_warehouse_name = 'warehouse_10' THEN warehouse_10 + OLD.quantity ELSE warehouse_10 END,
+            warehouse_11 = CASE WHEN old_from_warehouse_name = 'warehouse_11' THEN warehouse_11 + OLD.quantity ELSE warehouse_11 END,
+            warehouse_12 = CASE WHEN old_from_warehouse_name = 'warehouse_12' THEN warehouse_12 + OLD.quantity ELSE warehouse_12 END
         WHERE uuid = OLD.product_uuid;
 
         -- Add to new warehouse
@@ -81,7 +127,16 @@ BEGIN
         SET
             warehouse_1 = CASE WHEN new_from_warehouse_name = 'warehouse_1' THEN warehouse_1 - NEW.quantity ELSE warehouse_1 END,
             warehouse_2 = CASE WHEN new_from_warehouse_name = 'warehouse_2' THEN warehouse_2 - NEW.quantity ELSE warehouse_2 END,
-            warehouse_3 = CASE WHEN new_from_warehouse_name = 'warehouse_3' THEN warehouse_3 - NEW.quantity ELSE warehouse_3 END
+            warehouse_3 = CASE WHEN new_from_warehouse_name = 'warehouse_3' THEN warehouse_3 - NEW.quantity ELSE warehouse_3 END,
+            warehouse_4 = CASE WHEN new_from_warehouse_name = 'warehouse_4' THEN warehouse_4 - NEW.quantity ELSE warehouse_4 END,
+            warehouse_5 = CASE WHEN new_from_warehouse_name = 'warehouse_5' THEN warehouse_5 - NEW.quantity ELSE warehouse_5 END,
+            warehouse_6 = CASE WHEN new_from_warehouse_name = 'warehouse_6' THEN warehouse_6 - NEW.quantity ELSE warehouse_6 END,
+            warehouse_7 = CASE WHEN new_from_warehouse_name = 'warehouse_7' THEN warehouse_7 - NEW.quantity ELSE warehouse_7 END,
+            warehouse_8 = CASE WHEN new_from_warehouse_name = 'warehouse_8' THEN warehouse_8 - NEW.quantity ELSE warehouse_8 END,
+            warehouse_9 = CASE WHEN new_from_warehouse_name = 'warehouse_9' THEN warehouse_9 - NEW.quantity ELSE warehouse_9 END,
+            warehouse_10 = CASE WHEN new_from_warehouse_name = 'warehouse_10' THEN warehouse_10 - NEW.quantity ELSE warehouse_10 END,
+            warehouse_11 = CASE WHEN new_from_warehouse_name = 'warehouse_11' THEN warehouse_11 - NEW.quantity ELSE warehouse_11 END,
+            warehouse_12 = CASE WHEN new_from_warehouse_name = 'warehouse_12' THEN warehouse_12 - NEW.quantity ELSE warehouse_12 END
         WHERE uuid = NEW.product_uuid;
     ELSE
     -- Update the quantity in the same warehouse
@@ -89,7 +144,16 @@ BEGIN
         SET
             warehouse_1 = CASE WHEN old_from_warehouse_name = 'warehouse_1' THEN warehouse_1 + OLD.quantity - NEW.quantity ELSE warehouse_1 END,
             warehouse_2 = CASE WHEN old_from_warehouse_name = 'warehouse_2' THEN warehouse_2 + OLD.quantity - NEW.quantity ELSE warehouse_2 END,
-            warehouse_3 = CASE WHEN old_from_warehouse_name = 'warehouse_3' THEN warehouse_3 + OLD.quantity - NEW.quantity ELSE warehouse_3 END
+            warehouse_3 = CASE WHEN old_from_warehouse_name = 'warehouse_3' THEN warehouse_3 + OLD.quantity - NEW.quantity ELSE warehouse_3 END,
+            warehouse_4 = CASE WHEN old_from_warehouse_name = 'warehouse_4' THEN warehouse_4 + OLD.quantity - NEW.quantity ELSE warehouse_4 END,
+            warehouse_5 = CASE WHEN old_from_warehouse_name = 'warehouse_5' THEN warehouse_5 + OLD.quantity - NEW.quantity ELSE warehouse_5 END,
+            warehouse_6 = CASE WHEN old_from_warehouse_name = 'warehouse_6' THEN warehouse_6 + OLD.quantity - NEW.quantity ELSE warehouse_6 END,
+            warehouse_7 = CASE WHEN old_from_warehouse_name = 'warehouse_7' THEN warehouse_7 + OLD.quantity - NEW.quantity ELSE warehouse_7 END,
+            warehouse_8 = CASE WHEN old_from_warehouse_name = 'warehouse_8' THEN warehouse_8 + OLD.quantity - NEW.quantity ELSE warehouse_8 END,
+            warehouse_9 = CASE WHEN old_from_warehouse_name = 'warehouse_9' THEN warehouse_9 + OLD.quantity - NEW.quantity ELSE warehouse_9 END,
+            warehouse_10 = CASE WHEN old_from_warehouse_name = 'warehouse_10' THEN warehouse_10 + OLD.quantity - NEW.quantity ELSE warehouse_10 END,
+            warehouse_11 = CASE WHEN old_from_warehouse_name = 'warehouse_11' THEN warehouse_11 + OLD.quantity - NEW.quantity ELSE warehouse_11 END,
+            warehouse_12 = CASE WHEN old_from_warehouse_name = 'warehouse_12' THEN warehouse_12 + OLD.quantity - NEW.quantity ELSE warehouse_12 END
         WHERE uuid = NEW.product_uuid;
           
     END IF;
@@ -100,7 +164,16 @@ BEGIN
         SET
             warehouse_1 = CASE WHEN old_to_warehouse_name = 'warehouse_1' THEN warehouse_1 - OLD.quantity ELSE warehouse_1 END,
             warehouse_2 = CASE WHEN old_to_warehouse_name = 'warehouse_2' THEN warehouse_2 - OLD.quantity ELSE warehouse_2 END,
-            warehouse_3 = CASE WHEN old_to_warehouse_name = 'warehouse_3' THEN warehouse_3 - OLD.quantity ELSE warehouse_3 END
+            warehouse_3 = CASE WHEN old_to_warehouse_name = 'warehouse_3' THEN warehouse_3 - OLD.quantity ELSE warehouse_3 END,
+            warehouse_4 = CASE WHEN old_to_warehouse_name = 'warehouse_4' THEN warehouse_4 - OLD.quantity ELSE warehouse_4 END,
+            warehouse_5 = CASE WHEN old_to_warehouse_name = 'warehouse_5' THEN warehouse_5 - OLD.quantity ELSE warehouse_5 END,
+            warehouse_6 = CASE WHEN old_to_warehouse_name = 'warehouse_6' THEN warehouse_6 - OLD.quantity ELSE warehouse_6 END,
+            warehouse_7 = CASE WHEN old_to_warehouse_name = 'warehouse_7' THEN warehouse_7 - OLD.quantity ELSE warehouse_7 END,
+            warehouse_8 = CASE WHEN old_to_warehouse_name = 'warehouse_8' THEN warehouse_8 - OLD.quantity ELSE warehouse_8 END,
+            warehouse_9 = CASE WHEN old_to_warehouse_name = 'warehouse_9' THEN warehouse_9 - OLD.quantity ELSE warehouse_9 END,
+            warehouse_10 = CASE WHEN old_to_warehouse_name = 'warehouse_10' THEN warehouse_10 - OLD.quantity ELSE warehouse_10 END,
+            warehouse_11 = CASE WHEN old_to_warehouse_name = 'warehouse_11' THEN warehouse_11 - OLD.quantity ELSE warehouse_11 END,
+            warehouse_12 = CASE WHEN old_to_warehouse_name = 'warehouse_12' THEN warehouse_12 - OLD.quantity ELSE warehouse_12 END
         WHERE uuid = OLD.product_uuid;
 
         -- Add to new warehouse
@@ -108,7 +181,16 @@ BEGIN
         SET
             warehouse_1 = CASE WHEN new_to_warehouse_name = 'warehouse_1' THEN warehouse_1 + NEW.quantity ELSE warehouse_1 END,
             warehouse_2 = CASE WHEN new_to_warehouse_name = 'warehouse_2' THEN warehouse_2 + NEW.quantity ELSE warehouse_2 END,
-            warehouse_3 = CASE WHEN new_to_warehouse_name = 'warehouse_3' THEN warehouse_3 + NEW.quantity ELSE warehouse_3 END
+            warehouse_3 = CASE WHEN new_to_warehouse_name = 'warehouse_3' THEN warehouse_3 + NEW.quantity ELSE warehouse_3 END,
+            warehouse_4 = CASE WHEN new_to_warehouse_name = 'warehouse_4' THEN warehouse_4 + NEW.quantity ELSE warehouse_4 END,
+            warehouse_5 = CASE WHEN new_to_warehouse_name = 'warehouse_5' THEN warehouse_5 + NEW.quantity ELSE warehouse_5 END,
+            warehouse_6 = CASE WHEN new_to_warehouse_name = 'warehouse_6' THEN warehouse_6 + NEW.quantity ELSE warehouse_6 END,
+            warehouse_7 = CASE WHEN new_to_warehouse_name = 'warehouse_7' THEN warehouse_7 + NEW.quantity ELSE warehouse_7 END,
+            warehouse_8 = CASE WHEN new_to_warehouse_name = 'warehouse_8' THEN warehouse_8 + NEW.quantity ELSE warehouse_8 END,
+            warehouse_9 = CASE WHEN new_to_warehouse_name = 'warehouse_9' THEN warehouse_9 + NEW.quantity ELSE warehouse_9 END,
+            warehouse_10 = CASE WHEN new_to_warehouse_name = 'warehouse_10' THEN warehouse_10 + NEW.quantity ELSE warehouse_10 END,
+            warehouse_11 = CASE WHEN new_to_warehouse_name = 'warehouse_11' THEN warehouse_11 + NEW.quantity ELSE warehouse_11 END,
+            warehouse_12 = CASE WHEN new_to_warehouse_name = 'warehouse_12' THEN warehouse_12 + NEW.quantity ELSE warehouse_12 END
         WHERE uuid = NEW.product_uuid;
     ELSE
     -- Update the quantity in the same warehouse
@@ -116,7 +198,17 @@ BEGIN
         SET
             warehouse_1 = CASE WHEN old_to_warehouse_name = 'warehouse_1' THEN warehouse_1 - OLD.quantity + NEW.quantity ELSE warehouse_1 END,
             warehouse_2 = CASE WHEN old_to_warehouse_name = 'warehouse_2' THEN warehouse_2 - OLD.quantity + NEW.quantity ELSE warehouse_2 END,
-            warehouse_3 = CASE WHEN old_to_warehouse_name = 'warehouse_3' THEN warehouse_3 - OLD.quantity + NEW.quantity ELSE warehouse_3 END
+            warehouse_3 = CASE WHEN old_to_warehouse_name = 'warehouse_3' THEN warehouse_3 - OLD.quantity + NEW.quantity ELSE warehouse_3 END,
+
+            warehouse_4 = CASE WHEN old_to_warehouse_name = 'warehouse_4' THEN warehouse_4 - OLD.quantity + NEW.quantity ELSE warehouse_4 END,
+            warehouse_5 = CASE WHEN old_to_warehouse_name = 'warehouse_5' THEN warehouse_5 - OLD.quantity + NEW.quantity ELSE warehouse_5 END,
+            warehouse_6 = CASE WHEN old_to_warehouse_name = 'warehouse_6' THEN warehouse_6 - OLD.quantity + NEW.quantity ELSE warehouse_6 END,
+            warehouse_7 = CASE WHEN old_to_warehouse_name = 'warehouse_7' THEN warehouse_7 - OLD.quantity + NEW.quantity ELSE warehouse_7 END,
+            warehouse_8 = CASE WHEN old_to_warehouse_name = 'warehouse_8' THEN warehouse_8 - OLD.quantity + NEW.quantity ELSE warehouse_8 END,
+            warehouse_9 = CASE WHEN old_to_warehouse_name = 'warehouse_9' THEN warehouse_9 - OLD.quantity + NEW.quantity ELSE warehouse_9 END,
+            warehouse_10 = CASE WHEN old_to_warehouse_name = 'warehouse_10' THEN warehouse_10 - OLD.quantity + NEW.quantity ELSE warehouse_10 END,
+            warehouse_11 = CASE WHEN old_to_warehouse_name = 'warehouse_11' THEN warehouse_11 - OLD.quantity + NEW.quantity ELSE warehouse_11 END,
+            warehouse_12 = CASE WHEN old_to_warehouse_name = 'warehouse_12' THEN warehouse_12 - OLD.quantity + NEW.quantity ELSE warehouse_12 END
         WHERE uuid = NEW.product_uuid;
 
     END IF;
