@@ -500,7 +500,7 @@ export async function selectInternalTransfer(req, res, next) {
 }
 
 export async function selectModel(req, res, next) {
-	const { is_brand } = req.query;
+	const { is_brand, brand_uuid } = req.query;
 	const modelPromise = db
 		.select({
 			value: storeSchema.model.uuid,
@@ -514,6 +514,10 @@ export async function selectModel(req, res, next) {
 			storeSchema.brand,
 			eq(storeSchema.model.brand_uuid, storeSchema.brand.uuid)
 		);
+
+	if (brand_uuid) {
+		modelPromise.where(eq(storeSchema.model.brand_uuid, brand_uuid));
+	}
 
 	try {
 		const data = await modelPromise;
