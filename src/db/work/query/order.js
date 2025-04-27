@@ -325,8 +325,6 @@ export async function select(req, res, next) {
 			created_at: order.created_at,
 			updated_at: order.updated_at,
 			remarks: order.remarks,
-			brand_uuid: storeSchema.model.brand_uuid,
-			brand_name: storeSchema.brand.name,
 			is_diagnosis_need: order.is_diagnosis_need,
 			quantity: order.quantity,
 			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
@@ -356,10 +354,6 @@ export async function select(req, res, next) {
 		.leftJoin(storeSchema.box, eq(order.box_uuid, storeSchema.box.uuid))
 		.leftJoin(info, eq(order.info_uuid, info.uuid))
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
-		.leftJoin(
-			storeSchema.brand,
-			eq(storeSchema.model.brand_uuid, storeSchema.brand.uuid)
-		)
 		.where(eq(order.uuid, req.params.uuid));
 
 	try {
