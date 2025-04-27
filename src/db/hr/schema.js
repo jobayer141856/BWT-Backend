@@ -7,7 +7,6 @@ import {
 	uuid,
 } from 'drizzle-orm/pg-core';
 import { DateTime, defaultUUID, uuid_primary } from '../variables.js';
-
 const hr = pgSchema('hr');
 
 export const department = hr.table('department', {
@@ -71,6 +70,8 @@ export const users = hr.table('users', {
 	business_type: businessTypeEnum('business_type').default('user'),
 	where_they_find_us:
 		whereTheyFindUsEnum('where_they_find_us').default('none'),
+	rating: integer('rating').default(5),
+	price: integer('price').default(5),
 });
 
 export const policy_and_notice = hr.table('policy_and_notice', {

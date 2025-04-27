@@ -302,6 +302,38 @@ export const pathHrUser = {
 			},
 		},
 	},
+	'/hr/user/rating-price/{uuid}': {
+		put: {
+			tags: ['hr.user'],
+			summary: 'Update an existing user status',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'User status to update',
+					'uuid',
+					'string',
+					'uuid'
+				),
+			],
+			requestBody: SE.requestBody(
+				{
+					rating: SE.integer(1),
+					price: SE.integer(1),
+				},
+				['rating', 'price']
+			),
+			responses: {
+				200: SE.response_schema(200, {
+					rating: SE.integer(1),
+					price: SE.integer(1),
+				}),
+				405: SE.response(405),
+			},
+		},
+	},
 };
 
 // * Hr Department * //
