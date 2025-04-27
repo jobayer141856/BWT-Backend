@@ -1,4 +1,4 @@
-import { sql, eq, and } from 'drizzle-orm';
+import { sql, eq, and, is } from 'drizzle-orm';
 import db from '../../index.js';
 import { handleError, validateRequest } from '../../../util/index.js';
 import * as hrSchema from '../../hr/schema.js';
@@ -500,10 +500,14 @@ export async function selectInternalTransfer(req, res, next) {
 }
 
 export async function selectModel(req, res, next) {
+	const { is_brand } = req.query;
 	const modelPromise = db
 		.select({
 			value: storeSchema.model.uuid,
-			label: sql`CONCAT(${storeSchema.model.name}, '(', ${storeSchema.brand.name} ,')')`,
+			label:
+				is_brand === 'false'
+					? storeSchema.model.name
+					: sql`CONCAT(${storeSchema.model.name}, '(', ${storeSchema.brand.name}, ')')`,
 		})
 		.from(storeSchema.model)
 		.leftJoin(
