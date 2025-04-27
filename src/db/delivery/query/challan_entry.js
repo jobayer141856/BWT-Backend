@@ -167,8 +167,8 @@ export async function selectChallanEntryByChallan(req, res, next) {
 			user_name: user.name,
 			model_uuid: workSchema.order.model_uuid,
 			model_name: storeSchema.model.name,
-			size_uuid: workSchema.order.size_uuid,
-			size_name: storeSchema.size.name,
+			brand_uuid: workSchema.order.brand_uuid,
+			brand_name: storeSchema.brand.name,
 			serial_no: workSchema.order.serial_no,
 			problems_uuid: workSchema.order.problems_uuid,
 			problem_statement: workSchema.order.problem_statement,
@@ -209,8 +209,8 @@ export async function selectChallanEntryByChallan(req, res, next) {
 			eq(workSchema.order.model_uuid, storeSchema.model.uuid)
 		)
 		.leftJoin(
-			storeSchema.size,
-			eq(workSchema.order.size_uuid, storeSchema.size.uuid)
+			storeSchema.brand,
+			eq(workSchema.order.brand_uuid, storeSchema.brand.uuid)
 		)
 		.leftJoin(
 			storeSchema.warehouse,
