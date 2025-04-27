@@ -9,13 +9,34 @@ import { order, problem, info, accessory } from '../schema.js';
 import * as storeSchema from '../../store/schema.js';
 import * as deliverySchema from '../../delivery/schema.js';
 import { users } from '../../hr/schema.js';
+import nanoid from '../../../lib/nanoid.js'; // Adjust the relative path
 
 const user = alias(hrSchema.users, 'user');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	const { model_uuid, brand_uuid, created_by, created_at } = req.body;
+
 	try {
+		if (model_uuid) {
+			const model = await db
+				.select()
+				.from(storeSchema.model)
+				.where(eq(storeSchema.model.uuid, model_uuid))
+				.limit(1);
+
+			if (model.length === 0) {
+				await db.insert(storeSchema.model).values({
+					uuid: nanoid(),
+					brand_uuid: brand_uuid,
+					name: model_uuid,
+					created_by: created_by,
+					created_at: created_at,
+				});
+			}
+		}
+
 		const orderPromise = db
 			.insert(order)
 			.values(req.body)
@@ -37,7 +58,26 @@ export async function insert(req, res, next) {
 export async function update(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	const { model_uuid, brand_uuid, created_by, updated_at } = req.body;
+
 	try {
+		if (model_uuid) {
+			const model = await db
+				.select()
+				.from(storeSchema.model)
+				.where(eq(storeSchema.model.uuid, model_uuid))
+				.limit(1);
+
+			if (model.length === 0) {
+				await db.insert(storeSchema.model).values({
+					uuid: nanoid(),
+					brand_uuid: brand_uuid,
+					name: model_uuid,
+					created_by: created_by,
+					created_at: updated_at,
+				});
+			}
+		}
 		const orderPromise = db
 			.update(order)
 			.set(req.body)
