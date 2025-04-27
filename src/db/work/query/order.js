@@ -19,6 +19,8 @@ export async function insert(req, res, next) {
 	const { model_uuid, brand_uuid, created_by, created_at } = req.body;
 
 	try {
+		let finalModelUuid = model_uuid;
+
 		if (model_uuid) {
 			const model = await db
 				.select()
@@ -27,19 +29,29 @@ export async function insert(req, res, next) {
 				.limit(1);
 
 			if (model.length === 0) {
-				await db.insert(storeSchema.model).values({
-					uuid: nanoid(),
-					brand_uuid: brand_uuid,
-					name: model_uuid,
-					created_by: created_by,
-					created_at: created_at,
-				});
+				const [newModel] = await db
+					.insert(storeSchema.model)
+					.values({
+						uuid: nanoid(),
+						brand_uuid: brand_uuid,
+						name: model_uuid,
+						created_by: created_by,
+						created_at: created_at,
+					})
+					.returning({
+						uuid: storeSchema.model.uuid,
+					});
+
+				finalModelUuid = newModel.uuid;
 			}
 		}
 
 		const orderPromise = db
 			.insert(order)
-			.values(req.body)
+			.values({
+				...req.body,
+				model_uuid: finalModelUuid,
+			})
 			.returning({ insertedUuid: order.uuid });
 
 		const data = await orderPromise;
@@ -61,6 +73,7 @@ export async function update(req, res, next) {
 	const { model_uuid, brand_uuid, created_by, updated_at } = req.body;
 
 	try {
+		let finalModelUuid = model_uuid;
 		if (model_uuid) {
 			const model = await db
 				.select()
@@ -69,18 +82,27 @@ export async function update(req, res, next) {
 				.limit(1);
 
 			if (model.length === 0) {
-				await db.insert(storeSchema.model).values({
-					uuid: nanoid(),
-					brand_uuid: brand_uuid,
-					name: model_uuid,
-					created_by: created_by,
-					created_at: updated_at,
-				});
+				const [newModel] = await db
+					.insert(storeSchema.model)
+					.values({
+						uuid: nanoid(),
+						brand_uuid: brand_uuid,
+						name: model_uuid,
+						created_by: created_by,
+						created_at: updated_at,
+					})
+					.returning({
+						uuid: storeSchema.model.uuid,
+					});
+				finalModelUuid = newModel.uuid;
 			}
 		}
 		const orderPromise = db
 			.update(order)
-			.set(req.body)
+			.set({
+				...req.body,
+				model_uuid: finalModelUuid,
+			})
 			.where(eq(order.uuid, req.params.uuid))
 			.returning({ updatedUuid: order.uuid });
 
