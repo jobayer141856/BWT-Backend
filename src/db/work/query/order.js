@@ -93,8 +93,8 @@ export async function selectAll(req, res, next) {
 			user_name: user.name,
 			model_uuid: order.model_uuid,
 			model_name: storeSchema.model.name,
-			size_uuid: order.size_uuid,
-			size_name: storeSchema.size.name,
+			brand_uuid: order.brand_uuid,
+			brand_name: storeSchema.brand.name,
 			serial_no: order.serial_no,
 			problems_uuid: order.problems_uuid,
 			problem_statement: order.problem_statement,
@@ -126,7 +126,10 @@ export async function selectAll(req, res, next) {
 			storeSchema.model,
 			eq(order.model_uuid, storeSchema.model.uuid)
 		)
-		.leftJoin(storeSchema.size, eq(order.size_uuid, storeSchema.size.uuid))
+		.leftJoin(
+			storeSchema.brand,
+			eq(order.brand_uuid, storeSchema.brand.uuid)
+		)
 		.leftJoin(
 			storeSchema.warehouse,
 			eq(order.warehouse_uuid, storeSchema.warehouse.uuid)
@@ -260,8 +263,8 @@ export async function select(req, res, next) {
 			user_phone: user.phone,
 			model_uuid: order.model_uuid,
 			model_name: storeSchema.model.name,
-			size_uuid: order.size_uuid,
-			size_name: storeSchema.size.name,
+			brand_uuid: order.brand_uuid,
+			brand_name: storeSchema.brand.name,
 			serial_no: order.serial_no,
 			problems_uuid: order.problems_uuid,
 			problem_statement: order.problem_statement,
@@ -295,7 +298,10 @@ export async function select(req, res, next) {
 			storeSchema.model,
 			eq(order.model_uuid, storeSchema.model.uuid)
 		)
-		.leftJoin(storeSchema.size, eq(order.size_uuid, storeSchema.size.uuid))
+		.leftJoin(
+			storeSchema.brand,
+			eq(order.brand_uuid, storeSchema.brand.uuid)
+		)
 		.leftJoin(
 			storeSchema.warehouse,
 			eq(order.warehouse_uuid, storeSchema.warehouse.uuid)
