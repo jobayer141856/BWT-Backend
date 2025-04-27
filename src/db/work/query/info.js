@@ -21,6 +21,7 @@ export async function insert(req, res, next) {
 		department_uuid,
 		designation_uuid,
 		business_type,
+		where_they_find_us,
 	} = req.body;
 
 	try {
@@ -38,6 +39,7 @@ export async function insert(req, res, next) {
 				ext: '+880',
 				created_at: created_at,
 				business_type: business_type,
+				where_they_find_us: where_they_find_us,
 			});
 		}
 		const infoPromise = db
