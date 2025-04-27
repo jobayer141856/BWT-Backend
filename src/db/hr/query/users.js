@@ -103,6 +103,8 @@ export async function selectAll(req, res, next) {
 			user_type: users.user_type,
 			business_type: users.business_type,
 			where_they_find_us: users.where_they_find_us,
+			rating: users.rating,
+			price: users.price,
 		})
 		.from(users)
 		.leftJoin(designation, eq(users.designation_uuid, designation.uuid))
@@ -151,6 +153,8 @@ export async function select(req, res, next) {
 			user_type: users.user_type,
 			business_type: users.business_type,
 			where_they_find_us: users.where_they_find_us,
+			rating: users.rating,
+			price: users.price,
 		})
 		.from(users)
 		.leftJoin(designation, eq(users.designation_uuid, designation.uuid))
@@ -353,6 +357,29 @@ export async function changeUserPassword(req, res, next) {
 			status: 200,
 			type: 'update',
 			message: `${data[0].updatedName} password updated`,
+		};
+
+		return res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function updateRatingPrice(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const userPromise = db
+		.update(users)
+		.set({ rating: req.body.rating, price: req.body.price })
+		.where(eq(users.uuid, req.params.uuid))
+		.returning({ updatedName: users.name });
+
+	try {
+		const data = await userPromise;
+		const toast = {
+			status: 200,
+			type: 'update',
+			message: `${data[0].updatedName} updated`,
 		};
 
 		return res.status(200).json({ toast, data });
