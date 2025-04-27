@@ -571,6 +571,10 @@ const pathModel = {
 			tags: ['others'],
 			summary: 'Get all model',
 			description: 'Get all model',
+
+			parameters: [
+				SE.parameter_query('is_brand', 'is_brand', ['true', 'false']),
+			],
 			responses: {
 				200: {
 					description: 'Success',
