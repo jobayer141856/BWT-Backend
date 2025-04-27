@@ -38,6 +38,16 @@ export const businessTypeEnum = pgEnum('business_type', [
 	'tv_company',
 	'corporate',
 ]);
+
+export const whereTheyFindUsEnum = pgEnum('where_they_find_us', [
+	'facebook',
+	'youtube',
+	'whatsapp',
+	'person',
+	'instagram',
+	'none',
+]);
+
 export const users = hr.table('users', {
 	uuid: uuid_primary,
 	name: text('name').notNull(),
@@ -59,6 +69,8 @@ export const users = hr.table('users', {
 	id: serial('id').notNull().unique(),
 	user_type: userTypeEnum('user_type').default('customer'),
 	business_type: businessTypeEnum('business_type').default('user'),
+	where_they_find_us:
+		whereTheyFindUsEnum('where_they_find_us').default('none'),
 });
 
 export const policy_and_notice = hr.table('policy_and_notice', {

@@ -53,8 +53,7 @@ export const order = work.table('order', {
 	model_uuid: defaultUUID('model_uuid').references(
 		() => storeSchema.model.uuid
 	),
-	size_uuid: defaultUUID('size_uuid').references(() => storeSchema.size.uuid),
-	serial_no: text('serial_no').notNull(),
+	serial_no: text('serial_no'),
 	quantity: integer('quantity').default(0),
 	problems_uuid: text('problems_uuid').array(),
 	problem_statement: text('problem_statement').notNull(),
@@ -74,6 +73,10 @@ export const order = work.table('order', {
 	remarks: text('remarks').default(null),
 	is_transferred_for_qc: boolean('is_transferred_for_qc').default(false),
 	is_ready_for_delivery: boolean('is_ready_for_delivery').default(false),
+	brand_uuid: defaultUUID('brand_uuid').references(
+		() => storeSchema.brand.uuid
+	),
+	is_proceed_to_repair: boolean('is_proceed_to_repair').default(false),
 });
 export const statusEnum = pgEnum('status', [
 	'pending',
