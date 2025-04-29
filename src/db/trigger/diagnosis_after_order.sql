@@ -31,15 +31,24 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION insert_diagnosis_after_order()
 RETURNS TRIGGER AS $$
 BEGIN
+
+    -- Update the `is_proceed_to_repair` field based on the value of `NEW.is_proceed_to_repair`
+    IF TG_OP = 'UPDATE' AND OLD.is_diagnosis_need = TRUE AND NEW.is_diagnosis_need = TRUE THEN
+        UPDATE work.diagnosis
+        SET is_proceed_to_repair = NEW.is_proceed_to_repair
+        WHERE order_uuid = NEW.uuid AND is_proceed_to_repair IS DISTINCT FROM NEW.is_proceed_to_repair;
+    END IF;
+
     -- Delete diagnosis if transitioning from true to false
     IF TG_OP = 'UPDATE' AND OLD.is_diagnosis_need = TRUE AND NEW.is_diagnosis_need = FALSE THEN
         DELETE FROM work.diagnosis WHERE order_uuid = NEW.uuid;
     END IF;
 
+    
     -- Insert new diagnosis if is_diagnosis_need is true and it has changed from false to true
     IF NEW.is_diagnosis_need = TRUE AND (TG_OP = 'INSERT' OR OLD.is_diagnosis_need = FALSE) THEN
-        INSERT INTO work.diagnosis (order_uuid, uuid, created_by, created_at, updated_at)
-        VALUES (NEW.uuid, generate_15_digit_uuid(), NEW.created_by, NEW.created_at, NEW.updated_at);
+        INSERT INTO work.diagnosis (order_uuid, uuid, is_proceed_to_repair, created_by, created_at, updated_at)
+        VALUES (NEW.uuid, generate_15_digit_uuid(), NEW.is_proceed_to_repair,  NEW.created_by, NEW.created_at, NEW.updated_at);
     END IF;
 
     RETURN NEW;
