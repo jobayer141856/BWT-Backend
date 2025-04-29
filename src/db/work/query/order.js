@@ -142,7 +142,8 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
-	const { qc, is_delivered, work_in_hand, customer_uuid } = req.query;
+	const { qc, is_delivered, work_in_hand, customer_uuid, is_repair } =
+		req.query;
 	// console.log('customer_uuid', customer_uuid);
 	const orderPromise = db
 		.select({
@@ -249,6 +250,15 @@ export async function selectAll(req, res, next) {
 							)
 					)
 				)
+			)
+		);
+	}
+	if (is_repair === 'true') {
+		filters.push(
+			and(
+				eq(order.is_proceed_to_repair, true),
+				eq(order.is_transferred_for_qc, false),
+				eq(order.is_ready_for_delivery, false)
 			)
 		);
 	}
