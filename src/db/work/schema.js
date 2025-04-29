@@ -92,7 +92,7 @@ export const diagnosis = work.table('diagnosis', {
 	engineer_uuid: defaultUUID('engineer_uuid').references(
 		() => hrSchema.users.uuid
 	),
-	problems_uuid: text('problems_uuid').array(),
+	problems_uuid: text('problems_uuid').array().default([]),
 	problem_statement: text('problem_statement'),
 	status: statusEnum('status').default('pending'),
 	status_update_date: DateTime('status_update_date').default(null),
