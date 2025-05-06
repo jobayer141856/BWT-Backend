@@ -200,6 +200,8 @@ export async function selectAll(req, res, next) {
 				updated_at: process.updated_at,
 				remarks: process.remarks,
 				index: process.index,
+				branch_uuid: storeSchema.warehouse.branch_uuid,
+				branch_name: storeSchema.branch.name,
 			})
 			.from(process)
 			.leftJoin(
@@ -226,6 +228,10 @@ export async function selectAll(req, res, next) {
 			.leftJoin(
 				engineer_user,
 				eq(process.engineer_uuid, engineer_user.uuid)
+			)
+			.leftJoin(
+				storeSchema.branch,
+				eq(storeSchema.warehouse.branch_uuid, storeSchema.branch.uuid)
 			)
 			.orderBy(asc(process.index));
 
@@ -354,6 +360,8 @@ export async function select(req, res, next) {
 			updated_at: process.updated_at,
 			remarks: process.remarks,
 			index: process.index,
+			branch_uuid: storeSchema.warehouse.branch_uuid,
+			branch_name: storeSchema.branch.name,
 		})
 		.from(process)
 		.leftJoin(hrSchema.users, eq(process.created_by, hrSchema.users.uuid))
@@ -372,6 +380,10 @@ export async function select(req, res, next) {
 		)
 		.leftJoin(storeSchema.box, eq(process.box_uuid, storeSchema.box.uuid))
 		.leftJoin(engineer_user, eq(process.engineer_uuid, engineer_user.uuid))
+		.leftJoin(
+			storeSchema.branch,
+			eq(storeSchema.warehouse.branch_uuid, storeSchema.branch.uuid)
+		)
 		.where(eq(process.uuid, req.params.uuid));
 
 	try {

@@ -369,6 +369,8 @@ export async function select(req, res, next) {
 			is_transferred_for_qc: order.is_transferred_for_qc,
 			is_ready_for_delivery: order.is_ready_for_delivery,
 			is_proceed_to_repair: order.is_proceed_to_repair,
+			branch_uuid: storeSchema.warehouse.branch_uuid,
+			branch_name: storeSchema.branch.name,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -392,6 +394,10 @@ export async function select(req, res, next) {
 		.leftJoin(storeSchema.box, eq(order.box_uuid, storeSchema.box.uuid))
 		.leftJoin(info, eq(order.info_uuid, info.uuid))
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
+		.leftJoin(
+			storeSchema.branch,
+			eq(storeSchema.warehouse.branch_uuid, storeSchema.branch.uuid)
+		)
 		.where(eq(order.uuid, req.params.uuid));
 
 	try {
@@ -521,6 +527,8 @@ export async function selectByInfo(req, res, next) {
 			is_ready_for_delivery: order.is_ready_for_delivery,
 			is_delivery_complete: sql`COALESCE(${deliverySchema.challan.is_delivery_complete}, false)`,
 			is_proceed_to_repair: order.is_proceed_to_repair,
+			branch_uuid: storeSchema.warehouse.branch_uuid,
+			branch_name: storeSchema.branch.name,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -554,6 +562,10 @@ export async function selectByInfo(req, res, next) {
 				deliverySchema.challan_entry.challan_uuid,
 				deliverySchema.challan.uuid
 			)
+		)
+		.leftJoin(
+			storeSchema.branch,
+			eq(storeSchema.warehouse.branch_uuid, storeSchema.branch.uuid)
 		)
 		.where(eq(order.info_uuid, info_uuid));
 
