@@ -265,7 +265,7 @@ export async function selectAll(req, res, next) {
 			const resultIdPromise = db
 				.select({
 					order_id: sql`CONCAT('WO-', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
-					info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'), '(', ${user.name}, ')')`,
+					info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'), ' (', ${user.name}, ')')`,
 					diagnosis_id: sql`CASE WHEN ${diagnosis.created_at} IS NULL OR ${diagnosis.id} IS NULL THEN NULL ELSE CONCAT('WD-', TO_CHAR(${diagnosis.created_at}, 'YY'), '-', TO_CHAR(${diagnosis.id}, 'FM0000')) END`,
 				})
 				.from(order)
