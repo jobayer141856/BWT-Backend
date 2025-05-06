@@ -1,5 +1,5 @@
 // import { ComparePass, CreateToken } from "@/middleware/auth.js";
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, and } from 'drizzle-orm';
 import {
 	ComparePass,
 	CreateToken,
@@ -111,14 +111,26 @@ export async function selectAll(req, res, next) {
 		.leftJoin(department, eq(users.department_uuid, department.uuid))
 		.orderBy(desc(users.created_at));
 
-	if (status == 'true') {
-		resultPromise.where(eq(users.status, 1));
-	}
-	if (status == 'false') {
-		resultPromise.where(eq(users.status, 0));
+	const filters = [];
+
+	// if (status === 'true' || status === 'false') {
+	// 	resultPromise.where(eq(users.status, status === 'true' ? 1 : 0));
+	// }
+
+	// if (user_type) {
+	// 	resultPromise.where(eq(users.user_type, user_type));
+	// }
+
+	if (status) {
+		if (status === 'true' || status === 'false') {
+			filters.push(eq(users.status, status === 'true' ? 1 : 0));
+		}
 	}
 	if (user_type) {
-		resultPromise.where(eq(users.user_type, user_type));
+		filters.push(eq(users.user_type, user_type));
+	}
+	if (filters.length > 0) {
+		resultPromise.where(and(...filters));
 	}
 
 	try {
