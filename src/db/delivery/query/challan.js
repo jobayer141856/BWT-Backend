@@ -5,11 +5,11 @@ import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
-
+import * as workSchema from '../../work/schema.js';
 const customerUser = alias(hrSchema.users, 'customerUser');
 const employeeUser = alias(hrSchema.users, 'employeeUser');
 
-import { challan, courier, vehicle } from '../schema.js';
+import { challan, courier, vehicle, challan_entry } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -142,6 +142,9 @@ export async function select(req, res, next) {
 			created_at: challan.created_at,
 			updated_at: challan.updated_at,
 			remarks: challan.remarks,
+			zone_uuid: workSchema.info.zone_uuid,
+			zone_name: workSchema.zone.name,
+			location: workSchema.info.location,
 		})
 		.from(challan)
 		.leftJoin(customerUser, eq(challan.customer_uuid, customerUser.uuid))
@@ -149,6 +152,19 @@ export async function select(req, res, next) {
 		.leftJoin(vehicle, eq(challan.vehicle_uuid, vehicle.uuid))
 		.leftJoin(courier, eq(challan.courier_uuid, courier.uuid))
 		.leftJoin(hrSchema.users, eq(challan.created_by, hrSchema.users.uuid))
+		.leftJoin(challan_entry, eq(challan.uuid, challan_entry.challan_uuid))
+		.leftJoin(
+			workSchema.order,
+			eq(challan_entry.order_uuid, workSchema.order.uuid)
+		)
+		.leftJoin(
+			workSchema.info,
+			eq(workSchema.order.info_uuid, workSchema.info.uuid)
+		)
+		.leftJoin(
+			workSchema.zone,
+			eq(workSchema.info.zone_uuid, workSchema.zone.uuid)
+		)
 		.where(eq(challan.uuid, req.params.uuid));
 
 	try {
