@@ -141,7 +141,7 @@ export async function selectAll(req, res, next) {
 	const infoPromise = db
 		.select({
 			id: info.id,
-			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'), '(', ${user.name}, ')')`,
+			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'), ' (', ${user.name}, ')')`,
 			uuid: info.uuid,
 			user_uuid: info.user_uuid,
 			user_id: sql`CONCAT('HU', TO_CHAR(${user.created_at}::timestamp, 'YY'), '-', TO_CHAR(${user.id}, 'FM0000'))`,
@@ -186,7 +186,7 @@ export async function select(req, res, next) {
 	const infoPromise = db
 		.select({
 			id: info.id,
-			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'), '(', ${user.name}, ')')`,
+			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'), ' (', ${user.name}, ')')`,
 			uuid: info.uuid,
 			user_uuid: info.user_uuid,
 			user_id: sql`CONCAT('HU', TO_CHAR(${user.created_at}::timestamp, 'YY'), '-', TO_CHAR(${user.id}, 'FM0000'))`,
