@@ -113,7 +113,8 @@ export async function selectAll(req, res, next) {
 
 	if (status == 'true') {
 		resultPromise.where(eq(users.status, 1));
-	} else if (status == 'false') {
+	}
+	if (status == 'false') {
 		resultPromise.where(eq(users.status, 0));
 	}
 	if (user_type) {
