@@ -79,7 +79,7 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: diagnosis.uuid,
 			id: diagnosis.id,
-			diagnosis_id: sql`CONCAT('WD', TO_CHAR(${diagnosis.created_at}, 'YY'), TO_CHAR(${diagnosis.id}, 'FM0000'))`,
+			diagnosis_id: sql`CONCAT('WD', TO_CHAR(${diagnosis.created_at}, 'YY'), '-', TO_CHAR(${diagnosis.id}, 'FM0000'))`,
 			order_uuid: diagnosis.order_uuid,
 			order_id: sql`CONCAT('WO', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
 			engineer_uuid: diagnosis.engineer_uuid,
