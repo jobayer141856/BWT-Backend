@@ -19,6 +19,8 @@ import {
 
 const fromWarehouse = alias(warehouse, 'from_warehouse');
 const toWarehouse = alias(warehouse, 'to_warehouse');
+const fromBranch = alias(branch, 'from_branch');
+const toBranch = alias(branch, 'to_branch');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -132,6 +134,10 @@ export async function selectAll(req, res, next) {
 					toWarehouse.assigned
 				} = 'warehouse_2' THEN ${product.warehouse_2} ELSE ${product.warehouse_3} END`
 			),
+			from_branch_uuid: fromWarehouse.branch_uuid,
+			from_branch_name: fromBranch.name,
+			to_branch_uuid: toWarehouse.branch_uuid,
+			to_branch_name: toBranch.name,
 		})
 		.from(internal_transfer)
 		.leftJoin(floor, eq(internal_transfer.floor_uuid, floor.uuid))
@@ -150,6 +156,8 @@ export async function selectAll(req, res, next) {
 			eq(internal_transfer.to_warehouse_uuid, toWarehouse.uuid)
 		)
 		.leftJoin(product, eq(internal_transfer.product_uuid, product.uuid))
+		.leftJoin(fromBranch, eq(fromWarehouse.branch_uuid, fromBranch.uuid))
+		.leftJoin(toBranch, eq(toWarehouse.branch_uuid, toBranch.uuid))
 		.orderBy(internal_transfer.created_at, desc);
 
 	try {
@@ -212,6 +220,10 @@ export async function select(req, res, next) {
 					toWarehouse.assigned
 				} = 'warehouse_2' THEN ${product.warehouse_2} ELSE ${product.warehouse_3} END`
 			),
+			from_branch_uuid: fromWarehouse.branch_uuid,
+			from_branch_name: fromBranch.name,
+			to_branch_uuid: toWarehouse.branch_uuid,
+			to_branch_name: toBranch.name,
 		})
 		.from(internal_transfer)
 		.leftJoin(floor, eq(internal_transfer.floor_uuid, floor.uuid))
@@ -230,6 +242,8 @@ export async function select(req, res, next) {
 			eq(internal_transfer.to_warehouse_uuid, toWarehouse.uuid)
 		)
 		.leftJoin(product, eq(internal_transfer.product_uuid, product.uuid))
+		.leftJoin(fromBranch, eq(fromWarehouse.branch_uuid, fromBranch.uuid))
+		.leftJoin(toBranch, eq(toWarehouse.branch_uuid, toBranch.uuid))
 		.where(eq(internal_transfer.uuid, req.params.uuid));
 
 	try {
