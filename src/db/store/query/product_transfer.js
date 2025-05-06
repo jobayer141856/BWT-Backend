@@ -6,6 +6,8 @@ import { decimalToNumber } from '../../variables.js';
 import * as workSchema from '../../work/schema.js';
 import { product_transfer, product, warehouse } from '../schema.js';
 
+import { alias } from 'drizzle-orm/pg-core';
+const user = alias(hrSchema.users, 'user');
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
@@ -92,7 +94,7 @@ export async function selectAll(req, res, next) {
 			updated_at: product_transfer.updated_at,
 			remarks: product_transfer.remarks,
 			info_uuid: workSchema.order.info_uuid,
-			info_id: sql`CONCAT('WI', TO_CHAR(${workSchema.info.created_at}, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'))`,
+			info_id: sql`CONCAT ('WI', TO_CHAR(${workSchema.info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'), '(', ${user.name}, ')')`,
 			max_quantity:
 				decimalToNumber(sql`CASE WHEN ${warehouse.assigned} = 'warehouse_1' THEN ${product.warehouse_1} + ${product_transfer.quantity} 
 						WHEN ${warehouse.assigned} = 'warehouse_2' THEN ${product.warehouse_2} + ${product_transfer.quantity} 
@@ -125,7 +127,8 @@ export async function selectAll(req, res, next) {
 		.leftJoin(
 			workSchema.info,
 			eq(workSchema.order.info_uuid, workSchema.info.uuid)
-		);
+		)
+		.leftJoin(user, eq(workSchema.info.user_uuid, user.uuid));
 	try {
 		const data = await productTransferPromise;
 		const toast = {
@@ -159,7 +162,7 @@ export async function select(req, res, next) {
 			updated_at: product_transfer.updated_at,
 			remarks: product_transfer.remarks,
 			info_uuid: workSchema.order.info_uuid,
-			info_id: sql`CONCAT('WI', TO_CHAR(${workSchema.info.created_at}, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'))`,
+			info_id: sql`CONCAT ('WI', TO_CHAR(${workSchema.info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'), '(', ${user.name}, ')')`,
 			max_quantity:
 				decimalToNumber(sql`CASE WHEN ${warehouse.assigned} = 'warehouse_1' THEN ${product.warehouse_1} + ${product_transfer.quantity} 
 						WHEN ${warehouse.assigned} = 'warehouse_2' THEN ${product.warehouse_2} + ${product_transfer.quantity} 
@@ -193,6 +196,7 @@ export async function select(req, res, next) {
 			workSchema.info,
 			eq(workSchema.order.info_uuid, workSchema.info.uuid)
 		)
+		.leftJoin(user, eq(workSchema.info.user_uuid, user.uuid))
 		.where(eq(product_transfer.uuid, req.params.uuid));
 
 	try {

@@ -15,6 +15,7 @@ import {
 import * as storeSchema from '../../store/schema.js';
 
 const engineer_user = alias(hrSchema.users, 'engineer_user');
+const user = alias(hrSchema.users, 'user');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -264,12 +265,13 @@ export async function selectAll(req, res, next) {
 			const resultIdPromise = db
 				.select({
 					order_id: sql`CONCAT('WO-', TO_CHAR(${order.created_at}, 'YY'), '-', TO_CHAR(${order.id}, 'FM0000'))`,
-					info_id: sql`CONCAT('WI-', TO_CHAR(${info.created_at}, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
+					info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'), '(', ${user.name}, ')')`,
 					diagnosis_id: sql`CASE WHEN ${diagnosis.created_at} IS NULL OR ${diagnosis.id} IS NULL THEN NULL ELSE CONCAT('WD-', TO_CHAR(${diagnosis.created_at}, 'YY'), '-', TO_CHAR(${diagnosis.id}, 'FM0000')) END`,
 				})
 				.from(order)
 				.leftJoin(diagnosis, eq(order.uuid, diagnosis.order_uuid))
 				.leftJoin(info, eq(order.info_uuid, info.uuid))
+				.leftJoin(user, eq(info.user_uuid, user.uuid))
 				.where(eq(order.uuid, order_uuid));
 
 			resultIdData = await resultIdPromise;
