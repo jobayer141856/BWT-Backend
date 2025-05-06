@@ -82,7 +82,7 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
-	const { status } = req.query;
+	const { status, user_type } = req.query;
 
 	const resultPromise = db
 		.select({
@@ -115,6 +115,9 @@ export async function selectAll(req, res, next) {
 		resultPromise.where(eq(users.status, 1));
 	} else if (status == 'false') {
 		resultPromise.where(eq(users.status, 0));
+	}
+	if (user_type) {
+		resultPromise.where(eq(users.user_type, user_type));
 	}
 
 	try {

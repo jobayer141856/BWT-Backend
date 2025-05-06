@@ -31,6 +31,11 @@ export const pathHrUser = {
 			description: 'All users',
 			parameters: [
 				SE.parameter_query('status', 'status', ['true', 'false']),
+				SE.parameter_query('user_type', 'user_type', [
+					'employee',
+					'customer',
+					'vendor',
+				]),
 			],
 			operationId: 'getAllUsers',
 			responses: {
