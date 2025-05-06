@@ -314,10 +314,14 @@ export async function selectWarehouse(req, res, next) {
 	const warehousePromise = db
 		.select({
 			value: storeSchema.warehouse.uuid,
-			label: storeSchema.warehouse.name,
+			label: sql`CONCAT( ${storeSchema.warehouse.name}, '(', ${storeSchema.branch.name}, ')' )`,
 			assigned: storeSchema.warehouse.assigned,
 		})
-		.from(storeSchema.warehouse);
+		.from(storeSchema.warehouse)
+		.leftJoin(
+			storeSchema.branch,
+			eq(storeSchema.warehouse.branch_uuid, storeSchema.branch.uuid)
+		);
 
 	if (branch_uuid) {
 		warehousePromise.where(
