@@ -285,6 +285,7 @@ export const pathWorkOrder = {
 					'true',
 					'false',
 				]),
+				SE.parameter_query('is_repair', 'is_repair', ['true', 'false']),
 			],
 			responses: {
 				200: SE.response_schema(200, {
