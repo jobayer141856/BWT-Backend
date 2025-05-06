@@ -13,6 +13,7 @@ import {
 	rack,
 	purchase,
 	product,
+	branch,
 } from '../schema.js';
 
 export async function insert(req, res, next) {
@@ -109,6 +110,8 @@ export async function selectAll(req, res, next) {
 			created_at: purchase_entry.created_at,
 			updated_at: purchase_entry.updated_at,
 			remarks: purchase_entry.remarks,
+			branch_uuid: warehouse.branch_uuid,
+			branch_name: branch.name,
 		})
 		.from(purchase_entry)
 		.leftJoin(
@@ -121,7 +124,7 @@ export async function selectAll(req, res, next) {
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))
 		.leftJoin(product, eq(purchase_entry.product_uuid, product.uuid))
 		.leftJoin(purchase, eq(purchase_entry.purchase_uuid, purchase.uuid))
-		.where(eq(purchase_entry.uuid, req.params.uuid))
+		.leftJoin(branch, eq(warehouse.branch_uuid, branch.uuid))
 		.orderBy(desc(purchase_entry.created_at));
 
 	try {
@@ -164,6 +167,8 @@ export async function select(req, res, next) {
 			created_at: purchase_entry.created_at,
 			updated_at: purchase_entry.updated_at,
 			remarks: purchase_entry.remarks,
+			branch_uuid: warehouse.branch_uuid,
+			branch_name: branch.name,
 		})
 		.from(purchase_entry)
 		.leftJoin(
@@ -176,6 +181,7 @@ export async function select(req, res, next) {
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))
 		.leftJoin(product, eq(purchase_entry.product_uuid, product.uuid))
 		.leftJoin(purchase, eq(purchase_entry.purchase_uuid, purchase.uuid))
+		.leftJoin(branch, eq(warehouse.branch_uuid, branch.uuid))
 		.where(eq(purchase_entry.uuid, req.params.uuid));
 
 	try {
@@ -218,6 +224,8 @@ export async function selectByPurchaseUuid(req, res, next) {
 			created_at: purchase_entry.created_at,
 			updated_at: purchase_entry.updated_at,
 			remarks: purchase_entry.remarks,
+			branch_uuid: warehouse.branch_uuid,
+			branch_name: branch.name,
 		})
 		.from(purchase_entry)
 		.leftJoin(
@@ -230,6 +238,7 @@ export async function selectByPurchaseUuid(req, res, next) {
 		.leftJoin(box, eq(purchase_entry.box_uuid, box.uuid))
 		.leftJoin(product, eq(purchase_entry.product_uuid, product.uuid))
 		.leftJoin(purchase, eq(purchase_entry.purchase_uuid, purchase.uuid))
+		.leftJoin(branch, eq(warehouse.branch_uuid, branch.uuid))
 		.where(eq(purchase_entry.purchase_uuid, req.params.purchase_uuid));
 
 	try {
