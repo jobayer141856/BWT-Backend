@@ -27,7 +27,9 @@ export async function insert(req, res, next) {
 	} = req.body;
 
 	try {
+		
 		let userUuid = user_uuid;
+
 		if (is_new_customer) {
 			const formattedName = name.toLowerCase().replace(/\s+/g, '');
 			await db.insert(users).values({
@@ -47,14 +49,18 @@ export async function insert(req, res, next) {
 		}
 		if (submitted_by === 'customer') {
 			const formattedName2 = name.toLowerCase().replace(/\s+/g, '');
+
 			const existingUser = await db
 				.select()
 				.from(users)
 				.where(eq(users.phone, phone))
 				.limit(1);
 
+			userUuid = existingUser[0]?.uuid || userUuid;
+
 			if (existingUser.length === 0) {
 				userUuid = nanoid();
+				console.log('userUuid', userUuid);
 				await db.insert(users).values({
 					uuid: userUuid,
 					name: name,
