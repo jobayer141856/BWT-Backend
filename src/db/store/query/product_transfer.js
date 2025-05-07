@@ -94,7 +94,9 @@ export async function selectAll(req, res, next) {
 			updated_at: product_transfer.updated_at,
 			remarks: product_transfer.remarks,
 			info_uuid: workSchema.order.info_uuid,
-			info_id: sql`CONCAT ('WI', TO_CHAR(${workSchema.info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'), ' (', ${user.name}, ')')`,
+			info_id: sql`CONCAT ('WI', TO_CHAR(${workSchema.info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'))`,
+			user_uuid: workSchema.info.user_uuid,
+			user_name: user.name,
 			max_quantity:
 				decimalToNumber(sql`CASE WHEN ${warehouse.assigned} = 'warehouse_1' THEN ${product.warehouse_1} + ${product_transfer.quantity} 
 						WHEN ${warehouse.assigned} = 'warehouse_2' THEN ${product.warehouse_2} + ${product_transfer.quantity} 
@@ -162,7 +164,9 @@ export async function select(req, res, next) {
 			updated_at: product_transfer.updated_at,
 			remarks: product_transfer.remarks,
 			info_uuid: workSchema.order.info_uuid,
-			info_id: sql`CONCAT ('WI', TO_CHAR(${workSchema.info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'), ' (', ${user.name}, ')')`,
+			user_uuid: workSchema.info.user_uuid,
+			user_name: user.name,
+			info_id: sql`CONCAT ('WI', TO_CHAR(${workSchema.info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'))`,
 			max_quantity:
 				decimalToNumber(sql`CASE WHEN ${warehouse.assigned} = 'warehouse_1' THEN ${product.warehouse_1} + ${product_transfer.quantity} 
 						WHEN ${warehouse.assigned} = 'warehouse_2' THEN ${product.warehouse_2} + ${product_transfer.quantity} 

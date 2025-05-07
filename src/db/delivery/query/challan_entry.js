@@ -190,7 +190,7 @@ export async function selectChallanEntryByChallan(req, res, next) {
 			remarks: challan_entry.remarks,
 			is_diagnosis_need: workSchema.order.is_diagnosis_need,
 			quantity: workSchema.order.quantity,
-			info_id: sql`CONCAT ('WI', TO_CHAR(${workSchema.info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'), ' (', ${user.name}, ')')`,
+			info_id: sql`CONCAT ('WI', TO_CHAR(${workSchema.info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'))`,
 			is_transferred_for_qc: workSchema.order.is_transferred_for_qc,
 			is_ready_for_delivery: workSchema.order.is_ready_for_delivery,
 		})
