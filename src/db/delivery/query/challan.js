@@ -6,8 +6,10 @@ import { decimalToNumber } from '../../variables.js';
 import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
 import * as workSchema from '../../work/schema.js';
+
 const customerUser = alias(hrSchema.users, 'customerUser');
 const employeeUser = alias(hrSchema.users, 'employeeUser');
+const orderUser = alias(hrSchema.users, 'orderUser');
 
 import { challan, courier, vehicle, challan_entry } from '../schema.js';
 
@@ -145,6 +147,8 @@ export async function select(req, res, next) {
 			zone_uuid: workSchema.info.zone_uuid,
 			zone_name: workSchema.zone.name,
 			location: workSchema.info.location,
+			order_created_by: workSchema.order.created_by,
+			order_created_by_name: orderUser.name,
 		})
 		.from(challan)
 		.leftJoin(customerUser, eq(challan.customer_uuid, customerUser.uuid))
@@ -157,6 +161,7 @@ export async function select(req, res, next) {
 			workSchema.order,
 			eq(challan_entry.order_uuid, workSchema.order.uuid)
 		)
+		.leftJoin(orderUser, eq(workSchema.order.created_by, orderUser.uuid))
 		.leftJoin(
 			workSchema.info,
 			eq(workSchema.order.info_uuid, workSchema.info.uuid)
