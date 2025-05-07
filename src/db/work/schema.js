@@ -32,6 +32,8 @@ export const problem = work.table('problem', {
 	remarks: text('remarks').default(null),
 });
 
+export const submittedByEnum = pgEnum('submitted_by', ['customer', 'employee']);
+
 export const info = work.table('info', {
 	id: serial('id').notNull().unique(),
 	uuid: uuid_primary,
@@ -44,6 +46,7 @@ export const info = work.table('info', {
 	remarks: text('remarks').default(null),
 	zone_uuid: defaultUUID('zone_uuid').references(() => zone.uuid),
 	location: text('location').default(null),
+	submitted_by: submittedByEnum('submitted_by').default('customer'),
 });
 
 export const order = work.table('order', {
