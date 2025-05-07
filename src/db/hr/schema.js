@@ -60,7 +60,7 @@ export const users = hr.table('users', {
 	),
 	can_access: text('can_access').default('{"profile":["read"]}'),
 	ext: text('ext').default(null),
-	phone: text('phone').default(null),
+	phone: text('phone').notNull().unique(),
 	created_at: text('created_at').notNull(),
 	updated_at: text('updated_at').default(null),
 	status: text('status').default(0),
