@@ -109,7 +109,9 @@ export async function selectAll(req, res, next) {
 			customer_problem_statement: diagnosis.customer_problem_statement,
 			customer_remarks: diagnosis.customer_remarks,
 			info_uuid: order.info_uuid,
-			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'), ' (', ${user.name}, ')')`,
+			user_uuid: info.user_uuid,
+			user_name: user.name,
+			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 			branch_uuid: warehouse.branch_uuid,
 			branch_name: branch.name,
 		})
@@ -203,7 +205,9 @@ export async function select(req, res, next) {
 			customer_problem_statement: diagnosis.customer_problem_statement,
 			customer_remarks: diagnosis.customer_remarks,
 			info_uuid: order.info_uuid,
-			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'), ' (', ${user.name}, ')')`,
+			user_uuid: info.user_uuid,
+			user_name: user.name,
+			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 			branch_uuid: warehouse.branch_uuid,
 			branch_name: branch.name,
 		})
@@ -297,7 +301,9 @@ export async function selectByOrder(req, res, next) {
 			customer_problem_statement: diagnosis.customer_problem_statement,
 			customer_remarks: diagnosis.customer_remarks,
 			info_uuid: order.info_uuid,
-			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'), ' (', ${user.name}, ')')`,
+			user_uuid: info.user_uuid,
+			user_name: user.name,
+			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 			branch_uuid: warehouse.branch_uuid,
 			branch_name: branch.name,
 		})
