@@ -42,6 +42,9 @@ export const CreateToken = (user, time = '24h') => {
 const publicUrls = [
 	{ url: '/hr/user/login', method: 'POST' },
 	{ url: '/public', method: 'GET' },
+	{ url: '/other/model/value/label', method: 'GET' },
+	{ url: '/other/brand/value/label', method: 'GET' },
+	{ url: '/work/info', method: 'POST' },
 ];
 
 export const VerifyToken = (req, res, next) => {
