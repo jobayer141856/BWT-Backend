@@ -157,6 +157,7 @@ export async function selectAll(req, res, next) {
 			location: info.location,
 			zone_uuid: info.zone_uuid,
 			zone_name: zone.name,
+			submitted_by: info.submitted_by,
 		})
 		.from(info)
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
@@ -202,6 +203,7 @@ export async function select(req, res, next) {
 			location: info.location,
 			zone_uuid: info.zone_uuid,
 			zone_name: zone.name,
+			submitted_by: info.submitted_by,
 		})
 		.from(info)
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
