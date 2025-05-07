@@ -31,7 +31,7 @@ export async function insert(req, res, next) {
 		if (is_new_customer) {
 			const formattedName = name.toLowerCase().replace(/\s+/g, '');
 			await db.insert(users).values({
-				uuid: user_uuid,
+				uuid: userUuid,
 				name: name,
 				phone: phone,
 				user_type: 'customer',
@@ -46,7 +46,7 @@ export async function insert(req, res, next) {
 			});
 		}
 		if (submitted_by === 'customer') {
-			const formattedName = name.toLowerCase().replace(/\s+/g, '');
+			const formattedName2 = name.toLowerCase().replace(/\s+/g, '');
 			const existingUser = await db
 				.select()
 				.from(users)
@@ -56,12 +56,12 @@ export async function insert(req, res, next) {
 			if (existingUser.length === 0) {
 				userUuid = nanoid();
 				await db.insert(users).values({
-					uuid: nanoid(),
+					uuid: userUuid,
 					name: name,
 					phone: phone,
 					user_type: 'customer',
 					pass: phone,
-					email: `${formattedName + phone}@bwt.com`,
+					email: `${formattedName2 + phone}@bwt.com`,
 					ext: '+880',
 					created_at: created_at,
 				});
