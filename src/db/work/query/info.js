@@ -7,6 +7,7 @@ import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
 import { users } from '../../hr/schema.js';
 import { info, zone } from '../schema.js';
+import { nanoid } from '../../../lib/nanoid.js';
 const user = alias(hrSchema.users, 'user');
 import * as deliverySchema from '../../delivery/schema.js';
 
@@ -22,6 +23,7 @@ export async function insert(req, res, next) {
 		designation_uuid,
 		business_type,
 		where_they_find_us,
+		submitted_by,
 	} = req.body;
 
 	try {
@@ -41,6 +43,27 @@ export async function insert(req, res, next) {
 				business_type: business_type,
 				where_they_find_us: where_they_find_us,
 			});
+		}
+		if (submitted_by === 'customer') {
+			const formattedName = name.toLowerCase().replace(/\s+/g, '');
+			const existingUser = await db
+				.select()
+				.from(users)
+				.where(eq(users.phone, phone))
+				.limit(1);
+
+			if (existingUser.length === 0) {
+				await db.insert(users).values({
+					uuid: nanoid(),
+					name: name,
+					phone: phone,
+					user_type: 'customer',
+					pass: phone,
+					email: `${formattedName + phone}@bwt.com`,
+					ext: '+880',
+					created_at: created_at,
+				});
+			}
 		}
 		const infoPromise = db
 			.insert(info)
