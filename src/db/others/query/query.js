@@ -21,9 +21,9 @@ export async function selectUser(req, res, next) {
 					? sql`CONCAT(${hrSchema.users.name}, '-', ${hrSchema.users.phone})`
 					: hrSchema.users.name,
 			...(type === 'customer' && {
-				zone_uuid: workSchema.info.zone_uuid,
-				zone_name: workSchema.zone.name,
-				location: workSchema.info.location,
+				zone_uuid: sql`MAX(${workSchema.info.zone_uuid})`,
+				zone_name: sql`MAX(${workSchema.zone.name})`,
+				location: sql`MAX(${workSchema.info.location})`,
 			}),
 		})
 		.from(hrSchema.users)
@@ -42,7 +42,13 @@ export async function selectUser(req, res, next) {
 		.leftJoin(
 			workSchema.zone,
 			eq(workSchema.info.zone_uuid, workSchema.zone.uuid)
+		)
+		.groupBy(
+			hrSchema.users.uuid,
+			hrSchema.users.name,
+			hrSchema.users.phone
 		);
+
 	const filters = [];
 	if (type) {
 		filters.push(
