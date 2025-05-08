@@ -15,6 +15,7 @@ export async function selectUser(req, res, next) {
 		department,
 		is_ready_for_delivery,
 		is_delivery_complete,
+		challan_uuid,
 	} = req.query;
 
 	//console.log(type, designation, department);
@@ -101,6 +102,9 @@ export async function selectUser(req, res, next) {
 				)
 			)
 		);
+	}
+	if (challan_uuid) {
+		filters.push(eq(deliverySchema.challan.uuid, challan_uuid));
 	}
 
 	if (filters.length > 0) {
