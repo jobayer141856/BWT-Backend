@@ -35,6 +35,10 @@ const pathUser = {
 					'is_delivery_complete',
 					['true', 'false']
 				),
+				SE.parameter_query('challan_uuid', 'challan_uuid', [
+					'lsnYBibQt3QZhZM',
+					'lsnYBibQt3QZhZM',
+				]),
 			],
 			responses: {
 				200: {
