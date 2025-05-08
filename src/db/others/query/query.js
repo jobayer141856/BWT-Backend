@@ -21,6 +21,7 @@ export async function selectUser(req, res, next) {
 					? sql`CONCAT(${hrSchema.users.name}, '-', ${hrSchema.users.phone})`
 					: hrSchema.users.name,
 			...(type === 'customer' && {
+				zone_uuid: workSchema.info.zone_uuid,
 				zone_name: workSchema.zone.name,
 				location: workSchema.info.location,
 			}),
