@@ -9,9 +9,15 @@ import * as deliverySchema from '../../delivery/schema.js';
 //* HR others routes *//
 
 export async function selectUser(req, res, next) {
-	const { type, designation, department } = req.query;
+	const {
+		type,
+		designation,
+		department,
+		is_ready_for_delivery,
+		is_delivery_complete,
+	} = req.query;
 
-	console.log(type, designation, department);
+	//console.log(type, designation, department);
 
 	const userPromise = db
 		.select({
@@ -40,8 +46,16 @@ export async function selectUser(req, res, next) {
 			eq(hrSchema.users.uuid, workSchema.info.user_uuid)
 		)
 		.leftJoin(
+			workSchema.order,
+			eq(workSchema.info.uuid, workSchema.order.info_uuid)
+		)
+		.leftJoin(
 			workSchema.zone,
 			eq(workSchema.info.zone_uuid, workSchema.zone.uuid)
+		)
+		.leftJoin(
+			deliverySchema.challan,
+			eq(hrSchema.users.uuid, deliverySchema.challan.customer_uuid)
 		)
 		.groupBy(
 			hrSchema.users.uuid,
@@ -71,6 +85,20 @@ export async function selectUser(req, res, next) {
 			eq(
 				sql`LOWER(${hrSchema.designation.designation})`,
 				designation.toLowerCase()
+			)
+		);
+	}
+	if (is_ready_for_delivery && is_delivery_complete) {
+		filters.push(
+			and(
+				eq(
+					workSchema.order.is_ready_for_delivery,
+					is_ready_for_delivery
+				),
+				eq(
+					deliverySchema.challan.is_delivery_complete,
+					is_delivery_complete
+				)
 			)
 		);
 	}

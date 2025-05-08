@@ -25,6 +25,16 @@ const pathUser = {
 					'true',
 					'false',
 				]),
+				SE.parameter_query(
+					'is_ready_for_delivery',
+					'is_ready_for_delivery',
+					['true', 'false']
+				),
+				SE.parameter_query(
+					'is_delivery_complete',
+					'is_delivery_complete',
+					['true', 'false']
+				),
 			],
 			responses: {
 				200: {
