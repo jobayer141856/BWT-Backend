@@ -3,7 +3,7 @@ import db from '../../index.js';
 import { handleError, validateRequest } from '../../../util/index.js';
 import * as hrSchema from '../../hr/schema.js';
 import * as storeSchema from '../../store/schema.js';
-import work, * as workSchema from '../../work/schema.js';
+import * as workSchema from '../../work/schema.js';
 import * as deliverySchema from '../../delivery/schema.js';
 
 //* HR others routes *//
