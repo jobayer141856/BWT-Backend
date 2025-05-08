@@ -3,7 +3,7 @@ import db from '../../index.js';
 import { handleError, validateRequest } from '../../../util/index.js';
 import * as hrSchema from '../../hr/schema.js';
 import * as storeSchema from '../../store/schema.js';
-import * as workSchema from '../../work/schema.js';
+import work, * as workSchema from '../../work/schema.js';
 import * as deliverySchema from '../../delivery/schema.js';
 
 //* HR others routes *//
@@ -16,7 +16,14 @@ export async function selectUser(req, res, next) {
 	const userPromise = db
 		.select({
 			value: hrSchema.users.uuid,
-			label: hrSchema.users.name,
+			label:
+				type === 'customer'
+					? sql`CONCAT(${hrSchema.users.name}, '-', ${hrSchema.users.phone})`
+					: hrSchema.users.name,
+			...(type === 'customer' && {
+				zone_name: workSchema.zone.name,
+				location: workSchema.info.location,
+			}),
 		})
 		.from(hrSchema.users)
 		.leftJoin(
@@ -26,6 +33,14 @@ export async function selectUser(req, res, next) {
 		.leftJoin(
 			hrSchema.department,
 			eq(hrSchema.users.department_uuid, hrSchema.department.uuid)
+		)
+		.leftJoin(
+			workSchema.info,
+			eq(hrSchema.users.uuid, workSchema.info.user_uuid)
+		)
+		.leftJoin(
+			workSchema.zone,
+			eq(workSchema.info.zone_uuid, workSchema.zone.uuid)
 		);
 	const filters = [];
 	if (type) {
