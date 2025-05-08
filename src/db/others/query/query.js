@@ -338,6 +338,8 @@ export async function selectWarehouse(req, res, next) {
 			value: storeSchema.warehouse.uuid,
 			label: sql`CONCAT( ${storeSchema.warehouse.name}, '(', ${storeSchema.branch.name}, ')' )`,
 			assigned: storeSchema.warehouse.assigned,
+			warehouse_name: storeSchema.warehouse.name,
+			branch_name: storeSchema.branch.name,
 		})
 		.from(storeSchema.warehouse)
 		.leftJoin(
