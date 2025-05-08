@@ -125,6 +125,7 @@ export async function selectAll(req, res, next) {
 		.leftJoin(info, eq(order.info_uuid, info.uuid))
 		.leftJoin(branch, eq(warehouse.branch_uuid, branch.uuid))
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
+		.where(eq(diagnosis.is_proceed_to_repair, false))
 		.orderBy(desc(diagnosis.created_at));
 
 	try {

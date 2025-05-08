@@ -54,6 +54,10 @@ export const challanTypeEnum = pgEnum('challan_type', [
 	'vehicle_delivery',
 ]);
 
+export const challanPaymentMethodEnum = pgEnum('challan_payment_method', [
+	'cash',
+]);
+
 export const challan = delivery.table('challan', {
 	id: serial('id').notNull().unique(),
 	uuid: uuid_primary,
@@ -71,6 +75,9 @@ export const challan = delivery.table('challan', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	payment_method: challanPaymentMethodEnum('challan_payment_method').default(
+		'cash'
+	),
 });
 
 export const challan_entry = delivery.table('challan_entry', {

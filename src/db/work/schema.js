@@ -46,7 +46,7 @@ export const info = work.table('info', {
 	remarks: text('remarks').default(null),
 	zone_uuid: defaultUUID('zone_uuid').references(() => zone.uuid),
 	location: text('location').default(null),
-	submitted_by: submittedByEnum('submitted_by').default('customer'),
+	submitted_by: submittedByEnum('submitted_by').default('employee'),
 });
 
 export const order = work.table('order', {

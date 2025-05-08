@@ -101,6 +101,7 @@ export async function selectAll(req, res, next) {
 			created_at: challan.created_at,
 			updated_at: challan.updated_at,
 			remarks: challan.remarks,
+			payment_method: challan.payment_method,
 		})
 		.from(challan)
 		.leftJoin(customerUser, eq(challan.customer_uuid, customerUser.uuid))
@@ -151,6 +152,7 @@ export async function select(req, res, next) {
 			location: workSchema.info.location,
 			order_created_by: workSchema.order.created_by,
 			order_created_by_name: orderUser.name,
+			payment_method: challan.payment_method,
 		})
 		.from(challan)
 		.leftJoin(customerUser, eq(challan.customer_uuid, customerUser.uuid))
