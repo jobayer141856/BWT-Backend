@@ -639,13 +639,17 @@ export async function selectOrder(req, res, next) {
             TO_CHAR(${workSchema.info.created_at}, 'YY'),
             ' - ',
             TO_CHAR(${workSchema.info.id}, 'FM0000'),
-            ')'
+            ')' , ' - ' ,${hrSchema.users.name} ,' - ' ,${hrSchema.users.phone}
         )`,
 		})
 		.from(workSchema.order)
 		.leftJoin(
 			workSchema.info,
 			eq(workSchema.order.info_uuid, workSchema.info.uuid)
+		)
+		.leftJoin(
+			hrSchema.users,
+			eq(workSchema.info.user_uuid, hrSchema.users.uuid)
 		);
 
 	try {
