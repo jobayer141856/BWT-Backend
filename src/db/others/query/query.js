@@ -1,4 +1,4 @@
-import { sql, eq, and, is } from 'drizzle-orm';
+import { sql, eq, and, is, or } from 'drizzle-orm';
 import db from '../../index.js';
 import { handleError, validateRequest } from '../../../util/index.js';
 import * as hrSchema from '../../hr/schema.js';
@@ -91,7 +91,7 @@ export async function selectUser(req, res, next) {
 	}
 	if (is_ready_for_delivery && is_delivery_complete) {
 		filters.push(
-			and(
+			or(
 				eq(
 					workSchema.order.is_ready_for_delivery,
 					is_ready_for_delivery
