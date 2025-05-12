@@ -404,6 +404,16 @@ const pathWarehouse = {
 			tags: ['others'],
 			summary: 'Get all warehouse',
 			description: 'Get all warehouse',
+			parameters: [
+				SE.parameter_query('branch_uuid', 'branch_uuid', [
+					'lsnYBibQt3QZhZM',
+					'lsnYBibQt3QZhZM',
+				]),
+				SE.parameter_query('product_uuid', 'product_uuid', [
+					'lsnYBibQt3QZhZM',
+					'lsnYBibQt3QZhZM',
+				]),
+			],
 			responses: {
 				200: {
 					description: 'Success',
