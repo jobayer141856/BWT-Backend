@@ -454,16 +454,20 @@ export async function selectDiagnosisDetailsByOrder(req, res, next) {
 					throw error;
 				});
 
-		const [order, diagnosis, process] = await Promise.all([
-			fetchData(`/work/order/${order_uuid}`),
-			fetchData(`/work/diagnosis-by-order/${order_uuid}`),
-			fetchData(`/work/process?order_uuid=${order_uuid}`),
-		]);
+		const [order, diagnosis, process, product_transfer] = await Promise.all(
+			[
+				fetchData(`/work/order/${order_uuid}`),
+				fetchData(`/work/diagnosis-by-order/${order_uuid}`),
+				fetchData(`/work/process?order_uuid=${order_uuid}`),
+				fetchData(`/store/product-transfer/by/${order_uuid}`),
+			]
+		);
 
 		const response = {
 			...order?.data,
 			diagnosis: diagnosis?.data || [],
 			process: process?.data || [],
+			product_transfer: product_transfer?.data || [],
 		};
 
 		const toast = {

@@ -216,3 +216,51 @@ export async function select(req, res, next) {
 		next(error);
 	}
 }
+
+export async function selectByOrderUuid(req, res, next) {
+	const productTransferPromise = db
+		.select({
+			id: product_transfer.id,
+			uuid: product_transfer.uuid,
+			product_uuid: product_transfer.product_uuid,
+			warehouse_uuid: product_transfer.warehouse_uuid,
+			order_uuid: product_transfer.order_uuid,
+			created_by: product_transfer.created_by,
+			created_by_name: hrSchema.users.name,
+			created_at: product_transfer.created_at,
+			updated_at: product_transfer.updated_at,
+			remarks: product_transfer.remarks,
+			quantity: sql`SUM(${product_transfer.quantity})`,
+		})
+		.from(product_transfer)
+		.leftJoin(
+			hrSchema.users,
+			eq(product_transfer.created_by, hrSchema.users.uuid)
+		)
+		.where(eq(product_transfer.order_uuid, req.params.uuid))
+		.groupBy(
+			product_transfer.id,
+			product_transfer.uuid,
+			product_transfer.product_uuid,
+			product_transfer.warehouse_uuid,
+			product_transfer.order_uuid,
+			product_transfer.created_by,
+			hrSchema.users.name,
+			product_transfer.created_at,
+			product_transfer.updated_at,
+			product_transfer.remarks
+		);
+
+	try {
+		const data = await productTransferPromise;
+		const toast = {
+			status: 200,
+			type: 'select by order',
+			message: 'product transfer list by order',
+		};
+
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}

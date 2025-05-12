@@ -287,5 +287,9 @@ storeRouter.delete(
 	validateUuidParam(),
 	productTransferOperations.remove
 );
+storeRouter.get(
+	'/product-transfer/by/:order_uuid',
+	productTransferOperations.selectByOrderUuid
+);
 
 export { storeRouter };
