@@ -2185,6 +2185,41 @@ export const pathStoreProductTransfer = {
 			},
 		},
 	},
+	'/store/product-transfer/by/{order_uuid}': {
+		get: {
+			tags: ['store.product_transfer'],
+			summary: 'Get all store product transfers by order',
+			parameters: [
+				{
+					name: 'order_uuid',
+					in: 'path',
+					description: 'UUID of the store order',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					uuid: SE.uuid(),
+					id: SE.integer(),
+					product_transfer_id: SE.string('SPT25-0001'),
+					product_uuid: SE.uuid(),
+					product_name: SE.string('product_name'),
+					warehouse_uuid: SE.uuid(),
+					warehouse_name: SE.string('warehouse_name'),
+					order_uuid: SE.uuid(),
+					order_id: SE.string('WO25-0001'),
+					quantity: SE.number(),
+					created_by: SE.uuid(),
+					created_by_name: SE.string('created_by_name'),
+					created_at: SE.date_time(),
+					remarks: SE.string('remarks'),
+				}),
+				404: SE.response(404),
+			},
+		},
+	},
 };
 
 export const pathStore = {
