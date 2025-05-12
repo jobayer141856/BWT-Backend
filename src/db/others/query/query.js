@@ -5,6 +5,7 @@ import * as hrSchema from '../../hr/schema.js';
 import * as storeSchema from '../../store/schema.js';
 import * as workSchema from '../../work/schema.js';
 import * as deliverySchema from '../../delivery/schema.js';
+import { decimalToNumber } from '../../variables.js';
 
 //* HR others routes *//
 
@@ -364,7 +365,7 @@ export async function selectStock(req, res, next) {
 }
 
 export async function selectWarehouse(req, res, next) {
-	const { branch_uuid } = req.query;
+	const { branch_uuid, product_uuid } = req.query;
 	const warehousePromise = db
 		.select({
 			value: storeSchema.warehouse.uuid,
@@ -372,11 +373,45 @@ export async function selectWarehouse(req, res, next) {
 			assigned: storeSchema.warehouse.assigned,
 			warehouse_name: storeSchema.warehouse.name,
 			branch_name: storeSchema.branch.name,
+			...(product_uuid && {
+				warehouse_1: decimalToNumber(storeSchema.product.warehouse_1),
+				warehouse_2: decimalToNumber(storeSchema.product.warehouse_2),
+				warehouse_3: decimalToNumber(storeSchema.product.warehouse_3),
+				warehouse_4: decimalToNumber(storeSchema.product.warehouse_4),
+				warehouse_5: decimalToNumber(storeSchema.product.warehouse_5),
+				warehouse_6: decimalToNumber(storeSchema.product.warehouse_6),
+				warehouse_7: decimalToNumber(storeSchema.product.warehouse_7),
+				warehouse_8: decimalToNumber(storeSchema.product.warehouse_8),
+				warehouse_9: decimalToNumber(storeSchema.product.warehouse_9),
+				warehouse_10: decimalToNumber(storeSchema.product.warehouse_10),
+				warehouse_11: decimalToNumber(storeSchema.product.warehouse_11),
+				warehouse_12: decimalToNumber(storeSchema.product.warehouse_12),
+			}),
 		})
 		.from(storeSchema.warehouse)
 		.leftJoin(
 			storeSchema.branch,
 			eq(storeSchema.warehouse.branch_uuid, storeSchema.branch.uuid)
+		)
+		.leftJoin(
+			storeSchema.product,
+			and(
+				eq(storeSchema.product.uuid, product_uuid),
+				or(
+					eq(storeSchema.warehouse.assigned, 'warehouse_1'),
+					eq(storeSchema.warehouse.assigned, 'warehouse_2'),
+					eq(storeSchema.warehouse.assigned, 'warehouse_3'),
+					eq(storeSchema.warehouse.assigned, 'warehouse_4'),
+					eq(storeSchema.warehouse.assigned, 'warehouse_5'),
+					eq(storeSchema.warehouse.assigned, 'warehouse_6'),
+					eq(storeSchema.warehouse.assigned, 'warehouse_7'),
+					eq(storeSchema.warehouse.assigned, 'warehouse_8'),
+					eq(storeSchema.warehouse.assigned, 'warehouse_9'),
+					eq(storeSchema.warehouse.assigned, 'warehouse_10'),
+					eq(storeSchema.warehouse.assigned, 'warehouse_11'),
+					eq(storeSchema.warehouse.assigned, 'warehouse_12')
+				)
+			)
 		);
 
 	if (branch_uuid) {
