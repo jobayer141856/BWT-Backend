@@ -301,6 +301,18 @@ export async function selectProduct(req, res, next) {
 		.select({
 			value: storeSchema.product.uuid,
 			label: storeSchema.product.name,
+			warehouse_1: decimalToNumber(storeSchema.product.warehouse_1),
+			warehouse_2: decimalToNumber(storeSchema.product.warehouse_2),
+			warehouse_3: decimalToNumber(storeSchema.product.warehouse_3),
+			warehouse_4: decimalToNumber(storeSchema.product.warehouse_4),
+			warehouse_5: decimalToNumber(storeSchema.product.warehouse_5),
+			warehouse_6: decimalToNumber(storeSchema.product.warehouse_6),
+			warehouse_7: decimalToNumber(storeSchema.product.warehouse_7),
+			warehouse_8: decimalToNumber(storeSchema.product.warehouse_8),
+			warehouse_9: decimalToNumber(storeSchema.product.warehouse_9),
+			warehouse_10: decimalToNumber(storeSchema.product.warehouse_10),
+			warehouse_11: decimalToNumber(storeSchema.product.warehouse_11),
+			warehouse_12: decimalToNumber(storeSchema.product.warehouse_12),
 		})
 		.from(storeSchema.product);
 
