@@ -218,6 +218,9 @@ export async function select(req, res, next) {
 }
 
 export async function selectByOrderUuid(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+	const { order_uuid } = req.params;
+
 	const productTransferPromise = db
 		.select({
 			id: product_transfer.id,
@@ -237,7 +240,7 @@ export async function selectByOrderUuid(req, res, next) {
 			hrSchema.users,
 			eq(product_transfer.created_by, hrSchema.users.uuid)
 		)
-		.where(eq(product_transfer.order_uuid, req.params.uuid))
+		.where(eq(product_transfer.order_uuid, order_uuid))
 		.groupBy(
 			product_transfer.id,
 			product_transfer.uuid,
@@ -255,7 +258,7 @@ export async function selectByOrderUuid(req, res, next) {
 		const data = await productTransferPromise;
 		const toast = {
 			status: 200,
-			type: 'select by order',
+			type: 'select',
 			message: 'product transfer list by order',
 		};
 
