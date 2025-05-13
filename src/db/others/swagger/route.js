@@ -274,6 +274,12 @@ const pathProduct = {
 			tags: ['others'],
 			summary: 'Get all product',
 			description: 'Get all product',
+			parameters: [
+				SE.parameter_query('is_quantity', 'is_quantity', [
+					'true',
+					'false',
+				]),
+			],
 			responses: {
 				200: {
 					description: 'Success',

@@ -1,4 +1,4 @@
-import { sql, eq, and, is, or } from 'drizzle-orm';
+import { sql, eq, and, is, or, gt } from 'drizzle-orm';
 import db from '../../index.js';
 import { handleError, validateRequest } from '../../../util/index.js';
 import * as hrSchema from '../../hr/schema.js';
@@ -297,6 +297,8 @@ export async function selectVendor(req, res, next) {
 }
 
 export async function selectProduct(req, res, next) {
+	const { is_quantity } = req.query;
+
 	const productPromise = db
 		.select({
 			value: storeSchema.product.uuid,
@@ -315,6 +317,25 @@ export async function selectProduct(req, res, next) {
 			warehouse_12: decimalToNumber(storeSchema.product.warehouse_12),
 		})
 		.from(storeSchema.product);
+
+	if (is_quantity) {
+		productPromise.where(
+			or(
+				gt(storeSchema.product.warehouse_1, decimalToNumber(0)),
+				gt(storeSchema.product.warehouse_2, decimalToNumber(0)),
+				gt(storeSchema.product.warehouse_3, decimalToNumber(0)),
+				gt(storeSchema.product.warehouse_4, decimalToNumber(0)),
+				gt(storeSchema.product.warehouse_5, decimalToNumber(0)),
+				gt(storeSchema.product.warehouse_6, decimalToNumber(0)),
+				gt(storeSchema.product.warehouse_7, decimalToNumber(0)),
+				gt(storeSchema.product.warehouse_8, decimalToNumber(0)),
+				gt(storeSchema.product.warehouse_9, decimalToNumber(0)),
+				gt(storeSchema.product.warehouse_10, decimalToNumber(0)),
+				gt(storeSchema.product.warehouse_11, decimalToNumber(0)),
+				gt(storeSchema.product.warehouse_12, decimalToNumber(0))
+			)
+		);
+	}
 
 	try {
 		const data = await productPromise;
