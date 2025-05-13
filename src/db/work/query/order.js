@@ -447,6 +447,28 @@ export async function select(req, res, next) {
 			);
 		});
 
+		const api = await createApi(req);
+
+		const fetchData = async (endpoint) =>
+			await api
+				.get(`${endpoint}`)
+				.then((response) => response.data)
+				.catch((error) => {
+					console.error(
+						`Error fetching data from ${endpoint}:`,
+						error.message
+					);
+					throw error;
+				});
+
+		// Fetch product transfer data for each order
+		for (const order of data) {
+			const productTransfer = await fetchData(
+				`/store/product-transfer/by/${order.uuid}`
+			);
+			order.product_transfer = productTransfer?.data || [];
+		}
+
 		const toast = {
 			status: 200,
 			type: 'select',
