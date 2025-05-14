@@ -467,4 +467,51 @@ export const apply_balance = hr.table('apply_balance', {
 	remarks: text('remarks').default(null),
 });
 
+// ? payroll occasional
+
+export const payroll_occasional = hr.table('payroll_occasional', {
+	uuid: uuid_primary,
+	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
+	month: integer('month'),
+	year: integer('year'),
+	special_holidays_uuid: defaultUUID('special_holiday_uuid').references(
+		() => special_holidays.uuid
+	),
+	amount: PG_DECIMAL('amount').default(0),
+	created_by: defaultUUID('created_by').references(() => users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+// ? payroll increment
+export const payroll_increment = hr.table('payroll_increment', {
+	uuid: uuid_primary,
+	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
+	salary: PG_DECIMAL('salary').notNull(),
+	effective_date: DateTime('effective_date'),
+	created_by: defaultUUID('created_by').references(() => users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+// ? payroll entry
+export const payroll_entry_type_enum = pgEnum('payroll_entry_type_enum', [
+	'full',
+	'partial',
+]);
+export const payroll_entry = hr.table('payroll_entry', {
+	uuid: uuid_primary,
+	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
+	type: payroll_entry_type_enum('type').default('full'),
+	salary: PG_DECIMAL('salary').notNull(),
+	month: integer('month').notNull(),
+	year: integer('year').notNull(),
+	created_by: defaultUUID('created_by').references(() => users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
 export default hr;
