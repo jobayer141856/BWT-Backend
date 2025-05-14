@@ -395,6 +395,7 @@ export async function select(req, res, next) {
 			is_proceed_to_repair: order.is_proceed_to_repair,
 			branch_uuid: storeSchema.warehouse.branch_uuid,
 			branch_name: storeSchema.branch.name,
+			is_delivery_complete: deliverySchema.challan.is_delivery_complete,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -421,6 +422,17 @@ export async function select(req, res, next) {
 		.leftJoin(
 			storeSchema.branch,
 			eq(storeSchema.warehouse.branch_uuid, storeSchema.branch.uuid)
+		)
+		.leftJoin(
+			deliverySchema.challan_entry,
+			eq(order.uuid, deliverySchema.challan_entry.order_uuid)
+		)
+		.leftJoin(
+			deliverySchema.challan,
+			eq(
+				deliverySchema.challan_entry.challan_uuid,
+				deliverySchema.challan.uuid
+			)
 		)
 		.where(eq(order.uuid, req.params.uuid));
 
