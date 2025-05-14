@@ -1,11 +1,11 @@
 // import { ComparePass, CreateToken } from "@/middleware/auth.js";
-import { desc, eq, and } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import {
 	ComparePass,
 	CreateToken,
 	HashPass,
 } from '../../../middleware/auth.js';
-import { handleError, validateRequest } from '../../../util/index.js';
+import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import { department, designation, users } from '../schema.js';
 

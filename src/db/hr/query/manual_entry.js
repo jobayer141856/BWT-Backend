@@ -1,0 +1,161 @@
+import { desc, eq } from 'drizzle-orm';
+import { validateRequest } from '../../../util/index.js';
+import db from '../../index.js';
+import { alias } from 'drizzle-orm/pg-core';
+import {
+	users,
+	manual_entry,
+	workplace,
+	shifts,
+	leave_policy,
+	device_list,
+	employee,
+} from '../schema.js';
+
+const createdByUser = alias(users, 'created_by_user');
+
+export async function insert(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const manual_entryPromise = db
+		.insert(manual_entry)
+		.values(req.body)
+		.returning({ insertedName: manual_entry.name });
+
+	try {
+		const data = await manual_entryPromise;
+		const toast = {
+			status: 201,
+			type: 'insert',
+			message: `${data[0].insertedName} inserted`,
+		};
+
+		return res.status(201).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function update(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const manual_entryPromise = db
+		.update(manual_entry)
+		.set(req.body)
+		.where(eq(manual_entry.uuid, req.params.uuid))
+		.returning({ updatedName: manual_entry.name });
+
+	try {
+		const data = await manual_entryPromise;
+		const toast = {
+			status: 200,
+			type: 'update',
+			message: `${data[0].updatedName} updated`,
+		};
+
+		return res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function remove(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const manual_entryPromise = db
+		.delete(manual_entry)
+		.where(eq(manual_entry.uuid, req.params.uuid))
+		.returning({ deletedName: manual_entry.name });
+
+	try {
+		const data = await manual_entryPromise;
+		const toast = {
+			status: 200,
+			type: 'delete',
+			message: `${data[0].deletedName} deleted`,
+		};
+
+		return res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectAll(req, res, next) {
+	const resultPromise = db
+		.select({
+			uuid: manual_entry.uuid,
+			employee_uuid: manual_entry.employee_uuid,
+			employee_name: users.name,
+			type: manual_entry.type,
+			entry_time: manual_entry.entry_time,
+			exit_time: manual_entry.exit_time,
+			reason: manual_entry.reason,
+			area: manual_entry.area,
+			created_by: manual_entry.created_by,
+			created_at: manual_entry.created_at,
+			updated_at: manual_entry.updated_at,
+			remarks: manual_entry.remarks,
+		})
+		.from(manual_entry)
+		.leftJoin(
+			device_list,
+			eq(manual_entry.device_list_uuid, device_list.uuid)
+		)
+		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(
+			createdByUser,
+			eq(manual_entry.created_by, createdByUser.uuid)
+		)
+		.orderBy(desc(manual_entry.punch_time));
+
+	try {
+		const data = await resultPromise;
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'manual_entry',
+		};
+
+		return res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function select(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const manual_entryPromise = db
+		.select({
+			uuid: manual_entry.uuid,
+			employee_uuid: manual_entry.employee_uuid,
+			employee_name: users.name,
+			device_list_uuid: manual_entry.device_list_uuid,
+			device_list_name: device_list.name,
+			punch_type: manual_entry.punch_type,
+			punch_time: manual_entry.punch_time,
+		})
+		.from(manual_entry)
+		.leftJoin(
+			device_list,
+			eq(manual_entry.device_list_uuid, device_list.uuid)
+		)
+		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.where(eq(manual_entry.uuid, req.params.uuid));
+
+	try {
+		const data = await manual_entryPromise;
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'manual_entry',
+		};
+
+		return res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
