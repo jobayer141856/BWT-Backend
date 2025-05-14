@@ -24,6 +24,9 @@ import * as punchLogOperations from './query/punch_log.js';
 import * as manualEntryOperations from './query/manual_entry.js';
 import * as applyLeaveOperations from './query/apply_leave.js';
 import * as applyBalanceOperations from './query/apply_balance.js';
+import * as payRollOccasionalOperations from './query/payroll_occasional.js';
+import * as payRollIncrementOperations from './query/payroll_increment.js';
+import * as payRollEntryOperations from './query/payroll_entry.js';
 
 const hrRouter = Router();
 
@@ -436,6 +439,51 @@ hrRouter.delete(
 	'/apply-balance/:uuid',
 	validateUuidParam(),
 	applyBalanceOperations.remove
+);
+
+// ? payroll_occasional routes
+hrRouter.get('/payroll-occasional', payRollOccasionalOperations.selectAll);
+hrRouter.get(
+	'/payroll-occasional/:uuid',
+	validateUuidParam(),
+	payRollOccasionalOperations.select
+);
+hrRouter.post('/payroll-occasional', payRollOccasionalOperations.insert);
+hrRouter.put('/payroll-occasional/:uuid', payRollOccasionalOperations.update);
+hrRouter.delete(
+	'/payroll-occasional/:uuid',
+	validateUuidParam(),
+	payRollOccasionalOperations.remove
+);
+
+// ? payroll_increment routes
+hrRouter.get('/payroll-increment', payRollIncrementOperations.selectAll);
+hrRouter.get(
+	'/payroll-increment/:uuid',
+	validateUuidParam(),
+	payRollIncrementOperations.select
+);
+hrRouter.post('/payroll-increment', payRollIncrementOperations.insert);
+hrRouter.put('/payroll-increment/:uuid', payRollIncrementOperations.update);
+hrRouter.delete(
+	'/payroll-increment/:uuid',
+	validateUuidParam(),
+	payRollIncrementOperations.remove
+);
+
+// ? payroll_entry routes
+hrRouter.get('/payroll-entry', payRollEntryOperations.selectAll);
+hrRouter.get(
+	'/payroll-entry/:uuid',
+	validateUuidParam(),
+	payRollEntryOperations.select
+);
+hrRouter.post('/payroll-entry', payRollEntryOperations.insert);
+hrRouter.put('/payroll-entry/:uuid', payRollEntryOperations.update);
+hrRouter.delete(
+	'/payroll-entry/:uuid',
+	validateUuidParam(),
+	payRollEntryOperations.remove
 );
 
 export { hrRouter };
