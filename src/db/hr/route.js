@@ -162,16 +162,16 @@ hrRouter.delete(
 );
 
 // ? general_holidays routes
-hrRouter.get('/general-holidays', generalHolidayOperations.selectAll);
+hrRouter.get('/general-holiday', generalHolidayOperations.selectAll);
 hrRouter.get(
-	'/general-holidays/:uuid',
+	'/general-holiday/:uuid',
 	validateUuidParam(),
 	generalHolidayOperations.select
 );
-hrRouter.post('/general-holidays', generalHolidayOperations.insert);
-hrRouter.put('/general-holidays/:uuid', generalHolidayOperations.update);
+hrRouter.post('/general-holiday', generalHolidayOperations.insert);
+hrRouter.put('/general-holiday/:uuid', generalHolidayOperations.update);
 hrRouter.delete(
-	'/general-holidays/:uuid',
+	'/general-holiday/:uuid',
 	validateUuidParam(),
 	generalHolidayOperations.remove
 );
@@ -192,11 +192,11 @@ hrRouter.delete(
 );
 
 // ? shift routes
-hrRouter.get('/shift', shiftsOperations.selectAll);
-hrRouter.get('/shift/:uuid', validateUuidParam(), shiftsOperations.select);
-hrRouter.post('/shift', shiftsOperations.insert);
-hrRouter.put('/shift/:uuid', shiftsOperations.update);
-hrRouter.delete('/shift/:uuid', validateUuidParam(), shiftsOperations.remove);
+hrRouter.get('/shifts', shiftsOperations.selectAll);
+hrRouter.get('/shifts/:uuid', validateUuidParam(), shiftsOperations.select);
+hrRouter.post('/shifts', shiftsOperations.insert);
+hrRouter.put('/shifts/:uuid', shiftsOperations.update);
+hrRouter.delete('/shifts/:uuid', validateUuidParam(), shiftsOperations.remove);
 
 // ? shift_group routes
 hrRouter.get('/shift-group', shiftGroupOperations.selectAll);
@@ -292,16 +292,16 @@ hrRouter.delete(
 );
 
 // ? device_permissions routes
-hrRouter.get('/device-permissions', devicePermissionsOperations.selectAll);
+hrRouter.get('/device-permission', devicePermissionsOperations.selectAll);
 hrRouter.get(
-	'/device-permissions/:uuid',
+	'/device-permission/:uuid',
 	validateUuidParam(),
 	devicePermissionsOperations.select
 );
-hrRouter.post('/device-permissions', devicePermissionsOperations.insert);
-hrRouter.put('/device-permissions/:uuid', devicePermissionsOperations.update);
+hrRouter.post('/device-permission', devicePermissionsOperations.insert);
+hrRouter.put('/device-permission/:uuid', devicePermissionsOperations.update);
 hrRouter.delete(
-	'/device-permissions/:uuid',
+	'/device-permission/:uuid',
 	validateUuidParam(),
 	devicePermissionsOperations.remove
 );
@@ -364,66 +364,6 @@ hrRouter.delete(
 	'/apply-balance/:uuid',
 	validateUuidParam(),
 	applyBalanceOperations.remove
-);
-
-// ? apply_balance routes
-hrRouter.get('/apply-balance', applyBalanceOperations.selectAll);
-hrRouter.get(
-	'/apply-balance/:uuid',
-	validateUuidParam(),
-	applyBalanceOperations.select
-);
-hrRouter.post('/apply-balance', applyBalanceOperations.insert);
-hrRouter.put('/apply-balance/:uuid', applyBalanceOperations.update);
-hrRouter.delete(
-	'/apply-balance/:uuid',
-	validateUuidParam(),
-	applyBalanceOperations.remove
-);
-
-// ? apply_leave routes
-hrRouter.get('/apply-leave', applyLeaveOperations.selectAll);
-hrRouter.get(
-	'/apply-leave/:uuid',
-	validateUuidParam(),
-	applyLeaveOperations.select
-);
-hrRouter.post('/apply-leave', applyLeaveOperations.insert);
-hrRouter.put('/apply-leave/:uuid', applyLeaveOperations.update);
-hrRouter.delete(
-	'/apply-leave/:uuid',
-	validateUuidParam(),
-	applyLeaveOperations.remove
-);
-
-// ? apply_balance routes
-hrRouter.get('/apply-balance', applyBalanceOperations.selectAll);
-hrRouter.get(
-	'/apply-balance/:uuid',
-	validateUuidParam(),
-	applyBalanceOperations.select
-);
-hrRouter.post('/apply-balance', applyBalanceOperations.insert);
-hrRouter.put('/apply-balance/:uuid', applyBalanceOperations.update);
-hrRouter.delete(
-	'/apply-balance/:uuid',
-	validateUuidParam(),
-	applyBalanceOperations.remove
-);
-
-// ? apply_leave routes
-hrRouter.get('/apply-leave', applyLeaveOperations.selectAll);
-hrRouter.get(
-	'/apply-leave/:uuid',
-	validateUuidParam(),
-	applyLeaveOperations.select
-);
-hrRouter.post('/apply-leave', applyLeaveOperations.insert);
-hrRouter.put('/apply-leave/:uuid', applyLeaveOperations.update);
-hrRouter.delete(
-	'/apply-leave/:uuid',
-	validateUuidParam(),
-	applyLeaveOperations.remove
 );
 
 // ? apply_balance routes

@@ -796,9 +796,1960 @@ const pathHrPrivacyAndNotice = {
 	},
 };
 
+const pathHrSubDepartment = {
+	'/hr/sub-department': {
+		get: {
+			tags: ['hr.sub_department'],
+			summary: 'get all sub departments',
+			description: 'All sub departments',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/sub_department'),
+				400: SE.response(400),
+				404: SE.response(404),
+			},
+		},
+		post: {
+			tags: ['hr.sub_department'],
+			summary: 'create a sub department',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/sub_department'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/sub_department'),
+				400: SE.response(400),
+				404: SE.response(404),
+			},
+		},
+	},
+	'/hr/sub-department/{uuid}': {
+		get: {
+			tags: ['hr.sub_department'],
+			summary: 'Gets a sub department',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'sub-department to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/sub_department'),
+				400: SE.response(400),
+				404: SE.response(404),
+			},
+		},
+		put: {
+			tags: ['hr.sub_department'],
+			summary: 'Update an existing sub department',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'sub-department to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/sub_department'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/sub_department'),
+				400: SE.response(400),
+				404: SE.response(404),
+			},
+		},
+		delete: {
+			tags: ['hr.sub_department'],
+			summary: 'Deletes a sub department',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'sub-department to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				400: SE.response(400),
+				404: SE.response(404),
+			},
+		},
+	},
+};
+
+const pathHrWorkplace = {
+	'/hr/workplace': {
+		get: {
+			tags: ['hr.workplace'],
+			summary: 'get all workplace',
+			description: 'All workplace',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/workplace'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.workplace'],
+			summary: 'create a workplace',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/workplace'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/workplace'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/workplace/{uuid}': {
+		get: {
+			tags: ['hr.workplace'],
+			summary: 'Gets a workplace',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Workplace to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/workplace'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.workplace'],
+			summary: 'Update an existing workplace',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Workplace to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/workplace'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/workplace'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.workplace'],
+			summary: 'Deletes a workplace',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Workplace to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrEmploymentType = {
+	'/hr/employment-type': {
+		get: {
+			tags: ['hr.employment_type'],
+			summary: 'get all employment type',
+			description: 'All employment type',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employment_type'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.employment_type'],
+			summary: 'create a employment type',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/employment_type'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employment_type'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/employment-type/{uuid}': {
+		get: {
+			tags: ['hr.employment_type'],
+			summary: 'Gets a employment type',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employment type to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employment_type'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.employment_type'],
+			summary: 'Update an existing employment type',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employment type to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/employment_type'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employment_type'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.employment_type'],
+			summary: 'Deletes a employment type',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employment type to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrSpecialHolidays = {
+	'/hr/special-holidays': {
+		get: {
+			tags: ['hr.special_holidays'],
+			summary: 'get all special holidays',
+			description: 'All special holidays',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/special_holidays'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.special_holidays'],
+			summary: 'create a special holidays',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/special_holidays'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/special_holidays'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/special-holidays/{uuid}': {
+		get: {
+			tags: ['hr.special_holidays'],
+			summary: 'Gets a special holidays',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Special holidays to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/special_holidays'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.special_holidays'],
+			summary: 'Update an existing special holidays',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Special holidays to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/special_holidays'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/special_holidays'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.special_holidays'],
+			summary: 'Deletes a special holidays',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Special holidays to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrGeneralHolidays = {
+	'/hr/general-holiday': {
+		get: {
+			tags: ['hr.general_holiday'],
+			summary: 'get all general holidays',
+			description: 'All general holidays',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/general_holiday'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.general_holiday'],
+			summary: 'create a general holidays',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/general_holiday'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/general_holiday'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/general-holiday/{uuid}': {
+		get: {
+			tags: ['hr.general_holiday'],
+			summary: 'Gets a general holidays',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'General holidays to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/general_holiday'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.general_holiday'],
+			summary: 'Update an existing general holidays',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'General holidays to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/general_holiday'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/general_holiday'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.general_holiday'],
+			summary: 'Deletes a general holidays',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'General holidays to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrDeviceList = {
+	'/hr/device-list': {
+		get: {
+			tags: ['hr.device_list'],
+			summary: 'get all device list',
+			description: 'All device list',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/device_list'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.device_list'],
+			summary: 'create a device list',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/device_list'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/device_list'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/device-list/{uuid}': {
+		get: {
+			tags: ['hr.device_list'],
+			summary: 'Gets a device list',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Device list to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/device_list'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.device_list'],
+			summary: 'Update an existing device list',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Device list to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/device_list'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/device_list'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.device_list'],
+			summary: 'Deletes a device list',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Device list to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrShift = {
+	'/hr/shifts': {
+		get: {
+			tags: ['hr.shifts'],
+			summary: 'get all shift',
+			description: 'All shift',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/shifts'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.shifts'],
+			summary: 'create a shift',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/shifts'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/shifts'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/shifts/{uuid}': {
+		get: {
+			tags: ['hr.shifts'],
+			summary: 'Gets a shifts',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Shift to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/shifts'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.shifts'],
+			summary: 'Update an existing shift',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Shift to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/shifts'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/shifts'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.shifts'],
+			summary: 'Deletes a shifts',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Shift to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrShiftGroup = {
+	'/hr/shift-group': {
+		get: {
+			tags: ['hr.shift_group'],
+			summary: 'get all shift group',
+			description: 'All shift group',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/shift_group'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.shift_group'],
+			summary: 'create a shift group',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/shift_group'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/shift_group'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/shift-group/{uuid}': {
+		get: {
+			tags: ['hr.shift_group'],
+			summary: 'Gets a shift group',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Shift group to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/shift_group'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.shift_group'],
+			summary: 'Update an existing shift group',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Shift group to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/shift_group'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/shift_group'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.shift_group'],
+			summary: 'Deletes a shift group',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Shift group to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrRoster = {
+	'/hr/roster': {
+		get: {
+			tags: ['hr.roster'],
+			summary: 'get all roster',
+			description: 'All roster',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/roster'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.roster'],
+			summary: 'create a roster',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/roster'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/roster'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/roster/{uuid}': {
+		get: {
+			tags: ['hr.roster'],
+			summary: 'Gets a roster',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Roster to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/roster'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.roster'],
+			summary: 'Update an existing roster',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Roster to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/roster'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/roster'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.roster'],
+			summary: 'Deletes a roster',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Roster to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrLeavePolicy = {
+	'/hr/leave-policy': {
+		get: {
+			tags: ['hr.leave_policy'],
+			summary: 'get all leave policy',
+			description: 'All leave policy',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/leave_policy'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.leave_policy'],
+			summary: 'create a leave policy',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/leave_policy'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/leave_policy'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/leave-policy/{uuid}': {
+		get: {
+			tags: ['hr.leave_policy'],
+			summary: 'Gets a leave policy',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Leave policy to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/leave_policy'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.leave_policy'],
+			summary: 'Update an existing leave policy',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Leave policy to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/leave_policy'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/leave_policy'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.leave_policy'],
+			summary: 'Deletes a leave policy',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Leave policy to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrLeaveCategory = {
+	'/hr/leave-category': {
+		get: {
+			tags: ['hr.leave_category'],
+			summary: 'get all leave category',
+			description: 'All leave category',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/leave_category'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.leave_category'],
+			summary: 'create a leave category',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/leave_category'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/leave_category'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/leave-category/{uuid}': {
+		get: {
+			tags: ['hr.leave_category'],
+			summary: 'Gets a leave category',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Leave category to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/leave_category'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.leave_category'],
+			summary: 'Update an existing leave category',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Leave category to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/leave_category'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/leave_category'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.leave_category'],
+			summary: 'Deletes a leave category',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Leave category to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrConfiguration = {
+	'/hr/configuration': {
+		get: {
+			tags: ['hr.configuration'],
+			summary: 'get all configuration',
+			description: 'All configuration',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/configuration'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.configuration'],
+			summary: 'create a configuration',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/configuration'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/configuration'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/configuration/{uuid}': {
+		get: {
+			tags: ['hr.configuration'],
+			summary: 'Gets a configuration',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Configuration to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/configuration'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.configuration'],
+			summary: 'Update an existing configuration',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Configuration to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/configuration'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/configuration'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.configuration'],
+			summary: 'Deletes a configuration',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Configuration to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrConfigurationEntry = {
+	'/hr/configuration-entry': {
+		get: {
+			tags: ['hr.configuration_entry'],
+			summary: 'get all configuration entry',
+			description: 'All configuration entry',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/configuration_entry'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.configuration_entry'],
+			summary: 'create a configuration entry',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/configuration_entry'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/configuration_entry'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/configuration-entry/{uuid}': {
+		get: {
+			tags: ['hr.configuration_entry'],
+			summary: 'Gets a configuration entry',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Configuration entry to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/configuration_entry'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.configuration_entry'],
+			summary: 'Update an existing configuration entry',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Configuration entry to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/configuration_entry'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/configuration_entry'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.configuration_entry'],
+			summary: 'Deletes a configuration entry',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Configuration entry to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrEmployee = {
+	'/hr/employee': {
+		get: {
+			tags: ['hr.employee'],
+			summary: 'get all employee',
+			description: 'All employee',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.employee'],
+			summary: 'create a employee',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/employee'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/employee/{uuid}': {
+		get: {
+			tags: ['hr.employee'],
+			summary: 'Gets a employee',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.employee'],
+			summary: 'Update an existing employee',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/employee'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.employee'],
+			summary: 'Deletes a employee',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrDevicePermission = {
+	'/hr/device-permission': {
+		get: {
+			tags: ['hr.device_permission'],
+			summary: 'get all device permission',
+			description: 'All device permission',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/device_permission'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.device_permission'],
+			summary: 'create a device permission',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/device_permission'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/device_permission'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/device-permission/{uuid}': {
+		get: {
+			tags: ['hr.device_permission'],
+			summary: 'Gets a device permission',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Device permission to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/device_permission'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.device_permission'],
+			summary: 'Update an existing device permission',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Device permission to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/device_permission'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/device_permission'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.device_permission'],
+			summary: 'Deletes a device permission',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Device permission to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrPunchLog = {
+	'/hr/punch-log': {
+		get: {
+			tags: ['hr.punch_log'],
+			summary: 'get all punch log',
+			description: 'All punch log',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/punch_log'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.punch_log'],
+			summary: 'create a punch log',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/punch_log'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/punch_log'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/punch-log/{uuid}': {
+		get: {
+			tags: ['hr.punch_log'],
+			summary: 'Gets a punch log',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Punch log to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/punch_log'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.punch_log'],
+			summary: 'Update an existing punch log',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Punch log to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/punch_log'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/punch_log'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.punch_log'],
+			summary: 'Deletes a punch log',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Punch log to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrManualEntry = {
+	'/hr/manual-entry': {
+		get: {
+			tags: ['hr.manual_entry'],
+			summary: 'get all manual entry',
+			description: 'All manual entry',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/manual_entry'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.manual_entry'],
+			summary: 'create a manual entry',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/manual_entry'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/manual_entry'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/manual-entry/{uuid}': {
+		get: {
+			tags: ['hr.manual_entry'],
+			summary: 'Gets a manual entry',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Manual entry to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/manual_entry'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.manual_entry'],
+			summary: 'Update an existing manual entry',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Manual entry to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/manual_entry'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/manual_entry'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.manual_entry'],
+			summary: 'Deletes a manual entry',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Manual entry to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrApplyLeave = {
+	'/hr/apply-leave': {
+		get: {
+			tags: ['hr.apply_leave'],
+			summary: 'get all apply leave',
+			description: 'All apply leave',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/apply_leave'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.apply_leave'],
+			summary: 'create a apply leave',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/apply_leave'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/apply_leave'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/apply-leave/{uuid}': {
+		get: {
+			tags: ['hr.apply_leave'],
+			summary: 'Gets a apply leave',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Apply leave to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/apply_leave'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.apply_leave'],
+			summary: 'Update an existing apply leave',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Apply leave to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/apply_leave'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/apply_leave'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.apply_leave'],
+			summary: 'Deletes a apply leave',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Apply leave to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrApplyBalance = {
+	'/hr/apply-balance': {
+		get: {
+			tags: ['hr.apply_balance'],
+			summary: 'get all apply balance',
+			description: 'All apply balance',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/apply_balance'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.apply_balance'],
+			summary: 'create a apply balance',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/apply_balance'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/apply_balance'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/apply-balance/{uuid}': {
+		get: {
+			tags: ['hr.apply_balance'],
+			summary: 'Gets a apply balance',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Apply balance to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/apply_balance'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.apply_balance'],
+			summary: 'Update an existing apply balance',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Apply balance to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/apply_balance'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/apply_balance'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.apply_balance'],
+			summary: 'Deletes a apply balance',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Apply balance to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrPayrollOccasional = {
+	'/hr/payroll-occasional': {
+		get: {
+			tags: ['hr.payroll_occasional'],
+			summary: 'get all payroll occasional',
+			description: 'All payroll occasional',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_occasional'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.payroll_occasional'],
+			summary: 'create a payroll occasional',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/payroll_occasional'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_occasional'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/payroll-occasional/{uuid}': {
+		get: {
+			tags: ['hr.payroll_occasional'],
+			summary: 'Gets a payroll occasional',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Payroll occasional to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_occasional'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.payroll_occasional'],
+			summary: 'Update an existing payroll occasional',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Payroll occasional to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/payroll_occasional'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_occasional'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.payroll_occasional'],
+			summary: 'Deletes a payroll occasional',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Payroll occasional to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrPayrollIncrement = {
+	'/hr/payroll-increment': {
+		get: {
+			tags: ['hr.payroll_increment'],
+			summary: 'get all payroll increment',
+			description: 'All payroll increment',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_increment'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.payroll_increment'],
+			summary: 'create a payroll increment',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/payroll_increment'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_increment'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/payroll-increment/{uuid}': {
+		get: {
+			tags: ['hr.payroll_increment'],
+			summary: 'Gets a payroll increment',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Payroll increment to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_increment'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.payroll_increment'],
+			summary: 'Update an existing payroll increment',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Payroll increment to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/payroll_increment'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_increment'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.payroll_increment'],
+			summary: 'Deletes a payroll increment',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Payroll increment to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrPayrollEntry = {
+	'/hr/payroll-entry': {
+		get: {
+			tags: ['hr.payroll_entry'],
+			summary: 'get all payroll entry',
+			description: 'All payroll entry',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_entry'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.payroll_entry'],
+			summary: 'create a payroll entry',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/payroll_entry'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_entry'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/payroll-entry/{uuid}': {
+		get: {
+			tags: ['hr.payroll_entry'],
+			summary: 'Gets a payroll entry',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Payroll entry to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_entry'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.payroll_entry'],
+			summary: 'Update an existing payroll entry',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Payroll entry to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/payroll_entry'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/payroll_entry'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.payroll_entry'],
+			summary: 'Deletes a payroll entry',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Payroll entry to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
 export const pathHr = {
 	...pathHrUser,
 	...pathHrDepartment,
 	...pathHrDesignation,
 	...pathHrPrivacyAndNotice,
+	...pathHrSubDepartment,
+	...pathHrWorkplace,
+	...pathHrEmploymentType,
+	...pathHrSpecialHolidays,
+	...pathHrGeneralHolidays,
+	...pathHrDeviceList,
+	...pathHrShift,
+	...pathHrShiftGroup,
+	...pathHrRoster,
+	...pathHrLeavePolicy,
+	...pathHrLeaveCategory,
+	...pathHrConfiguration,
+	...pathHrConfigurationEntry,
+	...pathHrEmployee,
+	...pathHrDevicePermission,
+	...pathHrPunchLog,
+	...pathHrManualEntry,
+	...pathHrApplyLeave,
+	...pathHrApplyBalance,
+	...pathHrPayrollOccasional,
+	...pathHrPayrollIncrement,
+	...pathHrPayrollEntry,
 };

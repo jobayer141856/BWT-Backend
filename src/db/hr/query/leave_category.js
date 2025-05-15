@@ -2,8 +2,8 @@ import { desc, eq } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import {
-    leave_category,
-    users
+	leave_category,
+	users
 } from '../schema.js';
 
 export async function insert(req, res, next) {

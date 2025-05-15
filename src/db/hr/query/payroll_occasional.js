@@ -4,10 +4,10 @@ import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 
 import {
-	payroll_occasional,
 	employee,
-	users,
+	payroll_occasional,
 	special_holidays,
+	users,
 } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
@@ -86,11 +86,11 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: payroll_occasional.uuid,
 			employee_uuid: payroll_occasional.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			month: payroll_occasional.month,
 			year: payroll_occasional.year,
 			special_holidays_uuid: payroll_occasional.special_holidays_uuid,
-			special_holidays_name: special_holidays.special_holidays_name,
+			special_holidays_name: special_holidays.name,
 			amount: payroll_occasional.amount,
 			created_by: payroll_occasional.created_by,
 			created_by_name: users.name,
@@ -100,11 +100,16 @@ export async function selectAll(req, res, next) {
 		})
 		.from(payroll_occasional)
 		.leftJoin(employee, eq(payroll_occasional.employee_uuid, employee.uuid))
-		.leftJoin(users, eq(payroll_occasional.created_by, users.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.leftJoin(
 			special_holidays,
 			eq(payroll_occasional.special_holidays_uuid, special_holidays.uuid)
-		);
+		)
+		.leftJoin(
+			createdByUser,
+			eq(payroll_occasional.created_by, createdByUser.uuid)
+		)
+		.orderBy(desc(payroll_occasional.created_at));
 
 	try {
 		const data = await payrollOccasionalPromise;
@@ -126,11 +131,11 @@ export async function select(req, res, next) {
 		.select({
 			uuid: payroll_occasional.uuid,
 			employee_uuid: payroll_occasional.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			month: payroll_occasional.month,
 			year: payroll_occasional.year,
 			special_holidays_uuid: payroll_occasional.special_holidays_uuid,
-			special_holidays_name: special_holidays.special_holidays_name,
+			special_holidays_name: special_holidays.name,
 			amount: payroll_occasional.amount,
 			created_by: payroll_occasional.created_by,
 			created_by_name: users.name,
@@ -140,10 +145,14 @@ export async function select(req, res, next) {
 		})
 		.from(payroll_occasional)
 		.leftJoin(employee, eq(payroll_occasional.employee_uuid, employee.uuid))
-		.leftJoin(users, eq(payroll_occasional.created_by, users.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.leftJoin(
 			special_holidays,
 			eq(payroll_occasional.special_holidays_uuid, special_holidays.uuid)
+		)
+		.leftJoin(
+			createdByUser,
+			eq(payroll_occasional.created_by, createdByUser.uuid)
 		)
 		.where(eq(payroll_occasional.uuid, req.params.uuid));
 

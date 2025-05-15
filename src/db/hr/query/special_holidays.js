@@ -1,7 +1,7 @@
 import { desc, eq } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import { users, special_holidays, workplace } from '../schema.js';
+import { special_holidays, users, workplace } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;

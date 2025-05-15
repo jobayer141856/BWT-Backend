@@ -102,7 +102,7 @@ export async function selectAll(req, res, next) {
 			createdByUser,
 			eq(apply_balance.created_by, createdByUser.uuid)
 		)
-		.orderBy(desc(apply_balance.punch_time));
+		.orderBy(desc(apply_balance.created_at));
 
 	try {
 		const data = await resultPromise;
@@ -129,12 +129,11 @@ export async function select(req, res, next) {
 			leave_category_uuid: apply_balance.leave_category_uuid,
 			leave_category_name: leave_category.name,
 			year: apply_balance.year,
-			type: apply_balance.type,
-			from_date: apply_balance.from_date,
-			to_date: apply_balance.to_date,
+			days_count: apply_balance.days_count,
 			reason: apply_balance.reason,
 			file: apply_balance.file,
 			created_by: apply_balance.created_by,
+			created_by_name: createdByUser.name,
 			created_at: apply_balance.created_at,
 			updated_at: apply_balance.updated_at,
 			remarks: apply_balance.remarks,

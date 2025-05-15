@@ -3,7 +3,7 @@ import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 
-import { payroll_increment, employee, users } from '../schema.js';
+import { employee, payroll_increment, users } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
@@ -81,7 +81,7 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: payroll_increment.uuid,
 			employee_uuid: payroll_increment.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			salary: payroll_increment.salary,
 			effective_date: payroll_increment.effective_date,
 			created_by: payroll_increment.created_by,
@@ -91,8 +91,13 @@ export async function selectAll(req, res, next) {
 			remarks: payroll_increment.remarks,
 		})
 		.from(payroll_increment)
-		.leftJoin(employee, eq(payroll_increment.employeeUuid, employee.uuid))
-		.leftJoin(users, eq(payroll_increment.created_by, users.uuid));
+		.leftJoin(employee, eq(payroll_increment.employee_uuid, employee.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(
+			createdByUser,
+			eq(payroll_increment.created_by, createdByUser.uuid)
+		)
+		.orderBy(desc(payroll_increment.created_at));
 
 	try {
 		const data = await payrollIncrementPromise;
@@ -114,18 +119,22 @@ export async function select(req, res, next) {
 		.select({
 			uuid: payroll_increment.uuid,
 			employee_uuid: payroll_increment.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			salary: payroll_increment.salary,
 			effective_date: payroll_increment.effective_date,
 			created_by: payroll_increment.created_by,
-			created_by_name: users.name,
+			created_by_name: createdByUser.name,
 			created_at: payroll_increment.created_at,
 			updated_at: payroll_increment.updated_at,
 			remarks: payroll_increment.remarks,
 		})
 		.from(payroll_increment)
-		.leftJoin(employee, eq(payroll_increment.employeeUuid, employee.uuid))
-		.leftJoin(users, eq(payroll_increment.createdBy, users.uuid))
+		.leftJoin(employee, eq(payroll_increment.employee_uuid, employee.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(
+			createdByUser,
+			eq(payroll_increment.created_by, createdByUser.uuid)
+		)
 		.where(eq(payroll_increment.uuid, req.params.uuid));
 
 	try {

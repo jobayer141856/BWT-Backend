@@ -1,15 +1,12 @@
 import { desc, eq } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import { alias } from 'drizzle-orm/pg-core';
 import {
-	users,
-	punch_log,
-	workplace,
-	shifts,
-	leave_policy,
 	device_list,
 	employee,
+	punch_log,
+	users
 } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');

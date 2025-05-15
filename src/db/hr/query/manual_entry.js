@@ -1,15 +1,11 @@
 import { desc, eq } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import { alias } from 'drizzle-orm/pg-core';
 import {
-	users,
-	manual_entry,
-	workplace,
-	shifts,
-	leave_policy,
-	device_list,
 	employee,
+	manual_entry,
+	users
 } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
@@ -98,17 +94,13 @@ export async function selectAll(req, res, next) {
 			remarks: manual_entry.remarks,
 		})
 		.from(manual_entry)
-		.leftJoin(
-			device_list,
-			eq(manual_entry.device_list_uuid, device_list.uuid)
-		)
 		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.leftJoin(
 			createdByUser,
 			eq(manual_entry.created_by, createdByUser.uuid)
 		)
-		.orderBy(desc(manual_entry.punch_time));
+		.orderBy(desc(manual_entry.created_at));
 
 	try {
 		const data = await resultPromise;
@@ -132,18 +124,23 @@ export async function select(req, res, next) {
 			uuid: manual_entry.uuid,
 			employee_uuid: manual_entry.employee_uuid,
 			employee_name: users.name,
-			device_list_uuid: manual_entry.device_list_uuid,
-			device_list_name: device_list.name,
-			punch_type: manual_entry.punch_type,
-			punch_time: manual_entry.punch_time,
+			type: manual_entry.type,
+			entry_time: manual_entry.entry_time,
+			exit_time: manual_entry.exit_time,
+			reason: manual_entry.reason,
+			area: manual_entry.area,
+			created_by: manual_entry.created_by,
+			created_at: manual_entry.created_at,
+			updated_at: manual_entry.updated_at,
+			remarks: manual_entry.remarks,
 		})
 		.from(manual_entry)
-		.leftJoin(
-			device_list,
-			eq(manual_entry.device_list_uuid, device_list.uuid)
-		)
 		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(
+			createdByUser,
+			eq(manual_entry.created_by, createdByUser.uuid)
+		)
 		.where(eq(manual_entry.uuid, req.params.uuid));
 
 	try {

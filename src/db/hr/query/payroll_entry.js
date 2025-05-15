@@ -3,7 +3,7 @@ import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 
-import { payroll_increment, employee, users } from '../schema.js';
+import { employee, payroll_entry, users } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
@@ -11,9 +11,9 @@ export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const payrollIncrementPromise = db
-		.insert(payroll_increment)
+		.insert(payroll_entry)
 		.values(req.body)
-		.returning({ insertedUuid: payroll_increment.uuid });
+		.returning({ insertedUuid: payroll_entry.uuid });
 
 	try {
 		const data = await payrollIncrementPromise;
@@ -33,10 +33,10 @@ export async function update(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const payrollIncrementPromise = db
-		.update(payroll_increment)
+		.update(payroll_entry)
 		.set(req.body)
-		.where(eq(payroll_increment.uuid, req.params.uuid))
-		.returning({ updatedUuid: payroll_increment.uuid });
+		.where(eq(payroll_entry.uuid, req.params.uuid))
+		.returning({ updatedUuid: payroll_entry.uuid });
 
 	try {
 		const data = await payrollIncrementPromise;
@@ -56,9 +56,9 @@ export async function remove(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const payrollIncrementPromise = db
-		.delete(payroll_increment)
-		.where(eq(payroll_increment.uuid, req.params.uuid))
-		.returning({ deletedUuid: payroll_increment.uuid });
+		.delete(payroll_entry)
+		.where(eq(payroll_entry.uuid, req.params.uuid))
+		.returning({ deletedUuid: payroll_entry.uuid });
 
 	try {
 		const data = await payrollIncrementPromise;
@@ -79,22 +79,27 @@ export async function selectAll(req, res, next) {
 
 	const payrollIncrementPromise = db
 		.select({
-			uuid: payroll_increment.uuid,
-			employee_uuid: payroll_increment.employee_uuid,
-			employee_name: employee.name,
-			type: payroll_increment.type,
-			salary: payroll_increment.salary,
-			month: payroll_increment.month,
-			year: payroll_increment.year,
-			created_by: payroll_increment.created_by,
-			created_by_name: users.name,
-			created_at: payroll_increment.created_at,
-			updated_at: payroll_increment.updated_at,
-			remarks: payroll_increment.remarks,
+			uuid: payroll_entry.uuid,
+			employee_uuid: payroll_entry.employee_uuid,
+			employee_name: users.name,
+			type: payroll_entry.type,
+			salary: payroll_entry.salary,
+			month: payroll_entry.month,
+			year: payroll_entry.year,
+			created_by: payroll_entry.created_by,
+			created_by_name: createdByUser.name,
+			created_at: payroll_entry.created_at,
+			updated_at: payroll_entry.updated_at,
+			remarks: payroll_entry.remarks,
 		})
-		.from(payroll_increment)
-		.leftJoin(employee, eq(payroll_increment.employee_uuid, employee.uuid))
-		.leftJoin(users, eq(payroll_increment.created_by, users.uuid));
+		.from(payroll_entry)
+		.leftJoin(employee, eq(payroll_entry.employee_uuid, employee.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(
+			createdByUser,
+			eq(payroll_entry.created_by, createdByUser.uuid)
+		)
+		.orderBy(desc(payroll_entry.created_at));
 
 	try {
 		const data = await payrollIncrementPromise;
@@ -114,23 +119,27 @@ export async function select(req, res, next) {
 
 	const payrollIncrementPromise = db
 		.select({
-			uuid: payroll_increment.uuid,
-			employee_uuid: payroll_increment.employee_uuid,
-			employee_name: employee.name,
-			type: payroll_increment.type,
-			salary: payroll_increment.salary,
-			month: payroll_increment.month,
-			year: payroll_increment.year,
-			created_by: payroll_increment.created_by,
-			created_by_name: users.name,
-			created_at: payroll_increment.created_at,
-			updated_at: payroll_increment.updated_at,
-			remarks: payroll_increment.remarks,
+			uuid: payroll_entry.uuid,
+			employee_uuid: payroll_entry.employee_uuid,
+			employee_name: users.name,
+			type: payroll_entry.type,
+			salary: payroll_entry.salary,
+			month: payroll_entry.month,
+			year: payroll_entry.year,
+			created_by: payroll_entry.created_by,
+			created_by_name: createdByUser.name,
+			created_at: payroll_entry.created_at,
+			updated_at: payroll_entry.updated_at,
+			remarks: payroll_entry.remarks,
 		})
-		.from(payroll_increment)
-		.where(eq(payroll_increment.uuid, req.params.uuid))
-		.leftJoin(employee, eq(payroll_increment.employee_uuid, employee.uuid))
-		.leftJoin(users, eq(payroll_increment.created_by, users.uuid));
+		.from(payroll_entry)
+		.leftJoin(employee, eq(payroll_entry.employee_uuid, employee.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(
+			createdByUser,
+			eq(payroll_entry.created_by, createdByUser.uuid)
+		)
+		.leftJoin(users, eq(payroll_entry.created_by, users.uuid));
 
 	try {
 		const data = await payrollIncrementPromise;

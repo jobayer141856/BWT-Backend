@@ -2,12 +2,7 @@ import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import {
-    apply_leave,
-    employee,
-    leave_category,
-    users
-} from '../schema.js';
+import { apply_leave, employee, leave_category, users } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
@@ -106,7 +101,7 @@ export async function selectAll(req, res, next) {
 			eq(apply_leave.leave_category_uuid, leave_category.uuid)
 		)
 		.leftJoin(createdByUser, eq(apply_leave.created_by, createdByUser.uuid))
-		.orderBy(desc(apply_leave.punch_time));
+		.orderBy(desc(apply_leave.created_at));
 
 	try {
 		const data = await resultPromise;

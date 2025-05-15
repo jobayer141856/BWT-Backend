@@ -686,6 +686,10 @@ export const tagHr = [
 		description: 'Operations about shift group',
 	},
 	{
+		name: 'hr.roster',
+		description: 'Operations about roster',
+	},
+	{
 		name: 'hr.leave_policy',
 		description: 'Operations about leave policy',
 	},
@@ -736,9 +740,5 @@ export const tagHr = [
 	{
 		name: 'hr.payroll_entry',
 		description: 'Operations about payroll entry',
-	},
-	{
-		name: 'hr.roster',
-		description: 'Operations about roster',
 	},
 ];
