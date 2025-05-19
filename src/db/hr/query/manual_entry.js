@@ -12,7 +12,7 @@ export async function insert(req, res, next) {
 	const manual_entryPromise = db
 		.insert(manual_entry)
 		.values(req.body)
-		.returning({ insertedName: manual_entry.name });
+		.returning({ insertedName: manual_entry.type });
 
 	try {
 		const data = await manual_entryPromise;
@@ -35,7 +35,7 @@ export async function update(req, res, next) {
 		.update(manual_entry)
 		.set(req.body)
 		.where(eq(manual_entry.uuid, req.params.uuid))
-		.returning({ updatedName: manual_entry.name });
+		.returning({ updatedName: manual_entry.type });
 
 	try {
 		const data = await manual_entryPromise;
@@ -57,7 +57,7 @@ export async function remove(req, res, next) {
 	const manual_entryPromise = db
 		.delete(manual_entry)
 		.where(eq(manual_entry.uuid, req.params.uuid))
-		.returning({ deletedName: manual_entry.name });
+		.returning({ deletedName: manual_entry.type });
 
 	try {
 		const data = await manual_entryPromise;
