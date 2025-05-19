@@ -17,6 +17,29 @@ otherRouter.get('/designation/value/label', otherOperations.selectDesignation);
 // department routes
 otherRouter.get('/department/value/label', otherOperations.selectDepartment);
 
+//* HRM others routes *//
+
+// ? sub department routes
+otherRouter.get(
+	'/sub-department/value/label',
+	otherOperations.selectSubDepartment
+);
+
+// ? workplace routes
+otherRouter.get('/workplace/value/label', otherOperations.selectWorkplace);
+
+// ? Employment Type
+otherRouter.get(
+	'/employment-type/value/label',
+	otherOperations.selectEmploymentType
+);
+
+// ? Shift Group routes
+otherRouter.get('/shift-group/value/label', otherOperations.selectShiftGroup);
+
+// ? Leave Policy routes
+otherRouter.get('/leave-policy/value/label', otherOperations.selectLeavePolicy);
+
 //* Store others routes *//
 // group routes
 otherRouter.get('/group/value/label', otherOperations.selectGroup);
