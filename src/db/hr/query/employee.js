@@ -125,6 +125,10 @@ export async function selectAll(req, res, next) {
 			designation_name: designation.name,
 			department_uuid: employee.department_uuid,
 			department_name: department.name,
+			employee_id: employee.employee_id,
+			leave_policy_uuid: employee.leave_policy_uuid,
+			leave_policy_name: leave_policy.name,
+			report_position: employee.report_position,
 		})
 		.from(employee)
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
@@ -137,6 +141,10 @@ export async function selectAll(req, res, next) {
 		.leftJoin(shift_group, eq(employee.shift_group_uuid, shift_group.uuid))
 		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
 		.leftJoin(department, eq(employee.department_uuid, department.uuid))
+		.leftJoin(
+			leave_policy,
+			eq(employee.leave_policy_uuid, leave_policy.uuid)
+		)
 		.orderBy(desc(employee.created_at));
 
 	try {
@@ -196,6 +204,10 @@ export async function select(req, res, next) {
 			designation_name: designation.name,
 			department_uuid: employee.department_uuid,
 			department_name: department.name,
+			employee_id: employee.employee_id,
+			leave_policy_uuid: employee.leave_policy_uuid,
+			leave_policy_name: leave_policy.name,
+			report_position: employee.report_position,
 		})
 		.from(employee)
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
@@ -208,6 +220,10 @@ export async function select(req, res, next) {
 		.leftJoin(shift_group, eq(employee.shift_group_uuid, shift_group.uuid))
 		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
 		.leftJoin(department, eq(employee.department_uuid, department.uuid))
+		.leftJoin(
+			leave_policy,
+			eq(employee.leave_policy_uuid, leave_policy.uuid)
+		)
 		.where(eq(employee.uuid, req.params.uuid));
 	try {
 		const data = await employeePromise;
