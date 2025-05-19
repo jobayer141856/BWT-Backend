@@ -2,7 +2,7 @@ import { desc, eq } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import { users, workplace } from '../schema.js';
-
+import { decimalToNumber } from '../../variables.js';
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
@@ -78,8 +78,8 @@ export async function selectAll(req, res, next) {
 			name: workplace.name,
 			hierarchy: workplace.hierarchy,
 			status: workplace.status,
-			latitude: workplace.latitude,
-			longitude: workplace.longitude,
+			latitude: decimalToNumber(workplace.latitude),
+			longitude: decimalToNumber(workplace.longitude),
 			created_by: workplace.created_by,
 			created_by_name: users.name,
 			created_at: workplace.created_at,
@@ -114,8 +114,8 @@ export async function select(req, res, next) {
 			name: workplace.name,
 			hierarchy: workplace.hierarchy,
 			status: workplace.status,
-			latitude: workplace.latitude,
-			longitude: workplace.longitude,
+			latitude: decimalToNumber(workplace.latitude),
+			longitude: decimalToNumber(workplace.longitude),
 			created_by: workplace.created_by,
 			created_by_name: users.name,
 			created_at: workplace.created_at,

@@ -387,6 +387,7 @@ export const employee = hr.table('employee', {
 		() => leave_policy.uuid
 	),
 	report_position: text('report_position').default(null),
+	employee_id: text('employee_id').notNull(),
 });
 
 export const device_permission = hr.table('device_permission', {
