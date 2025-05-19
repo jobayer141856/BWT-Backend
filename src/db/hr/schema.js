@@ -22,6 +22,9 @@ export const department = hr.table('department', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	id: integer('id').default(0),
+	hierarchy: integer('hierarchy').default(0),
+	status: boolean('status').default(false),
 });
 
 export const designation = hr.table('designation', {
@@ -30,6 +33,9 @@ export const designation = hr.table('designation', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	id: integer('id').default(0),
+	hierarchy: integer('hierarchy').default(0),
+	status: boolean('status').default(false),
 });
 
 export const userTypeEnum = pgEnum('user_type', [
