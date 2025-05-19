@@ -264,6 +264,32 @@ const pathLeavePolicy = {
 	},
 };
 
+const pathEmployee = {
+	'/other/employee/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all employee',
+			description: 'Get all employee',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('employee'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 //* Store others routes *//
 
 const pathGroup = {
@@ -1020,6 +1046,7 @@ export const pathOthers = {
 	...pathEmploymentType,
 	...pathShiftGroup,
 	...pathLeavePolicy,
+	...pathEmployee,
 	...pathGroup,
 	...pathCategory,
 	...pathBrand,
