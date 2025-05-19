@@ -81,6 +81,9 @@ export async function selectAll(req, res, next) {
 			created_at: designation.created_at,
 			updated_at: designation.updated_at,
 			remarks: designation.remarks,
+			id: designation.id,
+			hierarchy: designation.hierarchy,
+			status: designation.status,
 		})
 		.from(designation)
 		.orderBy(desc(designation.created_at));
@@ -108,6 +111,9 @@ export async function select(req, res, next) {
 			created_at: designation.created_at,
 			updated_at: designation.updated_at,
 			remarks: designation.remarks,
+			id: designation.id,
+			hierarchy: designation.hierarchy,
+			status: designation.status,
 		})
 		.from(designation)
 		.where(eq(designation.uuid, req.params.uuid));
