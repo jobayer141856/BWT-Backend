@@ -337,7 +337,7 @@ export const employee = hr.table('employee', {
 	id: serial('id').notNull(),
 	gender: genderEnum('gender').default('male'),
 	user_uuid: defaultUUID('user_uuid').references(() => users.uuid),
-	start_date: DateTime('start_date').notNull(),
+	start_date: DateTime('start_date').default(null),
 	workplace_uuid: defaultUUID('workplace_uuid').references(
 		() => workplace.uuid
 	),
@@ -371,6 +371,16 @@ export const employee = hr.table('employee', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	name: text('name').notNull(),
+	email: text('email').notNull().unique(),
+	pass: text('pass').notNull(),
+	designation_uuid: defaultUUID('designation_uuid').references(
+		() => designation.uuid
+	),
+	department_uuid: defaultUUID('department_uuid').references(
+		() => department.uuid
+	),
+	company_id: boolean('company_id').default(false),
 });
 
 export const device_permission = hr.table('device_permission', {

@@ -189,6 +189,106 @@ export async function selectDepartment(req, res, next) {
 	}
 }
 
+//* HRM others routes *//
+export async function selectSubDepartment(req, res, next) {
+	const subDepartmentPromise = db
+		.select({
+			value: hrSchema.sub_department.uuid,
+			label: hrSchema.sub_department.name,
+		})
+		.from(hrSchema.sub_department);
+	try {
+		const data = await subDepartmentPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Sub Department list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectWorkplace(req, res, next) {
+	const workplacePromise = db
+		.select({
+			value: hrSchema.workplace.uuid,
+			label: hrSchema.workplace.name,
+		})
+		.from(hrSchema.workplace);
+	try {
+		const data = await workplacePromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Workplace list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectEmploymentType(req, res, next) {
+	const employmentTypePromise = db
+		.select({
+			value: hrSchema.employment_type.uuid,
+			label: hrSchema.employment_type.name,
+		})
+		.from(hrSchema.employment_type);
+	try {
+		const data = await employmentTypePromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Employment Type list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectShiftGroup(req, res, next) {
+	const shiftGroupPromise = db
+		.select({
+			value: hrSchema.shift_group.uuid,
+			label: hrSchema.shift_group.name,
+		})
+		.from(hrSchema.shift_group);
+	try {
+		const data = await shiftGroupPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Shift Group list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+export async function selectLeavePolicy(req, res, next) {
+	const leavePolicyPromise = db
+		.select({
+			value: hrSchema.leave_policy.uuid,
+			label: hrSchema.leave_policy.name,
+		})
+		.from(hrSchema.leave_policy);
+	try {
+		const data = await leavePolicyPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Leave Policy list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
 //* Store others routes *//
 
 export async function selectGroup(req, res, next) {

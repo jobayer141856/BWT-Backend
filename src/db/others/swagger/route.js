@@ -136,6 +136,134 @@ const pathDepartment = {
 	},
 };
 
+// * HRM others routes *//
+
+const pathSubDepartment = {
+	'/other/sub-department/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all sub department',
+			description: 'Get all sub department',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('sub department'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+const pathWorkplace = {
+	'/other/workplace/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all workplace',
+			description: 'Get all workplace',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('workplace'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+const pathEmploymentType = {
+	'/other/employment-type/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all employment type',
+			description: 'Get all employment type',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('employment type'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+const pathShiftGroup = {
+	'/other/shift-group/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all shift group',
+			description: 'Get all shift group',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('shift group'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+const pathLeavePolicy = {
+	'/other/leave-policy/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all leave policy',
+			description: 'Get all leave policy',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('leave policy'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 //* Store others routes *//
 
 const pathGroup = {
@@ -887,6 +1015,11 @@ export const pathOthers = {
 	...pathUser,
 	...pathDesignation,
 	...pathDepartment,
+	...pathSubDepartment,
+	...pathWorkplace,
+	...pathEmploymentType,
+	...pathShiftGroup,
+	...pathLeavePolicy,
 	...pathGroup,
 	...pathCategory,
 	...pathBrand,
