@@ -1,5 +1,5 @@
 import SE, { SED } from '../../../util/swagger_example.js';
-import { department, shift_group } from '../schema.js';
+import { department, employee, leave_policy, shift_group } from '../schema.js';
 
 //* ./schema.js#department
 export const defDepartment = SED({
@@ -395,6 +395,9 @@ export const defEmployee = SED({
 		designation_uuid: SE.uuid(),
 		department_uuid: SE.uuid(),
 		company_id: SE.boolean(false),
+		employee_id: SE.string('123456'),
+		leave_policy_uuid: SE.uuid(),
+		report_position: SE.string('employee'),
 	},
 
 	xml: 'Hr/Employee',

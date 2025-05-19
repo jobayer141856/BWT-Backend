@@ -383,6 +383,10 @@ export const employee = hr.table('employee', {
 		() => department.uuid
 	),
 	company_id: boolean('company_id').default(false),
+	leave_policy_uuid: defaultUUID('leave_policy_uuid').references(
+		() => leave_policy.uuid
+	),
+	report_position: text('report_position').default(null),
 });
 
 export const device_permission = hr.table('device_permission', {
