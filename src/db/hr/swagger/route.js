@@ -2209,6 +2209,13 @@ const pathHrManualEntry = {
 			tags: ['hr.manual_entry'],
 			summary: 'get all manual entry',
 			description: 'All manual entry',
+			parameters: [
+				SE.parameter_query('type', 'type', [
+					'field_visit',
+					'missing_punch',
+					'manual_punch',
+				]),
+			],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/manual_entry'),
 				405: SE.response(405),

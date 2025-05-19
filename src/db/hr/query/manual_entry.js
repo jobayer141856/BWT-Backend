@@ -2,11 +2,7 @@ import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import {
-	employee,
-	manual_entry,
-	users
-} from '../schema.js';
+import { employee, manual_entry, users } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
@@ -78,6 +74,7 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
+	const { type } = req.query;
 	const resultPromise = db
 		.select({
 			uuid: manual_entry.uuid,
@@ -101,6 +98,10 @@ export async function selectAll(req, res, next) {
 			eq(manual_entry.created_by, createdByUser.uuid)
 		)
 		.orderBy(desc(manual_entry.created_at));
+
+	if (type) {
+		resultPromise.where(eq(manual_entry.type, type));
+	}
 
 	try {
 		const data = await resultPromise;
