@@ -1,4 +1,5 @@
 import SE, { SED } from '../../../util/swagger_example.js';
+import { department, shift_group } from '../schema.js';
 
 //* ./schema.js#department
 export const defDepartment = SED({
@@ -354,10 +355,10 @@ export const defEmployee = SED({
 		'uuid',
 		'id',
 		'gender',
-		'user_uuid',
-		'start_date',
+		'name',
+		'email',
+		'pass',
 		'workplace_uuid',
-		'status',
 		'created_by',
 		'created_at',
 	],
@@ -375,7 +376,7 @@ export const defEmployee = SED({
 		configuration_uuid: SE.uuid(),
 		employment_type_uuid: SE.uuid(),
 		end_date: SE.date_time(null),
-		roster_uuid: SE.uuid(),
+		shift_group_uuid: SE.uuid(),
 		line_manager_uuid: SE.uuid(),
 		hr_manager_uuid: SE.uuid(),
 		is_admin: SE.boolean(false),
@@ -388,7 +389,14 @@ export const defEmployee = SED({
 		created_at: SE.date_time(),
 		updated_at: SE.date_time(null),
 		remarks: SE.string('remarks'),
+		name: SE.string('John Doe'),
+		email: SE.string('john@gmail.com'),
+		pass: SE.string('1234'),
+		designation_uuid: SE.uuid(),
+		department_uuid: SE.uuid(),
+		company_id: SE.boolean(false),
 	},
+
 	xml: 'Hr/Employee',
 });
 

@@ -354,7 +354,9 @@ export const employee = hr.table('employee', {
 		() => employment_type.uuid
 	),
 	end_date: DateTime('end_date').default(null),
-	roster_uuid: defaultUUID('roster_uuid').references(() => roster.uuid),
+	shift_group_uuid: defaultUUID('shift_group_uuid').references(
+		() => shift_group.uuid
+	),
 	line_manager_uuid: defaultUUID('line_manager_uuid').references(
 		() => users.uuid
 	),
