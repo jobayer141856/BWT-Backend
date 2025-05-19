@@ -1,7 +1,7 @@
 import { sql, eq, and, is, or, gt } from 'drizzle-orm';
 import db from '../../index.js';
 import { handleError, validateRequest } from '../../../util/index.js';
-import * as hrSchema from '../../hr/schema.js';
+import hr, * as hrSchema from '../../hr/schema.js';
 import * as storeSchema from '../../store/schema.js';
 import * as workSchema from '../../work/schema.js';
 import * as deliverySchema from '../../delivery/schema.js';
@@ -282,6 +282,26 @@ export async function selectLeavePolicy(req, res, next) {
 			status: 200,
 			type: 'select all',
 			message: 'Leave Policy list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectEmployee(req, res, next) {
+	const employeePromise = db
+		.select({
+			value: hrSchema.employee.uuid,
+			label: hrSchema.employee.name,
+		})
+		.from(hrSchema.employee);
+	try {
+		const data = await employeePromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Employee list',
 		};
 		return await res.status(200).json({ toast, data });
 	} catch (error) {
