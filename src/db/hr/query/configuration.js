@@ -89,11 +89,13 @@ export async function selectAll(req, res, next) {
 						'uuid', ce.uuid,
 						'id', ce.id, 
 						'leave_category_uuid', ce.leave_category_uuid,
+						'leave_category_name', lc.name,
 						'maximum_number_of_allowed_leaves', ce.maximum_number_of_allowed_leaves,
 						'enable_earned_leave', ce.enable_earned_leave
 					)), '[]'::json
 				)
 				FROM hr.configuration_entry ce
+				LEFT JOIN hr.leave_category lc ON ce.leave_category_uuid = lc.uuid
 				WHERE ce.configuration_uuid = ${configuration.uuid}
 			)`,
 		})
