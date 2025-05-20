@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import { createApi } from '../../../util/api.js';
@@ -84,14 +84,14 @@ export async function selectAll(req, res, next) {
 			updated_at: configuration.updated_at,
 			remarks: configuration.remarks,
 			configuration_entry: sql`(SELECT 
-			json_agg(json_build_object(
-			'uuid', ce.uuid,
-			'id', ce.id, 
-			'leave_category_uuid', ce.leave_category_uuid,
-			'maximum_number_of_allowed_leaves ', ce.maximum_number_of_allowed_leaves,
-			'enable_earned_leave', ce.enable_earned_leave)) 
-			FROM hr.configuration_entry ce
-			WHERE ce.configuration_uuid = ${configuration.uuid})`,
+										json_agg(json_build_object(
+										'uuid', ce.uuid,
+										'id', ce.id, 
+										'leave_category_uuid', ce.leave_category_uuid,
+										'maximum_number_of_allowed_leaves ', ce.maximum_number_of_allowed_leaves,
+										'enable_earned_leave', ce.enable_earned_leave)) 
+										FROM hr.configuration_entry ce
+										WHERE ce.configuration_uuid = ${configuration.uuid})`,
 		})
 		.from(configuration)
 		.leftJoin(
