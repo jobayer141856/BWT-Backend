@@ -265,6 +265,11 @@ hrRouter.delete(
 	configurationOperations.remove
 );
 
+hrRouter.get(
+	'/configuration-entry-details/by/:configuration_uuid',
+	configurationOperations.configurationEntryDetailsByConfiguration
+);
+
 // ? configuration_entry routes
 hrRouter.get('/configuration-entry', configurationEntryOperations.selectAll);
 hrRouter.get(
@@ -278,6 +283,10 @@ hrRouter.delete(
 	'/configuration-entry/:uuid',
 	validateUuidParam(),
 	configurationEntryOperations.remove
+);
+hrRouter.get(
+	'/configuration-entry/by/:configuration_uuid',
+	configurationEntryOperations.configurationEntryByConfiguration
 );
 
 // ? employee routes

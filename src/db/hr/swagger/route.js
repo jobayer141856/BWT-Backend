@@ -1853,6 +1853,35 @@ const pathHrConfiguration = {
 			},
 		},
 	},
+	'/hr/configuration-entry-details/by/{configuration_uuid}': {
+		get: {
+			tags: ['hr.configuration'],
+			summary: 'Gets a configuration entry details',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				{
+					name: 'configuration_uuid',
+					in: 'path',
+					description: 'Configuration UUID',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					configuration: { $ref: '#/definitions/hr/configuration' },
+					configuration_entry: {
+						type: 'array',
+						items: { $ref: '#/definitions/hr/configuration_entry' },
+					},
+				}),
+				405: SE.response(405),
+			},
+		},
+	},
 };
 
 const pathHrConfigurationEntry = {
@@ -1936,6 +1965,34 @@ const pathHrConfigurationEntry = {
 			],
 			responses: {
 				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/configuration-entry/by/{configuration_uuid}': {
+		get: {
+			tags: ['hr.configuration_entry'],
+			summary: 'Gets a configuration entry',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				{
+					name: 'configuration_uuid',
+					in: 'path',
+					description: 'Configuration UUID',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					configuration_entry: {
+						type: 'array',
+						items: { $ref: '#/definitions/hr/configuration_entry' },
+					},
+				}),
 				405: SE.response(405),
 			},
 		},
