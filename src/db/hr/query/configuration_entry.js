@@ -15,7 +15,7 @@ export async function insert(req, res, next) {
 	const configuration_entryPromise = db
 		.insert(configuration_entry)
 		.values(req.body)
-		.returning({ insertedName: configuration_entry.name });
+		.returning({ insertedName: configuration_entry.id });
 
 	try {
 		const data = await configuration_entryPromise;
@@ -38,7 +38,7 @@ export async function update(req, res, next) {
 		.update(configuration_entry)
 		.set(req.body)
 		.where(eq(configuration_entry.uuid, req.params.uuid))
-		.returning({ updatedName: configuration_entry.name });
+		.returning({ updatedName: configuration_entry.id });
 
 	try {
 		const data = await configuration_entryPromise;
@@ -60,7 +60,7 @@ export async function remove(req, res, next) {
 	const configuration_entryPromise = db
 		.delete(configuration_entry)
 		.where(eq(configuration_entry.uuid, req.params.uuid))
-		.returning({ deletedName: configuration_entry.name });
+		.returning({ deletedName: configuration_entry.id });
 
 	try {
 		const data = await configuration_entryPromise;
