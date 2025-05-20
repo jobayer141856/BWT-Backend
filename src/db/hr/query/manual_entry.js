@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
@@ -79,7 +79,7 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: manual_entry.uuid,
 			employee_uuid: manual_entry.employee_uuid,
-			employee_name: users.name,
+			employee_name: employee.name,
 			type: manual_entry.type,
 			entry_time: manual_entry.entry_time,
 			exit_time: manual_entry.exit_time,
@@ -124,7 +124,7 @@ export async function select(req, res, next) {
 		.select({
 			uuid: manual_entry.uuid,
 			employee_uuid: manual_entry.employee_uuid,
-			employee_name: users.name,
+			employee_name: employee.name,
 			type: manual_entry.type,
 			entry_time: manual_entry.entry_time,
 			exit_time: manual_entry.exit_time,
@@ -153,6 +153,54 @@ export async function select(req, res, next) {
 		};
 
 		return res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function manualEntryByEmployee(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const manual_entryPromise = db
+		.select({
+			uuid: manual_entry.uuid,
+			employee_uuid: manual_entry.employee_uuid,
+			employee_name: employee.name,
+			type: manual_entry.type,
+			entry_time: manual_entry.entry_time,
+			exit_time: manual_entry.exit_time,
+			reason: manual_entry.reason,
+			area: manual_entry.area,
+			created_by: manual_entry.created_by,
+			created_at: manual_entry.created_at,
+			updated_at: manual_entry.updated_at,
+			remarks: manual_entry.remarks,
+		})
+		.from(manual_entry)
+		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(
+			createdByUser,
+			eq(manual_entry.created_by, createdByUser.uuid)
+		)
+		.where(
+			and(
+				eq(manual_entry.employee_uuid, req.params.uuid),
+				eq(manual_entry.type, 'field_visit')
+			)
+		)
+		.orderBy(desc(manual_entry.created_at))
+		.limit(5);
+
+	try {
+		const data = await manual_entryPromise;
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'manual_entry',
+		};
+
+		return res.status(200).json({ toast, data });
 	} catch (error) {
 		next(error);
 	}

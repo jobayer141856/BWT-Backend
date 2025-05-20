@@ -290,6 +290,10 @@ hrRouter.delete(
 	validateUuidParam(),
 	employeeOperations.remove
 );
+hrRouter.get(
+	'/manual-entry-details/by/:employee_uuid',
+	employeeOperations.manualEntryDetailsByEmployee
+);
 
 // ? device_permissions routes
 hrRouter.get('/device-permission', devicePermissionsOperations.selectAll);
@@ -334,6 +338,10 @@ hrRouter.delete(
 	'/manual-entry/:uuid',
 	validateUuidParam(),
 	manualEntryOperations.remove
+);
+hrRouter.get(
+	'/manual-entry/by/:employee_uuid',
+	manualEntryOperations.manualEntryByEmployee
 );
 
 // ? apply_leave routes
