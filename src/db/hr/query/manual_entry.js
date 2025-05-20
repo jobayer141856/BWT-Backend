@@ -2,7 +2,13 @@ import { and, desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import { employee, manual_entry, users } from '../schema.js';
+import {
+	employee,
+	manual_entry,
+	users,
+	department,
+	designation,
+} from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
@@ -86,12 +92,19 @@ export async function selectAll(req, res, next) {
 			reason: manual_entry.reason,
 			area: manual_entry.area,
 			created_by: manual_entry.created_by,
+			created_by_name: createdByUser.name,
 			created_at: manual_entry.created_at,
 			updated_at: manual_entry.updated_at,
 			remarks: manual_entry.remarks,
+			department_uuid: employee.department_uuid,
+			department_name: department.department,
+			designation_uuid: employee.designation_uuid,
+			designation_name: designation.designation,
 		})
 		.from(manual_entry)
 		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
+		.leftJoin(department, eq(employee.department_uuid, department.uuid))
+		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.leftJoin(
 			createdByUser,
@@ -131,12 +144,19 @@ export async function select(req, res, next) {
 			reason: manual_entry.reason,
 			area: manual_entry.area,
 			created_by: manual_entry.created_by,
+			created_by_name: createdByUser.name,
 			created_at: manual_entry.created_at,
 			updated_at: manual_entry.updated_at,
 			remarks: manual_entry.remarks,
+			department_uuid: employee.department_uuid,
+			department_name: department.department,
+			designation_uuid: employee.designation_uuid,
+			designation_name: designation.designation,
 		})
 		.from(manual_entry)
 		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
+		.leftJoin(department, eq(employee.department_uuid, department.uuid))
+		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.leftJoin(
 			createdByUser,
@@ -172,12 +192,19 @@ export async function manualEntryByEmployee(req, res, next) {
 			reason: manual_entry.reason,
 			area: manual_entry.area,
 			created_by: manual_entry.created_by,
+			created_by_name: createdByUser.name,
 			created_at: manual_entry.created_at,
 			updated_at: manual_entry.updated_at,
 			remarks: manual_entry.remarks,
+			department_uuid: employee.department_uuid,
+			department_name: department.department,
+			designation_uuid: employee.designation_uuid,
+			designation_name: designation.designation,
 		})
 		.from(manual_entry)
 		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
+		.leftJoin(department, eq(employee.department_uuid, department.uuid))
+		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.leftJoin(
 			createdByUser,
