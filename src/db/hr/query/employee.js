@@ -14,6 +14,7 @@ import {
 	sub_department,
 	users,
 	workplace,
+	employment_type,
 } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
@@ -103,6 +104,7 @@ export async function selectAll(req, res, next) {
 			secondary_display_text: employee.secondary_display_text,
 			configuration_uuid: employee.configuration_uuid,
 			employment_type_uuid: employee.employment_type_uuid,
+			employment_type_name: employment_type.name,
 			end_date: employee.end_date,
 			shift_group_uuid: employee.shift_group_uuid,
 			shift_group_name: shift_group.name,
@@ -145,6 +147,10 @@ export async function selectAll(req, res, next) {
 		.leftJoin(
 			leave_policy,
 			eq(employee.leave_policy_uuid, leave_policy.uuid)
+		)
+		.leftJoin(
+			employment_type,
+			eq(employee.employment_type_uuid, employment_type.uuid)
 		)
 		.orderBy(desc(employee.created_at));
 
@@ -182,6 +188,7 @@ export async function select(req, res, next) {
 			secondary_display_text: employee.secondary_display_text,
 			configuration_uuid: employee.configuration_uuid,
 			employment_type_uuid: employee.employment_type_uuid,
+			employment_type_name: employment_type.name,
 			end_date: employee.end_date,
 			shift_group_uuid: employee.shift_group_uuid,
 			shift_group_name: shift_group.name,
@@ -224,6 +231,10 @@ export async function select(req, res, next) {
 		.leftJoin(
 			leave_policy,
 			eq(employee.leave_policy_uuid, leave_policy.uuid)
+		)
+		.leftJoin(
+			employment_type,
+			eq(employee.employment_type_uuid, employment_type.uuid)
 		)
 		.where(eq(employee.uuid, req.params.uuid));
 	try {
