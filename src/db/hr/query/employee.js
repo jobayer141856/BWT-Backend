@@ -261,7 +261,7 @@ export async function manualEntryDetailsByEmployee(req, res, next) {
 
 		const response = {
 			...employee?.data,
-			manual_entry: manual_entry?.data || [],
+			field_visit: manual_entry?.data || [],
 		};
 
 		const toast = {
