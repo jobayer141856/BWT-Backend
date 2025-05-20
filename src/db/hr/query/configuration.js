@@ -1,6 +1,7 @@
 import { desc, eq } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
+import { createApi } from '../../../util/api.js';
 import { configuration, leave_policy, users } from '../schema.js';
 
 export async function insert(req, res, next) {
@@ -137,6 +138,42 @@ export async function select(req, res, next) {
 		};
 
 		return res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function configurationEntryDetailsByConfiguration(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { configuration_uuid } = req.params;
+
+	try {
+		const api = await createApi(req);
+		const fetchData = async (endpoint) =>
+			await api
+				.get(`${endpoint}/${configuration_uuid}`)
+				.then((response) => response.data)
+				.catch((error) => {
+					throw error;
+				});
+
+		const [configuration, configuration_entry] = await Promise.all([
+			fetchData('/hr/configuration'),
+			fetchData('/hr/configuration-entry/by'),
+		]);
+
+		const response = {
+			...configuration?.data,
+			configuration_entry: configuration_entry?.data || [],
+		};
+
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'configuration_entry',
+		};
+		return res.status(200).json({ toast, data: response });
 	} catch (error) {
 		next(error);
 	}
