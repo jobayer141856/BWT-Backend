@@ -181,6 +181,9 @@ export async function select(req, res, next) {
 export async function manualEntryByEmployee(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	const { employee_uuid } = req.params;
+	//console.log('employee_uuid', employee_uuid);
+
 	const manual_entryPromise = db
 		.select({
 			uuid: manual_entry.uuid,
@@ -212,7 +215,7 @@ export async function manualEntryByEmployee(req, res, next) {
 		)
 		.where(
 			and(
-				eq(manual_entry.employee_uuid, req.params.uuid),
+				eq(manual_entry.employee_uuid, employee_uuid),
 				eq(manual_entry.type, 'field_visit')
 			)
 		)
