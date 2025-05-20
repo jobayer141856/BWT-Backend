@@ -8,6 +8,7 @@ import {
 	users,
 	department,
 	designation,
+	device_list,
 } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
@@ -100,6 +101,8 @@ export async function selectAll(req, res, next) {
 			department_name: department.department,
 			designation_uuid: employee.designation_uuid,
 			designation_name: designation.designation,
+			device_list_uuid: manual_entry.device_list_uuid,
+			device_list_name: device_list.name,
 		})
 		.from(manual_entry)
 		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
@@ -109,6 +112,10 @@ export async function selectAll(req, res, next) {
 		.leftJoin(
 			createdByUser,
 			eq(manual_entry.created_by, createdByUser.uuid)
+		)
+		.leftJoin(
+			device_list,
+			eq(manual_entry.device_list_uuid, device_list.uuid)
 		)
 		.orderBy(desc(manual_entry.created_at));
 
@@ -152,6 +159,8 @@ export async function select(req, res, next) {
 			department_name: department.department,
 			designation_uuid: employee.designation_uuid,
 			designation_name: designation.designation,
+			device_list_uuid: manual_entry.device_list_uuid,
+			device_list_name: device_list.name,
 		})
 		.from(manual_entry)
 		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
@@ -161,6 +170,10 @@ export async function select(req, res, next) {
 		.leftJoin(
 			createdByUser,
 			eq(manual_entry.created_by, createdByUser.uuid)
+		)
+		.leftJoin(
+			device_list,
+			eq(manual_entry.device_list_uuid, device_list.uuid)
 		)
 		.where(eq(manual_entry.uuid, req.params.uuid));
 
@@ -203,6 +216,8 @@ export async function manualEntryByEmployee(req, res, next) {
 			department_name: department.department,
 			designation_uuid: employee.designation_uuid,
 			designation_name: designation.designation,
+			device_list_uuid: manual_entry.device_list_uuid,
+			device_list_name: device_list.name,
 		})
 		.from(manual_entry)
 		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
@@ -212,6 +227,10 @@ export async function manualEntryByEmployee(req, res, next) {
 		.leftJoin(
 			createdByUser,
 			eq(manual_entry.created_by, createdByUser.uuid)
+		)
+		.leftJoin(
+			device_list,
+			eq(manual_entry.device_list_uuid, device_list.uuid)
 		)
 		.where(
 			and(

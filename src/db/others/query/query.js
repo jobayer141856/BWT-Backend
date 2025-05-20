@@ -329,6 +329,26 @@ export async function selectEmployee(req, res, next) {
 	}
 }
 
+export async function selectDeviceList(req, res, next) {
+	const deviceListPromise = db
+		.select({
+			value: hrSchema.device_list.uuid,
+			label: hrSchema.device_list.name,
+		})
+		.from(hrSchema.device_list);
+	try {
+		const data = await deviceListPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Device List list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
 //* Store others routes *//
 
 export async function selectGroup(req, res, next) {

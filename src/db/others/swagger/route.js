@@ -316,6 +316,32 @@ const pathEmployee = {
 	},
 };
 
+const pathDeviceList = {
+	'/other/device-list/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all device list',
+			description: 'Get all device list',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('device list'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 //* Store others routes *//
 
 const pathGroup = {
@@ -1074,6 +1100,7 @@ export const pathOthers = {
 	...pathLeavePolicy,
 	...pathLeaveCategory,
 	...pathEmployee,
+	...pathDeviceList,
 	...pathGroup,
 	...pathCategory,
 	...pathBrand,
