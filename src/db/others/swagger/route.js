@@ -264,6 +264,32 @@ const pathLeavePolicy = {
 	},
 };
 
+const pathLeaveCategory = {
+	'/other/leave-category/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all leave category',
+			description: 'Get all leave category',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('leave category'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 const pathEmployee = {
 	'/other/employee/value/label': {
 		get: {
@@ -1046,6 +1072,7 @@ export const pathOthers = {
 	...pathEmploymentType,
 	...pathShiftGroup,
 	...pathLeavePolicy,
+	...pathLeaveCategory,
 	...pathEmployee,
 	...pathGroup,
 	...pathCategory,

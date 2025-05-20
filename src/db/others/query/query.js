@@ -289,6 +289,26 @@ export async function selectLeavePolicy(req, res, next) {
 	}
 }
 
+export async function selectLeaveCategory(req, res, next) {
+	const leaveCategoryPromise = db
+		.select({
+			value: hrSchema.leave_category.uuid,
+			label: hrSchema.leave_category.name,
+		})
+		.from(hrSchema.leave_category);
+	try {
+		const data = await leaveCategoryPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Leave Category list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
 export async function selectEmployee(req, res, next) {
 	const employeePromise = db
 		.select({
