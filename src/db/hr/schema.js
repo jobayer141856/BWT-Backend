@@ -447,6 +447,9 @@ export const manual_entry = hr.table('manual_entry', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	device_list_uuid: defaultUUID('device_list_uuid').references(
+		() => device_list.uuid
+	),
 });
 
 // ? Apply Leave

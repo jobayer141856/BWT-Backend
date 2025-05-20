@@ -49,6 +49,12 @@ otherRouter.get(
 // ? Employee routes
 otherRouter.get('/employee/value/label', otherOperations.selectEmployee);
 
+// ? Device List routes
+otherRouter.get(
+	'/device-list/value/label',
+	otherOperations.selectDeviceList
+);
+
 //* Store others routes *//
 // group routes
 otherRouter.get('/group/value/label', otherOperations.selectGroup);
