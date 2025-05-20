@@ -1,6 +1,7 @@
 import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
+import { createApi } from '../../../util/api.js';
 import db from '../../index.js';
 import {
 	configuration,
@@ -233,6 +234,42 @@ export async function select(req, res, next) {
 			message: 'employee',
 		};
 		return res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function manualEntryDetailsByEmployee(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { employee_uuid } = req.params;
+
+	try {
+		const api = await createApi(req);
+		const fetchData = async (endpoint) =>
+			await api
+				.get(`${endpoint}/${employee_uuid}`)
+				.then((response) => response.data)
+				.catch((error) => {
+					throw error;
+				});
+
+		const [employee, manual_entry] = await Promise.all([
+			fetchData('/hr/employee'),
+			fetchData('/hr/manual-entry/by'),
+		]);
+
+		const response = {
+			...employee?.data,
+			manual_entry: manual_entry?.data || [],
+		};
+
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'manual_entry details by employee',
+		};
+		return res.status(200).json({ toast, data: response });
 	} catch (error) {
 		next(error);
 	}

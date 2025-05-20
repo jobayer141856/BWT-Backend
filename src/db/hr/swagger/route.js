@@ -2027,6 +2027,35 @@ const pathHrEmployee = {
 			},
 		},
 	},
+	'/hr/manual-entry-details/by/{employee_uuid}': {
+		get: {
+			tags: ['hr.employee'],
+			summary: 'Gets a employee',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				{
+					name: 'employee_uuid',
+					in: 'path',
+					description: 'Employee UUID',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					employee: { $ref: '#/definitions/hr/employee' },
+					manual_entries: {
+						type: 'array',
+						items: { $ref: '#/definitions/hr/manual_entry' },
+					},
+				}),
+				405: SE.response(405),
+			},
+		},
+	},
 };
 
 const pathHrDevicePermission = {
@@ -2306,6 +2335,29 @@ const pathHrManualEntry = {
 			],
 			responses: {
 				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/manual-entry/by/{employee_uuid}': {
+		get: {
+			tags: ['hr.manual_entry'],
+			summary: 'Gets a manual entry by employee uuid',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				{
+					name: 'employee_uuid',
+					in: 'path',
+					description: 'Employee UUID',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/manual_entry'),
 				405: SE.response(405),
 			},
 		},
