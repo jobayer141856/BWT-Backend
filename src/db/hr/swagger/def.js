@@ -473,6 +473,7 @@ export const defManualEntry = SED({
 		created_at: SE.date_time(),
 		updated_at: SE.date_time(null),
 		remarks: SE.string('remarks'),
+		device_list_uuid: SE.uuid(),
 	},
 	xml: 'Hr/ManualEntry',
 });
