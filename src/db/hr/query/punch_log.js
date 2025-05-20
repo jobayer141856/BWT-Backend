@@ -83,17 +83,11 @@ export async function selectAll(req, res, next) {
 			device_list_name: device_list.name,
 			punch_type: punch_log.punch_type,
 			punch_time: punch_log.punch_time,
-			created_by: punch_log.created_by,
-			created_by_name: createdByUser.name,
-			created_at: punch_log.created_at,
-			updated_at: punch_log.updated_at,
-			remarks: punch_log.remarks,
 		})
 		.from(punch_log)
 		.leftJoin(device_list, eq(punch_log.device_list_uuid, device_list.uuid))
 		.leftJoin(employee, eq(punch_log.employee_uuid, employee.uuid))
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
-		.leftJoin(createdByUser, eq(punch_log.created_by, createdByUser.uuid))
 		.orderBy(desc(punch_log.punch_time));
 
 	try {
@@ -122,17 +116,11 @@ export async function select(req, res, next) {
 			device_list_name: device_list.name,
 			punch_type: punch_log.punch_type,
 			punch_time: punch_log.punch_time,
-			created_by: punch_log.created_by,
-			created_by_name: createdByUser.name,
-			created_at: punch_log.created_at,
-			updated_at: punch_log.updated_at,
-			remarks: punch_log.remarks,
 		})
 		.from(punch_log)
 		.leftJoin(device_list, eq(punch_log.device_list_uuid, device_list.uuid))
 		.leftJoin(employee, eq(punch_log.employee_uuid, employee.uuid))
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
-		.leftJoin(createdByUser, eq(punch_log.created_by, createdByUser.uuid))
 		.where(eq(punch_log.uuid, req.params.uuid));
 
 	try {
