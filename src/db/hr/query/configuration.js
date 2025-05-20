@@ -1,11 +1,7 @@
 import { desc, eq } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import {
-	configuration,
-	leave_policy,
-	users
-} from '../schema.js';
+import { configuration, leave_policy, users } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -13,7 +9,7 @@ export async function insert(req, res, next) {
 	const configurationPromise = db
 		.insert(configuration)
 		.values(req.body)
-		.returning({ insertedName: configuration.name });
+		.returning({ insertedName: configuration.id });
 
 	try {
 		const data = await configurationPromise;
@@ -36,7 +32,7 @@ export async function update(req, res, next) {
 		.update(configuration)
 		.set(req.body)
 		.where(eq(configuration.uuid, req.params.uuid))
-		.returning({ updatedName: configuration.name });
+		.returning({ updatedName: configuration.id });
 
 	try {
 		const data = await configurationPromise;
@@ -58,7 +54,7 @@ export async function remove(req, res, next) {
 	const configurationPromise = db
 		.delete(configuration)
 		.where(eq(configuration.uuid, req.params.uuid))
-		.returning({ deletedName: configuration.name });
+		.returning({ deletedName: configuration.id });
 
 	try {
 		const data = await configurationPromise;
