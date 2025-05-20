@@ -40,6 +40,12 @@ otherRouter.get('/shift-group/value/label', otherOperations.selectShiftGroup);
 // ? Leave Policy routes
 otherRouter.get('/leave-policy/value/label', otherOperations.selectLeavePolicy);
 
+// ? Leave Category routes
+otherRouter.get(
+	'/leave-category/value/label',
+	otherOperations.selectLeaveCategory
+);
+
 // ? Employee routes
 otherRouter.get('/employee/value/label', otherOperations.selectEmployee);
 
