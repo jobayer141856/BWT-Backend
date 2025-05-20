@@ -127,7 +127,7 @@ export async function select(req, res, next) {
 										'leave_category_uuid', ce.leave_category_uuid,
 										'maximum_number_of_allowed_leaves ', ce.maximum_number_of_allowed_leaves,
 										'enable_earned_leave', ce.enable_earned_leave)) 
-										FROM configuration_entry ce
+										FROM hr.configuration_entry ce
 										WHERE ce.configuration_uuid = ${configuration.uuid})`,
 		})
 		.from(configuration)
