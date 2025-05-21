@@ -450,6 +450,7 @@ export const manual_entry = hr.table('manual_entry', {
 	device_list_uuid: defaultUUID('device_list_uuid').references(
 		() => device_list.uuid
 	),
+	approved: boolean('approved').default(false),
 });
 
 // ? Apply Leave
@@ -474,6 +475,7 @@ export const apply_leave = hr.table('apply_leave', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	approved: boolean('approved').default(false),
 });
 
 // ? Apply Balance
