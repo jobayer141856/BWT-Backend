@@ -2,12 +2,7 @@ import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import {
-	device_list,
-	device_permission,
-	employee,
-	users
-} from '../schema.js';
+import { device_list, device_permission, employee, users } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
@@ -17,7 +12,7 @@ export async function insert(req, res, next) {
 	const device_permissionPromise = db
 		.insert(device_permission)
 		.values(req.body)
-		.returning({ insertedName: device_permission.name });
+		.returning({ insertedName: device_permission.uuid });
 
 	try {
 		const data = await device_permissionPromise;
@@ -40,7 +35,7 @@ export async function update(req, res, next) {
 		.update(device_permission)
 		.set(req.body)
 		.where(eq(device_permission.uuid, req.params.uuid))
-		.returning({ updatedName: device_permission.name });
+		.returning({ updatedName: device_permission.uuid });
 
 	try {
 		const data = await device_permissionPromise;
@@ -62,7 +57,7 @@ export async function remove(req, res, next) {
 	const device_permissionPromise = db
 		.delete(device_permission)
 		.where(eq(device_permission.uuid, req.params.uuid))
-		.returning({ deletedName: device_permission.name });
+		.returning({ deletedName: device_permission.uuid });
 
 	try {
 		const data = await device_permissionPromise;
