@@ -2311,7 +2311,12 @@ const pathHrManualEntry = {
 					required: false,
 					schema: {
 						type: 'string',
-						enum: ['field_visit', 'missing_punch', 'manual_entry'],
+						enum: [
+							'field_visit',
+							'missing_punch',
+							'manual_entry',
+							'late_application',
+						],
 					},
 					example: 'field_visit',
 				},
