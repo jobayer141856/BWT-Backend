@@ -12,7 +12,7 @@ export async function insert(req, res, next) {
 	const apply_leavePromise = db
 		.insert(apply_leave)
 		.values(req.body)
-		.returning({ insertedName: apply_leave.name });
+		.returning({ insertedName: apply_leave.type });
 
 	try {
 		const data = await apply_leavePromise;
@@ -35,7 +35,7 @@ export async function update(req, res, next) {
 		.update(apply_leave)
 		.set(req.body)
 		.where(eq(apply_leave.uuid, req.params.uuid))
-		.returning({ updatedName: apply_leave.name });
+		.returning({ updatedName: apply_leave.type });
 
 	try {
 		const data = await apply_leavePromise;
@@ -57,7 +57,7 @@ export async function remove(req, res, next) {
 	const apply_leavePromise = db
 		.delete(apply_leave)
 		.where(eq(apply_leave.uuid, req.params.uuid))
-		.returning({ deletedName: apply_leave.name });
+		.returning({ deletedName: apply_leave.type });
 
 	try {
 		const data = await apply_leavePromise;
@@ -92,6 +92,7 @@ export async function selectAll(req, res, next) {
 			created_at: apply_leave.created_at,
 			updated_at: apply_leave.updated_at,
 			remarks: apply_leave.remarks,
+			approved: apply_leave.approved,
 		})
 		.from(apply_leave)
 		.leftJoin(employee, eq(apply_leave.employee_uuid, employee.uuid))
@@ -138,6 +139,7 @@ export async function select(req, res, next) {
 			created_at: apply_leave.created_at,
 			updated_at: apply_leave.updated_at,
 			remarks: apply_leave.remarks,
+			approved: apply_leave.approved,
 		})
 		.from(apply_leave)
 		.leftJoin(employee, eq(apply_leave.employee_uuid, employee.uuid))

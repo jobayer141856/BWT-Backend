@@ -474,6 +474,7 @@ export const defManualEntry = SED({
 		updated_at: SE.date_time(null),
 		remarks: SE.string('remarks'),
 		device_list_uuid: SE.uuid(),
+		approved: SE.boolean(false),
 	},
 	xml: 'Hr/ManualEntry',
 });
@@ -506,6 +507,7 @@ export const defApplyLeave = SED({
 		created_at: SE.date_time(),
 		updated_at: SE.date_time(null),
 		remarks: SE.string('remarks'),
+		approved: SE.boolean(false),
 	},
 	xml: 'Hr/ApplyLeave',
 });
