@@ -433,6 +433,7 @@ export const manual_entry_type_enum = pgEnum('manual_entry_type_enum', [
 	'manual_entry',
 	'missing_punch',
 	'field_visit',
+	'late_application',
 ]);
 
 export const manual_entry = hr.table('manual_entry', {
