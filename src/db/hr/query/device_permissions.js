@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq, ne, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
@@ -174,6 +174,39 @@ export async function select(req, res, next) {
 		};
 
 		return res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectNotAssignedEmployeeForPermissionByDeviceListUuid(
+	req,
+	res,
+	next
+) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { device_list_uuid } = req.params;
+
+	const query = sql`
+		SELECT e.uuid, e.name, e.user_uuid
+		FROM hr.employee e
+		LEFT JOIN hr.device_permission dp
+			ON dp.employee_uuid = e.uuid AND dp.device_list_uuid = ${device_list_uuid}
+		WHERE dp.employee_uuid IS NULL;
+	`;
+
+	const device_permissionPromise = db.execute(query);
+
+	try {
+		const data = await device_permissionPromise;
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'Not Assigned Employee',
+		};
+
+		return res.status(200).json({ toast, data: data.rows });
 	} catch (error) {
 		next(error);
 	}

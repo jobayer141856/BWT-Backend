@@ -318,6 +318,10 @@ hrRouter.delete(
 	validateUuidParam(),
 	devicePermissionsOperations.remove
 );
+hrRouter.get(
+	'/device-permission-for-employee/by/:device_list_uuid',
+	devicePermissionsOperations.selectNotAssignedEmployeeForPermissionByDeviceListUuid
+);
 
 // ? punch_log routes
 hrRouter.get('/punch-log', punchLogOperations.selectAll);

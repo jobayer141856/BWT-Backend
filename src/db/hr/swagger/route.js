@@ -2203,6 +2203,34 @@ const pathHrDevicePermission = {
 			},
 		},
 	},
+	'/hr/device-permission-for-employee/by/{device_list_uuid}': {
+		get: {
+			tags: ['hr.device_permission'],
+			summary: 'Gets a device permission',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				{
+					name: 'device_list_uuid',
+					in: 'path',
+					description: 'Device list UUID',
+					required: true,
+					type: 'string',
+					format: 'uuid',
+				},
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					device_permission: {
+						type: 'array',
+						items: { $ref: '#/definitions/hr/device_permission' },
+					},
+				}),
+				405: SE.response(405),
+			},
+		},
+	},
 };
 
 const pathHrPunchLog = {
