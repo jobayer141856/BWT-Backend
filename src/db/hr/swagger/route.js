@@ -2121,6 +2121,9 @@ const pathHrDevicePermission = {
 			tags: ['hr.device_permission'],
 			summary: 'get all device permission',
 			description: 'All device permission',
+			parameters: [
+				SE.parameter_query('employee_uuid', 'employee_uuid', ['uuid']),
+			],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/device_permission'),
 				405: SE.response(405),

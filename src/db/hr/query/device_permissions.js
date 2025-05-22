@@ -74,6 +74,10 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { employee_uuid } = req.query;
+
 	const resultPromise = db
 		.select({
 			uuid: device_permission.uuid,
@@ -106,6 +110,10 @@ export async function selectAll(req, res, next) {
 			eq(device_permission.created_by, createdByUser.uuid)
 		)
 		.orderBy(desc(device_permission.created_at));
+
+	if (employee_uuid) {
+		resultPromise.where(eq(device_permission.employee_uuid, employee_uuid));
+	}
 
 	try {
 		const data = await resultPromise;
