@@ -189,7 +189,10 @@ export async function selectNotAssignedEmployeeForPermissionByDeviceListUuid(
 	const { device_list_uuid } = req.params;
 
 	const query = sql`
-		SELECT e.uuid, e.name, e.user_uuid
+		SELECT 
+			e.uuid as employee_uuid, 
+			e.name as employee_name, 
+			e.user_uuid
 		FROM hr.employee e
 		LEFT JOIN hr.device_permission dp
 			ON dp.employee_uuid = e.uuid AND dp.device_list_uuid = ${device_list_uuid}
