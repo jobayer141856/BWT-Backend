@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import multer from 'multer';
 import { validateUuidParam } from '../../lib/validator.js';
 import * as departmentOperations from './query/department.js';
 import * as designationOperations from './query/designation.js';
@@ -29,7 +30,7 @@ import * as payRollIncrementOperations from './query/payroll_increment.js';
 import * as payRollEntryOperations from './query/payroll_entry.js';
 
 const hrRouter = Router();
-
+const upload = multer();
 // user routes
 
 hrRouter.post('/user/login', userOperations.loginUser);
@@ -364,8 +365,16 @@ hrRouter.get(
 	validateUuidParam(),
 	applyLeaveOperations.select
 );
-hrRouter.post('/apply-leave', applyLeaveOperations.insert);
-hrRouter.put('/apply-leave/:uuid', applyLeaveOperations.update);
+hrRouter.post(
+	'/apply-leave',
+	upload.single('file'),
+	applyLeaveOperations.insert
+);
+hrRouter.put(
+	'/apply-leave/:uuid',
+	upload.single('file'),
+	applyLeaveOperations.update
+);
 hrRouter.delete(
 	'/apply-leave/:uuid',
 	validateUuidParam(),
