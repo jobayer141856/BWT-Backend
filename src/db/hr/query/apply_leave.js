@@ -1,6 +1,11 @@
 import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
+import {
+	deleteFile,
+	insertFile,
+	updateFile,
+} from '../../../util/upload_files.js';
 import db from '../../index.js';
 import { apply_leave, employee, leave_category, users } from '../schema.js';
 
@@ -9,9 +14,34 @@ const createdByUser = alias(users, 'created_by_user');
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	const formData = req.body;
+	const file = req.file;
+
+	// console.log('formData', formData);
+	// console.log('file', file);
+
+	const filePath = file ? await insertFile(file, 'public/apply-leave') : null;
+
+	const values = {
+		uuid: formData.uuid,
+		employee_uuid: formData.employee_uuid || null,
+		leave_category_uuid: formData.leave_category_uuid || null,
+		year: formData.year,
+		type: formData.type,
+		from_date: formData.from_date,
+		to_date: formData.to_date,
+		reason: formData.reason,
+		file: filePath,
+		created_by: formData.created_by,
+		created_at: formData.created_at,
+		updated_at: formData.updated_at || null,
+		remarks: formData.remarks || null,
+		approved: formData.approved === 'true' || formData.approved === true,
+	};
+
 	const apply_leavePromise = db
 		.insert(apply_leave)
-		.values(req.body)
+		.values(values)
 		.returning({ insertedName: apply_leave.type });
 
 	try {
@@ -31,9 +61,56 @@ export async function insert(req, res, next) {
 export async function update(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	const formData = req.body;
+	const file = req.file;
+
+	if (!formData || Object.keys(formData).length === 0) {
+		return res.status(400).json({ error: 'No form data provided' });
+	}
+
+	let filePath = null;
+
+	if (file && typeof file === 'object') {
+		// Check if the file is being updated
+		const existingData = await db
+			.select({ file: apply_leave.file })
+			.from(apply_leave)
+			.where(eq(apply_leave.uuid, req.params.uuid))
+			.limit(1);
+
+		const existingFilePath = existingData[0]?.file;
+
+		if (existingFilePath) {
+			filePath = await updateFile(
+				file,
+				existingFilePath,
+				'public/apply-leave'
+			);
+		} else {
+			filePath = await insertFile(file, 'public/apply-leave');
+		}
+	}
+
+	const values = {
+		uuid: formData.uuid,
+		employee_uuid: formData.employee_uuid || null,
+		leave_category_uuid: formData.leave_category_uuid || null,
+		year: formData.year,
+		type: formData.type,
+		from_date: formData.from_date,
+		to_date: formData.to_date,
+		reason: formData.reason,
+		file: filePath,
+		created_by: formData.created_by,
+		created_at: formData.created_at,
+		updated_at: formData.updated_at || null,
+		remarks: formData.remarks || null,
+		approved: formData.approved === 'true' || formData.approved === true,
+	};
+
 	const apply_leavePromise = db
 		.update(apply_leave)
-		.set(req.body)
+		.set(values)
 		.where(eq(apply_leave.uuid, req.params.uuid))
 		.returning({ updatedName: apply_leave.type });
 
@@ -53,6 +130,17 @@ export async function update(req, res, next) {
 
 export async function remove(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
+
+	const existingData = await db
+		.select({ file: apply_leave.file })
+		.from(apply_leave)
+		.where(eq(apply_leave.uuid, req.params.uuid))
+		.limit(1);
+	const existingFilePath = existingData[0]?.file;
+	if (existingFilePath) {
+		// Delete the old file
+		await deleteFile(existingFilePath);
+	}
 
 	const apply_leavePromise = db
 		.delete(apply_leave)

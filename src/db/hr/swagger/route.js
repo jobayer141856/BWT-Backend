@@ -2447,7 +2447,82 @@ const pathHrApplyLeave = {
 			// operationId: "addPet",
 			consumes: ['application/json'],
 			produces: ['application/json'],
-			requestBody: SE.requestBody_schema_ref('hr/apply_leave'),
+			requestBody: {
+				required: true,
+				content: {
+					'multipart/form-data': {
+						schema: {
+							type: 'object',
+							properties: {
+								uuid: {
+									type: 'string',
+									example: 'igD0v9DIJQhJeet',
+								},
+
+								employee_uuid: {
+									type: 'string',
+									example: 'igD0v9DIJQhJeet',
+								},
+								leave_category_uuid: {
+									type: 'string',
+									example: 'igD0v9DIJQhJeet',
+								},
+								year: { type: Number, example: 2025 },
+								type: { type: 'string', example: 'full' },
+								from_date: {
+									type: 'string',
+									format: 'date',
+									example: '2025-05-07 18:44:25',
+								},
+								to_date: {
+									type: 'string',
+									format: 'date',
+									example: '2025-05-07 18:44:25',
+								},
+								reason: {
+									type: 'string',
+									example: 'Medical leave',
+								},
+								file: { type: 'string', format: 'binary' }, // for file upload
+								approved: {
+									type: 'boolean',
+									example: false,
+								},
+								created_by: {
+									type: 'string',
+									example: 'igD0v9DIJQhJeet',
+								},
+								created_at: {
+									type: 'string',
+									format: 'date-time',
+									example: '2024-05-01 10:00:00',
+								},
+								updated_at: {
+									type: 'string',
+									format: 'date-time',
+									example: '2024-05-01 10:00:00',
+								},
+								remarks: {
+									type: 'string',
+									example: 'Leave approved',
+								},
+							},
+							required: [
+								'uuid',
+								//'employee_uuid',
+								//'leave_category_uuid',
+								'year',
+								'type',
+								'from_date',
+								'to_date',
+								'reason',
+								'created_by',
+								'created_at',
+							],
+						},
+					},
+				},
+			},
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/apply_leave'),
 				405: SE.response(405),
@@ -2489,7 +2564,75 @@ const pathHrApplyLeave = {
 					SE.uuid()
 				),
 			],
-			requestBody: SE.requestBody_schema_ref('hr/apply_leave'),
+			requestBody: {
+				required: true,
+				content: {
+					'multipart/form-data': {
+						schema: {
+							type: 'object',
+							properties: {
+								uuid: {
+									type: 'string',
+									example: 'igD0v9DIJQhJeet',
+								},
+								employee_uuid: {
+									type: 'string',
+									example: 'igD0v9DIJQhJeet',
+								},
+								leave_category_uuid: {
+									type: 'string',
+									example: 'igD0v9DIJQhJeet',
+								},
+								year: { type: Number, example: 2025 },
+								type: { type: 'string', example: 'full' },
+								from_date: {
+									type: 'string',
+									format: 'date',
+									example: '2025-05-07 18:44:25',
+								},
+								to_date: {
+									type: 'string',
+									format: 'date',
+									example: '2025-05-07 18:44:25',
+								},
+								reason: {
+									type: 'string',
+									example: 'Medical leave',
+								},
+								file: { type: 'string', format: 'binary' }, // for file upload
+								approved: {
+									type: 'boolean',
+									example: false,
+								},
+								created_by: {
+									type: 'string',
+									example: 'igD0v9DIJQhJeet',
+								},
+								created_at: {
+									type: 'string',
+									format: 'date-time',
+									example: '2024-05-01 10:00:00',
+								},
+								updated_at: {
+									type: 'string',
+									format: 'date-time',
+									example: '2024-05-01 10:00:00',
+								},
+							},
+							required: [
+								'uuid',
+								//'employee_uuid',
+								//'leave_category_uuid',
+								'year',
+								'type',
+								'from_date',
+								'to_date',
+								'reason',
+							],
+						},
+					},
+				},
+			},
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/apply_leave'),
 				405: SE.response(405),
