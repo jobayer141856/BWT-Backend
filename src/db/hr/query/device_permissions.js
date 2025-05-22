@@ -76,7 +76,7 @@ export async function remove(req, res, next) {
 export async function selectAll(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const { employee_uuid } = req.query;
+	const { employee_uuid, device_list_uuid } = req.query;
 
 	const resultPromise = db
 		.select({
@@ -113,6 +113,12 @@ export async function selectAll(req, res, next) {
 
 	if (employee_uuid) {
 		resultPromise.where(eq(device_permission.employee_uuid, employee_uuid));
+	}
+
+	if (device_list_uuid) {
+		resultPromise.where(
+			eq(device_permission.device_list_uuid, device_list_uuid)
+		);
 	}
 
 	try {

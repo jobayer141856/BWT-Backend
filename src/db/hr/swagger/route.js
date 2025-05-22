@@ -2123,6 +2123,9 @@ const pathHrDevicePermission = {
 			description: 'All device permission',
 			parameters: [
 				SE.parameter_query('employee_uuid', 'employee_uuid', ['uuid']),
+				SE.parameter_query('device_list_uuid', 'device_list_uuid', [
+					'uuid',
+				]),
 			],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/device_permission'),
