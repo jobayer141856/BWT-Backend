@@ -180,7 +180,7 @@ export async function selectAll(req, res, next) {
 			created_at: apply_leave.created_at,
 			updated_at: apply_leave.updated_at,
 			remarks: apply_leave.remarks,
-			approved: apply_leave.approved,
+			approval: apply_leave.approval,
 		})
 		.from(apply_leave)
 		.leftJoin(employee, eq(apply_leave.employee_uuid, employee.uuid))
@@ -227,7 +227,7 @@ export async function select(req, res, next) {
 			created_at: apply_leave.created_at,
 			updated_at: apply_leave.updated_at,
 			remarks: apply_leave.remarks,
-			approved: apply_leave.approved,
+			approval: apply_leave.approval,
 		})
 		.from(apply_leave)
 		.leftJoin(employee, eq(apply_leave.employee_uuid, employee.uuid))
