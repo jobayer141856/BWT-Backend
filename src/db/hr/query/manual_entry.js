@@ -103,7 +103,7 @@ export async function selectAll(req, res, next) {
 			designation_name: designation.designation,
 			device_list_uuid: manual_entry.device_list_uuid,
 			device_list_name: device_list.name,
-			approved: manual_entry.approved,
+			approval: manual_entry.approval,
 		})
 		.from(manual_entry)
 		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
@@ -162,7 +162,7 @@ export async function select(req, res, next) {
 			designation_name: designation.designation,
 			device_list_uuid: manual_entry.device_list_uuid,
 			device_list_name: device_list.name,
-			approved: manual_entry.approved,
+			approval: manual_entry.approval,
 		})
 		.from(manual_entry)
 		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
@@ -220,7 +220,7 @@ export async function manualEntryByEmployee(req, res, next) {
 			designation_name: designation.designation,
 			device_list_uuid: manual_entry.device_list_uuid,
 			device_list_name: device_list.name,
-			approved: manual_entry.approved,
+			approval: manual_entry.approval,
 		})
 		.from(manual_entry)
 		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))

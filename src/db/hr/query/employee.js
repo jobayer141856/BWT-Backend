@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import { createApi } from '../../../util/api.js';
@@ -281,6 +281,107 @@ export async function manualEntryDetailsByEmployee(req, res, next) {
 			message: 'manual_entry details by employee',
 		};
 		return res.status(200).json({ toast, data: response });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function employeeLeaveInformationDetails(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { employee_uuid } = req.params;
+
+	const employeeLeaveInformationPromise = db
+		.select({
+			uuid: employee.uuid,
+			id: employee.id,
+			gender: employee.gender,
+			user_uuid: employee.user_uuid,
+			users_name: users.name,
+			start_date: employee.start_date,
+			workplace_uuid: employee.workplace_uuid,
+			workplace_name: workplace.name,
+			rfid: employee.rfid,
+			sub_department_uuid: employee.sub_department_uuid,
+			sub_department_name: sub_department.name,
+			primary_display_text: employee.primary_display_text,
+			secondary_display_text: employee.secondary_display_text,
+			configuration_uuid: employee.configuration_uuid,
+			employment_type_uuid: employee.employment_type_uuid,
+			employment_type_name: employment_type.name,
+			end_date: employee.end_date,
+			shift_group_uuid: employee.shift_group_uuid,
+			shift_group_name: shift_group.name,
+			line_manager_uuid: employee.line_manager_uuid,
+			hr_manager_uuid: employee.hr_manager_uuid,
+			is_admin: employee.is_admin,
+			is_hr: employee.is_hr,
+			is_line_manager: employee.is_line_manager,
+			allow_over_time: employee.allow_over_time,
+			exclude_from_attendance: employee.exclude_from_attendance,
+			status: employee.status,
+			created_by: employee.created_by,
+			created_by_name: createdByUser.name,
+			created_at: employee.created_at,
+			updated_at: employee.updated_at,
+			remarks: employee.remarks,
+			name: employee.name,
+			email: employee.email,
+			pass: employee.pass,
+			designation_uuid: employee.designation_uuid,
+			designation_name: designation.designation,
+			department_uuid: employee.department_uuid,
+			department_name: department.department,
+			employee_id: employee.employee_id,
+			leave_policy_uuid: employee.leave_policy_uuid,
+			leave_policy_name: leave_policy.name,
+			report_position: employee.report_position,
+			leave_information: sql`jsonb_build_object(
+				'leave_category_uuid', leave_category.uuid,
+				'leave_category_name', leave_category.name,
+				'number_of_leaves_to_provide_file', employee.number_of_leaves_to_provide_file,
+				'maximum_number_of_allowed_leaves', employee.maximum_number_of_allowed_leaves,
+				'leave_carry_type', employee.leave_carry_type,
+				'consecutive_days', employee.consecutive_days,
+				'maximum_number_of_leaves_to_carry', employee.maximum_number_of_leaves_to_carry,
+				'count_off_days_as_leaves', employee.count_off_days_as_leaves,
+				'enable_previous_day_selection', employee.enable_previous_day_selection,
+				'maximum_number_of_leave_per_month', employee.maximum_number_of_leave_per_month,
+				'previous_date_selected_limit', employee.previous_date_selected_limit,
+				'applicability', employee.applicability,
+				'eligible_after_joining', employee.eligible_after_joining,
+				'enable_pro_rata', employee.enable_pro_rata,
+				'max_avail_time', employee.max_avail_time,
+				'enable_earned_leave', employee.enable_earned_leave
+
+				
+			)`,
+		})
+		.from(employee)
+		.leftJoin(
+			leave_category,
+			eq(employee.leave_category_uuid, leave_category.uuid)
+		)
+		.leftJoin(
+			configuration,
+			eq(employee.configuration_uuid, configuration.uuid)
+		)
+		.leftJoin(
+			leave_policy,
+			eq(configuration.leave_policy_uuid, leave_policy.uuid)
+		)
+		.leftJoin(users, eq(employee.created_by, users.uuid))
+		.where(eq(employee.user_uuid, employee_uuid));
+
+	const data = await employeeLeaveInformationPromise;
+
+	try {
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'employee leave information details',
+		};
+		return res.status(200).json({ toast, data });
 	} catch (error) {
 		next(error);
 	}
