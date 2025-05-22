@@ -46,6 +46,7 @@ const publicUrls = [
 	{ url: '/other/brand/value/label', method: 'GET' },
 	{ url: '/work/info', method: 'POST' },
 	{ url: '/work/order', method: 'POST' },
+	{ url: '/uploads', method: 'GET' },
 ];
 
 export const VerifyToken = (req, res, next) => {
