@@ -428,6 +428,13 @@ export const punch_log = hr.table('punch_log', {
 	punch_time: DateTime('punch_time').notNull(),
 });
 
+// ? Manual Entry && ? Apply Leave
+export const approval_status_enum = pgEnum('approval_status_enum', [
+	'pending',
+	'approved',
+	'rejected',
+]);
+
 // ? Manual Entry
 export const manual_entry_type_enum = pgEnum('manual_entry_type_enum', [
 	'manual_entry',
@@ -451,7 +458,7 @@ export const manual_entry = hr.table('manual_entry', {
 	device_list_uuid: defaultUUID('device_list_uuid').references(
 		() => device_list.uuid
 	),
-	approved: boolean('approved').default(false),
+	approval: approval_status_enum('approval').default('pending'),
 });
 
 // ? Apply Leave
@@ -476,7 +483,7 @@ export const apply_leave = hr.table('apply_leave', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
-	approved: boolean('approved').default(false),
+	approval: approval_status_enum('approval').default('pending'),
 });
 
 // ? Apply Balance
