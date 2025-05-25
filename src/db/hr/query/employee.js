@@ -292,6 +292,7 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const { employee_uuid } = req.params;
+	const { apply_leave_uuid } = req.query;
 
 	const employeeLeaveInformationPromise = db
 		.select({
@@ -378,6 +379,38 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 			leave_application_information: sql`
 								(
 									SELECT COALESCE(
+										jsonb_build_object(
+											'uuid', apply_leave.uuid,
+											'leave_category_uuid', apply_leave.leave_category_uuid,
+											'leave_category_name', leave_category.name,
+											'employee_uuid', apply_leave.employee_uuid,
+											'employee_name', employee.name,
+											'type', apply_leave.type,
+											'from_date', apply_leave.from_date,
+											'to_date', apply_leave.to_date,
+											'reason', apply_leave.reason,
+											'file', apply_leave.file,
+											'approval', apply_leave.approval,
+											'created_at', apply_leave.created_at,
+											'updated_at', apply_leave.updated_at,
+											'remarks', apply_leave.remarks,
+											'created_by', apply_leave.created_by,
+											'created_by_name', createdByUser.name
+										), '{}'::jsonb
+									)
+									FROM hr.apply_leave
+									LEFT JOIN hr.leave_category
+										ON apply_leave.leave_category_uuid = leave_category.uuid
+									LEFT JOIN hr.employee
+										ON apply_leave.employee_uuid = employee.uuid
+									LEFT JOIN hr.users AS createdByUser
+										ON apply_leave.created_by = createdByUser.uuid
+									WHERE apply_leave.employee_uuid = ${employee_uuid} AND 
+									apply_leave.uuid = ${apply_leave_uuid}
+								)`,
+			last_five_leave_applications: sql`
+								(
+									SELECT COALESCE(
 										jsonb_agg(
 											jsonb_build_object(
 												'uuid', apply_leave.uuid,
@@ -397,8 +430,8 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 												'created_by', apply_leave.created_by,
 												'created_by_name', createdByUser.name
 											)
-										), '[]'::jsonb
-									)
+										) ORDER BY apply_leave.created_at DESC LIMIT 5
+									, '[]'::jsonb)
 									FROM hr.apply_leave
 									LEFT JOIN hr.leave_category
 										ON apply_leave.leave_category_uuid = leave_category.uuid
