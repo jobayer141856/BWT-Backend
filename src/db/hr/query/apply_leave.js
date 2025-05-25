@@ -156,6 +156,8 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
+	const { approval } = req.query;
+
 	const resultPromise = db
 		.select({
 			uuid: apply_leave.uuid,
@@ -185,6 +187,10 @@ export async function selectAll(req, res, next) {
 		)
 		.leftJoin(createdByUser, eq(apply_leave.created_by, createdByUser.uuid))
 		.orderBy(desc(apply_leave.created_at));
+
+	if (approval) {
+		resultPromise.where(eq(apply_leave.approval, approval));
+	}
 
 	try {
 		const data = await resultPromise;

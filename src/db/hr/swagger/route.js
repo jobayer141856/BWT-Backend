@@ -1,3 +1,4 @@
+import { param } from 'express-validator';
 import SE from '../../../util/swagger_example.js';
 
 // * Hr User * //
@@ -2592,6 +2593,13 @@ const pathHrApplyLeave = {
 			tags: ['hr.apply_leave'],
 			summary: 'get all apply leave',
 			description: 'All apply leave',
+			parameters: [
+				SE.parameter_query('approval', 'approval', [
+					'approved',
+					'rejected',
+					'pending',
+				]),
+			],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/apply_leave'),
 				405: SE.response(405),
