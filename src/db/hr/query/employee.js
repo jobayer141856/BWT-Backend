@@ -354,10 +354,14 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 												)
 										)
 									)
-									FROM hr.leave_category
-									LEFT JOIN hr.configuration_entry ON configuration_entry.leave_category_uuid = leave_category.uuid
-									LEFT JOIN hr.configuration ON configuration_entry.configuration_uuid = configuration.uuid
-									LEFT JOIN hr.leave_policy ON configuration.leave_policy_uuid = leave_policy.uuid
+									FROM hr.employee
+									LEFT JOIN hr.leave_policy ON employee.leave_policy_uuid = leave_policy.uuid
+									LEFT JOIN hr.configuration
+										ON leave_policy.uuid = configuration.leave_policy_uuid
+									LEFT JOIN hr.configuration_entry
+										ON configuration_entry.configuration_uuid = configuration.uuid
+									LEFT JOIN hr.leave_category
+										ON leave_category.uuid = configuration_entry.leave_category_uuid
 									LEFT JOIN (
 										SELECT
 											apply_leave.employee_uuid,
@@ -367,7 +371,7 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 										WHERE approval = 'approved'
 										GROUP BY employee_uuid, leave_category_uuid
 									) AS leave_summary
-										ON leave_summary.employee_uuid = ${employee_uuid}
+										ON leave_summary.employee_uuid = employee.uuid
 										AND leave_summary.leave_category_uuid = leave_category.uuid
 									WHERE leave_policy.uuid = ${employee.leave_policy_uuid}
 								)`,
