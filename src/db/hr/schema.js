@@ -396,6 +396,13 @@ export const employee = hr.table('employee', {
 	employee_id: text('employee_id').notNull(),
 });
 
+export const permission_type_enum = pgEnum('permission_type_enum', [
+	'permanent',
+	'temporary',
+]);
+
+// ? Device Permission
+
 export const device_permission = hr.table('device_permission', {
 	uuid: uuid_primary,
 	id: serial('id').notNull(),
@@ -403,7 +410,8 @@ export const device_permission = hr.table('device_permission', {
 		() => device_list.uuid
 	),
 	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
-	is_temporary_access: boolean('is_temporary_access').default(false),
+	permission_type:
+		permission_type_enum('permission_type').default('permanent'),
 	temporary_from_date: DateTime('temporary_from_date').default(null),
 	temporary_to_date: DateTime('temporary_to_date').default(null),
 	rfid_access: boolean('rfid_access').default(false),
