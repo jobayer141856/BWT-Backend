@@ -2693,14 +2693,7 @@ const pathHrApplyLeave = {
 			description: '',
 			// operationId: "deletePet",
 			produces: ['application/json'],
-			parameters: [
-				SE.parameter_params(
-					'Apply leave to get',
-					'uuid',
-					'string',
-					SE.uuid()
-				),
-			],
+			parameters: [SE.parameter_params('hr.apply_leave to get')],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/apply_leave'),
 				405: SE.response(405),
@@ -2713,14 +2706,7 @@ const pathHrApplyLeave = {
 			// operationId: "updatePet",
 			consumes: ['application/json'],
 			produces: ['application/json'],
-			parameters: [
-				SE.parameter_params(
-					'Apply leave to put',
-					'uuid',
-					'string',
-					SE.uuid()
-				),
-			],
+			parameters: [SE.parameter_params('hr.apply_leave to update')],
 			requestBody: {
 				required: true,
 				content: {
@@ -2728,10 +2714,6 @@ const pathHrApplyLeave = {
 						schema: {
 							type: 'object',
 							properties: {
-								uuid: {
-									type: 'string',
-									example: 'igD0v9DIJQhJeet',
-								},
 								employee_uuid: {
 									type: 'string',
 									example: 'igD0v9DIJQhJeet',
@@ -2777,7 +2759,6 @@ const pathHrApplyLeave = {
 								},
 							},
 							required: [
-								'uuid',
 								//'employee_uuid',
 								//'leave_category_uuid',
 								'year',
