@@ -120,12 +120,12 @@ export async function selectAll(req, res, next) {
 		)
 		.orderBy(desc(manual_entry.created_at));
 
-	if (type) {
-		resultPromise.where(eq(manual_entry.type, type));
+	if (type && approval) {
+		and(eq(manual_entry.type, type), eq(manual_entry.approval, approval));
 	}
-	if (approval) {
-		resultPromise.where(eq(manual_entry.approval, approval));
-	}
+	// if (approval) {
+	// 	resultPromise.where(eq(manual_entry.approval, approval));
+	// }
 
 	try {
 		const data = await resultPromise;
