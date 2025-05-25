@@ -2256,6 +2256,10 @@ const pathHrDevicePermission = {
 				SE.parameter_query('device_list_uuid', 'device_list_uuid', [
 					'uuid',
 				]),
+				SE.parameter_query('permission_type', 'permission_type', [
+					'permanent',
+					'temporary',
+				]),
 			],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/device_permission'),
