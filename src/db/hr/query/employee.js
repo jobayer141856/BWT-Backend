@@ -336,26 +336,63 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 			leave_policy_uuid: employee.leave_policy_uuid,
 			leave_policy_name: leave_policy.name,
 			report_position: employee.report_position,
-			leave_information: sql`jsonb_build_object(
-				'leave_category_uuid', leave_category.uuid,
-				'leave_category_name', leave_category.name,
-				'number_of_leaves_to_provide_file', employee.number_of_leaves_to_provide_file,
-				'maximum_number_of_allowed_leaves', employee.maximum_number_of_allowed_leaves,
-				'leave_carry_type', employee.leave_carry_type,
-				'consecutive_days', employee.consecutive_days,
-				'maximum_number_of_leaves_to_carry', employee.maximum_number_of_leaves_to_carry,
-				'count_off_days_as_leaves', employee.count_off_days_as_leaves,
-				'enable_previous_day_selection', employee.enable_previous_day_selection,
-				'maximum_number_of_leave_per_month', employee.maximum_number_of_leave_per_month,
-				'previous_date_selected_limit', employee.previous_date_selected_limit,
-				'applicability', employee.applicability,
-				'eligible_after_joining', employee.eligible_after_joining,
-				'enable_pro_rata', employee.enable_pro_rata,
-				'max_avail_time', employee.max_avail_time,
-				'enable_earned_leave', employee.enable_earned_leave
-
-				
-			)`,
+			remaining_leave_information: sql`
+				               (
+									SELECT jsonb_agg(
+										jsonb_build_object(
+											'uuid', leave_category.uuid,
+											'name', leave_category.name,
+											'maximum_number_of_allowed_leaves', configuration_entry.maximum_number_of_allowed_leaves,
+											'used_leave_days', COALESCE(leave_summary.total_leave_days, 0)
+											'remaining_leave_days', 
+												COALESCE(
+													configuration_entry.maximum_number_of_allowed_leaves - COALESCE(leave_summary.total_leave_days, 0),
+													configuration_entry.maximum_number_of_allowed_leaves
+												)
+										)
+									)
+									FROM hr.leave_category
+									LEFT JOIN hr.apply_leave 
+										ON apply_leave.leave_category_uuid = leave_category.uuid
+									LEFT JOIN hr.configuration_entry ON configuration_entry.leave_category_uuid = leave_category.uuid
+									LEFT JOIN (
+										SELECT 
+											apply_leave.employee_uuid,
+											apply_leave.leave_category_uuid,
+											SUM(apply_leave.to_date::date - apply_leave.from_date::date + 1) AS total_leave_days
+										FROM hr.apply_leave
+										WHERE approval = 'approved'
+										GROUP BY employee_uuid, leave_category_uuid
+									) AS leave_summary 
+										ON leave_summary.employee_uuid = ${employee_uuid}
+										AND leave_summary.leave_category_uuid = leave_category.uuid
+									WHERE apply_leave.employee_uuid = ${employee_uuid}
+								)`,
+			leave_application_information: sql`
+					                         (
+									SELECT jsonb_agg(
+										jsonb_build_object(
+											'uuid', apply_leave.uuid,
+											'leave_category_uuid', apply_leave.leave_category_uuid,
+											'leave_category_name', leave_category.name,
+											'employee_uuid', apply_leave.employee_uuid,
+											'employee_name', employee.name,
+											'type', apply_leave.type,
+											'from_date', apply_leave.from_date,
+											'to_date', apply_leave.to_date,
+											'reason', apply_leave.reason,
+											'file', apply_leave.file,
+											'approval', apply_leave.approval
+										)
+									
+									)
+									FROM hr.apply_leave
+									LEFT JOIN hr.leave_category 
+										ON apply_leave.leave_category_uuid = leave_category.uuid
+									LEFT JOIN hr.employee
+										ON apply_leave.employee_uuid = employee.uuid
+									WHERE apply_leave.employee_uuid = ${employee_uuid}
+								)`,
 		})
 		.from(employee)
 		.leftJoin(
