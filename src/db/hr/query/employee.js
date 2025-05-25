@@ -292,6 +292,7 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const { employee_uuid } = req.params;
+
 	const { apply_leave_uuid } = req.query;
 
 	const employeeLeaveInformationPromise = db
@@ -409,38 +410,60 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 									apply_leave.uuid = ${apply_leave_uuid}
 								)`,
 			last_five_leave_applications: sql`
-								(
-									SELECT COALESCE(
-										jsonb_agg(
-											jsonb_build_object(
-												'uuid', apply_leave.uuid,
-												'leave_category_uuid', apply_leave.leave_category_uuid,
-												'leave_category_name', leave_category.name,
-												'employee_uuid', apply_leave.employee_uuid,
-												'employee_name', employee.name,
-												'type', apply_leave.type,
-												'from_date', apply_leave.from_date,
-												'to_date', apply_leave.to_date,
-												'reason', apply_leave.reason,
-												'file', apply_leave.file,
-												'approval', apply_leave.approval,
-												'created_at', apply_leave.created_at,
-												'updated_at', apply_leave.updated_at,
-												'remarks', apply_leave.remarks,
-												'created_by', apply_leave.created_by,
-												'created_by_name', createdByUser.name
+											(
+												SELECT COALESCE(
+													jsonb_agg(
+														jsonb_build_object(
+															'uuid', t.uuid,
+															'leave_category_uuid', t.leave_category_uuid,
+															'leave_category_name', t.leave_category_name,
+															'employee_uuid', t.employee_uuid,
+															'employee_name', t.employee_name,
+															'type', t.type,
+															'from_date', t.from_date,
+															'to_date', t.to_date,
+															'reason', t.reason,
+															'file', t.file,
+															'approval', t.approval,
+															'created_at', t.created_at,
+															'updated_at', t.updated_at,
+															'remarks', t.remarks,
+															'created_by', t.created_by,
+															'created_by_name', t.created_by_name
+														)
+													), '[]'::jsonb
+												)
+												FROM (
+													SELECT
+														apply_leave.uuid,
+														apply_leave.leave_category_uuid,
+														leave_category.name AS leave_category_name,
+														apply_leave.employee_uuid,
+														employee.name AS employee_name,
+														apply_leave.type,
+														apply_leave.from_date,
+														apply_leave.to_date,
+														apply_leave.reason,
+														apply_leave.file,
+														apply_leave.approval,
+														apply_leave.created_at,
+														apply_leave.updated_at,
+														apply_leave.remarks,
+														apply_leave.created_by,
+														created_by_user.name AS created_by_name
+													FROM hr.apply_leave
+													LEFT JOIN hr.leave_category
+														ON apply_leave.leave_category_uuid = leave_category.uuid
+													LEFT JOIN hr.employee
+														ON apply_leave.employee_uuid = employee.uuid
+													LEFT JOIN hr.users AS created_by_user
+														ON apply_leave.created_by = created_by_user.uuid
+													WHERE apply_leave.employee_uuid = ${employee_uuid}
+													ORDER BY apply_leave.created_at DESC
+													LIMIT 5
+												) t
 											)
-										) ORDER BY apply_leave.created_at DESC LIMIT 5
-									, '[]'::jsonb)
-									FROM hr.apply_leave
-									LEFT JOIN hr.leave_category
-										ON apply_leave.leave_category_uuid = leave_category.uuid
-									LEFT JOIN hr.employee
-										ON apply_leave.employee_uuid = employee.uuid
-									LEFT JOIN hr.users AS createdByUser
-										ON apply_leave.created_by = createdByUser.uuid
-									WHERE apply_leave.employee_uuid = ${employee_uuid}
-								)`,
+										`,
 		})
 		.from(employee)
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
