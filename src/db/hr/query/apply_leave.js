@@ -36,7 +36,7 @@ export async function insert(req, res, next) {
 		created_at: formData.created_at,
 		updated_at: formData.updated_at || null,
 		remarks: formData.remarks || null,
-		approved: formData.approved === 'true' || formData.approved === true,
+		approval: formData.approval || 'pending',
 	};
 
 	const apply_leavePromise = db
@@ -68,24 +68,18 @@ export async function update(req, res, next) {
 		return res.status(400).json({ error: 'No form data provided' });
 	}
 
-	let filePath = null;
+	// Always fetch existing data to get the current file path
+	const existingData = await db
+		.select({ file: apply_leave.file })
+		.from(apply_leave)
+		.where(eq(apply_leave.uuid, req.params.uuid))
+		.limit(1);
+
+	let filePath = existingData[0]?.file || null;
 
 	if (file && typeof file === 'object') {
-		// Check if the file is being updated
-		const existingData = await db
-			.select({ file: apply_leave.file })
-			.from(apply_leave)
-			.where(eq(apply_leave.uuid, req.params.uuid))
-			.limit(1);
-
-		const existingFilePath = existingData[0]?.file;
-
-		if (existingFilePath) {
-			filePath = await updateFile(
-				file,
-				existingFilePath,
-				'public/apply-leave'
-			);
+		if (filePath) {
+			filePath = await updateFile(file, filePath, 'public/apply-leave');
 		} else {
 			filePath = await insertFile(file, 'public/apply-leave');
 		}
@@ -105,7 +99,7 @@ export async function update(req, res, next) {
 		created_at: formData.created_at,
 		updated_at: formData.updated_at,
 		remarks: formData.remarks,
-		approved: formData.approved === 'true' || formData.approved === true,
+		approval: formData.approval || 'pending',
 	};
 
 	const apply_leavePromise = db
