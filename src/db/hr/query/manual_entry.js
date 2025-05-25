@@ -81,7 +81,7 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
-	const { type } = req.query;
+	const { type, approval } = req.query;
 	const resultPromise = db
 		.select({
 			uuid: manual_entry.uuid,
@@ -122,6 +122,9 @@ export async function selectAll(req, res, next) {
 
 	if (type) {
 		resultPromise.where(eq(manual_entry.type, type));
+	}
+	if (approval) {
+		resultPromise.where(eq(manual_entry.approval, approval));
 	}
 
 	try {
