@@ -368,8 +368,8 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 											apply_leave.leave_category_uuid,
 											SUM(apply_leave.to_date::date - apply_leave.from_date::date + 1) AS total_leave_days
 										FROM hr.apply_leave
-										WHERE approval = 'approved'
-										GROUP BY employee_uuid, leave_category_uuid
+										WHERE apply_leave.approval = 'approved' AND apply_leave.employee_uuid = ${employee_uuid}
+										GROUP BY apply_leave.employee_uuid, apply_leave.leave_category_uuid
 									) AS leave_summary
 										ON leave_summary.employee_uuid = employee.uuid
 										AND leave_summary.leave_category_uuid = leave_category.uuid
