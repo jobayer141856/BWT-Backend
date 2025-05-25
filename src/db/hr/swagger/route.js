@@ -2130,11 +2130,9 @@ const pathHrEmployee = {
 					type: 'string',
 					format: 'uuid',
 				},
-				SE.parameter_query(
-					'leave_category_uuid',
-					'leave_category_uuid',
-					['uuid']
-				),
+				SE.parameter_query('apply_leave_uuid', 'apply_leave_uuid', [
+					'uuid',
+				]),
 			],
 			// ...existing code...
 			responses: {
