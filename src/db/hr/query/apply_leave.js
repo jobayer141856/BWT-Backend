@@ -93,8 +93,8 @@ export async function update(req, res, next) {
 
 	const values = {
 		uuid: formData.uuid,
-		employee_uuid: formData.employee_uuid || null,
-		leave_category_uuid: formData.leave_category_uuid || null,
+		employee_uuid: formData.employee_uuid,
+		leave_category_uuid: formData.leave_category_uuid,
 		year: formData.year,
 		type: formData.type,
 		from_date: formData.from_date,
@@ -103,8 +103,8 @@ export async function update(req, res, next) {
 		file: filePath,
 		created_by: formData.created_by,
 		created_at: formData.created_at,
-		updated_at: formData.updated_at || null,
-		remarks: formData.remarks || null,
+		updated_at: formData.updated_at,
+		remarks: formData.remarks,
 		approved: formData.approved === 'true' || formData.approved === true,
 	};
 
