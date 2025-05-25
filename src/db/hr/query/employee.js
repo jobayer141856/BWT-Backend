@@ -330,7 +330,7 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 			remarks: employee.remarks,
 			name: employee.name,
 			email: employee.email,
-			pass: employee.pass,
+			//pass: employee.pass,
 			designation_uuid: employee.designation_uuid,
 			designation_name: designation.designation,
 			department_uuid: employee.department_uuid,
@@ -432,7 +432,7 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 			type: 'select',
 			message: 'employee leave information details',
 		};
-		return res.status(200).json({ toast, data });
+		return res.status(200).json({ toast, data: data[0] });
 	} catch (error) {
 		next(error);
 	}
