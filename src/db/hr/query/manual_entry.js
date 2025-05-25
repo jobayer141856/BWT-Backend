@@ -121,7 +121,16 @@ export async function selectAll(req, res, next) {
 		.orderBy(desc(manual_entry.created_at));
 
 	if (type && approval) {
-		and(eq(manual_entry.type, type), eq(manual_entry.approval, approval));
+		resultPromise.where(
+			and(
+				eq(manual_entry.type, type),
+				eq(manual_entry.approval, approval)
+			)
+		);
+	} else if (type) {
+		resultPromise.where(eq(manual_entry.type, type));
+	} else if (approval) {
+		resultPromise.where(eq(manual_entry.approval, approval));
 	}
 	// if (approval) {
 	// 	resultPromise.where(eq(manual_entry.approval, approval));
