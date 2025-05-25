@@ -337,14 +337,14 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 			leave_policy_name: leave_policy.name,
 			report_position: employee.report_position,
 			remaining_leave_information: sql`
-				               (
+								(
 									SELECT jsonb_agg(
 										jsonb_build_object(
 											'uuid', leave_category.uuid,
 											'name', leave_category.name,
 											'maximum_number_of_allowed_leaves', configuration_entry.maximum_number_of_allowed_leaves,
-											'used_leave_days', COALESCE(leave_summary.total_leave_days, 0)
-											'remaining_leave_days', 
+											'used_leave_days', COALESCE(leave_summary.total_leave_days, 0),
+											'remaining_leave_days',
 												COALESCE(
 													configuration_entry.maximum_number_of_allowed_leaves - COALESCE(leave_summary.total_leave_days, 0),
 													configuration_entry.maximum_number_of_allowed_leaves
@@ -352,18 +352,18 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 										)
 									)
 									FROM hr.leave_category
-									LEFT JOIN hr.apply_leave 
+									LEFT JOIN hr.apply_leave
 										ON apply_leave.leave_category_uuid = leave_category.uuid
 									LEFT JOIN hr.configuration_entry ON configuration_entry.leave_category_uuid = leave_category.uuid
 									LEFT JOIN (
-										SELECT 
+										SELECT
 											apply_leave.employee_uuid,
 											apply_leave.leave_category_uuid,
 											SUM(apply_leave.to_date::date - apply_leave.from_date::date + 1) AS total_leave_days
 										FROM hr.apply_leave
 										WHERE approval = 'approved'
 										GROUP BY employee_uuid, leave_category_uuid
-									) AS leave_summary 
+									) AS leave_summary
 										ON leave_summary.employee_uuid = ${employee_uuid}
 										AND leave_summary.leave_category_uuid = leave_category.uuid
 									WHERE apply_leave.employee_uuid = ${employee_uuid}
@@ -382,37 +382,48 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 											'to_date', apply_leave.to_date,
 											'reason', apply_leave.reason,
 											'file', apply_leave.file,
-											'approval', apply_leave.approval
+											'approval', apply_leave.approval,
+											'created_at', apply_leave.created_at,
+											'updated_at', apply_leave.updated_at,
+											'remarks', apply_leave.remarks,
+											'created_by', apply_leave.created_by,
+											'created_by_name', createdByUser.name
 										)
-									
+
 									)
 									FROM hr.apply_leave
-									LEFT JOIN hr.leave_category 
+									LEFT JOIN hr.leave_category
 										ON apply_leave.leave_category_uuid = leave_category.uuid
 									LEFT JOIN hr.employee
 										ON apply_leave.employee_uuid = employee.uuid
+									LEFT JOIN hr.users AS createdByUser
+										ON apply_leave.created_by = createdByUser.uuid
 									WHERE apply_leave.employee_uuid = ${employee_uuid}
 								)`,
 		})
 		.from(employee)
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(workplace, eq(employee.workplace_uuid, workplace.uuid))
 		.leftJoin(
-			leave_category,
-			eq(employee.leave_category_uuid, leave_category.uuid)
+			sub_department,
+			eq(employee.sub_department_uuid, sub_department.uuid)
 		)
-		.leftJoin(
-			configuration,
-			eq(employee.configuration_uuid, configuration.uuid)
-		)
+		.leftJoin(createdByUser, eq(employee.created_by, createdByUser.uuid))
+		.leftJoin(shift_group, eq(employee.shift_group_uuid, shift_group.uuid))
+		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
+		.leftJoin(department, eq(employee.department_uuid, department.uuid))
 		.leftJoin(
 			leave_policy,
-			eq(configuration.leave_policy_uuid, leave_policy.uuid)
+			eq(employee.leave_policy_uuid, leave_policy.uuid)
 		)
-		.leftJoin(users, eq(employee.created_by, users.uuid))
-		.where(eq(employee.user_uuid, employee_uuid));
-
-	const data = await employeeLeaveInformationPromise;
+		.leftJoin(
+			employment_type,
+			eq(employee.employment_type_uuid, employment_type.uuid)
+		)
+		.where(eq(employee.uuid, employee_uuid));
 
 	try {
+		const data = await employeeLeaveInformationPromise;
 		const toast = {
 			status: 200,
 			type: 'select',
