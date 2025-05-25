@@ -376,27 +376,28 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 									WHERE leave_policy.uuid = ${employee.leave_policy_uuid}
 								)`,
 			leave_application_information: sql`
-					                         (
-									SELECT jsonb_agg(
-										jsonb_build_object(
-											'uuid', apply_leave.uuid,
-											'leave_category_uuid', apply_leave.leave_category_uuid,
-											'leave_category_name', leave_category.name,
-											'employee_uuid', apply_leave.employee_uuid,
-											'employee_name', employee.name,
-											'type', apply_leave.type,
-											'from_date', apply_leave.from_date,
-											'to_date', apply_leave.to_date,
-											'reason', apply_leave.reason,
-											'file', apply_leave.file,
-											'approval', apply_leave.approval,
-											'created_at', apply_leave.created_at,
-											'updated_at', apply_leave.updated_at,
-											'remarks', apply_leave.remarks,
-											'created_by', apply_leave.created_by,
-											'created_by_name', createdByUser.name
-										)
-
+								(
+									SELECT COALESCE(
+										jsonb_agg(
+											jsonb_build_object(
+												'uuid', apply_leave.uuid,
+												'leave_category_uuid', apply_leave.leave_category_uuid,
+												'leave_category_name', leave_category.name,
+												'employee_uuid', apply_leave.employee_uuid,
+												'employee_name', employee.name,
+												'type', apply_leave.type,
+												'from_date', apply_leave.from_date,
+												'to_date', apply_leave.to_date,
+												'reason', apply_leave.reason,
+												'file', apply_leave.file,
+												'approval', apply_leave.approval,
+												'created_at', apply_leave.created_at,
+												'updated_at', apply_leave.updated_at,
+												'remarks', apply_leave.remarks,
+												'created_by', apply_leave.created_by,
+												'created_by_name', createdByUser.name
+											)
+										), '[]'::jsonb
 									)
 									FROM hr.apply_leave
 									LEFT JOIN hr.leave_category
