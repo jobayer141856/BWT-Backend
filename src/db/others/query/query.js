@@ -408,7 +408,7 @@ export async function selectEmployee(req, res, next) {
 		)
 		.where(
 			leave_policy_required
-				? ne(hrSchema.employee.leave_policy_uuid, null)
+				? sql`${hrSchema.employee.leave_policy_uuid} IS NOT NULL`
 				: sql`true`
 		)
 		.groupBy(hrSchema.employee.uuid, hrSchema.employee.name);
