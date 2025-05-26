@@ -355,7 +355,7 @@ export async function selectEmployee(req, res, next) {
 					leave_category_uuid,
 					employee_uuid,
 					year,
-					COUNT(*) AS total_leaves
+					SUM(date_part('day', to_date - from_date)) AS total_leaves
 				FROM
 					hr.apply_leave
 				WHERE 
