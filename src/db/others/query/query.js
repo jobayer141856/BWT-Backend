@@ -317,8 +317,8 @@ export async function selectEmployee(req, res, next) {
 			policy: sql`
 				jsonb_agg(
 					jsonb_build_object(
-						'name',${sql`leave_category.name`},
-						'balance', ${sql`configuration_entry.maximum_number_of_allowed_leaves - COALESCE(leave_applied.total_leaves, 0)`}
+						'name', ${hrSchema.leave_category.name},
+						'balance', (${hrSchema.configuration_entry.maximum_number_of_allowed_leaves} - COALESCE(leave_applied.total_leaves, 0)::numeric)
 					)
 				)
 			`,
@@ -346,8 +346,8 @@ export async function selectEmployee(req, res, next) {
 			)
 		)
 		.leftJoin(
-			sql`
-				(SELECT 
+			sql`(
+				SELECT 
 					leave_category_uuid,
 					employee_uuid,
 					year,
@@ -358,8 +358,7 @@ export async function selectEmployee(req, res, next) {
 					approval != 'rejected'
 				GROUP BY
 					leave_category_uuid, employee_uuid, year
-				) as leave_applied
-			`,
+			) as leave_applied`,
 			and(
 				eq(
 					hrSchema.leave_category.uuid,
@@ -369,6 +368,8 @@ export async function selectEmployee(req, res, next) {
 			)
 		)
 		.groupBy(hrSchema.employee.uuid, hrSchema.employee.name);
+
+	console.log(employeePromise.toSQL());
 
 	try {
 		const data = await employeePromise;
