@@ -283,16 +283,15 @@ export async function selectLeavePolicy(req, res, next) {
 				hrSchema.leave_policy.uuid,
 				hrSchema.configuration.leave_policy_uuid
 			)
+		)
+		.where(
+			filteredConf === 'true'
+				? sql`${hrSchema.configuration.uuid} IS NULL`
+				: sql`true`
 		);
 
-	if (filteredConf && filteredConf === true) {
-		leavePolicyPromise.where(
-			ne(
-				hrSchema.configuration.leave_policy_uuid,
-				hrSchema.leave_policy.uuid
-			)
-		);
-	}
+	console.log(leavePolicyPromise.toSQL().sql);
+
 	try {
 		const data = await leavePolicyPromise;
 		const toast = {
