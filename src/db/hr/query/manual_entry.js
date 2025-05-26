@@ -229,9 +229,8 @@ export async function selectAllV2(req, res, next) {
 		const data = await baseQuery;
 
 		const pagination =
-			is_pagination === 'false'
-				? null
-				: {
+			is_pagination === 'true'
+				? {
 						total_record: resultPromiseForCount.length,
 						current_page: Number(page),
 						total_page: Math.ceil(
@@ -243,15 +242,16 @@ export async function selectAllV2(req, res, next) {
 								? null
 								: page + 1,
 						prev_page: page - 1 <= 0 ? null : page - 1,
-					};
+					}
+				: null;
 
 		const response =
-			is_pagination === 'false'
-				? data
-				: {
+			is_pagination === 'true'
+				? {
 						data,
 						pagination,
-					};
+					}
+				: data;
 
 		const toast = {
 			status: 200,
