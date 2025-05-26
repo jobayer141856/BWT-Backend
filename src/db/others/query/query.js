@@ -325,10 +325,14 @@ export async function selectEmployee(req, res, next) {
 		})
 		.from(hrSchema.employee)
 		.leftJoin(
+			hrSchema.leave_policy,
+			eq(hrSchema.employee.leave_policy_uuid, hrSchema.leave_policy.uuid)
+		)
+		.leftJoin(
 			hrSchema.configuration,
 			eq(
-				hrSchema.employee.configuration_uuid,
-				hrSchema.configuration.uuid
+				hrSchema.leave_policy.uuid,
+				hrSchema.configuration.leave_policy_uuid
 			)
 		)
 		.leftJoin(
