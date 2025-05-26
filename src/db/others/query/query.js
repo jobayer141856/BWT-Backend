@@ -286,7 +286,7 @@ export async function selectLeavePolicy(req, res, next) {
 		);
 
 	if (filteredConf && filteredConf === true) {
-		leavePolicyPromise.where(is(hrSchema.configuration.leave_policy_uuid, null));
+		leavePolicyPromise.where(is(hrSchema.configuration.uuid, null));
 	}
 	try {
 		const data = await leavePolicyPromise;
