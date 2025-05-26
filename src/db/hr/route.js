@@ -363,6 +363,7 @@ hrRouter.get(
 	'/manual-entry/by/:employee_uuid',
 	manualEntryOperations.manualEntryByEmployee
 );
+hrRouter.get('/manual-entry/by/pagination', manualEntryOperations.selectAllV2);
 
 // ? apply_leave routes
 hrRouter.get('/apply-leave', applyLeaveOperations.selectAll);

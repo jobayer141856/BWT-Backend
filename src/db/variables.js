@@ -36,28 +36,90 @@ export function constructSelectAllQuery(
 	baseQuery,
 	params,
 	defaultSortField = 'created_at',
-	additionalSearchFields = []
+	additionalSearchFields = [],
+	searchFieldNames,
+	field_value
 ) {
 	let { q, page, limit, sort, orderby } = params;
 
-	// Get search fields from table
-	const searchFields = Object.keys(baseQuery.config.table).filter(
-		(field) =>
-			field !== 'uuid' &&
-			field !== 'id' &&
-			field !== 'created_at' &&
-			field !== 'updated_at'
+	const avoidFields = [
+		'uuid',
+		'id',
+		'created_at',
+		'updated_at',
+		'approval',
+		'entry_time',
+		'exit_time',
+	];
+
+	// Get search fields from the main table
+	const searchFields = Object.keys(
+		baseQuery.config.table[Symbol.for('drizzle:Columns')]
+	).filter((field) => avoidFields.includes(field) === false);
+
+	// Get table name from baseQuery
+	const tableNameSymbol = Object.getOwnPropertySymbols(
+		baseQuery.config.table
+	).find((symbol) => symbol.toString().includes('OriginalName'));
+	const tableName = tableNameSymbol
+		? baseQuery.config.table[tableNameSymbol]
+		: '';
+
+	// Include table name with fields for the main table
+	const searchFieldsWithTable = searchFields.map(
+		(field) => `"${tableName}"."${field}"`
 	);
 
 	// Include additional search fields from joined tables
-	const allSearchFields = [...searchFields, ...additionalSearchFields];
+	const joinedTables = baseQuery.config.joins || [];
+	joinedTables.forEach((join) => {
+		const joinTableNameSymbol = Object.getOwnPropertySymbols(
+			join.table
+		).find((symbol) => symbol.toString().includes('OriginalName'));
+
+		const joinTableName = joinTableNameSymbol
+			? join.table[joinTableNameSymbol]
+			: '';
+
+		const joinTableFields = Object.keys(
+			join.table[Symbol.for('drizzle:Columns')]
+		)
+			.filter((field) => avoidFields.includes(field) === false)
+			.filter((field) => additionalSearchFields.includes(field));
+
+		const joinFieldsWithTable = joinTableFields.map((field) =>
+			joinTableName ? `"${joinTableName}"."${field}"` : `"${field}"`
+		);
+
+		searchFieldsWithTable.push(...joinFieldsWithTable);
+	});
+
+	// Include additional search fields from joined tables
+	const allSearchFields = [...searchFieldsWithTable];
 
 	// Apply search filter
-	if (q) {
-		const searchConditions = allSearchFields.map((field) =>
-			like(sql`${field}`, `%${q}%`)
+	if (searchFieldNames !== undefined && field_value !== undefined) {
+		const matchedSearchFields = allSearchFields.filter((field) =>
+			field.includes(searchFieldNames)
 		);
-		baseQuery = baseQuery.where(or(...searchConditions));
+
+		const searchConditions = matchedSearchFields
+			? sql`LOWER(CAST(${sql.raw(matchedSearchFields[0])} AS TEXT)) LIKE LOWER(${`%${field_value}%`})`
+			: sql``;
+
+		if (searchConditions) {
+			baseQuery = baseQuery.where(sql`${or(searchConditions)}`);
+		}
+	} else {
+		if (q) {
+			const searchConditions = allSearchFields.map((field) => {
+				return sql`LOWER(CAST(${sql.raw(field)} AS TEXT)) LIKE LOWER(${`%${q}%`})`;
+			});
+
+			if (searchConditions.length > 0) {
+				baseQuery = baseQuery.where(sql`${or(...searchConditions)}`);
+			}
+		}
 	}
 
 	// Apply sorting

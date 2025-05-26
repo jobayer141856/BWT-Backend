@@ -2592,6 +2592,50 @@ const pathHrManualEntry = {
 			},
 		},
 	},
+	'/hr/manual-entry/by/pagination': {
+		get: {
+			tags: ['hr.manual_entry'],
+			summary: 'Gets manual entries with pagination',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				// q, page, limit, sort, orderby
+				SE.parameter_query('q', 'q', SE.string()),
+				SE.parameter_query('page', 'Page number', [SE.integer(1)]),
+				SE.parameter_query('limit', 'Number of entries per page', [
+					SE.integer(10),
+				]),
+				SE.parameter_query('sort', 'Sort by field', [SE.string()]),
+				SE.parameter_query('orderby', 'Order by', ['asc', 'desc']),
+				SE.parameter_query('field_name', 'field_name', SE.string()),
+				SE.parameter_query('field_value', 'field_value', SE.string()),
+				SE.parameter_query('type', 'Type of manual entry', [
+					'field_visit',
+					'missing_punch',
+					'manual_entry',
+					'late_application',
+				]),
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					manual_entries: {
+						type: 'array',
+						items: { $ref: '#/definitions/hr/manual_entry' },
+					},
+					pagination: {
+						type: 'object',
+						properties: {
+							page: { type: 'integer', example: 1 },
+							limit: { type: 'integer', example: 10 },
+							total_entries: { type: 'integer', example: 100 },
+							total_pages: { type: 'integer', example: 10 },
+						},
+					},
+				}),
+				405: SE.response(405),
+			},
+		},
+	},
 };
 
 const pathHrApplyLeave = {

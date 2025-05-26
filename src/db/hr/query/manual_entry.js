@@ -10,6 +10,7 @@ import {
 	designation,
 	device_list,
 } from '../schema.js';
+import { constructSelectAllQuery } from '../../variables.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
@@ -82,6 +83,7 @@ export async function remove(req, res, next) {
 
 export async function selectAll(req, res, next) {
 	const { type, approval } = req.query;
+
 	const resultPromise = db
 		.select({
 			uuid: manual_entry.uuid,
@@ -135,6 +137,95 @@ export async function selectAll(req, res, next) {
 	// if (approval) {
 	// 	resultPromise.where(eq(manual_entry.approval, approval));
 	// }
+
+	try {
+		const data = await resultPromise;
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'manual_entry',
+		};
+
+		return res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectAllV2(req, res, next) {
+	const { type, approval, is_pagination, field_name, field_value } =
+		req.query;
+
+	const resultPromise = db
+		.select({
+			uuid: manual_entry.uuid,
+			employee_uuid: manual_entry.employee_uuid,
+			employee_name: employee.name,
+			type: manual_entry.type,
+			entry_time: manual_entry.entry_time,
+			exit_time: manual_entry.exit_time,
+			reason: manual_entry.reason,
+			area: manual_entry.area,
+			created_by: manual_entry.created_by,
+			created_by_name: createdByUser.name,
+			created_at: manual_entry.created_at,
+			updated_at: manual_entry.updated_at,
+			remarks: manual_entry.remarks,
+			department_uuid: employee.department_uuid,
+			department_name: department.department,
+			designation_uuid: employee.designation_uuid,
+			designation_name: designation.designation,
+			device_list_uuid: manual_entry.device_list_uuid,
+			device_list_name: device_list.name,
+			approval: manual_entry.approval,
+		})
+		.from(manual_entry)
+		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
+		.leftJoin(department, eq(employee.department_uuid, department.uuid))
+		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(
+			createdByUser,
+			eq(manual_entry.created_by, createdByUser.uuid)
+		)
+		.leftJoin(
+			device_list,
+			eq(manual_entry.device_list_uuid, device_list.uuid)
+		);
+
+	if (type && approval) {
+		resultPromise.where(
+			and(
+				eq(manual_entry.type, type),
+				eq(manual_entry.approval, approval)
+			)
+		);
+	} else if (type) {
+		resultPromise.where(eq(manual_entry.type, type));
+	} else if (approval) {
+		resultPromise.where(eq(manual_entry.approval, approval));
+	}
+
+	resultPromise.orderBy(desc(manual_entry.created_at));
+
+	let paginatedData = null;
+
+	if (is_pagination === 'true') {
+		paginatedData = constructSelectAllQuery(
+			resultPromise,
+			req.query,
+			'created_at',
+			[
+				createdByUser.name,
+				employee.name,
+				department.department,
+				designation.designation,
+				device_list.name,
+			],
+			field_name,
+			field_value
+		);
+	}
 
 	try {
 		const data = await resultPromise;
