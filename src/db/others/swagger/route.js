@@ -244,6 +244,12 @@ const pathLeavePolicy = {
 			tags: ['others'],
 			summary: 'Get all leave policy',
 			description: 'Get all leave policy',
+			parameters: [
+				SE.parameter_query('filteredConf', 'filteredConf', [
+					true,
+					false,
+				]),
+			],
 			responses: {
 				200: {
 					description: 'Success',
