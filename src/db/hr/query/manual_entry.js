@@ -208,34 +208,58 @@ export async function selectAllV2(req, res, next) {
 
 	resultPromise.orderBy(desc(manual_entry.created_at));
 
-	let paginatedData = null;
-
-	if (is_pagination === 'true') {
-		paginatedData = constructSelectAllQuery(
-			resultPromise,
-			req.query,
-			'created_at',
-			[
-				createdByUser.name,
-				employee.name,
-				department.department,
-				designation.designation,
-				device_list.name,
-			],
-			field_name,
-			field_value
-		);
-	}
+	let page = Number(req.query.page) || 1;
+	let limit = Number(req.query.limit) || 10;
 
 	try {
-		const data = await resultPromise;
+		const resultPromiseForCount = await resultPromise;
+
+		const baseQuery =
+			is_pagination === 'true'
+				? constructSelectAllQuery(
+						resultPromise,
+						c.req.valid('query'),
+						'created_at',
+						[hrSchema.users.name.name, faculty.name.name],
+						field_name,
+						field_value
+					)
+				: resultPromise;
+
+		const data = await baseQuery;
+
+		const pagination =
+			is_pagination === 'false'
+				? null
+				: {
+						total_record: resultPromiseForCount.length,
+						current_page: Number(page),
+						total_page: Math.ceil(
+							resultPromiseForCount.length / limit
+						),
+						next_page:
+							page + 1 >
+							Math.ceil(resultPromiseForCount.length / limit)
+								? null
+								: page + 1,
+						prev_page: page - 1 <= 0 ? null : page - 1,
+					};
+
+		const response =
+			is_pagination === 'false'
+				? data
+				: {
+						data,
+						pagination,
+					};
+
 		const toast = {
 			status: 200,
 			type: 'select',
 			message: 'manual_entry',
 		};
 
-		return res.status(200).json({ toast, data });
+		return res.status(200).json({ toast, data: response });
 	} catch (error) {
 		next(error);
 	}
