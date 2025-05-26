@@ -269,6 +269,11 @@ const pathLeaveCategory = {
 		get: {
 			tags: ['others'],
 			summary: 'Get all leave category',
+			parameters: [
+				SE.parameter_query('employee_uuid', 'employee_uuid', [
+					SE.uuid(),
+				]),
+			],
 			description: 'Get all leave category',
 			responses: {
 				200: {
@@ -295,6 +300,13 @@ const pathEmployee = {
 		get: {
 			tags: ['others'],
 			summary: 'Get all employee',
+			parameters: [
+				SE.parameter_query(
+					'leave_policy_required',
+					'leave_policy_required',
+					['true', 'false']
+				),
+			],
 			description: 'Get all employee',
 			responses: {
 				200: {

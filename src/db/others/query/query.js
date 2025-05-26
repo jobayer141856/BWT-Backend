@@ -1,4 +1,4 @@
-import { sql, eq, and, is, or, gt } from 'drizzle-orm';
+import { sql, eq, and, is, or, gt, ne } from 'drizzle-orm';
 import db from '../../index.js';
 import { handleError, validateRequest } from '../../../util/index.js';
 import * as hrSchema from '../../hr/schema.js';
@@ -290,12 +290,45 @@ export async function selectLeavePolicy(req, res, next) {
 }
 
 export async function selectLeaveCategory(req, res, next) {
+	const { employee_uuid } = req.query;
+
 	const leaveCategoryPromise = db
 		.select({
-			value: hrSchema.leave_category.uuid,
+			value: sql`DISTINCT leave_category.uuid`,
 			label: hrSchema.leave_category.name,
 		})
-		.from(hrSchema.leave_category);
+		.from(hrSchema.leave_category)
+		.leftJoin(
+			hrSchema.configuration_entry,
+			eq(
+				hrSchema.leave_category.uuid,
+				hrSchema.configuration_entry.leave_category_uuid
+			)
+		)
+		.leftJoin(
+			hrSchema.configuration,
+			eq(
+				hrSchema.configuration_entry.configuration_uuid,
+				hrSchema.configuration.uuid
+			)
+		)
+		.leftJoin(
+			hrSchema.leave_policy,
+			eq(
+				hrSchema.configuration.leave_policy_uuid,
+				hrSchema.leave_policy.uuid
+			)
+		)
+		.leftJoin(
+			hrSchema.employee,
+			eq(hrSchema.leave_policy.uuid, hrSchema.employee.leave_policy_uuid)
+		)
+		.where(
+			employee_uuid
+				? eq(hrSchema.employee.uuid, employee_uuid)
+				: sql`true`
+		);
+
 	try {
 		const data = await leaveCategoryPromise;
 		const toast = {
@@ -310,6 +343,8 @@ export async function selectLeaveCategory(req, res, next) {
 }
 
 export async function selectEmployee(req, res, next) {
+	const { leave_policy_required } = req.query;
+
 	const employeePromise = db
 		.select({
 			value: hrSchema.employee.uuid,
@@ -371,9 +406,12 @@ export async function selectEmployee(req, res, next) {
 				eq(hrSchema.employee.uuid, sql`leave_applied.employee_uuid`)
 			)
 		)
+		.where(
+			leave_policy_required
+				? ne(hrSchema.employee.leave_policy_uuid, null)
+				: sql`true`
+		)
 		.groupBy(hrSchema.employee.uuid, hrSchema.employee.name);
-
-	console.log(employeePromise.toSQL());
 
 	try {
 		const data = await employeePromise;
