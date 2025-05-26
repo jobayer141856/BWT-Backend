@@ -2592,7 +2592,7 @@ const pathHrManualEntry = {
 			},
 		},
 	},
-	'/hr/manual-entry/by/pagination': {
+	'/hr/v2/manual-entry/by/pagination': {
 		get: {
 			tags: ['hr.manual_entry'],
 			summary: 'Gets manual entries with pagination',
@@ -2854,7 +2854,7 @@ const pathHrApplyLeave = {
 			},
 		},
 	},
-	'/hr/apply-leave/by/pagination': {
+	'/hr/v2/apply-leave/by/pagination': {
 		get: {
 			tags: ['hr.apply_leave'],
 			summary: 'Get apply leave by pagination',

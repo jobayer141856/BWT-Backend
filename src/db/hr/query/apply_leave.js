@@ -253,7 +253,7 @@ export async function select(req, res, next) {
 	}
 }
 
-export async function selectAllWithPagination(req, res, next) {
+export async function selectAllApplyLeaveWithPagination(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	let {
@@ -351,7 +351,7 @@ export async function selectAllWithPagination(req, res, next) {
 		const toast = {
 			status: 200,
 			type: 'select_all',
-			message: 'apply_leave',
+			message: 'apply_leave with pagination',
 		};
 
 		return res.status(200).json({ toast, ...response });
