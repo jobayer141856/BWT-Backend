@@ -314,8 +314,62 @@ export async function selectEmployee(req, res, next) {
 		.select({
 			value: hrSchema.employee.uuid,
 			label: hrSchema.employee.name,
+			policy: sql`
+				jsonb_agg(
+					jsonb_build_object(
+						'name',${sql`leave_category.name`},
+						'balance', ${sql`configuration_entry.maximum_number_of_allowed_leaves - COALESCE(leave_applied.total_leaves, 0)`}
+					)
+				)
+			`,
 		})
-		.from(hrSchema.employee);
+		.from(hrSchema.employee)
+		.leftJoin(
+			hrSchema.configuration,
+			eq(
+				hrSchema.employee.configuration_uuid,
+				hrSchema.configuration.uuid
+			)
+		)
+		.leftJoin(
+			hrSchema.configuration_entry,
+			eq(
+				hrSchema.configuration.uuid,
+				hrSchema.configuration_entry.configuration_uuid
+			)
+		)
+		.leftJoin(
+			hrSchema.leave_category,
+			eq(
+				hrSchema.configuration_entry.leave_category_uuid,
+				hrSchema.leave_category.uuid
+			)
+		)
+		.leftJoin(
+			sql`
+				(SELECT 
+					leave_category_uuid,
+					employee_uuid,
+					year,
+					COUNT(*) AS total_leaves
+				FROM
+					hr.apply_leave
+				WHERE 
+					approval != 'rejected'
+				GROUP BY
+					leave_category_uuid, employee_uuid, year
+				) as leave_applied
+			`,
+			and(
+				eq(
+					hrSchema.leave_category.uuid,
+					sql`leave_applied.leave_category_uuid`
+				),
+				eq(hrSchema.employee.uuid, sql`leave_applied.employee_uuid`)
+			)
+		)
+		.groupBy(hrSchema.employee.uuid, hrSchema.employee.name);
+
 	try {
 		const data = await employeePromise;
 		const toast = {
