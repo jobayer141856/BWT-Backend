@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, count } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import {
@@ -248,6 +248,113 @@ export async function select(req, res, next) {
 		};
 
 		return res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectAllWithPagination(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	let {
+		page = 1,
+		limit = 10,
+		approval,
+		employee_uuid,
+		leave_category_uuid,
+		from_date,
+		to_date,
+		sort,
+		orderBy,
+	} = req.query;
+
+	page = parseInt(page, 10);
+	limit = parseInt(limit, 10);
+	const offset = (page - 1) * limit;
+
+	// Collect filters
+	const filters = [];
+	if (approval) filters.push(eq(apply_leave.approval, approval));
+	if (employee_uuid)
+		filters.push(eq(apply_leave.employee_uuid, employee_uuid));
+	if (leave_category_uuid)
+		filters.push(eq(apply_leave.leave_category_uuid, leave_category_uuid));
+	if (from_date) filters.push(eq(apply_leave.from_date, from_date));
+	if (to_date) filters.push(eq(apply_leave.to_date, to_date));
+
+	const resultPromise = db
+		.select({
+			uuid: apply_leave.uuid,
+			employee_uuid: apply_leave.employee_uuid,
+			employee_name: employee.name,
+			leave_category_uuid: apply_leave.leave_category_uuid,
+			leave_category_name: leave_category.name,
+			year: apply_leave.year,
+			type: apply_leave.type,
+			from_date: apply_leave.from_date,
+			to_date: apply_leave.to_date,
+			reason: apply_leave.reason,
+			file: apply_leave.file,
+			created_by: apply_leave.created_by,
+			created_by_name: createdByUser.name,
+			created_at: apply_leave.created_at,
+			updated_at: apply_leave.updated_at,
+			remarks: apply_leave.remarks,
+			approval: apply_leave.approval,
+		})
+		.from(apply_leave)
+		.leftJoin(employee, eq(apply_leave.employee_uuid, employee.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(
+			leave_category,
+			eq(apply_leave.leave_category_uuid, leave_category.uuid)
+		)
+		.leftJoin(createdByUser, eq(apply_leave.created_by, createdByUser.uuid))
+		.orderBy(desc(apply_leave.created_at))
+		.limit(limit)
+		.offset(offset);
+
+	if (filters.length) {
+		resultPromise.where(...filters);
+	}
+
+	try {
+		const data = await resultPromise;
+
+		const countPromise = db
+			.select({ count: count(apply_leave.uuid) })
+			.from(apply_leave);
+
+		if (filters.length) {
+			countPromise.where(...filters);
+		}
+
+		const countResult = await countPromise;
+		const totalRecords = Number(countResult[0].count);
+
+		const pagination = {
+			total_record: totalRecords,
+			current_page: Number(page),
+			total_page: Math.ceil(totalRecords / limit),
+			next_page:
+				Number(page) + 1 > Math.ceil(totalRecords / limit)
+					? null
+					: Number(page) + 1,
+			prev_page: Number(page) - 1 <= 0 ? null : Number(page) - 1,
+		};
+
+		const response = {
+			pagination: pagination,
+			data: data,
+		};
+
+		const toast = {
+			status: 200,
+			type: 'select_all',
+			message: 'apply_leave',
+		};
+
+		return res.status(200).json({ toast, ...response });
 	} catch (error) {
 		next(error);
 	}

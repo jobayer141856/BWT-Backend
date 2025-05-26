@@ -28,6 +28,7 @@ import * as applyBalanceOperations from './query/apply_balance.js';
 import * as payRollOccasionalOperations from './query/payroll_occasional.js';
 import * as payRollIncrementOperations from './query/payroll_increment.js';
 import * as payRollEntryOperations from './query/payroll_entry.js';
+import hr from './schema.js';
 
 const hrRouter = Router();
 const upload = multer();
@@ -384,6 +385,11 @@ hrRouter.delete(
 	'/apply-leave/:uuid',
 	validateUuidParam(),
 	applyLeaveOperations.remove
+);
+
+hrRouter.get(
+	'/apply-leave/by/pagination',
+	applyLeaveOperations.selectAllWithPagination
 );
 
 // ? apply_balance routes
