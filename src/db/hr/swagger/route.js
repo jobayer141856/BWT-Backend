@@ -2810,6 +2810,44 @@ const pathHrApplyLeave = {
 			},
 		},
 	},
+	'/hr/apply-leave/by/pagination': {
+		get: {
+			tags: ['hr.apply_leave'],
+			summary: 'Get apply leave by pagination',
+			description: 'Get apply leave by pagination',
+			parameters: [
+				SE.parameter_query('page', 'page', ['integer']),
+				SE.parameter_query('limit', 'limit', ['integer']),
+				SE.parameter_query('sort', 'sort', ['string']),
+				SE.parameter_query('orderBy', 'orderBy', ['asc', 'desc']),
+				SE.parameter_query('employee_uuid', 'employee_uuid', ['uuid']),
+				SE.parameter_query(
+					'leave_category_uuid',
+					'leave_category_uuid',
+					['uuid']
+				),
+				SE.parameter_query('year', 'year', ['integer']),
+				SE.parameter_query('type', 'type', [
+					'full',
+					'half',
+					'first_half',
+					'second_half',
+				]),
+				SE.parameter_query('from_date', 'from_date', ['date']),
+				SE.parameter_query('to_date', 'to_date', ['date']),
+				SE.parameter_query('reason', 'reason', ['string']),
+				SE.parameter_query('approval', 'approval', [
+					'approved',
+					'rejected',
+					'pending',
+				]),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/apply_leave'),
+				405: SE.response(405),
+			},
+		},
+	},
 };
 
 const pathHrApplyBalance = {
