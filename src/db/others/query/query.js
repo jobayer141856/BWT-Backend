@@ -276,17 +276,12 @@ export async function selectLeavePolicy(req, res, next) {
 			value: hrSchema.leave_policy.uuid,
 			label: hrSchema.leave_policy.name,
 		})
-		.from(hrSchema.leave_policy)
-		.leftJoin(
-			hrSchema.configuration,
-			eq(
-				hrSchema.leave_policy.uuid,
-				hrSchema.configuration.leave_policy_uuid
-			)
-		);
+		.from(hrSchema.leave_policy);
 
 	if (filteredConf && filteredConf === true) {
-		leavePolicyPromise.where(is(hrSchema.configuration.uuid, null));
+		leavePolicyPromise.where(
+			eq(hrSchema.configuration.leave_policy_uuid, null)
+		);
 	}
 	try {
 		const data = await leavePolicyPromise;
