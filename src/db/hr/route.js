@@ -363,7 +363,10 @@ hrRouter.get(
 	'/manual-entry/by/:employee_uuid',
 	manualEntryOperations.manualEntryByEmployee
 );
-hrRouter.get('/manual-entry/by/pagination', manualEntryOperations.selectAllV2);
+hrRouter.get(
+	'/v2/manual-entry/by/pagination',
+	manualEntryOperations.selectAllManualEntryWithPagination
+);
 
 // ? apply_leave routes
 hrRouter.get('/apply-leave', applyLeaveOperations.selectAll);
@@ -389,8 +392,8 @@ hrRouter.delete(
 );
 
 hrRouter.get(
-	'/apply-leave/by/pagination',
-	applyLeaveOperations.selectAllWithPagination
+	'/v2/apply-leave/by/pagination',
+	applyLeaveOperations.selectAllApplyLeaveWithPagination
 );
 
 // ? apply_balance routes

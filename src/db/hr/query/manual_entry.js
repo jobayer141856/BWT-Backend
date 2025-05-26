@@ -142,7 +142,7 @@ export async function selectAll(req, res, next) {
 		const data = await resultPromise;
 		const toast = {
 			status: 200,
-			type: 'select',
+			type: 'select all',
 			message: 'manual_entry',
 		};
 
@@ -152,7 +152,129 @@ export async function selectAll(req, res, next) {
 	}
 }
 
-export async function selectAllV2(req, res, next) {
+export async function select(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const manual_entryPromise = db
+		.select({
+			uuid: manual_entry.uuid,
+			employee_uuid: manual_entry.employee_uuid,
+			employee_name: employee.name,
+			type: manual_entry.type,
+			entry_time: manual_entry.entry_time,
+			exit_time: manual_entry.exit_time,
+			reason: manual_entry.reason,
+			area: manual_entry.area,
+			created_by: manual_entry.created_by,
+			created_by_name: createdByUser.name,
+			created_at: manual_entry.created_at,
+			updated_at: manual_entry.updated_at,
+			remarks: manual_entry.remarks,
+			department_uuid: employee.department_uuid,
+			department_name: department.department,
+			designation_uuid: employee.designation_uuid,
+			designation_name: designation.designation,
+			device_list_uuid: manual_entry.device_list_uuid,
+			device_list_name: device_list.name,
+			approval: manual_entry.approval,
+		})
+		.from(manual_entry)
+		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
+		.leftJoin(department, eq(employee.department_uuid, department.uuid))
+		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(
+			createdByUser,
+			eq(manual_entry.created_by, createdByUser.uuid)
+		)
+		.leftJoin(
+			device_list,
+			eq(manual_entry.device_list_uuid, device_list.uuid)
+		)
+		.where(eq(manual_entry.uuid, req.params.uuid));
+
+	try {
+		const data = await manual_entryPromise;
+		const toast = {
+			status: 200,
+			type: 'select ',
+			message: 'manual_entry',
+		};
+
+		return res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function manualEntryByEmployee(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { employee_uuid } = req.params;
+	//console.log('employee_uuid', employee_uuid);
+
+	const manual_entryPromise = db
+		.select({
+			uuid: manual_entry.uuid,
+			employee_uuid: manual_entry.employee_uuid,
+			employee_name: employee.name,
+			type: manual_entry.type,
+			entry_time: manual_entry.entry_time,
+			exit_time: manual_entry.exit_time,
+			reason: manual_entry.reason,
+			area: manual_entry.area,
+			created_by: manual_entry.created_by,
+			created_by_name: createdByUser.name,
+			created_at: manual_entry.created_at,
+			updated_at: manual_entry.updated_at,
+			remarks: manual_entry.remarks,
+			department_uuid: employee.department_uuid,
+			department_name: department.department,
+			designation_uuid: employee.designation_uuid,
+			designation_name: designation.designation,
+			device_list_uuid: manual_entry.device_list_uuid,
+			device_list_name: device_list.name,
+			approval: manual_entry.approval,
+		})
+		.from(manual_entry)
+		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
+		.leftJoin(department, eq(employee.department_uuid, department.uuid))
+		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(
+			createdByUser,
+			eq(manual_entry.created_by, createdByUser.uuid)
+		)
+		.leftJoin(
+			device_list,
+			eq(manual_entry.device_list_uuid, device_list.uuid)
+		)
+		.where(
+			and(
+				eq(manual_entry.employee_uuid, employee_uuid),
+				eq(manual_entry.type, 'field_visit')
+			)
+		)
+		.orderBy(desc(manual_entry.created_at))
+		.limit(5);
+
+	try {
+		const data = await manual_entryPromise;
+		const toast = {
+			status: 200,
+			type: 'select by employee',
+			message: 'manual_entry',
+		};
+
+		return res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectAllManualEntryWithPagination(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
 	const { type, approval, is_pagination, field_name, field_value } =
 		req.query;
 
@@ -255,131 +377,11 @@ export async function selectAllV2(req, res, next) {
 
 		const toast = {
 			status: 200,
-			type: 'select',
-			message: 'manual_entry',
+			type: 'select all v2',
+			message: 'manual_entry with pagination',
 		};
 
 		return res.status(200).json({ toast, data: response });
-	} catch (error) {
-		next(error);
-	}
-}
-
-export async function select(req, res, next) {
-	if (!(await validateRequest(req, next))) return;
-
-	const manual_entryPromise = db
-		.select({
-			uuid: manual_entry.uuid,
-			employee_uuid: manual_entry.employee_uuid,
-			employee_name: employee.name,
-			type: manual_entry.type,
-			entry_time: manual_entry.entry_time,
-			exit_time: manual_entry.exit_time,
-			reason: manual_entry.reason,
-			area: manual_entry.area,
-			created_by: manual_entry.created_by,
-			created_by_name: createdByUser.name,
-			created_at: manual_entry.created_at,
-			updated_at: manual_entry.updated_at,
-			remarks: manual_entry.remarks,
-			department_uuid: employee.department_uuid,
-			department_name: department.department,
-			designation_uuid: employee.designation_uuid,
-			designation_name: designation.designation,
-			device_list_uuid: manual_entry.device_list_uuid,
-			device_list_name: device_list.name,
-			approval: manual_entry.approval,
-		})
-		.from(manual_entry)
-		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
-		.leftJoin(department, eq(employee.department_uuid, department.uuid))
-		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
-		.leftJoin(users, eq(employee.user_uuid, users.uuid))
-		.leftJoin(
-			createdByUser,
-			eq(manual_entry.created_by, createdByUser.uuid)
-		)
-		.leftJoin(
-			device_list,
-			eq(manual_entry.device_list_uuid, device_list.uuid)
-		)
-		.where(eq(manual_entry.uuid, req.params.uuid));
-
-	try {
-		const data = await manual_entryPromise;
-		const toast = {
-			status: 200,
-			type: 'select',
-			message: 'manual_entry',
-		};
-
-		return res.status(200).json({ toast, data: data[0] });
-	} catch (error) {
-		next(error);
-	}
-}
-
-export async function manualEntryByEmployee(req, res, next) {
-	if (!(await validateRequest(req, next))) return;
-
-	const { employee_uuid } = req.params;
-	//console.log('employee_uuid', employee_uuid);
-
-	const manual_entryPromise = db
-		.select({
-			uuid: manual_entry.uuid,
-			employee_uuid: manual_entry.employee_uuid,
-			employee_name: employee.name,
-			type: manual_entry.type,
-			entry_time: manual_entry.entry_time,
-			exit_time: manual_entry.exit_time,
-			reason: manual_entry.reason,
-			area: manual_entry.area,
-			created_by: manual_entry.created_by,
-			created_by_name: createdByUser.name,
-			created_at: manual_entry.created_at,
-			updated_at: manual_entry.updated_at,
-			remarks: manual_entry.remarks,
-			department_uuid: employee.department_uuid,
-			department_name: department.department,
-			designation_uuid: employee.designation_uuid,
-			designation_name: designation.designation,
-			device_list_uuid: manual_entry.device_list_uuid,
-			device_list_name: device_list.name,
-			approval: manual_entry.approval,
-		})
-		.from(manual_entry)
-		.leftJoin(employee, eq(manual_entry.employee_uuid, employee.uuid))
-		.leftJoin(department, eq(employee.department_uuid, department.uuid))
-		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
-		.leftJoin(users, eq(employee.user_uuid, users.uuid))
-		.leftJoin(
-			createdByUser,
-			eq(manual_entry.created_by, createdByUser.uuid)
-		)
-		.leftJoin(
-			device_list,
-			eq(manual_entry.device_list_uuid, device_list.uuid)
-		)
-		.where(
-			and(
-				eq(manual_entry.employee_uuid, employee_uuid),
-				eq(manual_entry.type, 'field_visit')
-			)
-		)
-		.orderBy(desc(manual_entry.created_at))
-		.limit(5);
-
-	try {
-		const data = await manual_entryPromise;
-		const toast = {
-			status: 200,
-			type: 'select',
-			message: 'manual_entry',
-		};
-
-		return res.status(200).json({ toast, data });
 	} catch (error) {
 		next(error);
 	}
