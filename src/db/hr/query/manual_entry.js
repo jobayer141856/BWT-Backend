@@ -272,11 +272,14 @@ export async function manualEntryByEmployee(req, res, next) {
 	}
 }
 
-export async function selectAllManualEntryWithPagination(req, res, next) {
+export async function selectAllManualEntryWithPaginationFieldVisit(
+	req,
+	res,
+	next
+) {
 	if (!(await validateRequest(req, next))) return;
 
-	const { type, approval, is_pagination, field_name, field_value } =
-		req.query;
+	const { approval, is_pagination, field_name, field_value } = req.query;
 
 	const resultPromise = db
 		.select({
@@ -315,17 +318,15 @@ export async function selectAllManualEntryWithPagination(req, res, next) {
 			eq(manual_entry.device_list_uuid, device_list.uuid)
 		);
 
-	if (type && approval) {
+	if (approval) {
 		resultPromise.where(
 			and(
-				eq(manual_entry.type, type),
+				eq(manual_entry.type, 'field_visit'),
 				eq(manual_entry.approval, approval)
 			)
 		);
-	} else if (type) {
-		resultPromise.where(eq(manual_entry.type, type));
-	} else if (approval) {
-		resultPromise.where(eq(manual_entry.approval, approval));
+	} else {
+		resultPromise.where(eq(manual_entry.type, 'field_visit'));
 	}
 
 	resultPromise.orderBy(desc(manual_entry.created_at));

@@ -365,7 +365,7 @@ hrRouter.get(
 );
 hrRouter.get(
 	'/v2/manual-entry/by/pagination',
-	manualEntryOperations.selectAllManualEntryWithPagination
+	manualEntryOperations.selectAllManualEntryWithPaginationFieldVisit
 );
 
 // ? apply_leave routes

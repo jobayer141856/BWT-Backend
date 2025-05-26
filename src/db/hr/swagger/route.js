@@ -2609,12 +2609,6 @@ const pathHrManualEntry = {
 				SE.parameter_query('orderby', 'Order by', ['asc', 'desc']),
 				SE.parameter_query('field_name', 'field_name', SE.string()),
 				SE.parameter_query('field_value', 'field_value', SE.string()),
-				SE.parameter_query('type', 'Type of manual entry', [
-					'field_visit',
-					'missing_punch',
-					'manual_entry',
-					'late_application',
-				]),
 			],
 			responses: {
 				200: SE.response_schema(200, {
