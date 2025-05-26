@@ -308,6 +308,7 @@ hrRouter.get(
 	'/employee-leave-information-details/by/:employee_uuid',
 	employeeOperations.employeeLeaveInformationDetails
 );
+hrRouter.get('/employee-login', employeeOperations.loginUser);
 
 // ? device_permissions routes
 hrRouter.get('/device-permission', devicePermissionsOperations.selectAll);

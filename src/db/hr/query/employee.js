@@ -4,11 +4,14 @@ import { validateRequest } from '../../../util/index.js';
 import { createApi } from '../../../util/api.js';
 import db from '../../index.js';
 import {
-	configuration,
+	ComparePass,
+	CreateToken,
+	HashPass,
+} from '../../../middleware/auth.js';
+import {
 	department,
 	designation,
 	employee,
-	leave_category,
 	leave_policy,
 	shift_group,
 	sub_department,
@@ -22,9 +25,14 @@ const createdByUser = alias(users, 'created_by_user');
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	const hashPassword = await HashPass(req.body.pass);
+
 	const employeePromise = db
 		.insert(employee)
-		.values(req.body)
+		.values({
+			...req.body,
+			pass: hashPassword,
+		})
 		.returning({ insertedName: employee.name });
 
 	try {
@@ -499,69 +507,66 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 	}
 }
 
-// export async function select(req, res, next) {
-// 	if (!(await validateRequest(req, next))) return;
+export async function loginUser(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
 
-// 	const employeePromise = db
-// 		.select({
-// 			uuid: employee.uuid,
-// 			id: employee.id,
-// 			configuration_uuid: employee.configuration_uuid,
-// 			leave_policy_uuid: configuration.leave_policy_uuid,
-// 			leave_policy_name: leave_policy.name,
-// 			leave_category_uuid: employee.leave_category_uuid,
-// 			leave_category_name: leave_category.name,
-// 			number_of_leaves_to_provide_file:
-// 				employee.number_of_leaves_to_provide_file,
-// 			maximum_number_of_allowed_leaves:
-// 				employee.maximum_number_of_allowed_leaves,
-// 			leave_carry_type: employee.leave_carry_type,
-// 			consecutive_days: employee.consecutive_days,
-// 			maximum_number_of_leaves_to_carry:
-// 				employee.maximum_number_of_leaves_to_carry,
-// 			count_off_days_as_leaves: employee.count_off_days_as_leaves,
-// 			enable_previous_day_selection:
-// 				employee.enable_previous_day_selection,
-// 			maximum_number_of_leave_per_month:
-// 				employee.maximum_number_of_leave_per_month,
-// 			previous_date_selected_limit: employee.previous_date_selected_limit,
-// 			applicability: employee.applicability,
-// 			eligible_after_joining: employee.eligible_after_joining,
-// 			enable_pro_rata: employee.enable_pro_rata,
-// 			max_avail_time: employee.max_avail_time,
-// 			enable_earned_leave: employee.enable_earned_leave,
-// 			created_by: employee.created_by,
-// 			created_by_name: users.name,
-// 			created_at: employee.created_at,
-// 			updated_at: employee.updated_at,
-// 			remarks: employee.remarks,
-// 		})
-// 		.from(employee)
-// 		.leftJoin(
-// 			leave_category,
-// 			eq(employee.leave_category_uuid, leave_category.uuid)
-// 		)
-// 		.leftJoin(
-// 			configuration,
-// 			eq(employee.configuration_uuid, configuration.uuid)
-// 		)
-// 		.leftJoin(
-// 			leave_policy,
-// 			eq(configuration.leave_policy_uuid, leave_policy.uuid)
-// 		)
-// 		.leftJoin(users, eq(employee.created_by, users.uuid))
-// 		.where(eq(employee.uuid, req.params.uuid));
+	const { email, pass } = req.body;
 
-// 	try {
-// 		const data = await employeePromise;
-// 		const toast = {
-// 			status: 200,
-// 			type: 'select',
-// 			message: 'employee',
-// 		};
+	const userPromise = db
+		.select({
+			uuid: employee.uuid,
+			name: employee.name,
+			email: employee.email,
+			pass: employee.pass,
+			designation_uuid: employee.designation_uuid,
+			department_uuid: employee.department_uuid,
+			created_at: employee.created_at,
+			updated_at: employee.updated_at,
+			status: employee.status,
+			remarks: employee.remarks,
+			designation: designation.designation,
+			department: department.department,
+		})
+		.from(employee)
+		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
+		.leftJoin(department, eq(employee.department_uuid, department.uuid))
+		.where(eq(employee.email, email));
 
-// 		return res.status(200).json({ toast, data: data[0] });
-// 	} catch (error) {
-// 		next(error);
-// 	}
-// }
+	const USER = await userPromise;
+
+	if (USER[0].length === 0) {
+		return next(new CustomError('User not found', 404));
+	}
+
+	if (USER[0].status) {
+		return res.status(200).json({
+			status: 400,
+			type: 'delete',
+			message: 'User is not active',
+		});
+	}
+
+	await ComparePass(pass, USER[0].pass).then((result) => {
+		if (!result) {
+			return res.status(200).json({
+				status: 400,
+				type: 'delete',
+				message: 'Email/Password combination incorrect',
+			});
+		}
+
+		const token = CreateToken(USER[0]);
+		const { uuid, name, department } = USER[0];
+		if (!token.success) {
+			return res.status(500).json({ error: 'Error signing token' });
+		}
+
+		return res.status(200).json({
+			status: 201,
+			type: 'create',
+			message: 'User logged in',
+			token: token.token,
+			user: { uuid, name, department },
+		});
+	});
+}

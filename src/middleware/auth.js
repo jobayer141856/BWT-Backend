@@ -41,6 +41,7 @@ export const CreateToken = (user, time = '24h') => {
 
 const publicUrls = [
 	{ url: '/hr/user/login', method: 'POST' },
+	{ url: '/hr/employee-login', method: 'POST' },
 	{ url: '/public', method: 'GET' },
 	{ url: '/other/model/value/label', method: 'GET' },
 	{ url: '/other/brand/value/label', method: 'GET' },
