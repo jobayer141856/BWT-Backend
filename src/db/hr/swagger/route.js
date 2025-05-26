@@ -2574,17 +2574,14 @@ const pathHrManualEntry = {
 			tags: ['hr.manual_entry'],
 			summary: 'Gets a manual entry by employee uuid',
 			description: '',
-			// operationId: "deletePet",
 			produces: ['application/json'],
 			parameters: [
-				{
-					name: 'employee_uuid',
-					in: 'path',
-					description: 'Employee UUID',
-					required: true,
-					type: 'string',
-					format: 'uuid',
-				},
+				SE.parameter_params('employee_uuid', 'employee_uuid', [
+					SE.uuid(),
+				]),
+				SE.parameter_query('field_visit_uuid', 'field_visit_uuid', [
+					SE.uuid(),
+				]),
 			],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/manual_entry'),
