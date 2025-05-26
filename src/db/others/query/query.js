@@ -270,12 +270,26 @@ export async function selectShiftGroup(req, res, next) {
 	}
 }
 export async function selectLeavePolicy(req, res, next) {
+	const { filteredConf } = req.query;
 	const leavePolicyPromise = db
 		.select({
 			value: hrSchema.leave_policy.uuid,
 			label: hrSchema.leave_policy.name,
 		})
-		.from(hrSchema.leave_policy);
+		.from(hrSchema.leave_policy)
+		.leftJoin(
+			hrSchema.configuration,
+			eq(
+				hrSchema.leave_policy.uuid,
+				hrSchema.configuration.leave_policy_uuid
+			)
+		);
+
+	if (filteredConf === 'true') {
+		leavePolicyPromise.where(
+			is(hrSchema.configuration.leave_policy_uuid, null)
+		);
+	}
 	try {
 		const data = await leavePolicyPromise;
 		const toast = {
