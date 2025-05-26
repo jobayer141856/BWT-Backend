@@ -1,7 +1,7 @@
 import { sql, eq, and, is, or, gt, ne } from 'drizzle-orm';
 import db from '../../index.js';
 import { handleError, validateRequest } from '../../../util/index.js';
-import * as hrSchema from '../../hr/schema.js';
+import hr, * as hrSchema from '../../hr/schema.js';
 import * as storeSchema from '../../store/schema.js';
 import * as workSchema from '../../work/schema.js';
 import * as deliverySchema from '../../delivery/schema.js';
@@ -276,11 +276,21 @@ export async function selectLeavePolicy(req, res, next) {
 			value: hrSchema.leave_policy.uuid,
 			label: hrSchema.leave_policy.name,
 		})
-		.from(hrSchema.leave_policy);
+		.from(hrSchema.leave_policy)
+		.leftJoin(
+			hrSchema.configuration,
+			eq(
+				hrSchema.leave_policy.uuid,
+				hrSchema.configuration.leave_policy_uuid
+			)
+		);
 
 	if (filteredConf && filteredConf === true) {
 		leavePolicyPromise.where(
-			eq(hrSchema.configuration.leave_policy_uuid, null)
+			ne(
+				hrSchema.configuration.leave_policy_uuid,
+				hrSchema.leave_policy.uuid
+			)
 		);
 	}
 	try {
