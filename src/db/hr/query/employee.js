@@ -25,12 +25,12 @@ const createdByUser = alias(users, 'created_by_user');
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const hashPassword = await HashPass(req.body.pass);
+	//const hashPassword = await HashPass(req.body.pass);
 
 	const employeePromise = db
 		.insert(employee)
 		.values(req.body)
-		.returning({ insertedName: employee.name });
+		.returning({ insertedName: employee.employee_id });
 
 	try {
 		const data = await employeePromise;
@@ -53,7 +53,7 @@ export async function update(req, res, next) {
 		.update(employee)
 		.set(req.body)
 		.where(eq(employee.uuid, req.params.uuid))
-		.returning({ updatedName: employee.name });
+		.returning({ updatedName: employee.employee_id });
 
 	try {
 		const data = await employeePromise;
@@ -75,7 +75,7 @@ export async function remove(req, res, next) {
 	const employeePromise = db
 		.delete(employee)
 		.where(eq(employee.uuid, req.params.uuid))
-		.returning({ deletedName: employee.name });
+		.returning({ deletedName: employee.employee_id });
 
 	try {
 		const data = await employeePromise;
