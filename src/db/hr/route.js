@@ -28,7 +28,6 @@ import * as applyBalanceOperations from './query/apply_balance.js';
 import * as salaryOccasionalOperations from './query/salary_occasional.js';
 import * as salaryIncrementOperations from './query/salary_increment.js';
 import * as salaryEntryOperations from './query/salary_entry.js';
-import hr from './schema.js';
 
 const hrRouter = Router();
 const upload = multer();
