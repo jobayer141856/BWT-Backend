@@ -290,8 +290,6 @@ export async function selectLeavePolicy(req, res, next) {
 				: sql`true`
 		);
 
-	console.log(leavePolicyPromise.toSQL().sql);
-
 	try {
 		const data = await leavePolicyPromise;
 		const toast = {
@@ -443,12 +441,31 @@ export async function selectEmployee(req, res, next) {
 }
 
 export async function selectDeviceList(req, res, next) {
+	const { employee_uuid } = req.query;
 	const deviceListPromise = db
 		.select({
 			value: hrSchema.device_list.uuid,
 			label: hrSchema.device_list.name,
 		})
-		.from(hrSchema.device_list);
+		.from(hrSchema.device_list)
+		.leftJoin(
+			hrSchema.device_permission,
+			eq(
+				hrSchema.device_list.uuid,
+				hrSchema.device_permission.device_list_uuid
+			)
+		)
+		.where(
+			employee_uuid
+				? sql`${hrSchema.device_permission.employee_uuid} IS NULL`
+				: sql`true`
+		);
+
+	// if (employee_uuid) {
+	// 	deviceListPromise.where(
+	// 		eq(hrSchema.device_permission.employee_uuid, employee_uuid)
+	// 	);
+	// }
 	try {
 		const data = await deviceListPromise;
 		const toast = {

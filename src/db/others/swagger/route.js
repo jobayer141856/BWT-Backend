@@ -340,6 +340,11 @@ const pathDeviceList = {
 			tags: ['others'],
 			summary: 'Get all device list',
 			description: 'Get all device list',
+			parameters: [
+				SE.parameter_query('employee_uuid', 'employee_uuid', [
+					SE.uuid(),
+				]),
+			],
 			responses: {
 				200: {
 					description: 'Success',
