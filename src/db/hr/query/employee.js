@@ -100,9 +100,9 @@ export async function selectAll(req, res, next) {
 			uuid: employee.uuid,
 			id: employee.id,
 			gender: employee.gender,
-			employee_name: employee.name,
+			//employee_name: employee.name,
 			user_uuid: employee.user_uuid,
-			users_name: users.name,
+			employee_name: users.name,
 			start_date: employee.start_date,
 			workplace_uuid: employee.workplace_uuid,
 			workplace_name: workplace.name,
@@ -130,9 +130,9 @@ export async function selectAll(req, res, next) {
 			created_at: employee.created_at,
 			updated_at: employee.updated_at,
 			remarks: employee.remarks,
-			name: employee.name,
-			email: employee.email,
-			pass: employee.pass,
+			//name: employee.name,
+			//email: employee.email,
+			//pass: employee.pass,
 			designation_uuid: employee.designation_uuid,
 			designation_name: designation.designation,
 			department_uuid: employee.department_uuid,
@@ -185,9 +185,9 @@ export async function select(req, res, next) {
 			uuid: employee.uuid,
 			id: employee.id,
 			gender: employee.gender,
-			employee_name: employee.name,
+			//employee_name: employee.name,
 			user_uuid: employee.user_uuid,
-			users_name: users.name,
+			employee_name: users.name,
 			start_date: employee.start_date,
 			workplace_uuid: employee.workplace_uuid,
 			workplace_name: workplace.name,
@@ -215,9 +215,9 @@ export async function select(req, res, next) {
 			created_at: employee.created_at,
 			updated_at: employee.updated_at,
 			remarks: employee.remarks,
-			name: employee.name,
-			email: employee.email,
-			pass: employee.pass,
+			//name: employee.name,
+			//email: employee.email,
+			//pass: employee.pass,
 			designation_uuid: employee.designation_uuid,
 			designation_name: designation.designation,
 			department_uuid: employee.department_uuid,
@@ -308,9 +308,9 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 			uuid: employee.uuid,
 			id: employee.id,
 			gender: employee.gender,
-			employee_name: employee.name,
+			//employee_name: employee.name,
 			user_uuid: employee.user_uuid,
-			users_name: users.name,
+			employee_name: users.name,
 			start_date: employee.start_date,
 			workplace_uuid: employee.workplace_uuid,
 			workplace_name: workplace.name,
@@ -338,8 +338,8 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 			created_at: employee.created_at,
 			updated_at: employee.updated_at,
 			remarks: employee.remarks,
-			name: employee.name,
-			email: employee.email,
+			//name: employee.name,
+			//email: employee.email,
 			//pass: employee.pass,
 			designation_uuid: employee.designation_uuid,
 			designation_name: designation.designation,
@@ -507,66 +507,66 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 	}
 }
 
-export async function loginUser(req, res, next) {
-	if (!(await validateRequest(req, next))) return;
+// export async function loginUser(req, res, next) {
+// 	if (!(await validateRequest(req, next))) return;
 
-	const { email, pass } = req.body;
+// 	const { email, pass } = req.body;
 
-	const userPromise = db
-		.select({
-			uuid: employee.uuid,
-			name: employee.name,
-			email: employee.email,
-			pass: employee.pass,
-			designation_uuid: employee.designation_uuid,
-			department_uuid: employee.department_uuid,
-			created_at: employee.created_at,
-			updated_at: employee.updated_at,
-			status: employee.status,
-			remarks: employee.remarks,
-			designation: designation.designation,
-			department: department.department,
-		})
-		.from(employee)
-		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
-		.leftJoin(department, eq(employee.department_uuid, department.uuid))
-		.where(eq(employee.email, email));
+// 	const userPromise = db
+// 		.select({
+// 			uuid: employee.uuid,
+// 			name: employee.name,
+// 			email: employee.email,
+// 			pass: employee.pass,
+// 			designation_uuid: employee.designation_uuid,
+// 			department_uuid: employee.department_uuid,
+// 			created_at: employee.created_at,
+// 			updated_at: employee.updated_at,
+// 			status: employee.status,
+// 			remarks: employee.remarks,
+// 			designation: designation.designation,
+// 			department: department.department,
+// 		})
+// 		.from(employee)
+// 		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
+// 		.leftJoin(department, eq(employee.department_uuid, department.uuid))
+// 		.where(eq(employee.email, email));
 
-	const USER = await userPromise;
+// 	const USER = await userPromise;
 
-	if (USER[0].length === 0) {
-		return next(new CustomError('User not found', 404));
-	}
+// 	if (USER[0].length === 0) {
+// 		return next(new CustomError('User not found', 404));
+// 	}
 
-	if (USER[0].status) {
-		return res.status(200).json({
-			status: 400,
-			type: 'delete',
-			message: 'User is not active',
-		});
-	}
+// 	if (USER[0].status) {
+// 		return res.status(200).json({
+// 			status: 400,
+// 			type: 'delete',
+// 			message: 'User is not active',
+// 		});
+// 	}
 
-	await ComparePass(pass, USER[0].pass).then((result) => {
-		if (!result) {
-			return res.status(200).json({
-				status: 400,
-				type: 'delete',
-				message: 'Email/Password combination incorrect',
-			});
-		}
+// 	await ComparePass(pass, USER[0].pass).then((result) => {
+// 		if (!result) {
+// 			return res.status(200).json({
+// 				status: 400,
+// 				type: 'delete',
+// 				message: 'Email/Password combination incorrect',
+// 			});
+// 		}
 
-		const token = CreateToken(USER[0]);
-		const { uuid, name, department } = USER[0];
-		if (!token.success) {
-			return res.status(500).json({ error: 'Error signing token' });
-		}
+// 		const token = CreateToken(USER[0]);
+// 		const { uuid, name, department } = USER[0];
+// 		if (!token.success) {
+// 			return res.status(500).json({ error: 'Error signing token' });
+// 		}
 
-		return res.status(200).json({
-			status: 201,
-			type: 'create',
-			message: 'User logged in',
-			token: token.token,
-			user: { uuid, name, department },
-		});
-	});
-}
+// 		return res.status(200).json({
+// 			status: 201,
+// 			type: 'create',
+// 			message: 'User logged in',
+// 			token: token.token,
+// 			user: { uuid, name, department },
+// 		});
+// 	});
+// }

@@ -379,9 +379,9 @@ export const employee = hr.table('employee', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
-	name: text('name').notNull(),
-	email: text('email').notNull().unique(),
-	pass: text('pass').notNull(),
+	// name: text('name').notNull(),
+	// email: text('email').notNull().unique(),
+	// pass: text('pass').notNull(),
 	designation_uuid: defaultUUID('designation_uuid').references(
 		() => designation.uuid
 	),
