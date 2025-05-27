@@ -538,8 +538,8 @@ export const defApplyBalance = SED({
 	xml: 'Hr/ApplyBalance',
 });
 
-// ? Payroll Occasional
-export const defPayrollOccasional = SED({
+// ? Salary Occasional
+export const defSalaryOccasional = SED({
 	required: [
 		'uuid',
 		'employee_uuid',
@@ -562,11 +562,11 @@ export const defPayrollOccasional = SED({
 		updated_at: SE.date_time(null),
 		remarks: SE.string('remarks'),
 	},
-	xml: 'Hr/PayrollOccasional',
+	xml: 'Hr/SalaryOccasional',
 });
 
-// ? Payroll Increment
-export const defPayrollIncrement = SED({
+// ? Salary Increment
+export const defSalaryIncrement = SED({
 	required: [
 		'uuid',
 		'employee_uuid',
@@ -585,11 +585,11 @@ export const defPayrollIncrement = SED({
 		updated_at: SE.date_time(null),
 		remarks: SE.string('remarks'),
 	},
-	xml: 'Hr/PayrollIncrement',
+	xml: 'Hr/SalaryIncrement',
 });
 
-// ? Payroll Entry
-export const defPayrollEntry = SED({
+// ? Salary Entry
+export const defSalaryEntry = SED({
 	required: [
 		'uuid',
 		'employee_uuid',
@@ -612,7 +612,7 @@ export const defPayrollEntry = SED({
 		updated_at: SE.date_time(null),
 		remarks: SE.string('remarks'),
 	},
-	xml: 'Hr/PayrollEntry',
+	xml: 'Hr/SalaryEntry',
 });
 
 // * Marge All
@@ -640,9 +640,9 @@ export const defHr = {
 	manual_entry: defManualEntry,
 	apply_leave: defApplyLeave,
 	apply_balance: defApplyBalance,
-	payroll_occasional: defPayrollOccasional,
-	payroll_increment: defPayrollIncrement,
-	payroll_entry: defPayrollEntry,
+	salary_occasional: defSalaryOccasional,
+	salary_increment: defSalaryIncrement,
+	salary_entry: defSalaryEntry,
 	roster: defRoster,
 };
 
@@ -742,15 +742,15 @@ export const tagHr = [
 		description: 'Operations about apply balance',
 	},
 	{
-		name: 'hr.payroll_occasional',
-		description: 'Operations about payroll occasional',
+		name: 'hr.salary_occasional',
+		description: 'Operations about salary occasional',
 	},
 	{
-		name: 'hr.payroll_increment',
-		description: 'Operations about payroll increment',
+		name: 'hr.salary_increment',
+		description: 'Operations about salary increment',
 	},
 	{
-		name: 'hr.payroll_entry',
-		description: 'Operations about payroll entry',
+		name: 'hr.salary_entry',
+		description: 'Operations about salary entry',
 	},
 ];

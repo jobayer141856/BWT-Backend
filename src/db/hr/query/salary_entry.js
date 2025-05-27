@@ -3,20 +3,20 @@ import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 
-import { employee, payroll_entry, users } from '../schema.js';
+import { employee, salary_entry, users } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const payrollIncrementPromise = db
-		.insert(payroll_entry)
+	const salaryIncrementPromise = db
+		.insert(salary_entry)
 		.values(req.body)
-		.returning({ insertedUuid: payroll_entry.uuid });
+		.returning({ insertedUuid: salary_entry.uuid });
 
 	try {
-		const data = await payrollIncrementPromise;
+		const data = await salaryIncrementPromise;
 		const toast = {
 			status: 201,
 			type: 'insert',
@@ -32,14 +32,14 @@ export async function insert(req, res, next) {
 export async function update(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const payrollIncrementPromise = db
-		.update(payroll_entry)
+	const salaryIncrementPromise = db
+		.update(salary_entry)
 		.set(req.body)
-		.where(eq(payroll_entry.uuid, req.params.uuid))
-		.returning({ updatedUuid: payroll_entry.uuid });
+		.where(eq(salary_entry.uuid, req.params.uuid))
+		.returning({ updatedUuid: salary_entry.uuid });
 
 	try {
-		const data = await payrollIncrementPromise;
+		const data = await salaryIncrementPromise;
 		const toast = {
 			status: 200,
 			type: 'update',
@@ -55,13 +55,13 @@ export async function update(req, res, next) {
 export async function remove(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const payrollIncrementPromise = db
-		.delete(payroll_entry)
-		.where(eq(payroll_entry.uuid, req.params.uuid))
-		.returning({ deletedUuid: payroll_entry.uuid });
+	const salaryIncrementPromise = db
+		.delete(salary_entry)
+		.where(eq(salary_entry.uuid, req.params.uuid))
+		.returning({ deletedUuid: salary_entry.uuid });
 
 	try {
-		const data = await payrollIncrementPromise;
+		const data = await salaryIncrementPromise;
 		const toast = {
 			status: 200,
 			type: 'delete',
@@ -77,36 +77,36 @@ export async function remove(req, res, next) {
 export async function selectAll(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const payrollIncrementPromise = db
+	const salaryIncrementPromise = db
 		.select({
-			uuid: payroll_entry.uuid,
-			employee_uuid: payroll_entry.employee_uuid,
+			uuid: salary_entry.uuid,
+			employee_uuid: salary_entry.employee_uuid,
 			employee_name: users.name,
-			type: payroll_entry.type,
-			salary: payroll_entry.salary,
-			month: payroll_entry.month,
-			year: payroll_entry.year,
-			created_by: payroll_entry.created_by,
+			type: salary_entry.type,
+			salary: salary_entry.salary,
+			month: salary_entry.month,
+			year: salary_entry.year,
+			created_by: salary_entry.created_by,
 			created_by_name: createdByUser.name,
-			created_at: payroll_entry.created_at,
-			updated_at: payroll_entry.updated_at,
-			remarks: payroll_entry.remarks,
+			created_at: salary_entry.created_at,
+			updated_at: salary_entry.updated_at,
+			remarks: salary_entry.remarks,
 		})
-		.from(payroll_entry)
-		.leftJoin(employee, eq(payroll_entry.employee_uuid, employee.uuid))
+		.from(salary_entry)
+		.leftJoin(employee, eq(salary_entry.employee_uuid, employee.uuid))
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.leftJoin(
 			createdByUser,
-			eq(payroll_entry.created_by, createdByUser.uuid)
+			eq(salary_entry.created_by, createdByUser.uuid)
 		)
-		.orderBy(desc(payroll_entry.created_at));
+		.orderBy(desc(salary_entry.created_at));
 
 	try {
-		const data = await payrollIncrementPromise;
+		const data = await salaryIncrementPromise;
 		const toast = {
 			status: 200,
 			type: 'select',
-			message: 'Payroll_entry list',
+			message: 'salary_entry list',
 		};
 		return res.status(200).json({ toast, data });
 	} catch (error) {
@@ -117,36 +117,36 @@ export async function selectAll(req, res, next) {
 export async function select(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const payrollIncrementPromise = db
+	const salaryIncrementPromise = db
 		.select({
-			uuid: payroll_entry.uuid,
-			employee_uuid: payroll_entry.employee_uuid,
+			uuid: salary_entry.uuid,
+			employee_uuid: salary_entry.employee_uuid,
 			employee_name: users.name,
-			type: payroll_entry.type,
-			salary: payroll_entry.salary,
-			month: payroll_entry.month,
-			year: payroll_entry.year,
-			created_by: payroll_entry.created_by,
+			type: salary_entry.type,
+			salary: salary_entry.salary,
+			month: salary_entry.month,
+			year: salary_entry.year,
+			created_by: salary_entry.created_by,
 			created_by_name: createdByUser.name,
-			created_at: payroll_entry.created_at,
-			updated_at: payroll_entry.updated_at,
-			remarks: payroll_entry.remarks,
+			created_at: salary_entry.created_at,
+			updated_at: salary_entry.updated_at,
+			remarks: salary_entry.remarks,
 		})
-		.from(payroll_entry)
-		.leftJoin(employee, eq(payroll_entry.employee_uuid, employee.uuid))
+		.from(salary_entry)
+		.leftJoin(employee, eq(salary_entry.employee_uuid, employee.uuid))
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.leftJoin(
 			createdByUser,
-			eq(payroll_entry.created_by, createdByUser.uuid)
+			eq(salary_entry.created_by, createdByUser.uuid)
 		)
-		.leftJoin(users, eq(payroll_entry.created_by, users.uuid));
+		.leftJoin(users, eq(salary_entry.created_by, users.uuid));
 
 	try {
-		const data = await payrollIncrementPromise;
+		const data = await salaryIncrementPromise;
 		const toast = {
 			status: 200,
 			type: 'select',
-			message: 'Payroll_entry list',
+			message: 'salary_entry list',
 		};
 		return res.status(200).json({ toast, data });
 	} catch (error) {

@@ -25,9 +25,9 @@ import * as punchLogOperations from './query/punch_log.js';
 import * as manualEntryOperations from './query/manual_entry.js';
 import * as applyLeaveOperations from './query/apply_leave.js';
 import * as applyBalanceOperations from './query/apply_balance.js';
-import * as payRollOccasionalOperations from './query/payroll_occasional.js';
-import * as payRollIncrementOperations from './query/payroll_increment.js';
-import * as payRollEntryOperations from './query/payroll_entry.js';
+import * as salaryOccasionalOperations from './query/salary_occasional.js';
+import * as salaryIncrementOperations from './query/salary_increment.js';
+import * as salaryEntryOperations from './query/salary_entry.js';
 import hr from './schema.js';
 
 const hrRouter = Router();
@@ -426,49 +426,49 @@ hrRouter.delete(
 	applyBalanceOperations.remove
 );
 
-// ? payroll_occasional routes
-hrRouter.get('/payroll-occasional', payRollOccasionalOperations.selectAll);
+// ? salary_occasional routes
+hrRouter.get('/salary-occasional', salaryOccasionalOperations.selectAll);
 hrRouter.get(
-	'/payroll-occasional/:uuid',
+	'/salary-occasional/:uuid',
 	validateUuidParam(),
-	payRollOccasionalOperations.select
+	salaryOccasionalOperations.select
 );
-hrRouter.post('/payroll-occasional', payRollOccasionalOperations.insert);
-hrRouter.put('/payroll-occasional/:uuid', payRollOccasionalOperations.update);
+hrRouter.post('/salary-occasional', salaryOccasionalOperations.insert);
+hrRouter.put('/salary-occasional/:uuid', salaryOccasionalOperations.update);
 hrRouter.delete(
-	'/payroll-occasional/:uuid',
+	'/salary-occasional/:uuid',
 	validateUuidParam(),
-	payRollOccasionalOperations.remove
+	salaryOccasionalOperations.remove
 );
 
-// ? payroll_increment routes
-hrRouter.get('/payroll-increment', payRollIncrementOperations.selectAll);
+// ? salary_increment routes
+hrRouter.get('/salary-increment', salaryIncrementOperations.selectAll);
 hrRouter.get(
-	'/payroll-increment/:uuid',
+	'/salary-increment/:uuid',
 	validateUuidParam(),
-	payRollIncrementOperations.select
+	salaryIncrementOperations.select
 );
-hrRouter.post('/payroll-increment', payRollIncrementOperations.insert);
-hrRouter.put('/payroll-increment/:uuid', payRollIncrementOperations.update);
+hrRouter.post('/salary-increment', salaryIncrementOperations.insert);
+hrRouter.put('/salary-increment/:uuid', salaryIncrementOperations.update);
 hrRouter.delete(
-	'/payroll-increment/:uuid',
+	'/salary-increment/:uuid',
 	validateUuidParam(),
-	payRollIncrementOperations.remove
+	salaryIncrementOperations.remove
 );
 
-// ? payroll_entry routes
-hrRouter.get('/payroll-entry', payRollEntryOperations.selectAll);
+// ? salary_entry routes
+hrRouter.get('/salary-entry', salaryEntryOperations.selectAll);
 hrRouter.get(
-	'/payroll-entry/:uuid',
+	'/salary-entry/:uuid',
 	validateUuidParam(),
-	payRollEntryOperations.select
+	salaryEntryOperations.select
 );
-hrRouter.post('/payroll-entry', payRollEntryOperations.insert);
-hrRouter.put('/payroll-entry/:uuid', payRollEntryOperations.update);
+hrRouter.post('/salary-entry', salaryEntryOperations.insert);
+hrRouter.put('/salary-entry/:uuid', salaryEntryOperations.update);
 hrRouter.delete(
-	'/payroll-entry/:uuid',
+	'/salary-entry/:uuid',
 	validateUuidParam(),
-	payRollEntryOperations.remove
+	salaryEntryOperations.remove
 );
 
 export { hrRouter };

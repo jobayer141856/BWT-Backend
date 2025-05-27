@@ -222,8 +222,12 @@ export const shift_group = hr.table('shift_group', {
 	id: serial('id').notNull(),
 	name: text('name').notNull(),
 	default_shift: boolean('default_shift').default(false),
+	shifts_uuid: defaultUUID('shifts_uuid')
+		.references(() => shifts.uuid)
+		.notNull(),
 	status: boolean('status').default(true),
 	off_days: json('off_days').default('[]'),
+	effective_date: DateTime('effective_date').notNull(),
 	created_by: defaultUUID('created_by').references(() => users.uuid),
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
@@ -231,12 +235,14 @@ export const shift_group = hr.table('shift_group', {
 });
 
 // ? Roster
+// ! effective_date, shifts_uuid any of these changes will create a new roster entry
 export const roster = hr.table('roster', {
 	uuid: uuid_primary,
 	shift_group_uuid: defaultUUID('shift_group_uuid').references(
 		() => shift_group.uuid
 	),
 	shifts_uuid: defaultUUID('shifts_uuid').references(() => shifts.uuid),
+	effective_date: DateTime('effective_date').notNull(),
 	created_by: defaultUUID('created_by').references(() => users.uuid),
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
@@ -514,9 +520,9 @@ export const apply_balance = hr.table('apply_balance', {
 	remarks: text('remarks').default(null),
 });
 
-// ? payroll occasional
+// ? salary occasional
 
-export const payroll_occasional = hr.table('payroll_occasional', {
+export const salary_occasional = hr.table('salary_occasional', {
 	uuid: uuid_primary,
 	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
 	month: integer('month'),
@@ -531,8 +537,8 @@ export const payroll_occasional = hr.table('payroll_occasional', {
 	remarks: text('remarks').default(null),
 });
 
-// ? payroll increment
-export const payroll_increment = hr.table('payroll_increment', {
+// ? salary increment
+export const salary_increment = hr.table('salary_increment', {
 	uuid: uuid_primary,
 	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
 	salary: PG_DECIMAL('salary').notNull(),
@@ -543,15 +549,15 @@ export const payroll_increment = hr.table('payroll_increment', {
 	remarks: text('remarks').default(null),
 });
 
-// ? payroll entry
-export const payroll_entry_type_enum = pgEnum('payroll_entry_type_enum', [
+// ? salary entry
+export const salary_entry_type_enum = pgEnum('salary_entry_type_enum', [
 	'full',
 	'partial',
 ]);
-export const payroll_entry = hr.table('payroll_entry', {
+export const salary_entry = hr.table('salary_entry', {
 	uuid: uuid_primary,
 	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
-	type: payroll_entry_type_enum('type').default('full'),
+	type: salary_entry_type_enum('type').default('full'),
 	salary: PG_DECIMAL('salary').notNull(),
 	month: integer('month').notNull(),
 	year: integer('year').notNull(),

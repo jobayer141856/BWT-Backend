@@ -2972,80 +2972,80 @@ const pathHrApplyBalance = {
 	},
 };
 
-const pathHrPayrollOccasional = {
-	'/hr/payroll-occasional': {
+const pathHrSalaryOccasional = {
+	'/hr/salary-occasional': {
 		get: {
-			tags: ['hr.payroll_occasional'],
-			summary: 'get all payroll occasional',
-			description: 'All payroll occasional',
+			tags: ['hr.salary_occasional'],
+			summary: 'get all salary occasional',
+			description: 'All salary occasional',
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_occasional'),
+				200: SE.response_schema_ref(200, 'hr/salary_occasional'),
 				405: SE.response(405),
 			},
 		},
 		post: {
-			tags: ['hr.payroll_occasional'],
-			summary: 'create a payroll occasional',
+			tags: ['hr.salary_occasional'],
+			summary: 'create a salary occasional',
 			description: '',
 			// operationId: "addPet",
 			consumes: ['application/json'],
 			produces: ['application/json'],
-			requestBody: SE.requestBody_schema_ref('hr/payroll_occasional'),
+			requestBody: SE.requestBody_schema_ref('hr/salary_occasional'),
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_occasional'),
+				200: SE.response_schema_ref(200, 'hr/salary_occasional'),
 				405: SE.response(405),
 			},
 		},
 	},
-	'/hr/payroll-occasional/{uuid}': {
+	'/hr/salary-occasional/{uuid}': {
 		get: {
-			tags: ['hr.payroll_occasional'],
-			summary: 'Gets a payroll occasional',
+			tags: ['hr.salary_occasional'],
+			summary: 'Gets a salary occasional',
 			description: '',
 			// operationId: "deletePet",
 			produces: ['application/json'],
 			parameters: [
 				SE.parameter_params(
-					'Payroll occasional to get',
+					'Salary occasional to get',
 					'uuid',
 					'string',
 					SE.uuid()
 				),
 			],
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_occasional'),
+				200: SE.response_schema_ref(200, 'hr/salary_occasional'),
 				405: SE.response(405),
 			},
 		},
 		put: {
-			tags: ['hr.payroll_occasional'],
-			summary: 'Update an existing payroll occasional',
+			tags: ['hr.salary_occasional'],
+			summary: 'Update an existing salary occasional',
 			description: '',
 			// operationId: "updatePet",
 			consumes: ['application/json'],
 			produces: ['application/json'],
 			parameters: [
 				SE.parameter_params(
-					'Payroll occasional to put',
+					'Salary occasional to put',
 					'uuid',
 					'string',
 					SE.uuid()
 				),
 			],
-			requestBody: SE.requestBody_schema_ref('hr/payroll_occasional'),
+			requestBody: SE.requestBody_schema_ref('hr/salary_occasional'),
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_occasional'),
+				200: SE.response_schema_ref(200, 'hr/salary_occasional'),
 				405: SE.response(405),
 			},
 		},
 		delete: {
-			tags: ['hr.payroll_occasional'],
-			summary: 'Deletes a payroll occasional',
+			tags: ['hr.salary_occasional'],
+			summary: 'Deletes a salary occasional',
 			description: '',
 			produces: ['application/json'],
 			parameters: [
 				SE.parameter_params(
-					'Payroll occasional to delete',
+					'Salary occasional to delete',
 					'uuid',
 					'string',
 					SE.uuid()
@@ -3059,80 +3059,80 @@ const pathHrPayrollOccasional = {
 	},
 };
 
-const pathHrPayrollIncrement = {
-	'/hr/payroll-increment': {
+const pathHrSalaryIncrement = {
+	'/hr/salary-increment': {
 		get: {
-			tags: ['hr.payroll_increment'],
-			summary: 'get all payroll increment',
-			description: 'All payroll increment',
+			tags: ['hr.salary_increment'],
+			summary: 'get all salary increment',
+			description: 'All salary increment',
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_increment'),
+				200: SE.response_schema_ref(200, 'hr/salary_increment'),
 				405: SE.response(405),
 			},
 		},
 		post: {
-			tags: ['hr.payroll_increment'],
-			summary: 'create a payroll increment',
+			tags: ['hr.salary_increment'],
+			summary: 'create a salary increment',
 			description: '',
 			// operationId: "addPet",
 			consumes: ['application/json'],
 			produces: ['application/json'],
-			requestBody: SE.requestBody_schema_ref('hr/payroll_increment'),
+			requestBody: SE.requestBody_schema_ref('hr/salary_increment'),
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_increment'),
+				200: SE.response_schema_ref(200, 'hr/salary_increment'),
 				405: SE.response(405),
 			},
 		},
 	},
-	'/hr/payroll-increment/{uuid}': {
+	'/hr/salary-increment/{uuid}': {
 		get: {
-			tags: ['hr.payroll_increment'],
-			summary: 'Gets a payroll increment',
+			tags: ['hr.salary_increment'],
+			summary: 'Gets a salary increment',
 			description: '',
 			// operationId: "deletePet",
 			produces: ['application/json'],
 			parameters: [
 				SE.parameter_params(
-					'Payroll increment to get',
+					'Salary increment to get',
 					'uuid',
 					'string',
 					SE.uuid()
 				),
 			],
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_increment'),
+				200: SE.response_schema_ref(200, 'hr/salary_increment'),
 				405: SE.response(405),
 			},
 		},
 		put: {
-			tags: ['hr.payroll_increment'],
-			summary: 'Update an existing payroll increment',
+			tags: ['hr.salary_increment'],
+			summary: 'Update an existing salary increment',
 			description: '',
 			// operationId: "updatePet",
 			consumes: ['application/json'],
 			produces: ['application/json'],
 			parameters: [
 				SE.parameter_params(
-					'Payroll increment to put',
+					'Salary increment to put',
 					'uuid',
 					'string',
 					SE.uuid()
 				),
 			],
-			requestBody: SE.requestBody_schema_ref('hr/payroll_increment'),
+			requestBody: SE.requestBody_schema_ref('hr/salary_increment'),
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_increment'),
+				200: SE.response_schema_ref(200, 'hr/salary_increment'),
 				405: SE.response(405),
 			},
 		},
 		delete: {
-			tags: ['hr.payroll_increment'],
-			summary: 'Deletes a payroll increment',
+			tags: ['hr.salary_increment'],
+			summary: 'Deletes a salary increment',
 			description: '',
 			produces: ['application/json'],
 			parameters: [
 				SE.parameter_params(
-					'Payroll increment to delete',
+					'Salary increment to delete',
 					'uuid',
 					'string',
 					SE.uuid()
@@ -3146,80 +3146,80 @@ const pathHrPayrollIncrement = {
 	},
 };
 
-const pathHrPayrollEntry = {
-	'/hr/payroll-entry': {
+const pathHrSalaryEntry = {
+	'/hr/salary-entry': {
 		get: {
-			tags: ['hr.payroll_entry'],
-			summary: 'get all payroll entry',
-			description: 'All payroll entry',
+			tags: ['hr.salary_entry'],
+			summary: 'get all salary entry',
+			description: 'All salary entry',
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_entry'),
+				200: SE.response_schema_ref(200, 'hr/salary_entry'),
 				405: SE.response(405),
 			},
 		},
 		post: {
-			tags: ['hr.payroll_entry'],
-			summary: 'create a payroll entry',
+			tags: ['hr.salary_entry'],
+			summary: 'create a salary entry',
 			description: '',
 			// operationId: "addPet",
 			consumes: ['application/json'],
 			produces: ['application/json'],
-			requestBody: SE.requestBody_schema_ref('hr/payroll_entry'),
+			requestBody: SE.requestBody_schema_ref('hr/salary_entry'),
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_entry'),
+				200: SE.response_schema_ref(200, 'hr/salary_entry'),
 				405: SE.response(405),
 			},
 		},
 	},
-	'/hr/payroll-entry/{uuid}': {
+	'/hr/salary-entry/{uuid}': {
 		get: {
-			tags: ['hr.payroll_entry'],
-			summary: 'Gets a payroll entry',
+			tags: ['hr.salary_entry'],
+			summary: 'Gets a salary entry',
 			description: '',
 			// operationId: "deletePet",
 			produces: ['application/json'],
 			parameters: [
 				SE.parameter_params(
-					'Payroll entry to get',
+					'Salary entry to get',
 					'uuid',
 					'string',
 					SE.uuid()
 				),
 			],
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_entry'),
+				200: SE.response_schema_ref(200, 'hr/salary_entry'),
 				405: SE.response(405),
 			},
 		},
 		put: {
-			tags: ['hr.payroll_entry'],
-			summary: 'Update an existing payroll entry',
+			tags: ['hr.salary_entry'],
+			summary: 'Update an existing salary entry',
 			description: '',
 			// operationId: "updatePet",
 			consumes: ['application/json'],
 			produces: ['application/json'],
 			parameters: [
 				SE.parameter_params(
-					'Payroll entry to put',
+					'Salary entry to put',
 					'uuid',
 					'string',
 					SE.uuid()
 				),
 			],
-			requestBody: SE.requestBody_schema_ref('hr/payroll_entry'),
+			requestBody: SE.requestBody_schema_ref('hr/salary_entry'),
 			responses: {
-				200: SE.response_schema_ref(200, 'hr/payroll_entry'),
+				200: SE.response_schema_ref(200, 'hr/salary_entry'),
 				405: SE.response(405),
 			},
 		},
 		delete: {
-			tags: ['hr.payroll_entry'],
-			summary: 'Deletes a payroll entry',
+			tags: ['hr.salary_entry'],
+			summary: 'Deletes a salary entry',
 			description: '',
 			produces: ['application/json'],
 			parameters: [
 				SE.parameter_params(
-					'Payroll entry to delete',
+					'Salary entry to delete',
 					'uuid',
 					'string',
 					SE.uuid()
@@ -3257,7 +3257,7 @@ export const pathHr = {
 	...pathHrManualEntry,
 	...pathHrApplyLeave,
 	...pathHrApplyBalance,
-	...pathHrPayrollOccasional,
-	...pathHrPayrollIncrement,
-	...pathHrPayrollEntry,
+	...pathHrSalaryOccasional,
+	...pathHrSalaryIncrement,
+	...pathHrSalaryEntry,
 };
