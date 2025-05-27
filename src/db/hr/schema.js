@@ -541,7 +541,7 @@ export const salary_occasional = hr.table('salary_occasional', {
 export const salary_increment = hr.table('salary_increment', {
 	uuid: uuid_primary,
 	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
-	salary: PG_DECIMAL('salary').notNull(),
+	amount: PG_DECIMAL('amount').notNull(),
 	effective_date: DateTime('effective_date'),
 	created_by: defaultUUID('created_by').references(() => users.uuid),
 	created_at: DateTime('created_at').notNull(),
@@ -558,7 +558,7 @@ export const salary_entry = hr.table('salary_entry', {
 	uuid: uuid_primary,
 	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
 	type: salary_entry_type_enum('type').default('full'),
-	salary: PG_DECIMAL('salary').notNull(),
+	amount: PG_DECIMAL('amount').notNull(),
 	month: integer('month').notNull(),
 	year: integer('year').notNull(),
 	created_by: defaultUUID('created_by').references(() => users.uuid),
