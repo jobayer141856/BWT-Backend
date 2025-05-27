@@ -88,7 +88,7 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: manual_entry.uuid,
 			employee_uuid: manual_entry.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			type: manual_entry.type,
 			entry_time: manual_entry.entry_time,
 			exit_time: manual_entry.exit_time,
@@ -159,7 +159,7 @@ export async function select(req, res, next) {
 		.select({
 			uuid: manual_entry.uuid,
 			employee_uuid: manual_entry.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			type: manual_entry.type,
 			entry_time: manual_entry.entry_time,
 			exit_time: manual_entry.exit_time,
@@ -218,7 +218,7 @@ export async function manualEntryByEmployee(req, res, next) {
 		.select({
 			uuid: manual_entry.uuid,
 			employee_uuid: manual_entry.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			type: manual_entry.type,
 			entry_time: manual_entry.entry_time,
 			exit_time: manual_entry.exit_time,
@@ -289,7 +289,7 @@ export async function selectAllManualEntryWithPaginationFieldVisit(
 		.select({
 			uuid: manual_entry.uuid,
 			employee_uuid: manual_entry.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			type: manual_entry.type,
 			entry_time: manual_entry.entry_time,
 			exit_time: manual_entry.exit_time,

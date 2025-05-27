@@ -390,7 +390,7 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 											'leave_category_uuid', apply_leave.leave_category_uuid,
 											'leave_category_name', leave_category.name,
 											'employee_uuid', apply_leave.employee_uuid,
-											'employee_name', employee.name,
+											'employee_name', employeeUser.name,
 											'type', apply_leave.type,
 											'from_date', apply_leave.from_date,
 											'to_date', apply_leave.to_date,
@@ -409,6 +409,8 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 										ON apply_leave.leave_category_uuid = leave_category.uuid
 									LEFT JOIN hr.employee
 										ON apply_leave.employee_uuid = employee.uuid
+									LEFT JOIN hr.users AS employeeUser
+										ON employee.user_uuid = employeeUser.uuid
 									LEFT JOIN hr.users AS createdByUser
 										ON apply_leave.created_by = createdByUser.uuid
 									WHERE apply_leave.employee_uuid = ${employee_uuid} AND 
@@ -444,7 +446,7 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 														apply_leave.leave_category_uuid,
 														leave_category.name AS leave_category_name,
 														apply_leave.employee_uuid,
-														employee.name AS employee_name,
+														employeeUser.name AS employee_name,
 														apply_leave.type,
 														apply_leave.from_date,
 														apply_leave.to_date,
@@ -461,6 +463,8 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 														ON apply_leave.leave_category_uuid = leave_category.uuid
 													LEFT JOIN hr.employee
 														ON apply_leave.employee_uuid = employee.uuid
+													LEFT JOIN hr.users AS employeeUser
+														ON employee.user_uuid = employeeUser.uuid
 													LEFT JOIN hr.users AS created_by_user
 														ON apply_leave.created_by = created_by_user.uuid
 													WHERE apply_leave.employee_uuid = ${employee_uuid}
