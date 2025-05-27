@@ -342,7 +342,10 @@ export const employee = hr.table('employee', {
 	uuid: uuid_primary,
 	id: serial('id').notNull(),
 	gender: genderEnum('gender').default('male'),
-	user_uuid: defaultUUID('user_uuid').references(() => users.uuid),
+	user_uuid: defaultUUID('user_uuid')
+		.references(() => users.uuid)
+		.notNull()
+		.unique(),
 	start_date: DateTime('start_date').default(null),
 	workplace_uuid: defaultUUID('workplace_uuid').references(
 		() => workplace.uuid
