@@ -1,7 +1,7 @@
 import { sql, eq, and, is, or, gt, ne } from 'drizzle-orm';
 import db from '../../index.js';
 import { handleError, validateRequest } from '../../../util/index.js';
-import hr, * as hrSchema from '../../hr/schema.js';
+import * as hrSchema from '../../hr/schema.js';
 import * as storeSchema from '../../store/schema.js';
 import * as workSchema from '../../work/schema.js';
 import * as deliverySchema from '../../delivery/schema.js';
@@ -17,6 +17,7 @@ export async function selectUser(req, res, next) {
 		is_ready_for_delivery,
 		is_delivery_complete,
 		challan_uuid,
+		filteredUser,
 	} = req.query;
 
 	//console.log(type, designation, department);
@@ -58,6 +59,21 @@ export async function selectUser(req, res, next) {
 		.leftJoin(
 			deliverySchema.challan,
 			eq(hrSchema.users.uuid, deliverySchema.challan.customer_uuid)
+		)
+		.leftJoin(
+			hrSchema.employee,
+			eq(hrSchema.users.uuid, hrSchema.employee.user_uuid)
+		)
+		.where(
+			filteredUser === 'true'
+				? and(
+						eq(
+							sql`LOWER(CAST(${hrSchema.users.user_type} AS TEXT))`,
+							'employee'
+						),
+						sql`${hrSchema.employee.user_uuid} IS NULL`
+					)
+				: sql`true`
 		)
 		.groupBy(
 			hrSchema.users.uuid,

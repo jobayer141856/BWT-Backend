@@ -39,6 +39,10 @@ const pathUser = {
 					'lsnYBibQt3QZhZM',
 					'lsnYBibQt3QZhZM',
 				]),
+				SE.parameter_query('filteredUser', 'filteredUser', [
+					'true',
+					'false',
+				]),
 			],
 			responses: {
 				200: {
