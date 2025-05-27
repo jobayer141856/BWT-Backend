@@ -29,10 +29,7 @@ export async function insert(req, res, next) {
 
 	const employeePromise = db
 		.insert(employee)
-		.values({
-			...req.body,
-			pass: hashPassword,
-		})
+		.values(req.body)
 		.returning({ insertedName: employee.name });
 
 	try {
