@@ -378,7 +378,7 @@ export async function selectEmployee(req, res, next) {
 	const employeePromise = db
 		.select({
 			value: hrSchema.employee.uuid,
-			label: hrSchema.employee.name,
+			label: hrSchema.users.name,
 			policy: sql`
 				jsonb_agg(
 					jsonb_build_object(
@@ -389,6 +389,10 @@ export async function selectEmployee(req, res, next) {
 			`,
 		})
 		.from(hrSchema.employee)
+		.leftJoin(
+			hrSchema.users,
+			eq(hrSchema.employee.user_uuid, hrSchema.users.uuid)
+		)
 		.leftJoin(
 			hrSchema.leave_policy,
 			eq(hrSchema.employee.leave_policy_uuid, hrSchema.leave_policy.uuid)
@@ -441,7 +445,7 @@ export async function selectEmployee(req, res, next) {
 				? sql`${hrSchema.employee.leave_policy_uuid} IS NOT NULL`
 				: sql`true`
 		)
-		.groupBy(hrSchema.employee.uuid, hrSchema.employee.name);
+		.groupBy(hrSchema.employee.uuid, hrSchema.users.name);
 
 	try {
 		const data = await employeePromise;
