@@ -444,7 +444,7 @@ export async function selectDeviceList(req, res, next) {
 	const { employee_uuid } = req.query;
 	const deviceListPromise = db
 		.select({
-			value: hrSchema.device_list.uuid,
+			value: sql`DISTINCT ${hrSchema.device_list.uuid}`,
 			label: hrSchema.device_list.name,
 		})
 		.from(hrSchema.device_list)
