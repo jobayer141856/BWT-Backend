@@ -162,7 +162,7 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: apply_leave.uuid,
 			employee_uuid: apply_leave.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			leave_category_uuid: apply_leave.leave_category_uuid,
 			leave_category_name: leave_category.name,
 			year: apply_leave.year,
@@ -213,7 +213,7 @@ export async function select(req, res, next) {
 		.select({
 			uuid: apply_leave.uuid,
 			employee_uuid: apply_leave.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			leave_category_uuid: apply_leave.leave_category_uuid,
 			leave_category_name: leave_category.name,
 			year: apply_leave.year,
@@ -286,7 +286,7 @@ export async function selectAllApplyLeaveWithPagination(req, res, next) {
 		.select({
 			uuid: apply_leave.uuid,
 			employee_uuid: apply_leave.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			leave_category_uuid: apply_leave.leave_category_uuid,
 			leave_category_name: leave_category.name,
 			year: apply_leave.year,
