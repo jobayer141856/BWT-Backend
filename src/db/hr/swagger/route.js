@@ -3231,6 +3231,25 @@ const pathHrSalaryEntry = {
 			},
 		},
 	},
+	'/hr/employee-salary-details/by/year-month/{year}/{month}': {
+		get: {
+			tags: ['hr.salary_entry'],
+			summary: 'Get employee salary details by year and month',
+			description: 'Get employee salary details by year and month',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params('year', 'year', [SE.integer(2025)]),
+				SE.parameter_params('month', 'month', [SE.integer(1)]),
+				SE.parameter_query('employee_uuid', 'employee_uuid', [
+					SE.uuid(),
+				]),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/salary_entry'),
+				405: SE.response(405),
+			},
+		},
+	},
 };
 
 export const pathHr = {

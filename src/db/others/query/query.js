@@ -266,6 +266,26 @@ export async function selectEmploymentType(req, res, next) {
 	}
 }
 
+export async function selectShifts(req, res, next) {
+	const shiftsPromise = db
+		.select({
+			value: hrSchema.shifts.uuid,
+			label: hrSchema.shifts.name,
+		})
+		.from(hrSchema.shifts);
+	try {
+		const data = await shiftsPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Shifts list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
 export async function selectShiftGroup(req, res, next) {
 	const shiftGroupPromise = db
 		.select({

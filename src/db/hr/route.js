@@ -469,5 +469,9 @@ hrRouter.delete(
 	validateUuidParam(),
 	salaryEntryOperations.remove
 );
+hrRouter.get(
+	'/employee-salary-details/by/year-month/:year/:month',
+	salaryEntryOperations.employeeSalaryDetailsByYearDate
+);
 
 export { hrRouter };
