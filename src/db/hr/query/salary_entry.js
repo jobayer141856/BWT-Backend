@@ -589,24 +589,24 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 							se.created_at,
 							se.updated_at,
 							se.remarks,
-							COALESCE(total_increment.total_salary_increment, 0) AS total_incremented_salary,
-							COALESCE(attendance_summary.present_days, 0) AS present_days,
-							COALESCE(attendance_summary.late_days, 0) AS late_days,
-							COALESCE(leave_summary.total_leave_days, 0) AS total_leave_days,
+							COALESCE(total_increment.total_salary_increment, 0)::float8 AS total_incremented_salary,
+							COALESCE(attendance_summary.present_days, 0)::float8 AS present_days,
+							COALESCE(attendance_summary.late_days, 0)::float8 AS late_days,
+							COALESCE(leave_summary.total_leave_days, 0)::float8 AS total_leave_days,
 							COALESCE(
 								se.amount + COALESCE(total_increment.total_salary_increment, 0),
 								se.amount
-							) AS total_salary,
+							)::float8 AS total_salary,
 							COALESCE(
 								COALESCE(attendance_summary.present_days, 0) + COALESCE(attendance_summary.late_days, 0) + COALESCE(leave_summary.total_leave_days, 0),
 								0
-							) AS total_days
+							)::float8 AS total_days
 
 					FROM hr.salary_entry se
 					LEFT JOIN hr.employee
 						ON se.employee_uuid = employee.uuid
 					LEFT JOIN hr.users employeeUser
-						ON se.employee_uuid = employeeUser.uuid
+						ON employee.user_uuid = employeeUser.uuid
 					LEFT JOIN hr.users createdByUser
 						ON se.created_by = createdByUser.uuid
 					LEFT JOIN (
