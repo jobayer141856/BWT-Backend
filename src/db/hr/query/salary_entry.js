@@ -140,7 +140,7 @@ export async function select(req, res, next) {
 		)
 		.leftJoin(employee, eq(salary_entry.employee_uuid, employee.uuid))
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
-		.leftJoin(users, eq(salary_entry.created_by, users.uuid));
+		.where(eq(salary_entry.uuid, req.params.uuid));
 
 	try {
 		const data = await salaryIncrementPromise;
