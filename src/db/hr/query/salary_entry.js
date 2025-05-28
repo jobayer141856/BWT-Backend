@@ -94,12 +94,12 @@ export async function selectAll(req, res, next) {
 			remarks: salary_entry.remarks,
 		})
 		.from(salary_entry)
-		.leftJoin(employee, eq(salary_entry.employee_uuid, employee.uuid))
-		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.leftJoin(
 			createdByUser,
 			eq(salary_entry.created_by, createdByUser.uuid)
 		)
+		.leftJoin(employee, eq(salary_entry.employee_uuid, employee.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.orderBy(desc(salary_entry.created_at));
 
 	try {
@@ -134,12 +134,12 @@ export async function select(req, res, next) {
 			remarks: salary_entry.remarks,
 		})
 		.from(salary_entry)
-		.leftJoin(employee, eq(salary_entry.employee_uuid, employee.uuid))
-		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.leftJoin(
 			createdByUser,
 			eq(salary_entry.created_by, createdByUser.uuid)
 		)
+		.leftJoin(employee, eq(salary_entry.employee_uuid, employee.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
 		.leftJoin(users, eq(salary_entry.created_by, users.uuid));
 
 	try {
