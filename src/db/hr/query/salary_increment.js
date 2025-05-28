@@ -2,6 +2,7 @@ import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
+import { decimalToNumber } from '../../variables.js';
 
 import { employee, salary_increment, users } from '../schema.js';
 
@@ -82,7 +83,7 @@ export async function selectAll(req, res, next) {
 			uuid: salary_increment.uuid,
 			employee_uuid: salary_increment.employee_uuid,
 			employee_name: users.name,
-			amount: salary_increment.amount,
+			amount: decimalToNumber(salary_increment.amount),
 			effective_date: salary_increment.effective_date,
 			created_by: salary_increment.created_by,
 			created_by_name: users.name,
@@ -120,7 +121,7 @@ export async function select(req, res, next) {
 			uuid: salary_increment.uuid,
 			employee_uuid: salary_increment.employee_uuid,
 			employee_name: users.name,
-			amount: salary_increment.amount,
+			amount: decimalToNumber(salary_increment.amount),
 			effective_date: salary_increment.effective_date,
 			created_by: salary_increment.created_by,
 			created_by_name: createdByUser.name,

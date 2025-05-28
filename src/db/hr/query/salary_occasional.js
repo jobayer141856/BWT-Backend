@@ -2,6 +2,7 @@ import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
+import { decimalToNumber } from '../../variables.js';
 
 import {
 	employee,
@@ -91,7 +92,7 @@ export async function selectAll(req, res, next) {
 			year: salary_occasional.year,
 			special_holidays_uuid: salary_occasional.special_holidays_uuid,
 			special_holidays_name: special_holidays.name,
-			amount: salary_occasional.amount,
+			amount: decimalToNumber(salary_occasional.amount),
 			created_by: salary_occasional.created_by,
 			created_by_name: users.name,
 			created_at: salary_occasional.created_at,
@@ -136,7 +137,7 @@ export async function select(req, res, next) {
 			year: salary_occasional.year,
 			special_holidays_uuid: salary_occasional.special_holidays_uuid,
 			special_holidays_name: special_holidays.name,
-			amount: salary_occasional.amount,
+			amount: decimalToNumber(salary_occasional.amount),
 			created_by: salary_occasional.created_by,
 			created_by_name: users.name,
 			created_at: salary_occasional.created_at,

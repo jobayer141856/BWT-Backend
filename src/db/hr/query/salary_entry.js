@@ -4,6 +4,7 @@ import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 
 import { employee, salary_entry, users } from '../schema.js';
+import { decimalToNumber } from '../../variables.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
@@ -83,7 +84,7 @@ export async function selectAll(req, res, next) {
 			employee_uuid: salary_entry.employee_uuid,
 			employee_name: users.name,
 			type: salary_entry.type,
-			amount: salary_entry.amount,
+			amount: decimalToNumber(salary_entry.amount),
 			month: salary_entry.month,
 			year: salary_entry.year,
 			created_by: salary_entry.created_by,
@@ -123,7 +124,7 @@ export async function select(req, res, next) {
 			employee_uuid: salary_entry.employee_uuid,
 			employee_name: users.name,
 			type: salary_entry.type,
-			amount: salary_entry.amount,
+			amount: decimalToNumber(salary_entry.amount),
 			month: salary_entry.month,
 			year: salary_entry.year,
 			created_by: salary_entry.created_by,
