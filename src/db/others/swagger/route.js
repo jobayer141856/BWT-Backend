@@ -43,6 +43,10 @@ const pathUser = {
 					'true',
 					'false',
 				]),
+				SE.parameter_query('user_uuid', 'user_uuid', [
+					'lsnYBibQt3QZhZM',
+					'lsnYBibQt3QZhZM',
+				]),
 			],
 			responses: {
 				200: {

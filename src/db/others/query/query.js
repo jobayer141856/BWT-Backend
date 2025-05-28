@@ -18,6 +18,7 @@ export async function selectUser(req, res, next) {
 		is_delivery_complete,
 		challan_uuid,
 		filteredUser,
+		user_uuid,
 	} = req.query;
 
 	//console.log(type, designation, department);
@@ -126,6 +127,9 @@ export async function selectUser(req, res, next) {
 
 	if (filters.length > 0) {
 		userPromise.where(and(...filters));
+	}
+	if (user_uuid) {
+		userPromise.where(eq(hrSchema.users.uuid, user_uuid));
 	}
 
 	try {
