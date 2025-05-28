@@ -188,9 +188,29 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 	const punchLogPromise = db
 		.select({
 			employee_uuid: employee.uuid,
-			punch_days: sql`COUNT(*)`,
+			present_days: sql`
+				COUNT(
+					CASE 
+						WHEN ${punch_log.punch_time} IS NOT NULL 
+						AND TO_CHAR(${punch_log.punch_time}, 'HH24:MI') < TO_CHAR(${shifts.late_time}, 'HH24:MI')
+						THEN 1 
+					END
+				)
+			`,
+			late_days: sql`
+				COUNT(
+					CASE 
+						WHEN ${punch_log.punch_time} IS NOT NULL 
+						AND TO_CHAR(${punch_log.punch_time}, 'HH24:MI') >= TO_CHAR(${shifts.late_time}, 'HH24:MI')
+						THEN 1 
+					END
+				)
+			`,
 		})
 		.from(punch_log)
+		.leftJoin(employee, eq(punch_log.employee_uuid, employee.uuid))
+		.leftJoin(shift_group, eq(employee.shift_group_uuid, shift_group.uuid))
+		.leftJoin(shifts, eq(shift_group.shifts_uuid, shifts.uuid))
 		.where(
 			sql`EXTRACT(YEAR FROM ${punch_log.punch_time}) = ${year}`,
 			sql`EXTRACT(MONTH FROM ${punch_log.punch_time}) = ${month}`
@@ -198,18 +218,18 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 		.as('punchLogPromise')
 		.groupBy(employee.uuid);
 
-	const shiftsPromise = db
-		.select({
-			uuid: shifts.uuid,
-			late_days: sql`COUNT(*)`,
-		})
-		.from(shifts)
-		.where(
-			sql`EXTRACT(YEAR FROM ${shifts.late_time}) = ${year}`,
-			sql`EXTRACT(MONTH FROM ${shifts.late_time}) = ${month}`
-		)
-		.as('shiftsPromise')
-		.groupBy(shifts.uuid);
+	// const shiftsPromise = db
+	// 	.select({
+	// 		uuid: shifts.uuid,
+	// 		late_days: sql`COUNT(*)`,
+	// 	})
+	// 	.from(shifts)
+	// 	.where(
+	// 		sql`EXTRACT(YEAR FROM ${shifts.late_time}) = ${year}`,
+	// 		sql`EXTRACT(MONTH FROM ${shifts.late_time}) = ${month}`
+	// 	)
+	// 	.as('shiftsPromise')
+	// 	.groupBy(shifts.uuid);
 
 	const applyLeavePromise = db
 		.select({
@@ -263,8 +283,8 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 			),
 			start_date: employee.start_date,
 			//joining_salary: employee.joining_salary,
-			present_days: punchLogPromise.punch_days,
-			late_days: shiftsPromise.late_days,
+			present_days: punchLogPromise.present_days,
+			late_days: punchLogPromise.late_days,
 			off_days: shift_group.off_days,
 			leave_days: applyLeavePromise.off_days,
 			total_days: present_days + late_days + off_days + leave_days,
@@ -286,10 +306,6 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 		)
 		.leftJoin(shift_group, eq(employee.shift_group_uuid, shift_group.uuid))
 		.leftJoin(
-			shiftsPromise,
-			eq(shift_group.shifts_uuid, shiftsPromise.uuid)
-		)
-		.leftJoin(
 			applyLeavePromise,
 			eq(salary_entry.employee_uuid, applyLeavePromise.employee_uuid)
 		)
@@ -302,8 +318,8 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 		const data = await resultPromise;
 		const toast = {
 			status: 200,
-			type: 'select',
-			message: 'salary_entry list',
+			type: 'select all',
+			message: 'employee salary details list',
 		};
 		return res.status(200).json({ toast, data });
 	} catch (error) {
