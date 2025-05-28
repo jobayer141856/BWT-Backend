@@ -34,6 +34,9 @@ otherRouter.get(
 	otherOperations.selectEmploymentType
 );
 
+// ? Shift routes
+otherRouter.get('/shift/value/label', otherOperations.selectShifts);
+
 // ? Shift Group routes
 otherRouter.get('/shift-group/value/label', otherOperations.selectShiftGroup);
 
@@ -50,10 +53,7 @@ otherRouter.get(
 otherRouter.get('/employee/value/label', otherOperations.selectEmployee);
 
 // ? Device List routes
-otherRouter.get(
-	'/device-list/value/label',
-	otherOperations.selectDeviceList
-);
+otherRouter.get('/device-list/value/label', otherOperations.selectDeviceList);
 
 //* Store others routes *//
 // group routes

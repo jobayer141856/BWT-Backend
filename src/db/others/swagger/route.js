@@ -217,6 +217,32 @@ const pathEmploymentType = {
 		},
 	},
 };
+const pathShifts = {
+	'/other/shifts/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all shifts',
+			description: 'Get all shifts',
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('shifts'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 const pathShiftGroup = {
 	'/other/shift-group/value/label': {
 		get: {
@@ -1123,6 +1149,7 @@ export const pathOthers = {
 	...pathSubDepartment,
 	...pathWorkplace,
 	...pathEmploymentType,
+	...pathShifts,
 	...pathShiftGroup,
 	...pathLeavePolicy,
 	...pathLeaveCategory,
