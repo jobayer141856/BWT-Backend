@@ -4,13 +4,15 @@ BEGIN
         shift_group_uuid, 
         shifts_uuid, 
         effective_date, 
+        off_days,
         created_by,
         created_at, 
         updated_at
     ) VALUES (
-        NEW.shift_group_uuid,
+        NEW.uuid,
         NEW.shifts_uuid,
         NEW.effective_date,
+        NEW.off_days,
         NEW.created_by,
         NOW(),
         NOW()

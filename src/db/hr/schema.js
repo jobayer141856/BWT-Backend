@@ -243,6 +243,7 @@ export const roster = hr.table('roster', {
 	),
 	shifts_uuid: defaultUUID('shifts_uuid').references(() => shifts.uuid),
 	effective_date: DateTime('effective_date').notNull(),
+	off_days: json('off_days').default('[]'),
 	created_by: defaultUUID('created_by').references(() => users.uuid),
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
