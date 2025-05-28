@@ -3238,8 +3238,8 @@ const pathHrSalaryEntry = {
 			description: 'Get employee salary details by year and month',
 			produces: ['application/json'],
 			parameters: [
-				SE.parameter_params('year', 'year', [SE.integer(2025)]),
-				SE.parameter_params('month', 'month', [SE.integer(1)]),
+				SE.parameter_params('year', 'year', []),
+				SE.parameter_params('month', 'month', []),
 				SE.parameter_query('employee_uuid', 'employee_uuid', [
 					SE.uuid(),
 				]),
