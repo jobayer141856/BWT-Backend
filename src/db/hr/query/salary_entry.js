@@ -636,18 +636,36 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 						ON se.employee_uuid = attendance_summary.employee_uuid
 					LEFT JOIN (
 						SELECT
-							al.employee_uuid,
-							SUM(al.to_date::date - al.from_date::date + 1) AS total_leave_days
+								al.employee_uuid,
+								SUM(al.to_date::date - al.from_date::date + 1) -
+								SUM(
+									CASE
+										WHEN al.to_date::date > (TO_TIMESTAMP(CAST(${year} AS TEXT) || '-' || LPAD(CAST(${month} AS TEXT), 2, '0') || '-01', 'YYYY-MM-DD') + INTERVAL '1 month - 1 day')::date
+											THEN al.to_date::date - (TO_TIMESTAMP(CAST(${year} AS TEXT) || '-' || LPAD(CAST(${month} AS TEXT), 2, '0') || '-01', 'YYYY-MM-DD') + INTERVAL '1 month - 1 day')::date
+										ELSE 0
+									END
+									+
+									CASE
+										WHEN al.from_date::date < TO_TIMESTAMP(CAST(${year} AS TEXT) || '-' || LPAD(CAST(${month} AS TEXT), 2, '0') || '-01', 'YYYY-MM-DD')::date
+											THEN TO_TIMESTAMP(CAST(${year} AS TEXT) || '-' || LPAD(CAST(${month} AS TEXT), 2, '0') || '-01', 'YYYY-MM-DD')::date - al.from_date::date
+										ELSE 0
+									END
+								) AS total_leave_days
 							FROM hr.apply_leave al
 							WHERE al.approval = 'approved'
-							AND EXTRACT(YEAR FROM al.from_date) = ${year}
-							AND EXTRACT(MONTH FROM al.from_date) = ${month}
-						GROUP BY al.employee_uuid
+							AND (
+								EXTRACT(YEAR FROM al.to_date) > ${year}
+								OR (EXTRACT(YEAR FROM al.to_date) = ${year} AND EXTRACT(MONTH FROM al.to_date) >= ${month})
+							)
+							AND (
+								EXTRACT(YEAR FROM al.from_date) < ${year}
+								OR (EXTRACT(YEAR FROM al.from_date) = ${year} AND EXTRACT(MONTH FROM al.from_date) <= ${month})
+							)
+							GROUP BY al.employee_uuid
 					) AS leave_summary
 						ON se.employee_uuid = leave_summary.employee_uuid
 					WHERE se.year = ${year} AND se.month = ${month}
-					ORDER BY se.created_at DESC
-	`;
+					ORDER BY se.created_at DESC`;
 
 	const resultPromise = db.execute(query);
 
