@@ -9,7 +9,7 @@ export async function insert(req, res, next) {
 	const rosterPromise = db
 		.insert(roster)
 		.values(req.body)
-		.returning({ insertedName: roster.name });
+		.returning({ insertedName: roster.id });
 
 	try {
 		const data = await rosterPromise;
@@ -31,8 +31,8 @@ export async function update(req, res, next) {
 	const rosterPromise = db
 		.update(roster)
 		.set(req.body)
-		.where(eq(roster.uuid, req.params.uuid))
-		.returning({ updatedName: roster.name });
+		.where(eq(roster.id, req.params.id))
+		.returning({ updatedName: roster.id });
 
 	try {
 		const data = await rosterPromise;
@@ -53,8 +53,8 @@ export async function remove(req, res, next) {
 
 	const rosterPromise = db
 		.delete(roster)
-		.where(eq(roster.uuid, req.params.uuid))
-		.returning({ deletedName: roster.name });
+		.where(eq(roster.id, req.params.id))
+		.returning({ deletedName: roster.id });
 
 	try {
 		const data = await rosterPromise;
@@ -73,7 +73,7 @@ export async function remove(req, res, next) {
 export async function selectAll(req, res, next) {
 	const resultPromise = db
 		.select({
-			uuid: roster.uuid,
+			id: roster.id,
 			shift_group_uuid: roster.shift_group_uuid,
 			shift_group_name: shift_group.name,
 			shifts_uuid: roster.shifts_uuid,
@@ -109,7 +109,7 @@ export async function select(req, res, next) {
 
 	const rosterPromise = db
 		.select({
-			uuid: roster.uuid,
+			id: roster.id,
 			shift_group_uuid: roster.shift_group_uuid,
 			shift_group_name: shift_group.name,
 			shifts_uuid: roster.shifts_uuid,
@@ -124,7 +124,7 @@ export async function select(req, res, next) {
 		.leftJoin(shift_group, eq(roster.shift_group_uuid, shift_group.uuid))
 		.leftJoin(shifts, eq(roster.shifts_uuid, shifts.uuid))
 		.leftJoin(users, eq(roster.created_by, users.uuid))
-		.where(eq(roster.uuid, req.params.uuid));
+		.where(eq(roster.id, req.params.id));
 
 	try {
 		const data = await rosterPromise;
