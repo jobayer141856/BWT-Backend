@@ -173,7 +173,6 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 		.select({
 			employee_uuid: salary_increment.employee_uuid,
 			amount: SUM(salary_increment.amount),
-			effective_date: salary_increment.effective_date,
 		})
 		.from(salary_increment)
 		.where(

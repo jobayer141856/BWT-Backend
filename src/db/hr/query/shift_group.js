@@ -1,7 +1,7 @@
 import { desc, eq } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import { shift_group, users } from '../schema.js';
+import { shift_group, shifts, users } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -77,8 +77,11 @@ export async function selectAll(req, res, next) {
 			id: shift_group.id,
 			name: shift_group.name,
 			default_shift: shift_group.default_shift,
+			shifts_uuid: shift_group.shifts_uuid,
+			shifts_name: shifts.name,
 			status: shift_group.status,
 			off_days: shift_group.off_days,
+			effective_date: shift_group.effective_date,
 			created_by: shift_group.created_by,
 			created_by_name: users.name,
 			created_at: shift_group.created_at,
@@ -86,6 +89,7 @@ export async function selectAll(req, res, next) {
 			remarks: shift_group.remarks,
 		})
 		.from(shift_group)
+		.leftJoin(shifts, eq(shift_group.shifts_uuid, shifts.uuid))
 		.leftJoin(users, eq(shift_group.created_by, users.uuid))
 		.orderBy(desc(shift_group.created_at));
 
@@ -112,8 +116,11 @@ export async function select(req, res, next) {
 			id: shift_group.id,
 			name: shift_group.name,
 			default_shift: shift_group.default_shift,
+			shifts_uuid: shift_group.shifts_uuid,
+			shifts_name: shifts.name,
 			status: shift_group.status,
 			off_days: shift_group.off_days,
+			effective_date: shift_group.effective_date,
 			created_by: shift_group.created_by,
 			created_by_name: users.name,
 			created_at: shift_group.created_at,
@@ -121,6 +128,7 @@ export async function select(req, res, next) {
 			remarks: shift_group.remarks,
 		})
 		.from(shift_group)
+		.leftJoin(shifts, eq(shift_group.shifts_uuid, shifts.uuid))
 		.leftJoin(users, eq(shift_group.created_by, users.uuid))
 		.where(eq(shift_group.uuid, req.params.uuid));
 
