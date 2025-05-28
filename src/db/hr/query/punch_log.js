@@ -78,7 +78,7 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: punch_log.uuid,
 			employee_uuid: punch_log.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			device_list_uuid: punch_log.device_list_uuid,
 			device_list_name: device_list.name,
 			punch_type: punch_log.punch_type,
