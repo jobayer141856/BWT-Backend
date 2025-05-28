@@ -178,6 +178,7 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 							se.amount::float8,
 							se.month,
 							se.year,
+							employee.start_date as joining_date,
 							se.created_by,
 							createdByUser.name as created_by_name,
 							se.created_at,
