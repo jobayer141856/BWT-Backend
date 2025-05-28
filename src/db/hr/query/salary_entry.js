@@ -223,8 +223,8 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 						LEFT JOIN hr.shift_group ON e.shift_group_uuid = shift_group.uuid
 						LEFT JOIN hr.shifts ON shift_group.shifts_uuid = shifts.uuid
 						WHERE pl.punch_time IS NOT NULL
-							AND EXTRACT(YEAR FROM pl.punch_time) <= ${year}
-							AND EXTRACT(MONTH FROM pl.punch_time) <= ${month}
+							AND EXTRACT(YEAR FROM pl.punch_time) = ${year}
+							AND EXTRACT(MONTH FROM pl.punch_time) = ${month}
 						GROUP BY pl.employee_uuid
 						) AS attendance_summary
 						ON se.employee_uuid = attendance_summary.employee_uuid
