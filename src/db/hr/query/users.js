@@ -8,7 +8,6 @@ import {
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import { department, designation, employee, users } from '../schema.js';
-import { compare } from 'bcrypt';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -388,7 +387,7 @@ export async function changeUserPassword(req, res, next) {
 			});
 		}
 
-		compare(current_pass, userPrev[0].pass)
+		ComparePass(current_pass, userPrev[0].pass)
 			.then(async (result) => {
 				if (!result) {
 					return res.status(400).json({
