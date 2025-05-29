@@ -361,7 +361,35 @@ export async function changeUserStatus(req, res, next) {
 export async function changeUserPassword(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const hashPassword = await HashPass(req.body.pass);
+	const { current_pass, pass } = req.body;
+
+	const currentHashPass = await HashPass(current_pass);
+
+	const userPrevPromise = db
+		.select({
+			uuid: users.uuid,
+			name: users.name,
+			pass: users.pass,
+		})
+		.from(users)
+		.where(
+			and(
+				eq(users.uuid, req.params.uuid),
+				eq(users.pass, currentHashPass)
+			)
+		);
+
+	if (userPrevPromise[0].length === 0) {
+		return res.status(400).json({
+			toast: {
+				status: 400,
+				type: 'error',
+				message: 'Current password is incorrect',
+			},
+		});
+	}
+
+	const hashPassword = await HashPass(pass);
 
 	const userPromise = db
 		.update(users)
