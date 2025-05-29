@@ -363,8 +363,6 @@ export async function changeUserPassword(req, res, next) {
 
 	const { current_pass, pass } = req.body;
 
-	const currentHashPass = await HashPass(current_pass);
-
 	const userPrevPromise = db
 		.select({
 			uuid: users.uuid,
@@ -387,21 +385,16 @@ export async function changeUserPassword(req, res, next) {
 			});
 		}
 
-		ComparePass(current_pass, userPrev[0].pass)
-			.then(async (result) => {
-				if (!result) {
-					return res.status(400).json({
-						toast: {
-							status: 400,
-							type: 'error',
-							message: 'Current password is incorrect',
-						},
-					});
-				}
-			})
-			.catch((err) => {
-				return next(err);
+		const isMatch = await ComparePass(current_pass, userPrev[0].pass);
+		if (!isMatch) {
+			return res.status(400).json({
+				toast: {
+					status: 400,
+					type: 'error',
+					message: 'Current password is incorrect',
+				},
 			});
+		}
 
 		const hashPassword = await HashPass(pass);
 
