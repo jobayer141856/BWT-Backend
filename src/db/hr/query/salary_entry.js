@@ -243,7 +243,7 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 								se.amount + COALESCE(total_increment.total_salary_increment, 0),
 								se.amount
 							)::float8 AS total_salary,
-							COALESCE(off_days_summary.total_off_days, 0)::float8 AS total_off_days,
+							COALESCE(off_days_summary.total_off_days, 0)::float8 AS week_days,
 							COALESCE(${total_general_holidays}, 0)::float8 AS total_general_holidays,
 							COALESCE(${total_special_holidays}, 0)::float8 AS total_special_holidays,
 							COALESCE(
@@ -255,8 +255,8 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 								0
 							)::float8 AS total_present_days,
 							COALESCE(
-								attendance_summary.present_days + attendance_summary.late_days + leave_summary.total_leave_days +
-								off_days_summary.total_off_days + ${total_general_holidays} + ${total_special_holidays},
+								COALESCE(attendance_summary.present_days, 0) + COALESCE(attendance_summary.late_days, 0) + COALESCE(leave_summary.total_leave_days, 0) +
+								COALESCE(off_days_summary.total_off_days, 0) + COALESCE(${total_general_holidays}, 0) + COALESCE(${total_special_holidays}, 0),
 								0
 							)::float8 AS total_days
 					FROM hr.salary_entry se
