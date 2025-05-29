@@ -39,9 +39,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger for insert operation when shift group is updated
-CREATE TRIGGER roster_insert_after_shift_group_update_trigger
-AFTER UPDATE OF shifts_uuid, effective_date ON hr.shift_group
+CREATE OR REPLACE TRIGGER roster_insert_after_shift_group_update_trigger
+AFTER UPDATE OF shifts_uuid, effective_date, off_days ON hr.shift_group
 FOR EACH ROW
-WHEN (OLD.shifts_uuid IS DISTINCT FROM NEW.shifts_uuid OR OLD.effective_date IS DISTINCT FROM NEW.effective_date OR OLD.off_days IS DISTINCT FROM NEW.off_days)
+WHEN (
+    OLD.shifts_uuid IS DISTINCT FROM NEW.shifts_uuid
+    OR OLD.effective_date IS DISTINCT FROM NEW.effective_date
+    OR OLD.off_days::text IS DISTINCT FROM NEW.off_days::text
+)
 EXECUTE FUNCTION roster_insert_after_shift_group_update_function();
