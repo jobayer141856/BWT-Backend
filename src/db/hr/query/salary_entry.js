@@ -254,11 +254,7 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 								attendance_summary.present_days + attendance_summary.late_days + leave_summary.total_leave_days,
 								0
 							)::float8 AS total_present_days,
-							COALESCE(
-								COALESCE(attendance_summary.present_days, 0) + COALESCE(attendance_summary.late_days, 0) + COALESCE(leave_summary.total_leave_days, 0) +
-								COALESCE(off_days_summary.total_off_days, 0) + COALESCE(${total_general_holidays}, 0) + COALESCE(${total_special_holidays}, 0),
-								0
-							)::float8 AS total_days,
+							
 							COALESCE(
 									(
 										(TO_TIMESTAMP(CAST(${year} AS TEXT) || '-' || LPAD(CAST(${month} AS TEXT), 2, '0') || '-01', 'YYYY-MM-DD') + INTERVAL '1 month - 1 day')::date 
@@ -272,7 +268,24 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 									COALESCE(leave_summary.total_leave_days, 0) + 
 									COALESCE(${total_general_holidays}::int, 0) + 
 									COALESCE(${total_special_holidays}::int, 0)
-									)::float8 AS absent_days
+									)::float8 AS absent_days,
+							COALESCE(
+								COALESCE(attendance_summary.present_days, 0) + COALESCE(attendance_summary.late_days, 0) + COALESCE(leave_summary.total_leave_days, 0) +
+								COALESCE(off_days_summary.total_off_days, 0) + COALESCE(${total_general_holidays}, 0) + COALESCE(${total_special_holidays}, 0) + COALESCE(
+									(
+										(TO_TIMESTAMP(CAST(${year} AS TEXT) || '-' || LPAD(CAST(${month} AS TEXT), 2, '0') || '-01', 'YYYY-MM-DD') + INTERVAL '1 month - 1 day')::date 
+										- (TO_TIMESTAMP(CAST(${year} AS TEXT) || '-' || LPAD(CAST(${month} AS TEXT), 2, '0') || '-01', 'YYYY-MM-DD'))::date
+										+ 1
+									), 0
+									)
+									- (
+									COALESCE(attendance_summary.present_days, 0) + 
+									COALESCE(attendance_summary.late_days, 0) + 
+									COALESCE(leave_summary.total_leave_days, 0) + 
+									COALESCE(${total_general_holidays}::int, 0) + 
+									COALESCE(${total_special_holidays}::int, 0)
+									)
+							, 0)::float8 AS total_days
 					FROM hr.salary_entry se
 					LEFT JOIN hr.employee
 						ON se.employee_uuid = employee.uuid
