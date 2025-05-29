@@ -1,6 +1,5 @@
-import { sql, eq, and, is, or, gt, ne } from 'drizzle-orm';
+import { sql, eq, and, or, gt } from 'drizzle-orm';
 import db from '../../index.js';
-import { handleError, validateRequest } from '../../../util/index.js';
 import * as hrSchema from '../../hr/schema.js';
 import * as storeSchema from '../../store/schema.js';
 import * as workSchema from '../../work/schema.js';
@@ -397,7 +396,7 @@ export async function selectLeaveCategory(req, res, next) {
 }
 
 export async function selectEmployee(req, res, next) {
-	const { leave_policy_required } = req.query;
+	const { leave_policy_required, is_hr, is_line_manager } = req.query;
 
 	const employeePromise = db
 		.select({
@@ -465,9 +464,17 @@ export async function selectEmployee(req, res, next) {
 			)
 		)
 		.where(
-			leave_policy_required
-				? sql`${hrSchema.employee.leave_policy_uuid} IS NOT NULL`
-				: sql`true`
+			and(
+				leave_policy_required
+					? sql`${hrSchema.employee.leave_policy_uuid} IS NOT NULL`
+					: sql`true`,
+				is_hr === 'true'
+					? eq(hrSchema.employee.is_hr, true)
+					: sql`true`,
+				is_line_manager === 'true'
+					? eq(hrSchema.employee.is_line_manager, true)
+					: sql`true`
+			)
 		)
 		.groupBy(hrSchema.employee.uuid, hrSchema.users.name);
 

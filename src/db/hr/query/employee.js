@@ -4,11 +4,6 @@ import { validateRequest } from '../../../util/index.js';
 import { createApi } from '../../../util/api.js';
 import db from '../../index.js';
 import {
-	ComparePass,
-	CreateToken,
-	HashPass,
-} from '../../../middleware/auth.js';
-import {
 	department,
 	designation,
 	employee,

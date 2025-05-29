@@ -346,6 +346,11 @@ const pathEmployee = {
 					'leave_policy_required',
 					['true', 'false']
 				),
+				SE.parameter_query('is_hr', 'is_hr', [true, false]),
+				SE.parameter_query('is_line_manager', 'is_line_manager', [
+					true,
+					false,
+				]),
 			],
 			description: 'Get all employee',
 			responses: {
