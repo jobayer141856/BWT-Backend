@@ -16,6 +16,8 @@ import {
 } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
+const lineMagagerUser = alias(users, 'line_manager_user');
+const hrManagerUser = alias(users, 'hr_manager_user');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -95,6 +97,7 @@ export async function selectAll(req, res, next) {
 			//employee_name: employee.name,
 			user_uuid: employee.user_uuid,
 			employee_name: users.name,
+			email: users.email,
 			start_date: employee.start_date,
 			workplace_uuid: employee.workplace_uuid,
 			workplace_name: workplace.name,
@@ -123,7 +126,6 @@ export async function selectAll(req, res, next) {
 			updated_at: employee.updated_at,
 			remarks: employee.remarks,
 			//name: employee.name,
-			//email: employee.email,
 			//pass: employee.pass,
 			designation_uuid: employee.designation_uuid,
 			designation_name: designation.designation,
@@ -152,6 +154,14 @@ export async function selectAll(req, res, next) {
 		.leftJoin(
 			employment_type,
 			eq(employee.employment_type_uuid, employment_type.uuid)
+		)
+		.leftJoin(
+			lineMagagerUser,
+			eq(employee.line_manager_uuid, lineMagagerUser.uuid)
+		)
+		.leftJoin(
+			hrManagerUser,
+			eq(employee.hr_manager_uuid, hrManagerUser.uuid)
 		)
 		.orderBy(desc(employee.created_at));
 
@@ -180,6 +190,7 @@ export async function select(req, res, next) {
 			//employee_name: employee.name,
 			user_uuid: employee.user_uuid,
 			employee_name: users.name,
+			email: users.email,
 			start_date: employee.start_date,
 			workplace_uuid: employee.workplace_uuid,
 			workplace_name: workplace.name,
@@ -208,7 +219,6 @@ export async function select(req, res, next) {
 			updated_at: employee.updated_at,
 			remarks: employee.remarks,
 			//name: employee.name,
-			//email: employee.email,
 			//pass: employee.pass,
 			designation_uuid: employee.designation_uuid,
 			designation_name: designation.designation,
@@ -237,6 +247,14 @@ export async function select(req, res, next) {
 		.leftJoin(
 			employment_type,
 			eq(employee.employment_type_uuid, employment_type.uuid)
+		)
+		.leftJoin(
+			lineMagagerUser,
+			eq(employee.line_manager_uuid, lineMagagerUser.uuid)
+		)
+		.leftJoin(
+			hrManagerUser,
+			eq(employee.hr_manager_uuid, hrManagerUser.uuid)
 		)
 		.where(eq(employee.uuid, req.params.uuid));
 	try {
