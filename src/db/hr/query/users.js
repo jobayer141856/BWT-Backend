@@ -8,6 +8,7 @@ import {
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import { department, designation, employee, users } from '../schema.js';
+import { compare } from 'bcrypt';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -372,32 +373,45 @@ export async function changeUserPassword(req, res, next) {
 			pass: users.pass,
 		})
 		.from(users)
-		.where(
-			and(
-				eq(users.uuid, req.params.uuid),
-				eq(users.pass, currentHashPass)
-			)
-		);
-
-	if (userPrevPromise[0].length === 0) {
-		return res.status(400).json({
-			toast: {
-				status: 400,
-				type: 'error',
-				message: 'Current password is incorrect',
-			},
-		});
-	}
-
-	const hashPassword = await HashPass(pass);
-
-	const userPromise = db
-		.update(users)
-		.set({ pass: hashPassword, updated_at: req.body.updated_at })
-		.where(eq(users.uuid, req.params.uuid))
-		.returning({ updatedName: users.name });
+		.where(eq(users.uuid, req.params.uuid));
 
 	try {
+		const userPrev = await userPrevPromise;
+
+		if (userPrev.length === 0) {
+			return res.status(400).json({
+				toast: {
+					status: 400,
+					type: 'error',
+					message: 'No user found',
+				},
+			});
+		}
+
+		compare(current_pass, userPrev[0].pass)
+			.then(async (result) => {
+				if (!result) {
+					return res.status(400).json({
+						toast: {
+							status: 400,
+							type: 'error',
+							message: 'Current password is incorrect',
+						},
+					});
+				}
+			})
+			.catch((err) => {
+				return next(err);
+			});
+
+		const hashPassword = await HashPass(pass);
+
+		const userPromise = db
+			.update(users)
+			.set({ pass: hashPassword, updated_at: req.body.updated_at })
+			.where(eq(users.uuid, req.params.uuid))
+			.returning({ updatedName: users.name });
+
 		const data = await userPromise;
 		const toast = {
 			status: 200,
