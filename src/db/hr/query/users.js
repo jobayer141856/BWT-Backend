@@ -7,7 +7,7 @@ import {
 } from '../../../middleware/auth.js';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import { department, designation, users } from '../schema.js';
+import { department, designation, employee, users } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -213,10 +213,12 @@ export async function loginUser(req, res, next) {
 			remarks: users.remarks,
 			designation: designation.designation,
 			department: department.department,
+			employee_uuid: employee.uuid,
 		})
 		.from(users)
 		.leftJoin(designation, eq(users.designation_uuid, designation.uuid))
 		.leftJoin(department, eq(users.department_uuid, department.uuid))
+		.leftJoin(employee, eq(users.uuid, employee.user_uuid))
 		.where(eq(users.email, email));
 
 	const USER = await userPromise;
@@ -243,7 +245,7 @@ export async function loginUser(req, res, next) {
 		}
 
 		const token = CreateToken(USER[0]);
-		const { uuid, name, department, can_access } = USER[0];
+		const { uuid, name, department, can_access, employee_uuid } = USER[0];
 		if (!token.success) {
 			return res.status(500).json({ error: 'Error signing token' });
 		}
@@ -253,7 +255,7 @@ export async function loginUser(req, res, next) {
 			type: 'create',
 			message: 'User logged in',
 			token: token.token,
-			user: { uuid, name, department },
+			user: { uuid, name, department, employee_uuid },
 			can_access,
 		});
 	});
