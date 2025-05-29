@@ -6,18 +6,36 @@ BEGIN
         effective_date, 
         off_days,
         created_by,
-        created_at, 
-        updated_at
+        created_at
     ) VALUES (
         OLD.uuid,
         OLD.shifts_uuid,
         OLD.effective_date,
         OLD.off_days,
         OLD.created_by,
-        NOW(),
         NOW()
     );
-    RETURN NEW;
+
+    INSERT INTO
+    hr.roster (
+        shift_group_uuid,
+        shifts_uuid,
+        effective_date,
+        off_days,
+        created_by,
+        created_at,
+        updated_at
+    ) VALUES (
+        NEW.uuid,
+        NEW.shifts_uuid,
+        NEW.effective_date,
+        NEW.off_days,
+        NEW.created_by,
+        NOW()
+    );
+
+    RETURN NULL;
+
 END;
 $$ LANGUAGE plpgsql;
 
