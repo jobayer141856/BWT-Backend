@@ -438,7 +438,7 @@ export const employee = hr.table('employee', {
 
 // ? Employee Address
 
-export const employye_address_type_enum = pgEnum('employee_address_type', [
+export const employee_address_type_enum = pgEnum('employee_address_type', [
 	'permanent',
 	'present',
 	'home',
@@ -448,7 +448,7 @@ export const employee_address = hr.table('employee_address', {
 	uuid: uuid_primary,
 	index: integer('index').default(0),
 	address_type:
-		employye_address_type_enum('address_type').default('permanent'),
+		employee_address_type_enum('address_type').default('permanent'),
 	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
 	address: text('address').notNull(),
 	thana: text('thana').default(null),
@@ -466,7 +466,7 @@ export const employee_history = hr.table('employee_history', {
 	index: integer('index').default(0),
 	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
 	company_name: text('company_name').default(null),
-	compnay_business: text('compnay_business').default(null),
+	company_business: text('company_business').default(null),
 	start_date: DateTime('start_date').default(null),
 	end_date: DateTime('end_date').default(null),
 	department: text('department').default(null),

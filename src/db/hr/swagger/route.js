@@ -1592,6 +1592,38 @@ const pathHrRoster = {
 			},
 		},
 	},
+	'/hr/roster-calendar/by/{employee_uuid}/{year}/{month}': {
+		get: {
+			tags: ['hr.roster_calendar'],
+			summary: 'Get roster calendar by employee UUID, year, and month',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee UUID',
+					'employee_uuid',
+					'string',
+					SE.uuid()
+				),
+				SE.parameter_params(
+					'Year',
+					'year',
+					'integer',
+					SE.integer()
+				),
+				SE.parameter_params(
+					'Month',
+					'month',
+					'integer',
+					SE.integer()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/roster'),
+				405: SE.response(405),
+			},
+		},
+	},
 };
 
 const pathHrLeavePolicy = {

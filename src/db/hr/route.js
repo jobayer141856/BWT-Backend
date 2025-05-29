@@ -224,6 +224,10 @@ hrRouter.get('/roster/:uuid', validateUuidParam(), rosterOperations.select);
 hrRouter.post('/roster', rosterOperations.insert);
 hrRouter.put('/roster/:uuid', rosterOperations.update);
 hrRouter.delete('/roster/:uuid', validateUuidParam(), rosterOperations.remove);
+hrRouter.get(
+	'/roster-calendar/by/:employee_uuid/:year/:month',
+	rosterOperations.selectRosterCalendarByEmployeeUuid
+);
 
 // ? leave_policy routes
 hrRouter.get('/leave-policy', leavePolicyOperations.selectAll);
