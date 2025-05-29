@@ -396,9 +396,140 @@ export const defEmployee = SED({
 		employee_id: SE.string('123456'),
 		leave_policy_uuid: SE.uuid(),
 		report_position: SE.string('employee'),
+		first_leave_approver_uuid: SE.uuid(),
+		second_leave_approver_uuid: SE.uuid(),
+		first_late_approver_uuid: SE.uuid(),
+		second_late_approver_uuid: SE.uuid(),
+		first_manual_entry_approver_uuid: SE.uuid(),
+		second_manual_entry_approver_uuid: SE.uuid(),
+		father_name: SE.string(null),
+		mother_name: SE.string(null),
+		blood_group: SE.string(null),
+		dob: SE.date_time(null),
+		national_id: SE.string(null),
+		office_phone: SE.string(null),
+		home_phone: SE.string(null),
+		personal_phone: SE.string(null),
 	},
-
 	xml: 'Hr/Employee',
+});
+
+export const defEmployeeAddress = SED({
+	required: [
+		'uuid',
+		'created_by',
+		'created_at',
+		'employee_uuid',
+		'address',
+		'address_type',
+		'thana',
+		'district',
+	],
+	properties: {
+		uuid: SE.uuid(),
+		index: SE.integer(1),
+		address_type: SE.type_enum(['permanent', 'present', 'office', 'other']),
+		employee_uuid: SE.uuid(),
+		address: SE.string('Address'),
+		thana: SE.string('thana'),
+		district: SE.string('district'),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(null),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Hr/EmployeeAddress',
+});
+
+export const defEmployeeHistory = SED({
+	required: [
+		'uuid',
+		'created_by',
+		'created_at',
+		'employee_uuid',
+		'company_name',
+		'compnay_business',
+		'start_date',
+		'end_date',
+		'department',
+		'designation',
+		'location',
+		'responsibilities',
+	],
+	properties: {
+		uuid: SE.uuid(),
+		index: SE.integer(1),
+		employee_uuid: SE.uuid(),
+		company_name: SE.string('Company Name'),
+		compnay_business: SE.string('Company Business'),
+		start_date: SE.date_time(),
+		end_date: SE.date_time(null),
+		department: SE.string('Department'),
+		designation: SE.string('Designation'),
+		location: SE.string('Location'),
+		responsibilities: SE.string('Responsibilities'),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(null),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Hr/EmployeeHistory',
+});
+
+// ? Employee Education
+
+export const defEmployeeEducation = SED({
+	required: [
+		'uuid',
+		'created_by',
+		'created_at',
+		'employee_uuid',
+		'institution',
+		'degree_name',
+		'board',
+		'year_of_passing',
+		'grade',
+	],
+	properties: {
+		uuid: SE.uuid(),
+		index: SE.integer(1),
+		employee_uuid: SE.uuid(),
+		institution: SE.string('Institution Name'),
+		degree_name: SE.string('Degree Name'),
+		board: SE.string('Board Name'),
+		year_of_passing: SE.integer(2024),
+		grade: SE.string('A+'),
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(null),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Hr/EmployeeEducation',
+});
+
+// ? Employee Document
+export const defEmployeeDocument = SED({
+	required: [
+		'uuid',
+		'created_by',
+		'created_at',
+		'employee_uuid',
+		'document_type',
+		'description',
+	],
+	properties: {
+		uuid: SE.uuid(),
+		index: SE.integer(1),
+		employee_uuid: SE.uuid(),
+		document_type: SE.string('Document Type'),
+		description: SE.string('Description'),
+		file: SE.string(null), // URL or file path
+		created_by: SE.uuid(),
+		created_at: SE.date_time(),
+		updated_at: SE.date_time(null),
+		remarks: SE.string('remarks'),
+	},
+	xml: 'Hr/EmployeeDocument',
 });
 
 // ? Device Permission
@@ -635,6 +766,10 @@ export const defHr = {
 	configuration: defConfiguration,
 	configuration_entry: defConfigurationEntry,
 	employee: defEmployee,
+	employee_address: defEmployeeAddress,
+	employee_history: defEmployeeHistory,
+	employee_education: defEmployeeEducation,
+	employee_document: defEmployeeDocument,
 	device_permission: defDevicePermission,
 	punch_log: defPunchLog,
 	manual_entry: defManualEntry,
@@ -720,6 +855,22 @@ export const tagHr = [
 	{
 		name: 'hr.employee',
 		description: 'Operations about employee',
+	},
+	{
+		name: 'hr.employee_address',
+		description: 'Operations about employee address',
+	},
+	{
+		name: 'hr.employee_history',
+		description: 'Operations about employee history',
+	},
+	{
+		name: 'hr.employee_education',
+		description: 'Operations about employee education',
+	},
+	{
+		name: 'hr.employee_document',
+		description: 'Operations about employee document',
 	},
 	{
 		name: 'hr.device_permission',

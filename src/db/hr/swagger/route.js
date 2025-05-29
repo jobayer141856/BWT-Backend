@@ -2245,6 +2245,462 @@ const pathHrEmployee = {
 	},
 };
 
+const pathHrEmployeeAddress = {
+	'/hr/employee-address': {
+		get: {
+			tags: ['hr.employee_address'],
+			summary: 'get all employee address',
+			description: 'All employee address',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_address'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.employee_address'],
+			summary: 'create a employee address',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/employee_address'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_address'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/employee-address/{uuid}': {
+		get: {
+			tags: ['hr.employee_address'],
+			summary: 'Gets a employee address',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee address to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_address'),
+				405: SE.response(405),
+			},
+		},
+		put: {
+			tags: ['hr.employee_address'],
+			summary: 'Update an existing employee address',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee address to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/employee_address'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_address'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.employee_address'],
+			summary: 'Deletes a employee address',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee address to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/employee-address/by/{employee_uuid}': {
+		get: {
+			tags: ['hr.employee_address'],
+			summary: 'Gets a employee address',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee UUID to get address',
+					'employee_uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					employee_address: {
+						type: 'array',
+						items: { $ref: '#/definitions/hr/employee_address' },
+					},
+				}),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrEmployeeHistory = {
+	'/hr/employee-history': {
+		get: {
+			tags: ['hr.employee_history'],
+			summary: 'get all employee history',
+			description: 'All employee history',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_history'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.employee_history'],
+			summary: 'create a employee history',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/employee_history'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_history'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/employee-history/{uuid}': {
+		get: {
+			tags: ['hr.employee_history'],
+			summary: 'Gets a employee history',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee history to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_history'),
+				405: SE.response(405),
+			},
+			consumes: ['application/json'],
+			produces: ['application/json'],
+		},
+		put: {
+			tags: ['hr.employee_history'],
+			summary: 'Update an existing employee history',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee history to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/employee_history'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_history'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.employee_history'],
+			summary: 'Deletes a employee history',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee history to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/employee-history/by/{employee_uuid}': {
+		get: {
+			tags: ['hr.employee_history'],
+			summary: 'Gets a employee history',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee UUID to get history',
+					'employee_uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					employee_history: {
+						type: 'array',
+						items: { $ref: '#/definitions/hr/employee_history' },
+					},
+				}),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrEmployeeEducation = {
+	'/hr/employee-education': {
+		get: {
+			tags: ['hr.employee_education'],
+			summary: 'get all employee education',
+			description: 'All employee education',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_education'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.employee_education'],
+			summary: 'create a employee education',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/employee_education'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_education'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/employee-education/{uuid}': {
+		get: {
+			tags: ['hr.employee_education'],
+			summary: 'Gets a employee education',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee education to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_education'),
+				405: SE.response(405),
+			},
+			consumes: ['application/json'],
+			produces: ['application/json'],
+		},
+		put: {
+			tags: ['hr.employee_education'],
+			summary: 'Update an existing employee education',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee education to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/employee_education'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_education'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.employee_education'],
+			summary: 'Deletes a employee education',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee education to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/employee-education/by/{employee_uuid}': {
+		get: {
+			tags: ['hr.employee_education'],
+			summary: 'Gets employee education by employee UUID',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee UUID to get education',
+					'employee_uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema(200, {
+					employee_education: {
+						type: 'array',
+						items: { $ref: '#/definitions/hr/employee_education' },
+					},
+				}),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
+const pathHrEmployeeDocument = {
+	'/hr/employee-document': {
+		get: {
+			tags: ['hr.employee_document'],
+			summary: 'get all employee document',
+			description: 'All employee document',
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_document'),
+				405: SE.response(405),
+			},
+		},
+		post: {
+			tags: ['hr.employee_document'],
+			summary: 'create a employee document',
+			description: '',
+			// operationId: "addPet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			requestBody: SE.requestBody_schema_ref('hr/employee_document'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_document'),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/employee-document/{uuid}': {
+		get: {
+			tags: ['hr.employee_document'],
+			summary: 'Gets a employee document',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee document to get',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_document'),
+				405: SE.response(405),
+			},
+			consumes: ['application/json'],
+			produces: ['application/json'],
+		},
+		put: {
+			tags: ['hr.employee_document'],
+			summary: 'Update an existing employee document',
+			description: '',
+			// operationId: "updatePet",
+			consumes: ['application/json'],
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee document to put',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			requestBody: SE.requestBody_schema_ref('hr/employee_document'),
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_document'),
+				405: SE.response(405),
+			},
+		},
+		delete: {
+			tags: ['hr.employee_document'],
+			summary: 'Deletes a employee document',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee document to delete',
+					'uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response(200),
+				405: SE.response(405),
+			},
+		},
+	},
+	'/hr/employee-document/by/{employee_uuid}': {
+		get: {
+			tags: ['hr.employee_document'],
+			summary: 'Gets employee document by employee UUID',
+			description: '',
+			// operationId: "deletePet",
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params(
+					'Employee UUID to get document',
+					'employee_uuid',
+					'string',
+					SE.uuid()
+				),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee_document'),
+				405: SE.response(405),
+			},
+		},
+	},
+};
+
 const pathHrDevicePermission = {
 	'/hr/device-permission': {
 		get: {
@@ -3271,6 +3727,10 @@ export const pathHr = {
 	...pathHrConfiguration,
 	...pathHrConfigurationEntry,
 	...pathHrEmployee,
+	...pathHrEmployeeAddress,
+	...pathHrEmployeeDocument,
+	...pathHrEmployeeEducation,
+	...pathHrEmployeeHistory,
 	...pathHrDevicePermission,
 	...pathHrPunchLog,
 	...pathHrManualEntry,

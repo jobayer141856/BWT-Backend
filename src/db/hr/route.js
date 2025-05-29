@@ -19,6 +19,10 @@ import * as leavePolicyOperations from './query/leave_policy.js';
 import * as leaveCategoryOperations from './query/leave_category.js';
 import * as configurationOperations from './query/configuration.js';
 import * as configurationEntryOperations from './query/configuration_entry.js';
+import * as employeeAddressOperations from './query/employee_address.js';
+import * as employeeDocumentOperations from './query/employee_document.js';
+import * as employeeEducationOperations from './query/employee_education.js';
+import * as employeeHistoryOperations from './query/employee_history.js';
 import * as employeeOperations from './query/employee.js';
 import * as devicePermissionsOperations from './query/device_permissions.js';
 import * as punchLogOperations from './query/punch_log.js';
@@ -309,6 +313,86 @@ hrRouter.get(
 	employeeOperations.employeeLeaveInformationDetails
 );
 // hrRouter.get('/employee-login', employeeOperations.loginUser);
+
+// ? employee_address routes
+hrRouter.get('/employee-address', employeeAddressOperations.selectAll);
+hrRouter.get(
+	'/employee-address/:uuid',
+	validateUuidParam(),
+	employeeAddressOperations.select
+);
+hrRouter.post('/employee-address', employeeAddressOperations.insert);
+hrRouter.put('/employee-address/:uuid', employeeAddressOperations.update);
+hrRouter.delete(
+	'/employee-address/:uuid',
+	validateUuidParam(),
+	employeeAddressOperations.remove
+);
+hrRouter.get(
+	'/employee-address/by/:employee_uuid',
+	validateUuidParam(),
+	employeeAddressOperations.selectByEmployeeUuid
+);
+// ? employee_document routes
+
+hrRouter.get('/employee-document', employeeDocumentOperations.selectAll);
+hrRouter.get(
+	'/employee-document/:uuid',
+	validateUuidParam(),
+	employeeDocumentOperations.select
+);
+hrRouter.post('/employee-document', employeeDocumentOperations.insert);
+hrRouter.put('/employee-document/:uuid', employeeDocumentOperations.update);
+hrRouter.delete(
+	'/employee-document/:uuid',
+	validateUuidParam(),
+	employeeDocumentOperations.remove
+);
+hrRouter.get(
+	'/employee-document/by/:employee_uuid',
+	validateUuidParam(),
+	employeeDocumentOperations.selectByEmployeeUuid
+);
+
+// ? employee_education routes
+hrRouter.get('/employee-education', employeeEducationOperations.selectAll);
+hrRouter.get(
+	'/employee-education/:uuid',
+	validateUuidParam(),
+	employeeEducationOperations.select
+);
+hrRouter.post('/employee-education', employeeEducationOperations.insert);
+hrRouter.put('/employee-education/:uuid', employeeEducationOperations.update);
+hrRouter.delete(
+	'/employee-education/:uuid',
+	validateUuidParam(),
+	employeeEducationOperations.remove
+);
+hrRouter.get(
+	'/employee-education/by/:employee_uuid',
+	validateUuidParam(),
+	employeeEducationOperations.selectByEmployeeUuid
+);
+
+// ? employee_history routes
+hrRouter.get('/employee-history', employeeHistoryOperations.selectAll);
+hrRouter.get(
+	'/employee-history/:uuid',
+	validateUuidParam(),
+	employeeHistoryOperations.select
+);
+hrRouter.post('/employee-history', employeeHistoryOperations.insert);
+hrRouter.put('/employee-history/:uuid', employeeHistoryOperations.update);
+hrRouter.delete(
+	'/employee-history/:uuid',
+	validateUuidParam(),
+	employeeHistoryOperations.remove
+);
+hrRouter.get(
+	'/employee-history/by/:employee_uuid',
+	validateUuidParam(),
+	employeeHistoryOperations.selectByEmployeeUuid
+);
 
 // ? device_permissions routes
 hrRouter.get('/device-permission', devicePermissionsOperations.selectAll);

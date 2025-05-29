@@ -404,6 +404,123 @@ export const employee = hr.table('employee', {
 	),
 	report_position: text('report_position').default(null),
 	employee_id: text('employee_id').notNull(),
+	first_leave_approver_uuid: defaultUUID('first_leave_approver_uuid')
+		.references(() => users.uuid)
+		.default(null),
+	second_leave_approver_uuid: defaultUUID('second_leave_approver_uuid')
+		.references(() => users.uuid)
+		.default(null),
+	first_late_approver_uuid: defaultUUID('first_late_approver_uuid')
+		.references(() => users.uuid)
+		.default(null),
+	second_late_approver_uuid: defaultUUID('second_late_approver_uuid')
+		.references(() => users.uuid)
+		.default(null),
+	first_manual_entry_approver_uuid: defaultUUID(
+		'first_manual_entry_approver_uuid'
+	)
+		.references(() => users.uuid)
+		.default(null),
+	second_manual_entry_approver_uuid: defaultUUID(
+		'second_manual_entry_approver_uuid'
+	)
+		.references(() => users.uuid)
+		.default(null),
+	father_name: text('father_name').default(null),
+	mother_name: text('mother_name').default(null),
+	blood_group: text('blood_group').default(null),
+	dob: DateTime('dob').default(null),
+	national_id: text('national_id').default(null),
+	office_phone: text('office_phone').default(null),
+	home_phone: text('home_phone').default(null),
+	personal_phone: text('personal_phone').default(null),
+});
+
+// ? Employee Address
+
+export const employye_address_type_enum = pgEnum('employee_address_type', [
+	'permanent',
+	'present',
+	'home',
+]);
+
+export const employee_address = hr.table('employee_address', {
+	uuid: uuid_primary,
+	index: integer('index').default(0),
+	address_type:
+		employye_address_type_enum('address_type').default('permanent'),
+	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
+	address: text('address').notNull(),
+	thana: text('thana').default(null),
+	district: text('district').default(null),
+	created_by: defaultUUID('created_by').references(() => users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+// ? Employee History
+
+export const employee_history = hr.table('employee_history', {
+	uuid: uuid_primary,
+	index: integer('index').default(0),
+	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
+	company_name: text('company_name').default(null),
+	compnay_business: text('compnay_business').default(null),
+	start_date: DateTime('start_date').default(null),
+	end_date: DateTime('end_date').default(null),
+	department: text('department').default(null),
+	designation: text('designation').default(null),
+	location: text('location').default(null),
+	responsibilities: text('responsibilities').default(null),
+	created_by: defaultUUID('created_by').references(() => users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+// ? Employee Education
+
+export const employee_education = hr.table('employee_education', {
+	uuid: uuid_primary,
+	index: integer('index').default(0),
+	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
+	degree_name: text('degree_name').notNull(),
+	institute: text('institute').notNull(),
+	board: text('board').notNull(),
+	year_of_passing: DateTime('year_of_passing').notNull(),
+	grade: text('grade').notNull(),
+	created_by: defaultUUID('created_by').references(() => users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
+});
+
+// ? Employee Document
+
+export const employee_document_type_enum = pgEnum('employee_document_type', [
+	'ssc',
+	'hsc',
+	'bachelor',
+	'master',
+	'passport',
+	'national_id',
+	'driving_license',
+	'other',
+]);
+
+export const employee_document = hr.table('employee_document', {
+	uuid: uuid_primary,
+	index: integer('index').default(0),
+	employee_uuid: defaultUUID('employee_uuid').references(() => employee.uuid),
+	document_type:
+		employee_document_type_enum('document_type').default('other'),
+	description: text('description').notNull(),
+	file: text('file').default(null),
+	created_by: defaultUUID('created_by').references(() => users.uuid),
+	created_at: DateTime('created_at').notNull(),
+	updated_at: DateTime('updated_at').default(null),
+	remarks: text('remarks').default(null),
 });
 
 export const permission_type_enum = pgEnum('permission_type_enum', [

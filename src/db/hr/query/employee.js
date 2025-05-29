@@ -18,6 +18,12 @@ import {
 const createdByUser = alias(users, 'created_by_user');
 const lineMagagerUser = alias(users, 'line_manager_user');
 const hrManagerUser = alias(users, 'hr_manager_user');
+const firstLeaveApprover = alias(users, 'first_leave_approver');
+const secondLeaveApprover = alias(users, 'second_leave_approver');
+const firstLateApprover = alias(users, 'first_late_approver');
+const secondLateApprover = alias(users, 'second_late_approver');
+const firstManualEntryApprover = alias(users, 'first_manual_entry_approver');
+const secondManualEntryApprover = alias(users, 'second_manual_entry_approver');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -135,6 +141,28 @@ export async function selectAll(req, res, next) {
 			leave_policy_uuid: employee.leave_policy_uuid,
 			leave_policy_name: leave_policy.name,
 			report_position: employee.report_position,
+			first_leave_approver_uuid: employee.first_leave_approver_uuid,
+			first_leave_approver_name: firstLeaveApprover.name,
+			second_leave_approver_uuid: employee.second_leave_approver_uuid,
+			second_leave_approver_name: secondLeaveApprover.name,
+			first_late_approver_uuid: employee.first_late_approver_uuid,
+			first_late_approver_name: firstLateApprover.name,
+			second_late_approver_uuid: employee.second_late_approver_uuid,
+			second_late_approver_name: secondLateApprover.name,
+			first_manual_entry_approver_uuid:
+				employee.first_manual_entry_approver_uuid,
+			first_manual_entry_approver_name: firstManualEntryApprover.name,
+			second_manual_entry_approver_uuid:
+				employee.second_manual_entry_approver_uuid,
+			second_manual_entry_approver_name: secondManualEntryApprover.name,
+			father_name: employee.father_name,
+			mother_name: employee.mother_name,
+			blood_group: employee.blood_group,
+			dob: employee.dob,
+			national_id: employee.national_id,
+			office_phone: employee.office_phone,
+			home_phone: employee.home_phone,
+			personal_phone: employee.personal_phone,
 		})
 		.from(employee)
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
@@ -162,6 +190,36 @@ export async function selectAll(req, res, next) {
 		.leftJoin(
 			hrManagerUser,
 			eq(employee.hr_manager_uuid, hrManagerUser.uuid)
+		)
+		.leftJoin(
+			firstLeaveApprover,
+			eq(employee.first_leave_approver_uuid, firstLeaveApprover.uuid)
+		)
+		.leftJoin(
+			secondLeaveApprover,
+			eq(employee.second_leave_approver_uuid, secondLeaveApprover.uuid)
+		)
+		.leftJoin(
+			firstLateApprover,
+			eq(employee.first_late_approver_uuid, firstLateApprover.uuid)
+		)
+		.leftJoin(
+			secondLateApprover,
+			eq(employee.second_late_approver_uuid, secondLateApprover.uuid)
+		)
+		.leftJoin(
+			firstManualEntryApprover,
+			eq(
+				employee.first_manual_entry_approver_uuid,
+				firstManualEntryApprover.uuid
+			)
+		)
+		.leftJoin(
+			secondManualEntryApprover,
+			eq(
+				employee.second_manual_entry_approver_uuid,
+				secondManualEntryApprover.uuid
+			)
 		)
 		.orderBy(desc(employee.created_at));
 
@@ -228,6 +286,28 @@ export async function select(req, res, next) {
 			leave_policy_uuid: employee.leave_policy_uuid,
 			leave_policy_name: leave_policy.name,
 			report_position: employee.report_position,
+			first_leave_approver_uuid: employee.first_leave_approver_uuid,
+			first_leave_approver_name: firstLeaveApprover.name,
+			second_leave_approver_uuid: employee.second_leave_approver_uuid,
+			second_leave_approver_name: secondLeaveApprover.name,
+			first_late_approver_uuid: employee.first_late_approver_uuid,
+			first_late_approver_name: firstLateApprover.name,
+			second_late_approver_uuid: employee.second_late_approver_uuid,
+			second_late_approver_name: secondLateApprover.name,
+			first_manual_entry_approver_uuid:
+				employee.first_manual_entry_approver_uuid,
+			first_manual_entry_approver_name: firstManualEntryApprover.name,
+			second_manual_entry_approver_uuid:
+				employee.second_manual_entry_approver_uuid,
+			second_manual_entry_approver_name: secondManualEntryApprover.name,
+			father_name: employee.father_name,
+			mother_name: employee.mother_name,
+			blood_group: employee.blood_group,
+			dob: employee.dob,
+			national_id: employee.national_id,
+			office_phone: employee.office_phone,
+			home_phone: employee.home_phone,
+			personal_phone: employee.personal_phone,
 		})
 		.from(employee)
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
@@ -255,6 +335,36 @@ export async function select(req, res, next) {
 		.leftJoin(
 			hrManagerUser,
 			eq(employee.hr_manager_uuid, hrManagerUser.uuid)
+		)
+		.leftJoin(
+			firstLeaveApprover,
+			eq(employee.first_leave_approver_uuid, firstLeaveApprover.uuid)
+		)
+		.leftJoin(
+			secondLeaveApprover,
+			eq(employee.second_leave_approver_uuid, secondLeaveApprover.uuid)
+		)
+		.leftJoin(
+			firstLateApprover,
+			eq(employee.first_late_approver_uuid, firstLateApprover.uuid)
+		)
+		.leftJoin(
+			secondLateApprover,
+			eq(employee.second_late_approver_uuid, secondLateApprover.uuid)
+		)
+		.leftJoin(
+			firstManualEntryApprover,
+			eq(
+				employee.first_manual_entry_approver_uuid,
+				firstManualEntryApprover.uuid
+			)
+		)
+		.leftJoin(
+			secondManualEntryApprover,
+			eq(
+				employee.second_manual_entry_approver_uuid,
+				secondManualEntryApprover.uuid
+			)
 		)
 		.where(eq(employee.uuid, req.params.uuid));
 	try {
