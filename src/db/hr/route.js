@@ -300,14 +300,10 @@ hrRouter.get(
 
 // ? employee routes
 hrRouter.get('/employee', employeeOperations.selectAll);
-hrRouter.get('/employee/:uuid', validateUuidParam(), employeeOperations.select);
+hrRouter.get('/employee/:uuid', employeeOperations.select);
 hrRouter.post('/employee', employeeOperations.insert);
 hrRouter.put('/employee/:uuid', employeeOperations.update);
-hrRouter.delete(
-	'/employee/:uuid',
-	validateUuidParam(),
-	employeeOperations.remove
-);
+hrRouter.delete('/employee/:uuid', employeeOperations.remove);
 hrRouter.get(
 	'/manual-entry-details/by/:employee_uuid',
 	employeeOperations.manualEntryDetailsByEmployee
@@ -320,31 +316,18 @@ hrRouter.get(
 
 // ? employee_address routes
 hrRouter.get('/employee-address', employeeAddressOperations.selectAll);
-hrRouter.get(
-	'/employee-address/:uuid',
-	validateUuidParam(),
-	employeeAddressOperations.select
-);
+hrRouter.get('/employee-address/:uuid', employeeAddressOperations.select);
 hrRouter.post('/employee-address', employeeAddressOperations.insert);
 hrRouter.put('/employee-address/:uuid', employeeAddressOperations.update);
-hrRouter.delete(
-	'/employee-address/:uuid',
-	validateUuidParam(),
-	employeeAddressOperations.remove
-);
+hrRouter.delete('/employee-address/:uuid', employeeAddressOperations.remove);
 hrRouter.get(
 	'/employee-address/by/:employee_uuid',
-	validateUuidParam(),
 	employeeAddressOperations.selectByEmployeeUuid
 );
 // ? employee_document routes
 
 hrRouter.get('/employee-document', employeeDocumentOperations.selectAll);
-hrRouter.get(
-	'/employee-document/:uuid',
-	validateUuidParam(),
-	employeeDocumentOperations.select
-);
+hrRouter.get('/employee-document/:uuid', employeeDocumentOperations.select);
 hrRouter.post(
 	'/employee-document',
 	upload.single('file'),
@@ -355,54 +338,34 @@ hrRouter.put(
 	upload.single('file'),
 	employeeDocumentOperations.update
 );
-hrRouter.delete(
-	'/employee-document/:uuid',
-	validateUuidParam(),
-	employeeDocumentOperations.remove
-);
+hrRouter.delete('/employee-document/:uuid', employeeDocumentOperations.remove);
 hrRouter.get(
 	'/employee-document/by/:employee_uuid',
-	validateUuidParam(),
 	employeeDocumentOperations.selectByEmployeeUuid
 );
 
 // ? employee_education routes
 hrRouter.get('/employee-education', employeeEducationOperations.selectAll);
-hrRouter.get(
-	'/employee-education/:uuid',
-	validateUuidParam(),
-	employeeEducationOperations.select
-);
+hrRouter.get('/employee-education/:uuid', employeeEducationOperations.select);
 hrRouter.post('/employee-education', employeeEducationOperations.insert);
 hrRouter.put('/employee-education/:uuid', employeeEducationOperations.update);
 hrRouter.delete(
 	'/employee-education/:uuid',
-	validateUuidParam(),
 	employeeEducationOperations.remove
 );
 hrRouter.get(
 	'/employee-education/by/:employee_uuid',
-	validateUuidParam(),
 	employeeEducationOperations.selectByEmployeeUuid
 );
 
 // ? employee_history routes
 hrRouter.get('/employee-history', employeeHistoryOperations.selectAll);
-hrRouter.get(
-	'/employee-history/:uuid',
-	validateUuidParam(),
-	employeeHistoryOperations.select
-);
+hrRouter.get('/employee-history/:uuid', employeeHistoryOperations.select);
 hrRouter.post('/employee-history', employeeHistoryOperations.insert);
 hrRouter.put('/employee-history/:uuid', employeeHistoryOperations.update);
-hrRouter.delete(
-	'/employee-history/:uuid',
-	validateUuidParam(),
-	employeeHistoryOperations.remove
-);
+hrRouter.delete('/employee-history/:uuid', employeeHistoryOperations.remove);
 hrRouter.get(
 	'/employee-history/by/:employee_uuid',
-	validateUuidParam(),
 	employeeHistoryOperations.selectByEmployeeUuid
 );
 
