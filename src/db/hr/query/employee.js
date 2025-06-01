@@ -310,7 +310,7 @@ export async function select(req, res, next) {
 			home_phone: employee.home_phone,
 			personal_phone: employee.personal_phone,
 			employee_address: sql`
-				(
+				COALESCE(
 					SELECT jsonb_agg(
 						jsonb_build_object(
 							'uuid', employee_address.uuid,
@@ -330,9 +330,10 @@ export async function select(req, res, next) {
 					FROM hr.employee_address
 					LEFT JOIN hr.users createdByUser ON createdByUser.uuid = employee_address.created_by
 					WHERE employee_address.employee_uuid = ${employee.uuid}
-				)`,
+				, '[]'::jsonb)
+			`,
 			employee_document: sql`
-				(
+				COALESCE(
 					SELECT jsonb_agg(
 						jsonb_build_object(
 							'uuid', employee_document.uuid,
@@ -351,10 +352,10 @@ export async function select(req, res, next) {
 					FROM hr.employee_document
 					LEFT JOIN hr.users createdByUser ON createdByUser.uuid = employee_document.created_by
 					WHERE employee_document.employee_uuid = ${employee.uuid}
-				)
+				, '[]'::jsonb)
 			`,
 			employee_education: sql`
-				(
+				COALESCE(
 					SELECT jsonb_agg(
 						jsonb_build_object(
 							'uuid', employee_education.uuid,
@@ -375,10 +376,10 @@ export async function select(req, res, next) {
 					FROM hr.employee_education
 					LEFT JOIN hr.users createdByUser ON createdByUser.uuid = employee_education.created_by
 					WHERE employee_education.employee_uuid = ${employee.uuid}
-				)
+				, '[]'::jsonb)
 			`,
 			employee_history: sql`
-				(
+				COALESCE(
 					SELECT jsonb_agg(
 						jsonb_build_object(
 							'uuid', employee_history.uuid,
@@ -402,7 +403,7 @@ export async function select(req, res, next) {
 					FROM hr.employee_history
 					LEFT JOIN hr.users createdByUser ON createdByUser.uuid = employee_history.created_by
 					WHERE employee_history.employee_uuid = ${employee.uuid}
-				)
+				, '[]'::jsonb)
 			`,
 		})
 		.from(employee)
