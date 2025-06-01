@@ -100,6 +100,7 @@ export async function selectAll(req, res, next) {
 		.select({
 			uuid: employee.uuid,
 			id: employee.id,
+			employee_id: employee.employee_id,
 			gender: employee.gender,
 			//employee_name: employee.name,
 			user_uuid: employee.user_uuid,
@@ -245,6 +246,7 @@ export async function select(req, res, next) {
 		.select({
 			uuid: employee.uuid,
 			id: employee.id,
+			employee_id: employee.employee_id,
 			gender: employee.gender,
 			//employee_name: employee.name,
 			user_uuid: employee.user_uuid,
