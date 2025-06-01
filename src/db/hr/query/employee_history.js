@@ -12,7 +12,7 @@ export async function insert(req, res, next) {
 	const employee_historyPromise = db
 		.insert(employee_history)
 		.values(req.body)
-		.returning({ insertedName: employee_history.employee_history });
+		.returning({ insertedName: employee_history.employee_uuid });
 
 	try {
 		const data = await employee_historyPromise;
@@ -35,7 +35,7 @@ export async function update(req, res, next) {
 		.update(employee_history)
 		.set(req.body)
 		.where(eq(employee_history.uuid, req.params.uuid))
-		.returning({ updatedName: employee_history.employee_history });
+		.returning({ updatedName: employee_history.employee_uuid });
 
 	try {
 		const data = await employee_historyPromise;
@@ -57,7 +57,7 @@ export async function remove(req, res, next) {
 	const employee_historyPromise = db
 		.delete(employee_history)
 		.where(eq(employee_history.uuid, req.params.uuid))
-		.returning({ deletedName: employee_history.employee_history });
+		.returning({ deletedName: employee_history.employee_uuid });
 
 	try {
 		const data = await employee_historyPromise;
