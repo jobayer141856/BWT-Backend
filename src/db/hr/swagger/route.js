@@ -1594,7 +1594,7 @@ const pathHrRoster = {
 	},
 	'/hr/roster-calendar/by/{employee_uuid}/{year}/{month}': {
 		get: {
-			tags: ['hr.roster_calendar'],
+			tags: ['hr.roster'],
 			summary: 'Get roster calendar by employee UUID, year, and month',
 			description: '',
 			produces: ['application/json'],
@@ -1605,18 +1605,8 @@ const pathHrRoster = {
 					'string',
 					SE.uuid()
 				),
-				SE.parameter_params(
-					'Year',
-					'year',
-					'integer',
-					SE.integer()
-				),
-				SE.parameter_params(
-					'Month',
-					'month',
-					'integer',
-					SE.integer()
-				),
+				SE.parameter_params('Year', 'year', 'integer', SE.integer()),
+				SE.parameter_params('Month', 'month', 'integer', SE.integer()),
 			],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/roster'),
