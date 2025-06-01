@@ -168,6 +168,14 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const { year, month } = req.params;
+	const totalDays = new Date(year, month, 0).getDate();
+	//console.log(`Total days in month: ${totalDays}`);
+	const date = new Date(year, month - 1, 1); // JS months are 0-based
+	date.setMonth(date.getMonth() - 1);
+	const prevMonth = date.getMonth() + 1; // back to 1-based
+	const prevYear = date.getFullYear();
+
+	//console.log(prevMonth, prevYear);
 
 	const SpecialHolidaysQuery = sql`
 							SELECT
@@ -222,26 +230,21 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 
 	const query = sql`
 					SELECT 
-							se.uuid as salary_uuid,
-							se.employee_uuid,
+							employee.uuid as employee_uuid,
+							employeeUser.uuid as employee_user_uuid,
 							employeeUser.name as employee_name,
-							se.type,
-							se.amount::float8,
-							se.month,
-							se.year,
+							employee.joining_amount::float8,
 							employee.start_date as joining_date,
-							se.created_by,
-							createdByUser.name as created_by_name,
-							se.created_at,
-							se.updated_at,
-							se.remarks,
+							employee.created_at,
+							employee.updated_at,
+							employee.remarks,
 							COALESCE(total_increment.total_salary_increment, 0)::float8 AS total_incremented_salary,
 							COALESCE(attendance_summary.present_days, 0)::float8 AS present_days,
 							COALESCE(attendance_summary.late_days, 0)::float8 AS late_days,
 							COALESCE(leave_summary.total_leave_days, 0)::float8 AS total_leave_days,
 							COALESCE(
-								se.amount + COALESCE(total_increment.total_salary_increment, 0),
-								se.amount
+								employee.joining_amount + COALESCE(total_increment.total_salary_increment, 0),
+								employee.joining_amount
 							)::float8 AS total_salary,
 							COALESCE(off_days_summary.total_off_days, 0)::float8 AS week_days,
 							COALESCE(${total_general_holidays}, 0)::float8 AS total_general_holidays,
@@ -285,14 +288,70 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 									COALESCE(${total_general_holidays}::int, 0) + 
 									COALESCE(${total_special_holidays}::int, 0)
 									)
-							, 0)::float8 AS total_days
-					FROM hr.salary_entry se
-					LEFT JOIN hr.employee
-						ON se.employee_uuid = employee.uuid
+							, 0)::float8 AS total_days,
+							COALESCE(COALESCE(
+								employee.joining_amount + COALESCE(total_increment.total_salary_increment, 0),
+								employee.joining_amount
+							) / ${totalDays}, 0)::float8 AS daily_salary,
+							 COALESCE(
+								(COALESCE(employee.joining_amount + COALESCE(total_increment.total_salary_increment, 0), employee.joining_amount) / ${totalDays}) *
+								(
+									COALESCE(attendance_summary.present_days, 0)
+									+ COALESCE(off_days_summary.total_off_days, 0)
+									+ COALESCE(leave_summary.total_leave_days, 0)
+									+ COALESCE(${total_general_holidays}, 0)
+									+ COALESCE(${total_special_holidays}, 0)
+								)
+							, 0)::float8 AS gross_salary,
+							COALESCE(salary_entry_summary.advance_amount, 0)::float8 AS advance_amount,
+							COALESCE(salary_entry_summary.loan_amount, 0)::float8 AS loan_amount,
+							COALESCE(
+								salary_entry_summary.advance_amount + salary_entry_summary.loan_amount, 0
+							)::float8 AS total_advance_salary,
+							COALESCE(
+									FLOOR(COALESCE(attendance_summary.late_days, 0) / 3) * 
+									(COALESCE(
+										employee.joining_amount + COALESCE(total_increment.total_salary_increment, 0),
+										employee.joining_amount
+									) / ${totalDays})
+								, 0)::float8 AS late_salary_deduction,
+							(
+								COALESCE(salary_entry_summary.advance_amount, 0)
+								+ COALESCE(salary_entry_summary.loan_amount, 0)
+								+ COALESCE(
+									COALESCE(employee.joining_amount + COALESCE(total_increment.total_salary_increment, 0), employee.joining_amount)
+									/ ${totalDays} * (COALESCE(attendance_summary.late_days, 0)), 0
+								)
+							)::float8 AS total_deduction,
+							(
+								COALESCE(
+									(COALESCE(employee.joining_amount + COALESCE(total_increment.total_salary_increment, 0), employee.joining_amount) / ${totalDays}) *
+									(
+										COALESCE(attendance_summary.present_days, 0)
+										+ COALESCE(off_days_summary.total_off_days, 0)
+										+ COALESCE(leave_summary.total_leave_days, 0)
+										+ COALESCE(${total_general_holidays}, 0)
+										+ COALESCE(${total_special_holidays}, 0)
+									)
+								, 0)
+								-
+								(
+									COALESCE(salary_entry_summary.advance_amount, 0)
+									+ COALESCE(salary_entry_summary.loan_amount, 0)
+									+ COALESCE(
+										FLOOR(COALESCE(attendance_summary.late_days, 0) / 3) *
+										(COALESCE(
+											employee.joining_amount + COALESCE(total_increment.total_salary_increment, 0),
+											employee.joining_amount
+										) / ${totalDays})
+									, 0)
+								)
+							)::float8 AS net_payable
+					FROM  hr.employee
 					LEFT JOIN hr.users employeeUser
 						ON employee.user_uuid = employeeUser.uuid
 					LEFT JOIN hr.users createdByUser
-						ON se.created_by = createdByUser.uuid
+						ON employee.created_by = createdByUser.uuid
 					LEFT JOIN (
 						SELECT 
 							si.employee_uuid, 
@@ -302,7 +361,7 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 						AND EXTRACT(MONTH FROM si.effective_date) <= ${month}
 						GROUP BY si.employee_uuid
 					) AS total_increment
-						ON se.employee_uuid = total_increment.employee_uuid
+						ON employee.uuid = total_increment.employee_uuid
 					LEFT JOIN (
 						SELECT 
 							pl.employee_uuid,
@@ -317,7 +376,7 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 							AND EXTRACT(MONTH FROM pl.punch_time) = ${month}
 						GROUP BY pl.employee_uuid
 						) AS attendance_summary
-						ON se.employee_uuid = attendance_summary.employee_uuid
+						ON employee.uuid = attendance_summary.employee_uuid
 					LEFT JOIN (
 						SELECT
 								al.employee_uuid,
@@ -347,7 +406,7 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 							)
 							GROUP BY al.employee_uuid
 					) AS leave_summary
-						ON se.employee_uuid = leave_summary.employee_uuid
+						ON employee.uuid = leave_summary.employee_uuid
 					LEFT JOIN (
 						WITH params AS (
 							SELECT 
@@ -395,8 +454,20 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 						GROUP BY shift_group_uuid
 					) AS off_days_summary
 						ON employee.shift_group_uuid = off_days_summary.shift_group_uuid
-					WHERE se.year = ${year} AND se.month = ${month}
-					ORDER BY se.created_at DESC`;
+					LEFT JOIN
+						(
+							SELECT 
+								se.advance_amount::float8,
+								se.loan_amount::float8,
+								se.uuid AS salary_entry_uuid,
+								se.employee_uuid AS salary_entry_employee_uuid
+							FROM hr.salary_entry se
+							WHERE se.month = ${prevMonth}
+								AND se.year = ${prevYear}
+						) AS salary_entry_summary
+					ON employee.uuid = salary_entry_summary.salary_entry_employee_uuid
+					WHERE employee.status = true
+					ORDER BY employee.created_at DESC`;
 
 	const resultPromise = db.execute(query);
 

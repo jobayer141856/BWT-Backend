@@ -434,6 +434,7 @@ export const employee = hr.table('employee', {
 	office_phone: text('office_phone').default(null),
 	home_phone: text('home_phone').default(null),
 	personal_phone: text('personal_phone').default(null),
+	joining_amount: PG_DECIMAL('joining_amount').default(0),
 });
 
 // ? Employee Address
@@ -683,6 +684,8 @@ export const salary_entry = hr.table('salary_entry', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	loan_amount: PG_DECIMAL('loan_amount').default(0),
+	advance_amount: PG_DECIMAL('advance_amount').default(0),
 });
 
 export default hr;
