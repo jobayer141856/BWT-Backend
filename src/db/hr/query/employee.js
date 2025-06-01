@@ -328,7 +328,7 @@ export async function select(req, res, next) {
 						)
 					)
 					FROM hr.employee_address
-					LEFT JOIN hr.users AS createdByUser ON createdByUser.uuid = employee_address.created_by
+					LEFT JOIN hr.users createdByUser ON createdByUser.uuid = employee_address.created_by
 					WHERE employee_address.employee_uuid = ${employee.uuid}
 				)`,
 			employee_document: sql`
@@ -349,7 +349,7 @@ export async function select(req, res, next) {
 						)
 					)
 					FROM hr.employee_document
-					LEFT JOIN hr.users AS createdByUser ON createdByUser.uuid = employee_document.created_by
+					LEFT JOIN hr.users createdByUser ON createdByUser.uuid = employee_document.created_by
 					WHERE employee_document.employee_uuid = ${employee.uuid}
 				)
 			`,
@@ -373,7 +373,7 @@ export async function select(req, res, next) {
 						)
 					)
 					FROM hr.employee_education
-					LEFT JOIN hr.users AS createdByUser ON createdByUser.uuid = employee_education.created_by
+					LEFT JOIN hr.users createdByUser ON createdByUser.uuid = employee_education.created_by
 					WHERE employee_education.employee_uuid = ${employee.uuid}
 				)
 			`,
@@ -384,7 +384,6 @@ export async function select(req, res, next) {
 							'uuid', employee_history.uuid,
 							'index', employee_history.index,
 							'employee_uuid', employee_history.employee_uuid,
-							'employee_name', users.name,
 							'company_name', employee_history.company_name,
 							'company_business', employee_history.company_business,
 							'start_date', employee_history.start_date,
@@ -401,7 +400,7 @@ export async function select(req, res, next) {
 						)
 					)
 					FROM hr.employee_history
-					INNER JOIN hr.users AS employeeUser ON employeeUser.uuid = employee_history.employee_uuid
+					LEFT JOIN hr.users createdByUser ON createdByUser.uuid = employee_history.created_by
 					WHERE employee_history.employee_uuid = ${employee.uuid}
 				)
 			`,
