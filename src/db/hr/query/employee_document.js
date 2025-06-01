@@ -238,7 +238,7 @@ export async function selectByEmployeeUuid(req, res, next) {
 			message: 'Employee_document',
 		};
 
-		return res.status(200).json({ toast, data: data[0] });
+		return res.status(200).json({ toast, data: data || [] });
 	} catch (error) {
 		next(error);
 	}
