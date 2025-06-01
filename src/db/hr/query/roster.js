@@ -185,8 +185,21 @@ export async function selectRosterCalendarByEmployeeUuid(req, res, next) {
 		SELECT 
 			employee.uuid as employee_uuid,
 			users.name as employee_name,
-			roster.off_days,
-			roster.created_at
+			jsonb_agg(
+				jsonb_build_object(
+					'shift_group_uuid', shift_group.uuid,
+					'shift_group_name', shift_group.name,
+					'shifts_uuid', roster.shifts_uuid,
+					'off_days', roster.off_days,
+					'created_at', roster.created_at
+				)
+			) FILTER (WHERE shift_group.uuid IS NOT NULL) as shift_group,
+			jsonb_agg(
+				jsonb_build_object(
+					'from_date', apply_leave.from_date,
+					'to_date', apply_leave.to_date
+				)
+			) FILTER (WHERE apply_leave.from_date IS NOT NULL AND apply_leave.to_date IS NOT NULL) as applied_leaves
 		FROM 
 			hr.employee 
 		LEFT JOIN
@@ -196,10 +209,14 @@ export async function selectRosterCalendarByEmployeeUuid(req, res, next) {
 		LEFT JOIN
 			hr.roster ON employee.shift_group_uuid = roster.shift_group_uuid
 			AND roster.shifts_uuid = shift_group.shifts_uuid
-			AND roster.created_at >= DATE_TRUNC('month', DATE '${year}-${month}-01')
-			AND roster.created_at < DATE_TRUNC('month', DATE '${year}-${month}-01') + INTERVAL '1 month'
+		LEFT JOIN
+			hr.apply_leave ON (employee.uuid = apply_leave.employee_uuid AND apply_leave.year = ${year} 
+			AND apply_leave.from_date >= DATE_TRUNC('month', DATE '${year}-${month}-01')
+			AND apply_leave.to_date < DATE_TRUNC('month', DATE '${year}-${month}-01') + INTERVAL '1 month')
 		WHERE 
 			employee.uuid = ${employee_uuid}
+		GROUP BY
+			employee.uuid, users.name
 	`;
 
 	const rosterPromise = db.execute(query);
