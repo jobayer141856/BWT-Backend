@@ -13,10 +13,11 @@ import {
 	users,
 	workplace,
 	employment_type,
+	employee_history,
 } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
-const lineMagagerUser = alias(users, 'line_manager_user');
+const lineManagerUser = alias(users, 'line_manager_user');
 const hrManagerUser = alias(users, 'hr_manager_user');
 const firstLeaveApprover = alias(users, 'first_leave_approver');
 const secondLeaveApprover = alias(users, 'second_leave_approver');
@@ -184,8 +185,8 @@ export async function selectAll(req, res, next) {
 			eq(employee.employment_type_uuid, employment_type.uuid)
 		)
 		.leftJoin(
-			lineMagagerUser,
-			eq(employee.line_manager_uuid, lineMagagerUser.uuid)
+			lineManagerUser,
+			eq(employee.line_manager_uuid, lineManagerUser.uuid)
 		)
 		.leftJoin(
 			hrManagerUser,
@@ -308,6 +309,102 @@ export async function select(req, res, next) {
 			office_phone: employee.office_phone,
 			home_phone: employee.home_phone,
 			personal_phone: employee.personal_phone,
+			employee_address: sql`
+				(
+					SELECT jsonb_agg(
+						jsonb_build_object(
+							'uuid', employee_address.uuid,
+							'index', employee_address.index,
+							'address_type', employee_address.address_type,
+							'employee_uuid', employee_address.employee_uuid,
+							'address', employee_address.address,
+							'thana', employee_address.thana,
+							'district', employee_address.district,
+							'created_by', employee_address.created_by,
+							'created_by_name', createdByUser.name,
+							'created_at', employee_address.created_at,
+							'updated_at', employee_address.updated_at,
+							'remarks', employee_address.remarks
+						)
+					)
+					FROM hr.employee_address
+					LEFT JOIN hr.users AS createdByUser ON createdByUser.uuid = employee_address.created_by
+					WHERE employee_address.employee_uuid = ${employee.uuid}
+				)`,
+			employee_document: sql`
+				(
+					SELECT jsonb_agg(
+						jsonb_build_object(
+							'uuid', employee_document.uuid,
+							'index', employee_document.index,
+							'employee_uuid', employee_document.employee_uuid,
+							'document_type', employee_document.document_type,
+							'description', employee_document.description,
+							'file', employee_document.file,
+							'created_by', employee_document.created_by,
+							'created_by_name', createdByUser.name,
+							'created_at', employee_document.created_at,
+							'updated_at', employee_document.updated_at,
+							'remarks', employee_document.remarks
+						)
+					)
+					FROM hr.employee_document
+					LEFT JOIN hr.users AS createdByUser ON createdByUser.uuid = employee_document.created_by
+					WHERE employee_document.employee_uuid = ${employee.uuid}
+				)
+			`,
+			employee_education: sql`
+				(
+					SELECT jsonb_agg(
+						jsonb_build_object(
+							'uuid', employee_education.uuid,
+							'index', employee_education.index,
+							'employee_uuid', employee_education.employee_uuid,
+							'degree_name', employee_education.degree_name,
+							'institute', employee_education.institute,
+							'board', employee_education.board,
+							'year_of_passing', employee_education.year_of_passing,
+							'grade', employee_education.grade,
+							'created_by', employee_education.created_by,
+							'created_by_name', createdByUser.name,
+							'created_at', employee_education.created_at,
+							'updated_at', employee_education.updated_at,
+							'remarks', employee_education.remarks
+						)
+					)
+					FROM hr.employee_education
+					LEFT JOIN hr.users AS createdByUser ON createdByUser.uuid = employee_education.created_by
+					WHERE employee_education.employee_uuid = ${employee.uuid}
+				)
+			`,
+			employee_history: sql`
+				(
+					SELECT jsonb_agg(
+						jsonb_build_object(
+							'uuid', employee_history.uuid,
+							'index', employee_history.index,
+							'employee_uuid', employee_history.employee_uuid,
+							'employee_name', users.name,
+							'company_name', employee_history.company_name,
+							'company_business', employee_history.company_business,
+							'start_date', employee_history.start_date,
+							'end_date', employee_history.end_date,
+							'department', employee_history.department,
+							'designation', employee_history.designation,
+							'location', employee_history.location,
+							'responsibilities', employee_history.responsibilities,
+							'created_by', employee_history.created_by,
+							'created_by_name', createdByUser.name,
+							'created_at', employee_history.created_at,
+							'updated_at', employee_history.updated_at,
+							'remarks', employee_history.remarks
+						)
+					)
+					FROM hr.employee_history
+					INNER JOIN hr.users AS employeeUser ON employeeUser.uuid = employee_history.employee_uuid
+					WHERE employee_history.employee_uuid = ${employee.uuid}
+				)
+			`,
 		})
 		.from(employee)
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
@@ -329,8 +426,8 @@ export async function select(req, res, next) {
 			eq(employee.employment_type_uuid, employment_type.uuid)
 		)
 		.leftJoin(
-			lineMagagerUser,
-			eq(employee.line_manager_uuid, lineMagagerUser.uuid)
+			lineManagerUser,
+			eq(employee.line_manager_uuid, lineManagerUser.uuid)
 		)
 		.leftJoin(
 			hrManagerUser,
