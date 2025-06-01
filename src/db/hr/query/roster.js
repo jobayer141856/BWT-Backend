@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import {
@@ -208,11 +208,19 @@ export async function selectRosterCalendarByEmployeeUuid(req, res, next) {
 			hr.shift_group ON employee.shift_group_uuid = shift_group.uuid
 		LEFT JOIN
 			hr.roster ON employee.shift_group_uuid = roster.shift_group_uuid
-			AND roster.shifts_uuid = shift_group.shifts_uuid
-		LEFT JOIN
-			hr.apply_leave ON (employee.uuid = apply_leave.employee_uuid AND apply_leave.year = ${year} 
-			AND apply_leave.from_date >= DATE_TRUNC('month', DATE '${year}-${month}-01')
-			AND apply_leave.to_date < DATE_TRUNC('month', DATE '${year}-${month}-01') + INTERVAL '1 month')
+        LEFT JOIN
+            hr.apply_leave ON (
+                employee.uuid = apply_leave.employee_uuid
+                AND apply_leave.year = ${year}
+                AND (
+                    EXTRACT(YEAR FROM apply_leave.to_date) > ${year}
+                    OR (EXTRACT(YEAR FROM apply_leave.to_date) = ${year} AND EXTRACT(MONTH FROM apply_leave.to_date) >= ${month})
+                )
+                AND (
+                    EXTRACT(YEAR FROM apply_leave.from_date) < ${year}
+                    OR (EXTRACT(YEAR FROM apply_leave.from_date) = ${year} AND EXTRACT(MONTH FROM apply_leave.from_date) <= ${month})
+                )
+            )
 		WHERE 
 			employee.uuid = ${employee_uuid}
 		GROUP BY
