@@ -168,6 +168,7 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const { year, month } = req.params;
+	const { employee_uuid } = req.query;
 	const totalDays = new Date(year, month, 0).getDate();
 	//console.log(`Total days in month: ${totalDays}`);
 	const date = new Date(year, month - 1, 1); // JS months are 0-based
@@ -466,7 +467,8 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 								AND se.year = ${prevYear}
 						) AS salary_entry_summary
 					ON employee.uuid = salary_entry_summary.salary_entry_employee_uuid
-					WHERE employee.status = true
+					WHERE employee.status = true 
+					${employee_uuid ? sql`AND employee.uuid = ${employee_uuid}` : sql``}
 					ORDER BY employee.created_at DESC`;
 
 	const resultPromise = db.execute(query);
@@ -478,7 +480,11 @@ export async function employeeSalaryDetailsByYearDate(req, res, next) {
 			type: 'select all',
 			message: 'employee salary details list',
 		};
-		return res.status(200).json({ toast, data: data.rows });
+		if (employee_uuid) {
+			return res.status(200).json({ toast, data: data.rows[0] || {} });
+		} else {
+			return res.status(200).json({ toast, data: data.rows });
+		}
 	} catch (error) {
 		next(error);
 	}
