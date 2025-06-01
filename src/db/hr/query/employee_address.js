@@ -107,7 +107,7 @@ export async function selectAll(req, res, next) {
 			message: 'Employee_address',
 		};
 
-		return res.status(200).json({ toast, data });
+		return res.status(200).json({ toast, data: data || [] });
 	} catch (error) {
 		next(error);
 	}
