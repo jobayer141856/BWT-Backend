@@ -15,6 +15,7 @@ import {
 	employment_type,
 	employee_history,
 } from '../schema.js';
+import { decimalToNumber } from '../../variables.js';
 
 const createdByUser = alias(users, 'created_by_user');
 const lineManagerUser = alias(users, 'line_manager_user');
@@ -165,7 +166,7 @@ export async function selectAll(req, res, next) {
 			office_phone: employee.office_phone,
 			home_phone: employee.home_phone,
 			personal_phone: employee.personal_phone,
-			joining_amount: employee.joining_amount,
+			joining_amount: decimalToNumber(employee.joining_amount),
 		})
 		.from(employee)
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
@@ -312,7 +313,7 @@ export async function select(req, res, next) {
 			office_phone: employee.office_phone,
 			home_phone: employee.home_phone,
 			personal_phone: employee.personal_phone,
-			joining_amount: employee.joining_amount,
+			joining_amount: decimalToNumber(employee.joining_amount),
 			employee_address: sql`
 				COALESCE((
 					SELECT jsonb_agg(
@@ -589,7 +590,7 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 			blood_group: employee.blood_group,
 			dob: employee.dob,
 			national_id: employee.national_id,
-			joining_amount: employee.joining_amount,
+			joining_amount: decimalToNumber(employee.joining_amount),
 			remaining_leave_information: sql`
 								(
 									SELECT jsonb_agg(
