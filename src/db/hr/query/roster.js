@@ -189,7 +189,6 @@ export async function selectRosterCalendarByEmployeeUuid(req, res, next) {
 				jsonb_build_object(
 					'shift_group_uuid', shift_group.uuid,
 					'shift_group_name', shift_group.name,
-					'shifts_uuid', roster.shifts_uuid,
 					'off_days', roster.off_days,
 					'created_at', roster.created_at
 				)
@@ -207,7 +206,12 @@ export async function selectRosterCalendarByEmployeeUuid(req, res, next) {
 		LEFT JOIN 
 			hr.shift_group ON employee.shift_group_uuid = shift_group.uuid
 		LEFT JOIN
-			hr.roster ON employee.shift_group_uuid = roster.shift_group_uuid
+			hr.roster ON (
+				employee.shift_group_uuid = roster.shift_group_uuid
+				AND (
+					EXTRACT(YEAR FROM roster.effective_date) = ${year} AND EXTRACT(MONTH FROM roster.effective_date) = ${month}
+				)
+			)
         LEFT JOIN
             hr.apply_leave ON (
                 employee.uuid = apply_leave.employee_uuid
