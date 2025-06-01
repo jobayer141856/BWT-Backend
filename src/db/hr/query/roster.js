@@ -209,7 +209,7 @@ export async function selectRosterCalendarByEmployeeUuid(req, res, next) {
 			hr.roster ON (
 				employee.shift_group_uuid = roster.shift_group_uuid
 				AND (
-					EXTRACT(YEAR FROM roster.effective_date) = ${year} AND EXTRACT(MONTH FROM roster.effective_date) = ${month}
+					EXTRACT(YEAR FROM roster.effective_date) <= ${year} AND EXTRACT(MONTH FROM roster.effective_date) <= ${month}
 				)
 			)
         LEFT JOIN
