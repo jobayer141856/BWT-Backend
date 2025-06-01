@@ -345,8 +345,16 @@ hrRouter.get(
 	validateUuidParam(),
 	employeeDocumentOperations.select
 );
-hrRouter.post('/employee-document', employeeDocumentOperations.insert);
-hrRouter.put('/employee-document/:uuid', employeeDocumentOperations.update);
+hrRouter.post(
+	'/employee-document',
+	upload.single('file'),
+	employeeDocumentOperations.insert
+);
+hrRouter.put(
+	'/employee-document/:uuid',
+	upload.single('file'),
+	employeeDocumentOperations.update
+);
 hrRouter.delete(
 	'/employee-document/:uuid',
 	validateUuidParam(),

@@ -1,18 +1,29 @@
 import { desc, eq } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import { designation, employee, employee_document, users } from '../schema.js';
+import { employee, employee_document, users } from '../schema.js';
 import { alias } from 'drizzle-orm/gel-core';
+import { insertFile, updateFile } from '@/util/upload_files.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	const formData = req.body;
+	const file = req.file;
+
+	const filePath = file
+		? await insertFile(file, 'public/employee-document')
+		: null;
+
 	const employee_documentPromise = db
 		.insert(employee_document)
-		.values(req.body)
-		.returning({ insertedName: employee_document.employee_document });
+		.values({
+			...formData,
+			file: filePath,
+		})
+		.returning({ insertedName: employee_document.uuid });
 
 	try {
 		const data = await employee_documentPromise;
@@ -31,11 +42,38 @@ export async function insert(req, res, next) {
 export async function update(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	const formData = req.body;
+	const file = req.file;
+
+	if (file) {
+		// If a new file is uploaded, we need to handle the file update
+		const oldFilePath = db
+			.select()
+			.from(employee_document)
+			.where(eq(employee_document.uuid, req.params.uuid))
+			.returning(employee_document.file);
+		const oldFile = await oldFilePath;
+
+		if (oldFile && oldFile[0].file) {
+			// If there is an old file, delete it
+			const filePath = updateFile(
+				file,
+				oldFile[0].file,
+				'public/employee-document'
+			);
+			formData.file = filePath;
+		} else {
+			// If no new file is uploaded, keep the old file path
+			const filePath = insertFile(file, 'public/employee-document');
+			formData.file = filePath;
+		}
+	}
+
 	const employee_documentPromise = db
 		.update(employee_document)
-		.set(req.body)
+		.set(formData)
 		.where(eq(employee_document.uuid, req.params.uuid))
-		.returning({ updatedName: employee_document.employee_document });
+		.returning({ updatedName: employee_document.uuid });
 
 	try {
 		const data = await employee_documentPromise;
@@ -54,10 +92,22 @@ export async function update(req, res, next) {
 export async function remove(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	// First, we need to check if the document exists and get its file path
+	const oldFilePath = db
+		.select()
+		.from(employee_document)
+		.where(eq(employee_document.uuid, req.params.uuid))
+		.returning(employee_document.file);
+	const oldFile = await oldFilePath;
+	if (oldFile && oldFile[0].file) {
+		// If there is an old file, delete it
+		await deleteFile(oldFile[0].file);
+	}
+
 	const employee_documentPromise = db
 		.delete(employee_document)
 		.where(eq(employee_document.uuid, req.params.uuid))
-		.returning({ deletedName: employee_document.employee_document });
+		.returning({ deletedName: employee_document.uuid });
 
 	try {
 		const data = await employee_documentPromise;
