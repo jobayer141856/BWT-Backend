@@ -164,6 +164,7 @@ export async function selectAll(req, res, next) {
 			office_phone: employee.office_phone,
 			home_phone: employee.home_phone,
 			personal_phone: employee.personal_phone,
+			joining_amount: employee.joining_amount,
 		})
 		.from(employee)
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
@@ -309,6 +310,7 @@ export async function select(req, res, next) {
 			office_phone: employee.office_phone,
 			home_phone: employee.home_phone,
 			personal_phone: employee.personal_phone,
+			joining_amount: employee.joining_amount,
 			employee_address: sql`
 				COALESCE((
 					SELECT jsonb_agg(
@@ -566,6 +568,26 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 			leave_policy_uuid: employee.leave_policy_uuid,
 			leave_policy_name: leave_policy.name,
 			report_position: employee.report_position,
+			first_leave_approver_uuid: employee.first_leave_approver_uuid,
+			first_leave_approver_name: firstLeaveApprover.name,
+			second_leave_approver_uuid: employee.second_leave_approver_uuid,
+			second_leave_approver_name: secondLeaveApprover.name,
+			first_late_approver_uuid: employee.first_late_approver_uuid,
+			first_late_approver_name: firstLateApprover.name,
+			second_late_approver_uuid: employee.second_late_approver_uuid,
+			second_late_approver_name: secondLateApprover.name,
+			first_manual_entry_approver_uuid:
+				employee.first_manual_entry_approver_uuid,
+			first_manual_entry_approver_name: firstManualEntryApprover.name,
+			second_manual_entry_approver_uuid:
+				employee.second_manual_entry_approver_uuid,
+			second_manual_entry_approver_name: secondManualEntryApprover.name,
+			father_name: employee.father_name,
+			mother_name: employee.mother_name,
+			blood_group: employee.blood_group,
+			dob: employee.dob,
+			national_id: employee.national_id,
+			joining_amount: employee.joining_amount,
 			remaining_leave_information: sql`
 								(
 									SELECT jsonb_agg(
