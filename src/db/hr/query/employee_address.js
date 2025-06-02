@@ -2,7 +2,7 @@ import { desc, eq } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 import { employee, employee_address, users } from '../schema.js';
-import { alias } from 'drizzle-orm/gel-core';
+import { alias } from 'drizzle-orm/pg-core';
 
 const createdByUser = alias(users, 'created_by_user');
 

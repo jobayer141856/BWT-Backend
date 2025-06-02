@@ -1,8 +1,8 @@
 import { desc, eq } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import { designation, employee, employee_education, users } from '../schema.js';
-import { alias } from 'drizzle-orm/gel-core';
+import { employee, employee_education, users } from '../schema.js';
+import { alias } from 'drizzle-orm/pg-core';
 
 const createdByUser = alias(users, 'created_by_user');
 
@@ -12,7 +12,7 @@ export async function insert(req, res, next) {
 	const employee_educationPromise = db
 		.insert(employee_education)
 		.values(req.body)
-		.returning({ insertedName: employee_education.employee_education });
+		.returning({ insertedName: employee_education.uuid });
 
 	try {
 		const data = await employee_educationPromise;
@@ -35,7 +35,7 @@ export async function update(req, res, next) {
 		.update(employee_education)
 		.set(req.body)
 		.where(eq(employee_education.uuid, req.params.uuid))
-		.returning({ updatedName: employee_education.employee_education });
+		.returning({ updatedName: employee_education.uuid });
 
 	try {
 		const data = await employee_educationPromise;
@@ -57,7 +57,7 @@ export async function remove(req, res, next) {
 	const employee_educationPromise = db
 		.delete(employee_education)
 		.where(eq(employee_education.uuid, req.params.uuid))
-		.returning({ deletedName: employee_education.employee_education });
+		.returning({ deletedName: employee_education.uuid });
 
 	try {
 		const data = await employee_educationPromise;

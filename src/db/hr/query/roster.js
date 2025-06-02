@@ -1,15 +1,8 @@
 import { desc, eq, sql } from 'drizzle-orm';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import {
-	employee,
-	general_holiday,
-	roster,
-	shift_group,
-	shifts,
-	users,
-} from '../schema.js';
-import { alias } from 'drizzle-orm/gel-core';
+import { roster, shift_group, shifts, users } from '../schema.js';
+import { alias } from 'drizzle-orm/pg-core';
 
 const createdByUser = alias(users, 'created_by_user');
 
@@ -156,20 +149,32 @@ export async function selectRosterCalendarByEmployeeUuid(req, res, next) {
 	const { employee_uuid, year, month } = req.params;
 
 	const specialHolidaysQuery = sql`
-		SELECT
-			sh.from_date,
-			sh.to_date
-		FROM hr.special_holidays sh
-		WHERE
-			(
-				EXTRACT(YEAR FROM sh.to_date) > ${year}
-				OR (EXTRACT(YEAR FROM sh.to_date) = ${year} AND EXTRACT(MONTH FROM sh.to_date) >= ${month})
-			)
-			AND (
-				EXTRACT(YEAR FROM sh.from_date) < ${year}
-				OR (EXTRACT(YEAR FROM sh.from_date) = ${year} AND EXTRACT(MONTH FROM sh.from_date) <= ${month})
-			)
-	`;
+							SELECT
+								SUM(sh.to_date::date - sh.from_date::date + 1) -
+								SUM(
+									CASE
+										WHEN sh.to_date::date > (TO_TIMESTAMP(CAST(${year} AS TEXT) || '-' || LPAD(CAST(${month} AS TEXT), 2, '0') || '-01', 'YYYY-MM-DD') + INTERVAL '1 month - 1 day')::date
+											THEN sh.to_date::date - (TO_TIMESTAMP(CAST(${year} AS TEXT) || '-' || LPAD(CAST(${month} AS TEXT), 2, '0') || '-01', 'YYYY-MM-DD') + INTERVAL '1 month - 1 day')::date
+										ELSE 0
+									END
+									+
+									CASE
+										WHEN sh.from_date::date < TO_TIMESTAMP(CAST(${year} AS TEXT) || '-' || LPAD(CAST(${month} AS TEXT), 2, '0') || '-01', 'YYYY-MM-DD')::date
+											THEN TO_TIMESTAMP(CAST(${year} AS TEXT) || '-' || LPAD(CAST(${month} AS TEXT), 2, '0') || '-01', 'YYYY-MM-DD')::date - sh.from_date::date
+										ELSE 0
+									END
+								) AS total_special_holidays
+							FROM hr.special_holidays sh
+							WHERE
+							(
+								EXTRACT(YEAR FROM sh.to_date) > ${year}
+								OR (EXTRACT(YEAR FROM sh.to_date) = ${year} AND EXTRACT(MONTH FROM sh.to_date) >= ${month})
+							)
+							AND (
+								EXTRACT(YEAR FROM sh.from_date) < ${year}
+								OR (EXTRACT(YEAR FROM sh.from_date) = ${year} AND EXTRACT(MONTH FROM sh.from_date) <= ${month})
+							)
+					`;
 
 	const generalHolidayQuery = sql`
 		SELECT
