@@ -23,6 +23,8 @@ export async function insert(req, res, next) {
 		remarks,
 	} = req.body;
 
+	console.log('insert employee_education', req.body);
+
 	const employee_educationPromise = db
 		.insert(employee_education)
 		.values({
@@ -39,6 +41,8 @@ export async function insert(req, res, next) {
 			remarks,
 		})
 		.returning({ insertedName: employee_education.uuid });
+
+	console.log(employee_educationPromise.toSQL());
 
 	try {
 		const data = await employee_educationPromise;

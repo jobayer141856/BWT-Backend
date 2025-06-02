@@ -1,7 +1,11 @@
 import { desc, eq } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
-import { insertFile, updateFile } from '../../../util/upload_files.js';
+import {
+	deleteFile,
+	insertFile,
+	updateFile,
+} from '../../../util/upload_files.js';
 import db from '../../index.js';
 import { employee, employee_document, users } from '../schema.js';
 
@@ -96,12 +100,17 @@ export async function remove(req, res, next) {
 	const oldFilePath = db
 		.select()
 		.from(employee_document)
-		.where(eq(employee_document.uuid, req.params.uuid))
-		.returning(employee_document.file);
+		.where(eq(employee_document.uuid, req.params.uuid));
+
 	const oldFile = await oldFilePath;
+
 	if (oldFile && oldFile[0].file) {
 		// If there is an old file, delete it
-		await deleteFile(oldFile[0].file);
+		try {
+			await deleteFile(oldFile[0].file);
+		} catch (error) {
+			console.error('Error deleting file:', error);
+		}
 	}
 
 	const employee_documentPromise = db
