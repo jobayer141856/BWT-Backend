@@ -12,7 +12,7 @@ export async function insert(req, res, next) {
 	const employee_historyPromise = db
 		.insert(employee_history)
 		.values(req.body)
-		.returning({ insertedName: employee_history.employee_uuid });
+		.returning({ insertedName: employee_history.uuid });
 
 	try {
 		const data = await employee_historyPromise;
@@ -35,7 +35,7 @@ export async function update(req, res, next) {
 		.update(employee_history)
 		.set(req.body)
 		.where(eq(employee_history.uuid, req.params.uuid))
-		.returning({ updatedName: employee_history.employee_uuid });
+		.returning({ updatedName: employee_history.uuid });
 
 	try {
 		const data = await employee_historyPromise;
@@ -57,7 +57,7 @@ export async function remove(req, res, next) {
 	const employee_historyPromise = db
 		.delete(employee_history)
 		.where(eq(employee_history.uuid, req.params.uuid))
-		.returning({ deletedName: employee_history.employee_uuid });
+		.returning({ deletedName: employee_history.uuid });
 
 	try {
 		const data = await employee_historyPromise;
@@ -111,7 +111,7 @@ export async function selectAll(req, res, next) {
 			message: 'Employee_history',
 		};
 
-		return res.status(200).json({ toast, data: data || [] });
+		return res.status(200).json({ toast, data });
 	} catch (error) {
 		next(error);
 	}
