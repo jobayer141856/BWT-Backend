@@ -12,7 +12,7 @@ export async function insert(req, res, next) {
 	const employee_addressPromise = db
 		.insert(employee_address)
 		.values(req.body)
-		.returning({ insertedName: employee_address.employee_address });
+		.returning({ insertedName: employee_address.uuid });
 
 	try {
 		const data = await employee_addressPromise;
@@ -35,7 +35,7 @@ export async function update(req, res, next) {
 		.update(employee_address)
 		.set(req.body)
 		.where(eq(employee_address.uuid, req.params.uuid))
-		.returning({ updatedName: employee_address.employee_address });
+		.returning({ updatedName: employee_address.uuid });
 
 	try {
 		const data = await employee_addressPromise;
@@ -57,7 +57,7 @@ export async function remove(req, res, next) {
 	const employee_addressPromise = db
 		.delete(employee_address)
 		.where(eq(employee_address.uuid, req.params.uuid))
-		.returning({ deletedName: employee_address.employee_address });
+		.returning({ deletedName: employee_address.uuid });
 
 	try {
 		const data = await employee_addressPromise;

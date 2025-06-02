@@ -1,17 +1,16 @@
-import { desc, eq, sql, inArray } from 'drizzle-orm';
-import { handleError, validateRequest } from '../../../util/index.js';
-import db from '../../index.js';
-import * as hrSchema from '../../hr/schema.js';
-import { decimalToNumber } from '../../variables.js';
-import { createApi } from '../../../util/api.js';
+import { eq, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
+import { createApi } from '../../../util/api.js';
+import { validateRequest } from '../../../util/index.js';
+import * as hrSchema from '../../hr/schema.js';
+import db from '../../index.js';
 import * as workSchema from '../../work/schema.js';
 
 const customerUser = alias(hrSchema.users, 'customerUser');
 const employeeUser = alias(hrSchema.users, 'employeeUser');
 const orderUser = alias(hrSchema.users, 'orderUser');
 
-import { challan, courier, vehicle, challan_entry } from '../schema.js';
+import { challan, challan_entry, courier, vehicle } from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;

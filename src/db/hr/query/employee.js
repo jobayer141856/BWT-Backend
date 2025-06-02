@@ -1,21 +1,20 @@
 import { desc, eq, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
-import { validateRequest } from '../../../util/index.js';
 import { createApi } from '../../../util/api.js';
+import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
+import { decimalToNumber } from '../../variables.js';
 import {
 	department,
 	designation,
 	employee,
+	employment_type,
 	leave_policy,
 	shift_group,
 	sub_department,
 	users,
-	workplace,
-	employment_type,
-	employee_history,
+	workplace
 } from '../schema.js';
-import { decimalToNumber } from '../../variables.js';
 
 const createdByUser = alias(users, 'created_by_user');
 const lineManagerUser = alias(users, 'line_manager_user');

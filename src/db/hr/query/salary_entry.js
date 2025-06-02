@@ -1,19 +1,10 @@
-import { desc, eq, lte, sum, sql } from 'drizzle-orm';
-import { alias, uuid } from 'drizzle-orm/pg-core';
+import { desc, eq, sql } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
 
-import {
-	employee,
-	salary_entry,
-	salary_increment,
-	users,
-	punch_log,
-	shifts,
-	shift_group,
-	apply_leave,
-} from '../schema.js';
 import { decimalToNumber } from '../../variables.js';
+import { employee, salary_entry, users } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
