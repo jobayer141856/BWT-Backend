@@ -2628,9 +2628,19 @@ const pathHrEmployeeDocument = {
 			summary: 'create a employee document',
 			description: '',
 			// operationId: "addPet",
-			consumes: ['application/json'],
+			consumes: ['multipart/form-data'],
 			produces: ['application/json'],
-			requestBody: SE.requestBody_schema_ref('hr/employee_document'),
+			requestBody: {
+				required: true,
+				content: {
+					'multipart/form-data': {
+						schema: {
+							$ref: '#/definitions/hr/employee_document',
+						},
+					},
+				},
+			},
+			// requestBody: SE.requestBody_schema_ref('hr/employee_document'),
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/employee_document'),
 				405: SE.response(405),

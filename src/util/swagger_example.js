@@ -65,6 +65,11 @@ const SE = {
 		enum: enumVal,
 		default: enumVal[0],
 	}),
+	file: (description = 'File') => ({
+		type: 'string',
+		format: 'binary',
+		description,
+	}),
 
 	// * Others
 	xml: (name = '') => ({ name }),
