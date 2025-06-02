@@ -1,5 +1,4 @@
 import SE, { SED } from '../../../util/swagger_example.js';
-import { department, employee, leave_policy, shift_group } from '../schema.js';
 
 //* ./schema.js#department
 export const defDepartment = SED({
