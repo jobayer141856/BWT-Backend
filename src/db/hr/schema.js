@@ -489,7 +489,7 @@ export const employee_education = hr.table('employee_education', {
 	degree_name: text('degree_name').notNull(),
 	institute: text('institute').notNull(),
 	board: text('board').notNull(),
-	year_of_passing: DateTime('year_of_passing').notNull(),
+	year_of_passing: integer('year_of_passing').notNull(),
 	grade: text('grade').notNull(),
 	created_by: defaultUUID('created_by').references(() => users.uuid),
 	created_at: DateTime('created_at').notNull(),

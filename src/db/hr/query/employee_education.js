@@ -9,10 +9,14 @@ const createdByUser = alias(users, 'created_by_user');
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
+	console.log(req.body);
+
 	const employee_educationPromise = db
 		.insert(employee_education)
 		.values(req.body)
 		.returning({ insertedName: employee_education.uuid });
+
+	console.log('employee_educationPromise', employee_educationPromise.toSQL());
 
 	try {
 		const data = await employee_educationPromise;
