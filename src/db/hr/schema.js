@@ -14,6 +14,7 @@ import {
 	PG_DECIMAL,
 	uuid_primary,
 } from '../variables.js';
+import { sql } from 'drizzle-orm';
 const hr = pgSchema('hr');
 
 export const department = hr.table('department', {
@@ -520,7 +521,7 @@ export const employee_document = hr.table('employee_document', {
 	file: text('file').default(null),
 	created_by: defaultUUID('created_by').references(() => users.uuid),
 	created_at: DateTime('created_at').notNull(),
-	updated_at: DateTime('updated_at').default(null),
+	updated_at: DateTime('updated_at').default(sql`null`),
 	remarks: text('remarks').default(null),
 });
 
