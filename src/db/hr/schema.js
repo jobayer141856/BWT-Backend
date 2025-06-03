@@ -436,6 +436,7 @@ export const employee = hr.table('employee', {
 	home_phone: text('home_phone').default(null),
 	personal_phone: text('personal_phone').default(null),
 	joining_amount: PG_DECIMAL('joining_amount').default(0),
+	is_resign: boolean('is_resign').default(false),
 });
 
 // ? Employee Address

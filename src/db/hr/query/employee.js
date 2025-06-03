@@ -13,7 +13,7 @@ import {
 	shift_group,
 	sub_department,
 	users,
-	workplace
+	workplace,
 } from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
@@ -166,6 +166,7 @@ export async function selectAll(req, res, next) {
 			home_phone: employee.home_phone,
 			personal_phone: employee.personal_phone,
 			joining_amount: decimalToNumber(employee.joining_amount),
+			is_resign: employee.is_resign,
 		})
 		.from(employee)
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
@@ -313,6 +314,7 @@ export async function select(req, res, next) {
 			home_phone: employee.home_phone,
 			personal_phone: employee.personal_phone,
 			joining_amount: decimalToNumber(employee.joining_amount),
+			is_resign: employee.is_resign,
 			employee_address: sql`
 				COALESCE((
 					SELECT jsonb_agg(
@@ -590,6 +592,7 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 			dob: employee.dob,
 			national_id: employee.national_id,
 			joining_amount: decimalToNumber(employee.joining_amount),
+			is_resign: employee.is_resign,
 			remaining_leave_information: sql`
 								(
 									SELECT jsonb_agg(
@@ -751,67 +754,3 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 		next(error);
 	}
 }
-
-// export async function loginUser(req, res, next) {
-// 	if (!(await validateRequest(req, next))) return;
-
-// 	const { email, pass } = req.body;
-
-// 	const userPromise = db
-// 		.select({
-// 			uuid: employee.uuid,
-// 			name: employee.name,
-// 			email: employee.email,
-// 			pass: employee.pass,
-// 			designation_uuid: employee.designation_uuid,
-// 			department_uuid: employee.department_uuid,
-// 			created_at: employee.created_at,
-// 			updated_at: employee.updated_at,
-// 			status: employee.status,
-// 			remarks: employee.remarks,
-// 			designation: designation.designation,
-// 			department: department.department,
-// 		})
-// 		.from(employee)
-// 		.leftJoin(designation, eq(employee.designation_uuid, designation.uuid))
-// 		.leftJoin(department, eq(employee.department_uuid, department.uuid))
-// 		.where(eq(employee.email, email));
-
-// 	const USER = await userPromise;
-
-// 	if (USER[0].length === 0) {
-// 		return next(new CustomError('User not found', 404));
-// 	}
-
-// 	if (USER[0].status) {
-// 		return res.status(200).json({
-// 			status: 400,
-// 			type: 'delete',
-// 			message: 'User is not active',
-// 		});
-// 	}
-
-// 	await ComparePass(pass, USER[0].pass).then((result) => {
-// 		if (!result) {
-// 			return res.status(200).json({
-// 				status: 400,
-// 				type: 'delete',
-// 				message: 'Email/Password combination incorrect',
-// 			});
-// 		}
-
-// 		const token = CreateToken(USER[0]);
-// 		const { uuid, name, department } = USER[0];
-// 		if (!token.success) {
-// 			return res.status(500).json({ error: 'Error signing token' });
-// 		}
-
-// 		return res.status(200).json({
-// 			status: 201,
-// 			type: 'create',
-// 			message: 'User logged in',
-// 			token: token.token,
-// 			user: { uuid, name, department },
-// 		});
-// 	});
-// }

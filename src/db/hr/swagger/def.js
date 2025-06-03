@@ -409,6 +409,7 @@ export const defEmployee = SED({
 		office_phone: SE.string(null),
 		home_phone: SE.string(null),
 		personal_phone: SE.string(null),
+		is_resigned: SE.boolean(false),
 	},
 	xml: 'Hr/Employee',
 });
