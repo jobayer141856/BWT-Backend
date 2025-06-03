@@ -85,7 +85,7 @@ export async function selectAll(req, res, next) {
 			device_list_uuid: device_permission.device_list_uuid,
 			device_list_name: device_list.name,
 			employee_uuid: device_permission.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			permission_type: device_permission.permission_type,
 			temporary_from_date: device_permission.temporary_from_date,
 			temporary_to_date: device_permission.temporary_to_date,
@@ -111,16 +111,42 @@ export async function selectAll(req, res, next) {
 		)
 		.orderBy(desc(device_permission.created_at));
 
-	if (employee_uuid) {
+	if (employee_uuid && device_list_uuid && permission_type) {
+		resultPromise.where(
+			and(
+				eq(device_permission.employee_uuid, employee_uuid),
+				eq(device_permission.device_list_uuid, device_list_uuid),
+				eq(device_permission.permission_type, permission_type)
+			)
+		);
+	} else if (employee_uuid && device_list_uuid) {
+		resultPromise.where(
+			and(
+				eq(device_permission.employee_uuid, employee_uuid),
+				eq(device_permission.device_list_uuid, device_list_uuid)
+			)
+		);
+	} else if (employee_uuid && permission_type) {
+		resultPromise.where(
+			and(
+				eq(device_permission.employee_uuid, employee_uuid),
+				eq(device_permission.permission_type, permission_type)
+			)
+		);
+	} else if (device_list_uuid && permission_type) {
+		resultPromise.where(
+			and(
+				eq(device_permission.device_list_uuid, device_list_uuid),
+				eq(device_permission.permission_type, permission_type)
+			)
+		);
+	} else if (employee_uuid) {
 		resultPromise.where(eq(device_permission.employee_uuid, employee_uuid));
-	}
-
-	if (device_list_uuid) {
+	} else if (device_list_uuid) {
 		resultPromise.where(
 			eq(device_permission.device_list_uuid, device_list_uuid)
 		);
-	}
-	if (permission_type) {
+	} else if (permission_type) {
 		resultPromise.where(
 			eq(device_permission.permission_type, permission_type)
 		);
@@ -150,7 +176,7 @@ export async function select(req, res, next) {
 			device_list_uuid: device_permission.device_list_uuid,
 			device_list_name: device_list.name,
 			employee_uuid: device_permission.employee_uuid,
-			employee_name: employee.name,
+			employee_name: users.name,
 			permission_type: device_permission.permission_type,
 			temporary_from_date: device_permission.temporary_from_date,
 			temporary_to_date: device_permission.temporary_to_date,
