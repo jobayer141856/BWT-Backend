@@ -1,8 +1,15 @@
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq, gt } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { validateRequest } from '../../../util/index.js';
 import db from '../../index.js';
-import { device_list, employee, punch_log, users } from '../schema.js';
+import {
+	device_list,
+	employee,
+	punch_log,
+	shift_group,
+	shifts,
+	users,
+} from '../schema.js';
 
 const createdByUser = alias(users, 'created_by_user');
 
@@ -132,6 +139,47 @@ export async function select(req, res, next) {
 		};
 
 		return res.status(200).json({ toast, data: data[0] });
+	} catch (error) {
+		next(error);
+	}
+}
+
+export async function selectLateEntryDateByEmployeeUuid(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const punch_logPromise = db
+		.select({
+			uuid: punch_log.uuid,
+			employee_uuid: punch_log.employee_uuid,
+			employee_name: users.name,
+			device_list_uuid: punch_log.device_list_uuid,
+			device_list_name: device_list.name,
+			punch_type: punch_log.punch_type,
+			punch_time: punch_log.punch_time,
+		})
+		.from(punch_log)
+		.leftJoin(device_list, eq(punch_log.device_list_uuid, device_list.uuid))
+		.leftJoin(employee, eq(punch_log.employee_uuid, employee.uuid))
+		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.leftJoin(shift_group, eq(employee.shift_group_uuid, shift_group.uuid))
+		.leftJoin(shifts, eq(shift_group.shifts_uuid, shifts.uuid))
+		.where(
+			and(
+				eq(punch_log.employee_uuid, req.params.employee_uuid),
+				gt(punch_log.punch_time, shifts.late_time)
+			)
+		)
+		.orderBy(desc(punch_log.punch_time));
+
+	try {
+		const data = await punch_logPromise;
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'punch_log',
+		};
+
+		return res.status(200).json({ toast, data });
 	} catch (error) {
 		next(error);
 	}

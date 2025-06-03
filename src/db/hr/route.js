@@ -402,6 +402,10 @@ hrRouter.delete(
 	validateUuidParam(),
 	punchLogOperations.remove
 );
+hrRouter.get(
+	'/punch-late-log/by/:employee_uuid',
+	punchLogOperations.selectLateEntryDateByEmployeeUuid
+);
 
 // ? manual_entry routes
 hrRouter.get('/manual-entry', manualEntryOperations.selectAll);
