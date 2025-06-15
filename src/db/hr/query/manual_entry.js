@@ -211,7 +211,7 @@ export async function manualEntryByEmployee(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
 	const { employee_uuid } = req.params;
-	const { field_visit_uuid } = req.query;
+	const { field_visit_uuid, type } = req.query;
 	//console.log('employee_uuid', employee_uuid);
 
 	const manual_entryPromise = db
@@ -253,14 +253,19 @@ export async function manualEntryByEmployee(req, res, next) {
 		.where(
 			and(
 				eq(manual_entry.employee_uuid, employee_uuid),
-				eq(manual_entry.type, 'field_visit'),
+				type
+					? eq(manual_entry.type, type)
+					: eq(manual_entry.type, 'field_visit'),
 				field_visit_uuid
 					? eq(manual_entry.uuid, field_visit_uuid)
 					: true
 			)
 		)
-		.orderBy(desc(manual_entry.created_at))
-		.limit(5);
+		.orderBy(desc(manual_entry.created_at));
+
+	if (!type) {
+		manual_entryPromise.limit(5);
+	}
 
 	try {
 		const data = await manual_entryPromise;
