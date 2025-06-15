@@ -406,6 +406,10 @@ hrRouter.get(
 	'/punch-late-log/by/:employee_uuid',
 	punchLogOperations.selectLateEntryDateByEmployeeUuid
 );
+hrRouter.get(
+	'/punch-log-per-day/by/:employee_uuid',
+	punchLogOperations.selectEmployeePunchLogPerDayByEmployeeUuid
+);
 
 // ? manual_entry routes
 hrRouter.get('/manual-entry', manualEntryOperations.selectAll);

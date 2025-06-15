@@ -2963,6 +2963,23 @@ const pathHrPunchLog = {
 			},
 		},
 	},
+	'/hr/punch-log-per-day/by/{employee_uuid}': {
+		get: {
+			tags: ['hr.punch_log'],
+			summary: 'Gets punch log per day by employee uuid',
+			description: '',
+			produces: ['application/json'],
+			parameters: [
+				SE.parameter_params('employee_uuid', 'employee_uuid', [
+					SE.uuid(),
+				]),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/punch_log'),
+				405: SE.response(405),
+			},
+		},
+	},
 };
 
 const pathHrManualEntry = {
