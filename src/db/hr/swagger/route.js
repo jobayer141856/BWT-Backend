@@ -2864,6 +2864,9 @@ const pathHrPunchLog = {
 			tags: ['hr.punch_log'],
 			summary: 'get all punch log',
 			description: 'All punch log',
+			parameters: [
+				SE.parameter_query('employee_uuid', 'employee_uuid', ['uuid']),
+			],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/punch_log'),
 				405: SE.response(405),

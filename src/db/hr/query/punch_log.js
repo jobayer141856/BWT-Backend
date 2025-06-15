@@ -81,6 +81,8 @@ export async function remove(req, res, next) {
 }
 
 export async function selectAll(req, res, next) {
+	const { employee_uuid } = req.query;
+
 	const resultPromise = db
 		.select({
 			uuid: punch_log.uuid,
@@ -95,6 +97,9 @@ export async function selectAll(req, res, next) {
 		.leftJoin(device_list, eq(punch_log.device_list_uuid, device_list.uuid))
 		.leftJoin(employee, eq(punch_log.employee_uuid, employee.uuid))
 		.leftJoin(users, eq(employee.user_uuid, users.uuid))
+		.where(
+			employee_uuid ? eq(punch_log.employee_uuid, employee_uuid) : true
+		)
 		.orderBy(desc(punch_log.punch_time));
 
 	try {
