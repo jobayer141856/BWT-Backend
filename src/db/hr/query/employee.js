@@ -754,3 +754,34 @@ export async function employeeLeaveInformationDetails(req, res, next) {
 		next(error);
 	}
 }
+
+export async function employeeAttendanceReport(req, res, next) {
+	if (!(await validateRequest(req, next))) return;
+
+	const { employee_uuid } = req.params;
+
+	const { from_date, to_date } = req.query;
+
+	const query = sql`
+		SELECT
+			employee.uuid,
+			users.name AS employee_name,
+		FROM hr.employee
+		LEFT JOIN hr.users ON employee.user_uuid = users.uuid
+		WHERE employee.uuid = ${employee_uuid}
+	`;
+
+	const employeeAttendanceReportPromise = db.execute(query);
+
+	try {
+		const data = await employeeAttendanceReportPromise;
+		const toast = {
+			status: 200,
+			type: 'select',
+			message: 'employee attendance report',
+		};
+		return res.status(200).json({ toast, data: data.rows });
+	} catch (error) {
+		next(error);
+	}
+}

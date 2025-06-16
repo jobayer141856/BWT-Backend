@@ -195,18 +195,62 @@ export async function selectEmployeePunchLogPerDayByEmployeeUuid(
 ) {
 	if (!(await validateRequest(req, next))) return;
 
+	const { from_date, to_date } = req.query;
+
+	const { employee_uuid } = req.params;
+
+	// get year and month from the from_date
+	const fromDateYear = from_date ? new Date(from_date).getFullYear() : null;
+	const fromDateMonth = from_date ? new Date(from_date).getMonth() + 1 : null;
+	const toDateYear = to_date ? new Date(to_date).getFullYear() : null;
+	const toDateMonth = to_date ? new Date(to_date).getMonth() + 1 : null;
+
 	const SpecialHolidaysQuery = sql`
 		SELECT date(gs.generated_date) AS holiday_date, sh.name, 'special' AS holiday_type
 		FROM hr.special_holidays sh
 		JOIN LATERAL (
 			SELECT generate_series(sh.from_date::date, sh.to_date::date, INTERVAL '1 day') AS generated_date
 		) gs ON TRUE
+		WHERE
+			${
+				fromDateYear && fromDateMonth
+					? sql`(
+				EXTRACT(YEAR FROM sh.to_date) > ${fromDateYear}
+				OR (EXTRACT(YEAR FROM sh.to_date) = ${fromDateYear} AND EXTRACT(MONTH FROM sh.to_date) >= ${fromDateMonth})
+			)`
+					: sql`true`
+			}
+			AND ${
+				toDateYear && toDateMonth
+					? sql`(
+				EXTRACT(YEAR FROM sh.from_date) < ${toDateYear}
+				OR (EXTRACT(YEAR FROM sh.from_date) = ${toDateYear} AND EXTRACT(MONTH FROM sh.from_date) <= ${toDateMonth})
+			)`
+					: sql`true`
+			}
 		ORDER BY holiday_date;
 	`;
 
 	const generalHolidayQuery = sql`
 		SELECT date(date) AS holiday_date, name, 'general' AS holiday_type
 		FROM hr.general_holidays
+		WHERE
+			${
+				fromDateYear && fromDateMonth
+					? sql`(
+						EXTRACT(YEAR FROM date) > ${fromDateYear}
+						OR (EXTRACT(YEAR FROM date) = ${fromDateYear} AND EXTRACT(MONTH FROM date) >= ${fromDateMonth})
+					)`
+					: sql`true`
+			}
+			AND ${
+				toDateYear && toDateMonth
+					? sql`(
+						EXTRACT(YEAR FROM date) < ${toDateYear}
+						OR (EXTRACT(YEAR FROM date) = ${toDateYear} AND EXTRACT(MONTH FROM date) <= ${toDateMonth})
+					)`
+					: sql`true`
+			}
 		ORDER BY holiday_date;
 	`;
 
@@ -218,27 +262,32 @@ export async function selectEmployeePunchLogPerDayByEmployeeUuid(
 		generalHolidaysPromise,
 	]);
 
-	const punch_logPromise = db
-		.select({
-			uuid: punch_log.uuid,
-			employee_uuid: punch_log.employee_uuid,
-			employee_name: users.name,
-			punch_date: sql`date(punch_log.punch_time)`,
-			entry_time: sql`min(punch_log.punch_time)`,
-			exit_time: sql`max(punch_log.punch_time)`,
-		})
-		.from(punch_log)
-		.leftJoin(device_list, eq(punch_log.device_list_uuid, device_list.uuid))
-		.leftJoin(employee, eq(punch_log.employee_uuid, employee.uuid))
-		.leftJoin(users, eq(employee.user_uuid, users.uuid))
-		// .where(eq(punch_log.employee_uuid, req.params.employee_uuid))
-		.orderBy(desc(punch_log.punch_time))
-		.groupBy(
-			punch_log.uuid,
-			punch_log.employee_uuid,
-			users.name,
-			sql`date(punch_log.punch_time)`
-		);
+	const punch_log_query = sql`
+		WITH date_series AS (
+			SELECT generate_series(${from_date}::date, ${to_date}::date, INTERVAL '1 day') AS punch_date
+		),
+		user_dates AS (
+			SELECT u.uuid AS employee_uuid, u.name AS employee_name, d.punch_date
+			FROM hr.users u
+			CROSS JOIN date_series d
+		)
+		SELECT
+			ud.employee_uuid,
+			ud.employee_name,
+			ud.punch_date,
+			MIN(pl.punch_time) AS entry_time,
+			MAX(pl.punch_time) AS exit_time,
+			EXTRACT(EPOCH FROM MAX(pl.punch_time) - MIN(pl.punch_time)) / 3600 AS duration_hours
+		FROM user_dates ud
+		LEFT JOIN hr.employee e ON e.user_uuid = ud.employee_uuid
+		LEFT JOIN hr.punch_log pl ON pl.employee_uuid = e.uuid AND DATE(pl.punch_time) = ud.punch_date
+		WHERE 
+			ud.employee_uuid = ${employee_uuid}
+		GROUP BY ud.employee_uuid, ud.employee_name, ud.punch_date
+		ORDER BY ud.employee_uuid, ud.punch_date;
+	`;
+
+	const punch_logPromise = db.execute(punch_log_query);
 
 	try {
 		const data = await punch_logPromise;
@@ -250,11 +299,9 @@ export async function selectEmployeePunchLogPerDayByEmployeeUuid(
 
 		return res.status(200).json({
 			toast,
-			data: {
-				...data,
-				specialHolidays: specialHolidaysResult?.rows,
-				generalHolidays: generalHolidaysResult?.rows,
-			},
+			data: data,
+			special_holidays: specialHolidaysResult?.rows,
+			general_holidays: generalHolidaysResult?.rows,
 		});
 	} catch (error) {
 		next(error);

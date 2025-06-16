@@ -2973,6 +2973,8 @@ const pathHrPunchLog = {
 				SE.parameter_params('employee_uuid', 'employee_uuid', [
 					SE.uuid(),
 				]),
+				SE.parameter_query('from_date', 'from_date', [SE.date_time()]),
+				SE.parameter_query('to_date', 'to_date', [SE.date_time()]),
 			],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/punch_log'),
