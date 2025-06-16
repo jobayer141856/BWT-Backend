@@ -299,7 +299,7 @@ export async function selectEmployeePunchLogPerDayByEmployeeUuid(
 
 		return res.status(200).json({
 			toast,
-			data: data,
+			data: data?.rows,
 			special_holidays: specialHolidaysResult?.rows,
 			general_holidays: generalHolidaysResult?.rows,
 		});
