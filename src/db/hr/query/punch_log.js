@@ -264,27 +264,29 @@ export async function selectEmployeePunchLogPerDayByEmployeeUuid(
 
 	const punch_log_query = sql`
 		WITH date_series AS (
-			SELECT generate_series(${from_date}::date, ${to_date}::date, INTERVAL '1 day') AS punch_date
+			SELECT generate_series(${from_date}::date, ${to_date}::date, INTERVAL '1 day')::date AS punch_date
 		),
 		user_dates AS (
-			SELECT u.uuid AS employee_uuid, u.name AS employee_name, d.punch_date
+			SELECT u.uuid AS user_uuid, u.name AS employee_name, d.punch_date
 			FROM hr.users u
 			CROSS JOIN date_series d
 		)
 		SELECT
-			ud.employee_uuid,
+			ud.user_uuid,
 			ud.employee_name,
-			ud.punch_date,
+			DATE(ud.punch_date) AS punch_date,
 			MIN(pl.punch_time) AS entry_time,
 			MAX(pl.punch_time) AS exit_time,
-			EXTRACT(EPOCH FROM MAX(pl.punch_time) - MIN(pl.punch_time)) / 3600 AS duration_hours
-		FROM user_dates ud
-		LEFT JOIN hr.employee e ON e.user_uuid = ud.employee_uuid
-		LEFT JOIN hr.punch_log pl ON pl.employee_uuid = e.uuid AND DATE(pl.punch_time) = ud.punch_date
+			(EXTRACT(EPOCH FROM MAX(pl.punch_time) - MIN(pl.punch_time)) / 3600)::float8 AS duration_hours
+		FROM hr.employee e
+		LEFT JOIN user_dates ud ON e.user_uuid = ud.user_uuid
+		LEFT JOIN hr.punch_log pl ON pl.employee_uuid = e.uuid AND DATE(pl.punch_time) = DATE(ud.punch_date)
 		WHERE 
-			ud.employee_uuid = ${employee_uuid}
-		GROUP BY ud.employee_uuid, ud.employee_name, ud.punch_date
-		ORDER BY ud.employee_uuid, ud.punch_date;
+			e.uuid = ${employee_uuid}
+		GROUP BY ud.user_uuid, ud.employee_name, ud.punch_date
+		ORDER BY ud.user_uuid, ud.punch_date;
+
+
 	`;
 
 	const punch_logPromise = db.execute(punch_log_query);
