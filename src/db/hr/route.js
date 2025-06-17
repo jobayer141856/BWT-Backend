@@ -316,6 +316,10 @@ hrRouter.get(
 	'/employee-attendance-report/by/:employee_uuid',
 	employeeOperations.employeeAttendanceReport
 );
+hrRouter.get(
+	'/employee-summary-report/by/:employee_uuid/:from_date/:to_date',
+	employeeOperations.employeeSummaryDetailsByEmployeeUuid
+);
 
 // ? employee_address routes
 hrRouter.get('/employee-address', employeeAddressOperations.selectAll);

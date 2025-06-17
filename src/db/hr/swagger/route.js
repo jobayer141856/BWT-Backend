@@ -2267,7 +2267,7 @@ const pathHrEmployee = {
 	},
 	'/hr/employee-attendance-report/by/{employee_uuid}': {
 		get: {
-			tags: ['hr.employee_attendance_report'],
+			tags: ['hr.employee'],
 			summary: 'Get employee attendance report',
 			description: 'Get attendance report for a specific employee',
 			parameters: [
@@ -2279,6 +2279,37 @@ const pathHrEmployee = {
 				),
 				SE.parameter_query('from_date', 'from_date', SE.date_time()),
 				SE.parameter_query('to_date', 'to_date', SE.date_time()),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee'),
+				404: SE.response(404),
+			},
+		},
+	},
+	'/hr/employee-summary-report/by/{employee_uuid}/{from_date}/{to_date}': {
+		get: {
+			tags: ['hr.employee'],
+			summary: 'Get employee summary report',
+			description: 'Get summary report for a specific employee',
+			parameters: [
+				SE.parameter_params(
+					'Employee UUID',
+					'employee_uuid',
+					'string',
+					SE.uuid()
+				),
+				SE.parameter_params(
+					'From Date',
+					'from_date',
+					'string',
+					SE.date_time()
+				),
+				SE.parameter_params(
+					'To Date',
+					'to_date',
+					'string',
+					SE.date_time()
+				),
 			],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/employee'),
