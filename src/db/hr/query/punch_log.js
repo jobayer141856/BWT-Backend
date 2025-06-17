@@ -314,6 +314,67 @@ export async function selectEmployeeLateDayByEmployeeUuid(req, res, next) {
 	const { from_date, to_date } = req.query;
 
 	const { employee_uuid } = req.params;
+	const fromDateYear = from_date ? new Date(from_date).getFullYear() : null;
+	const fromDateMonth = from_date ? new Date(from_date).getMonth() + 1 : null;
+	const toDateYear = to_date ? new Date(to_date).getFullYear() : null;
+	const toDateMonth = to_date ? new Date(to_date).getMonth() + 1 : null;
+
+	const SpecialHolidaysQuery = sql`
+		SELECT date(gs.generated_date) AS holiday_date, sh.name, 'special' AS holiday_type
+		FROM hr.special_holidays sh
+		JOIN LATERAL (
+			SELECT generate_series(sh.from_date::date, sh.to_date::date, INTERVAL '1 day') AS generated_date
+		) gs ON TRUE
+		WHERE
+			${
+				fromDateYear && fromDateMonth
+					? sql`(
+				EXTRACT(YEAR FROM sh.to_date) > ${fromDateYear}
+				OR (EXTRACT(YEAR FROM sh.to_date) = ${fromDateYear} AND EXTRACT(MONTH FROM sh.to_date) >= ${fromDateMonth})
+			)`
+					: sql`true`
+			}
+			AND ${
+				toDateYear && toDateMonth
+					? sql`(
+				EXTRACT(YEAR FROM sh.from_date) < ${toDateYear}
+				OR (EXTRACT(YEAR FROM sh.from_date) = ${toDateYear} AND EXTRACT(MONTH FROM sh.from_date) <= ${toDateMonth})
+			)`
+					: sql`true`
+			}
+		ORDER BY holiday_date;
+	`;
+
+	const generalHolidayQuery = sql`
+		SELECT date(date) AS holiday_date, name, 'general' AS holiday_type
+		FROM hr.general_holidays
+		WHERE
+			${
+				fromDateYear && fromDateMonth
+					? sql`(
+						EXTRACT(YEAR FROM date) > ${fromDateYear}
+						OR (EXTRACT(YEAR FROM date) = ${fromDateYear} AND EXTRACT(MONTH FROM date) >= ${fromDateMonth})
+					)`
+					: sql`true`
+			}
+			AND ${
+				toDateYear && toDateMonth
+					? sql`(
+						EXTRACT(YEAR FROM date) < ${toDateYear}
+						OR (EXTRACT(YEAR FROM date) = ${toDateYear} AND EXTRACT(MONTH FROM date) <= ${toDateMonth})
+					)`
+					: sql`true`
+			}
+		ORDER BY holiday_date;
+	`;
+
+	const specialHolidaysPromise = db.execute(SpecialHolidaysQuery);
+	const generalHolidaysPromise = db.execute(generalHolidayQuery);
+
+	const [specialHolidaysResult, generalHolidaysResult] = await Promise.all([
+		specialHolidaysPromise,
+		generalHolidaysPromise,
+	]);
 
 	const punch_log_query = sql`
 		WITH date_series AS (
