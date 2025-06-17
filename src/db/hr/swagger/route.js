@@ -2265,6 +2265,27 @@ const pathHrEmployee = {
 			},
 		},
 	},
+	'/hr/employee-attendance-report/by/{employee_uuid}': {
+		get: {
+			tags: ['hr.employee_attendance_report'],
+			summary: 'Get employee attendance report',
+			description: 'Get attendance report for a specific employee',
+			parameters: [
+				SE.parameter_query(
+					'Employee UUID',
+					'employee_uuid',
+					'string',
+					SE.uuid()
+				),
+				SE.parameter_query('from_date', 'from_date', SE.date_time()),
+				SE.parameter_query('end_date', 'end_date', SE.date_time()),
+			],
+			responses: {
+				200: SE.response_schema_ref(200, 'hr/employee'),
+				404: SE.response(404),
+			},
+		},
+	},
 };
 
 const pathHrEmployeeAddress = {

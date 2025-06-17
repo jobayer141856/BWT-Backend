@@ -312,7 +312,10 @@ hrRouter.get(
 	'/employee-leave-information-details/by/:employee_uuid',
 	employeeOperations.employeeLeaveInformationDetails
 );
-// hrRouter.get('/employee-login', employeeOperations.loginUser);
+hrRouter.get(
+	'/employee-attendance-report/by/:employee_uuid',
+	employeeOperations.employeeAttendanceReport
+);
 
 // ? employee_address routes
 hrRouter.get('/employee-address', employeeAddressOperations.selectAll);
