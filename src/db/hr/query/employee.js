@@ -1010,7 +1010,7 @@ export async function employeeSummaryDetailsByEmployeeUuid(req, res, next) {
 					) AS off_days_summary
 						ON employee.shift_group_uuid = off_days_summary.shift_group_uuid
 					WHERE employee.status = true 
-					${employee_uuid ? sql` AND employee.uuid = ${employee_uuid}` : sql``}
+					AND employee.uuid = ${employee_uuid}
 					ORDER BY employee.created_at DESC
 		`;
 
