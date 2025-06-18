@@ -2286,7 +2286,7 @@ const pathHrEmployee = {
 			},
 		},
 	},
-	'/hr/employee-summary-report/by/{employee_uuid}/{from_date}/{to_date}': {
+	'/hr/employee-summary-report/by/{employee_uuid}': {
 		get: {
 			tags: ['hr.employee'],
 			summary: 'Get employee summary report',
@@ -2298,18 +2298,8 @@ const pathHrEmployee = {
 					'string',
 					SE.uuid()
 				),
-				SE.parameter_params(
-					'From Date',
-					'from_date',
-					'string',
-					SE.date_time()
-				),
-				SE.parameter_params(
-					'To Date',
-					'to_date',
-					'string',
-					SE.date_time()
-				),
+				SE.parameter_query('from_date', 'from_date', SE.date_time()),
+				SE.parameter_query('to_date', 'to_date', SE.date_time()),
 			],
 			responses: {
 				200: SE.response_schema_ref(200, 'hr/employee'),

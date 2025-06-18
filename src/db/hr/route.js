@@ -317,7 +317,7 @@ hrRouter.get(
 	employeeOperations.employeeAttendanceReport
 );
 hrRouter.get(
-	'/employee-summary-report/by/:employee_uuid/:from_date/:to_date',
+	'/employee-summary-report/by/:employee_uuid',
 	employeeOperations.employeeSummaryDetailsByEmployeeUuid
 );
 

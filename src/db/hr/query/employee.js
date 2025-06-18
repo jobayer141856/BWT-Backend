@@ -808,7 +808,9 @@ export async function employeeAttendanceReport(req, res, next) {
 export async function employeeSummaryDetailsByEmployeeUuid(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
 
-	const { employee_uuid, from_date, to_date } = req.params;
+	const { employee_uuid } = req.params;
+
+	const { from_date, to_date } = req.query;
 
 	const SpecialHolidaysQuery = sql`
 							SELECT
