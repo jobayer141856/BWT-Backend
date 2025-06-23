@@ -185,6 +185,9 @@ export async function selectAll(req, res, next) {
 			is_proceed_to_repair: order.is_proceed_to_repair,
 			branch_uuid: storeSchema.warehouse.branch_uuid,
 			branch_name: storeSchema.branch.name,
+			repairing_problem: order.repairing_problem,
+			qc_problem: order.qc_problem,
+			delivery_problem: order.delivery_problem,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -396,6 +399,9 @@ export async function select(req, res, next) {
 			branch_uuid: storeSchema.warehouse.branch_uuid,
 			branch_name: storeSchema.branch.name,
 			is_delivery_complete: deliverySchema.challan.is_delivery_complete,
+			repairing_problem: order.repairing_problem,
+			qc_problem: order.qc_problem,
+			delivery_problem: order.delivery_problem,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -591,6 +597,9 @@ export async function selectByInfo(req, res, next) {
 			is_proceed_to_repair: order.is_proceed_to_repair,
 			branch_uuid: storeSchema.warehouse.branch_uuid,
 			branch_name: storeSchema.branch.name,
+			repairing_problem: order.repairing_problem,
+			qc_problem: order.qc_problem,
+			delivery_problem: order.delivery_problem,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
