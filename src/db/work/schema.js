@@ -80,6 +80,9 @@ export const order = work.table('order', {
 		() => storeSchema.brand.uuid
 	),
 	is_proceed_to_repair: boolean('is_proceed_to_repair').default(false),
+	repairing_problem: text('repairing_problem').array().default([]),
+	qc_problem: text('qc_problem').array().default([]),
+	delivery_problem: text('delivery_problem').array().default([]),
 });
 export const statusEnum = pgEnum('status', [
 	'pending',
