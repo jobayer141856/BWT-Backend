@@ -93,6 +93,7 @@ export const order = work.table('order', {
 		null
 	),
 	ready_for_delivery_date: DateTime('ready_for_delivery_date').default(null),
+	bill_amount: PG_DECIMAL('bill_amount').default(0),
 });
 export const statusEnum = pgEnum('status', [
 	'pending',
