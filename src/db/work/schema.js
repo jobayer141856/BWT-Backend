@@ -80,9 +80,19 @@ export const order = work.table('order', {
 		() => storeSchema.brand.uuid
 	),
 	is_proceed_to_repair: boolean('is_proceed_to_repair').default(false),
-	repairing_problem: text('repairing_problem').array().default([]),
-	qc_problem: text('qc_problem').array().default([]),
-	delivery_problem: text('delivery_problem').array().default([]),
+	repairing_problems_uuid: text('repairing_problems_uuid')
+		.array()
+		.default([]),
+	qc_problems_uuid: text('qc_problems_uuid').array().default([]),
+	delivery_problems_uuid: text('delivery_problems_uuid').array().default([]),
+	repairing_problem_statement: text('repairing_problem_statement').default(
+		null
+	),
+	qc_problem_statement: text('qc_problem_statement').default(null),
+	delivery_problem_statement: text('delivery_problem_statement').default(
+		null
+	),
+	ready_for_delivery_date: DateTime('ready_for_delivery_date').default(null),
 });
 export const statusEnum = pgEnum('status', [
 	'pending',
