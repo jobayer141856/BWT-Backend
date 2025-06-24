@@ -6,7 +6,7 @@ import { decimalToNumber } from '../../variables.js';
 import { createApi } from '../../../util/api.js';
 import { alias } from 'drizzle-orm/pg-core';
 import { users } from '../../hr/schema.js';
-import { info, zone } from '../schema.js';
+import { info, zone, order } from '../schema.js';
 import { nanoid } from '../../../lib/nanoid.js';
 const user = alias(hrSchema.users, 'user');
 import * as deliverySchema from '../../delivery/schema.js';
@@ -27,7 +27,6 @@ export async function insert(req, res, next) {
 	} = req.body;
 
 	try {
-		
 		let userUuid = user_uuid;
 
 		if (is_new_customer) {
@@ -168,7 +167,38 @@ export async function remove(req, res, next) {
 
 export async function selectAll(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
-	const { customer_uuid } = req.query;
+	const { customer_uuid, status } = req.query;
+
+	const orderCountSubquery = db
+		.select({
+			info_uuid: order.info_uuid,
+			order_count: sql`COUNT(*)`.as('order_count'),
+		})
+		.from(order)
+		.groupBy(order.info_uuid)
+		.as('order_count_tbl');
+
+	const deliveredCountSubquery = db
+		.select({
+			info_uuid: order.info_uuid,
+			delivered_count: sql`COUNT(*)`.as('delivered_count'),
+		})
+		.from(deliverySchema.challan)
+		.leftJoin(
+			deliverySchema.challan_entry,
+			eq(
+				deliverySchema.challan.uuid,
+				deliverySchema.challan_entry.challan_uuid
+			)
+		)
+		.leftJoin(
+			order,
+			eq(deliverySchema.challan_entry.order_uuid, order.uuid)
+		)
+		.where(sql`delivery."challan".is_delivery_complete = 'true'`)
+		.groupBy(order.info_uuid)
+		.as('delivered_count_tbl');
+
 	const infoPromise = db
 		.select({
 			id: info.id,
@@ -189,14 +219,40 @@ export async function selectAll(req, res, next) {
 			zone_uuid: info.zone_uuid,
 			zone_name: zone.name,
 			submitted_by: info.submitted_by,
+			order_count: decimalToNumber(
+				sql`COALESCE(order_count_tbl.order_count, 0)`
+			),
+			delivered_count: decimalToNumber(
+				sql`COALESCE(delivered_count_tbl.delivered_count, 0)`
+			),
 		})
 		.from(info)
 		.leftJoin(user, eq(info.user_uuid, user.uuid))
 		.leftJoin(hrSchema.users, eq(info.created_by, hrSchema.users.uuid))
-		.leftJoin(zone, eq(info.zone_uuid, zone.uuid));
+		.leftJoin(zone, eq(info.zone_uuid, zone.uuid))
+		.leftJoin(
+			orderCountSubquery,
+			eq(info.uuid, orderCountSubquery.info_uuid)
+		)
+		.leftJoin(
+			deliveredCountSubquery,
+			eq(info.uuid, deliveredCountSubquery.info_uuid)
+		);
 
 	if (customer_uuid) {
 		infoPromise.where(eq(info.user_uuid, customer_uuid));
+	}
+	if (status === 'pending') {
+		infoPromise.where(
+			sql`COALESCE(order_count_tbl.order_count, 0) != COALESCE(delivered_count_tbl.delivered_count, 0)`
+		);
+	}
+	if (status === 'complete') {
+		infoPromise.where(
+			sql`COALESCE(order_count_tbl.order_count, 0) = COALESCE(delivered_count_tbl.delivered_count, 0)
+				AND COALESCE(order_count_tbl.order_count, 0) > 0
+				AND COALESCE(delivered_count_tbl.delivered_count, 0) > 0`
+		);
 	}
 
 	try {
@@ -235,6 +291,20 @@ export async function select(req, res, next) {
 			zone_uuid: info.zone_uuid,
 			zone_name: zone.name,
 			submitted_by: info.submitted_by,
+			// order_count: decimalToNumber(
+			// 	sql`(SELECT COUNT(*) FROM work."order" WHERE "order".info_uuid = ${info.uuid})`
+			// ),
+			// delivered_count: decimalToNumber(
+			// 	sql`(
+			// 		SELECT COUNT(*)
+			// 		FROM delivery."challan"
+			// 		LEFT JOIN delivery."challan_entry" ON delivery."challan".uuid = delivery."challan_entry".challan_uuid
+			// 		LEFT JOIN work."order" ON delivery."challan_entry".order_uuid = work."order".uuid
+			// 		LEFT JOIN work.info ON work."order".info_uuid = work.info.uuid
+			// 		WHERE "order".info_uuid = ${info.uuid}
+			// 		AND delivery."challan".is_delivery_complete = 'true'
+			// 	)`
+			// ),
 		})
 		.from(info)
 		.leftJoin(user, eq(info.user_uuid, user.uuid))

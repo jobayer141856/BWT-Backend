@@ -112,6 +112,13 @@ export const pathWorkInfo = {
 		get: {
 			tags: ['work.info'],
 			summary: 'Get all work info',
+			parameters: [
+				SE.parameter_query('customer_uuid', 'customer_uuid', [
+					'c6mRD1fcb7qOs9O',
+				]),
+				SE.parameter_query('status', 'status', ['pending', 'complete']),
+			],
+
 			responses: {
 				200: SE.response_schema(200, {
 					uuid: SE.uuid(),
