@@ -195,7 +195,7 @@ export async function selectAll(req, res, next) {
 			ready_for_delivery_date: order.ready_for_delivery_date,
 			diagnosis_problems_uuid: diagnosis.problems_uuid,
 			diagnosis_problem_statement: diagnosis.problem_statement,
-			bill_amount: order.bill_amount,
+			bill_amount: decimalToNumber(order.bill_amount),
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -451,7 +451,7 @@ export async function select(req, res, next) {
 			ready_for_delivery_date: order.ready_for_delivery_date,
 			diagnosis_problems_uuid: diagnosis.problems_uuid,
 			diagnosis_problem_statement: diagnosis.problem_statement,
-			bill_amount: order.bill_amount,
+			bill_amount: decimalToNumber(order.bill_amount),
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -696,7 +696,7 @@ export async function selectByInfo(req, res, next) {
 			ready_for_delivery_date: order.ready_for_delivery_date,
 			diagnosis_problems_uuid: diagnosis.problems_uuid,
 			diagnosis_problem_statement: diagnosis.problem_statement,
-			bill_amount: order.bill_amount,
+			bill_amount: decimalToNumber(order.bill_amount),
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
