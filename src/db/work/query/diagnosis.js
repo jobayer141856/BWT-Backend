@@ -114,6 +114,7 @@ export async function selectAll(req, res, next) {
 			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 			branch_uuid: warehouse.branch_uuid,
 			branch_name: branch.name,
+			order_problems_uuid: order.problems_uuid,
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
@@ -131,10 +132,20 @@ export async function selectAll(req, res, next) {
 	try {
 		const data = await diagnosisPromise;
 
-		const problems_uuid = data
-			.filter((diagnosis) => diagnosis.problems_uuid != null)
-			.map((diagnosis) => diagnosis.problems_uuid)
+		// Gather all unique UUIDs from both diagnosis.problems_uuid and order_problems_uuid
+		const diagnosisProblemsUUIDs = data
+			.filter((d) => d.problems_uuid != null)
+			.map((d) => d.problems_uuid)
 			.flat();
+
+		const orderProblemsUUIDs = data
+			.filter((d) => d.order_problems_uuid != null)
+			.map((d) => d.order_problems_uuid)
+			.flat();
+
+		const allProblemsUUIDs = Array.from(
+			new Set([...diagnosisProblemsUUIDs, ...orderProblemsUUIDs])
+		);
 
 		const problems = await db
 			.select({
@@ -142,7 +153,7 @@ export async function selectAll(req, res, next) {
 				uuid: problem.uuid,
 			})
 			.from(problem)
-			.where(inArray(problem.uuid, problems_uuid));
+			.where(inArray(problem.uuid, allProblemsUUIDs));
 
 		const problemsMap = problems.reduce((acc, problem) => {
 			acc[problem.uuid] = problem.name;
@@ -150,15 +161,29 @@ export async function selectAll(req, res, next) {
 		}, {});
 
 		data.forEach((diagnosis) => {
+			// diagnosis_problems_name
 			if (
 				diagnosis.problems_uuid &&
 				Array.isArray(diagnosis.problems_uuid)
 			) {
-				diagnosis.problems_name = diagnosis.problems_uuid.map(
+				diagnosis.diagnosis_problems_name = diagnosis.problems_uuid.map(
 					(uuid) => problemsMap[uuid]
 				);
 			} else {
-				diagnosis.problems_name = [];
+				diagnosis.diagnosis_problems_name = [];
+			}
+
+			// order_problems_name
+			if (
+				diagnosis.order_problems_uuid &&
+				Array.isArray(diagnosis.order_problems_uuid)
+			) {
+				diagnosis.order_problems_name =
+					diagnosis.order_problems_uuid.map(
+						(uuid) => problemsMap[uuid]
+					);
+			} else {
+				diagnosis.order_problems_name = [];
 			}
 		});
 
@@ -211,6 +236,7 @@ export async function select(req, res, next) {
 			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 			branch_uuid: warehouse.branch_uuid,
 			branch_name: branch.name,
+			order_problems_uuid: order.problems_uuid,
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
@@ -227,10 +253,19 @@ export async function select(req, res, next) {
 	try {
 		const data = await diagnosisPromise;
 
-		const problems_uuid = data
-			.filter((diagnosis) => diagnosis.problems_uuid != null)
-			.map((diagnosis) => diagnosis.problems_uuid)
+		const diagnosisProblemsUUIDs = data
+			.filter((d) => d.problems_uuid != null)
+			.map((d) => d.problems_uuid)
 			.flat();
+
+		const orderProblemsUUIDs = data
+			.filter((d) => d.order_problems_uuid != null)
+			.map((d) => d.order_problems_uuid)
+			.flat();
+
+		const allProblemsUUIDs = Array.from(
+			new Set([...diagnosisProblemsUUIDs, ...orderProblemsUUIDs])
+		);
 
 		const problems = await db
 			.select({
@@ -238,7 +273,7 @@ export async function select(req, res, next) {
 				uuid: problem.uuid,
 			})
 			.from(problem)
-			.where(inArray(problem.uuid, problems_uuid));
+			.where(inArray(problem.uuid, allProblemsUUIDs));
 
 		const problemsMap = problems.reduce((acc, problem) => {
 			acc[problem.uuid] = problem.name;
@@ -246,15 +281,29 @@ export async function select(req, res, next) {
 		}, {});
 
 		data.forEach((diagnosis) => {
+			// diagnosis_problems_name
 			if (
 				diagnosis.problems_uuid &&
 				Array.isArray(diagnosis.problems_uuid)
 			) {
-				diagnosis.problems_name = diagnosis.problems_uuid.map(
+				diagnosis.diagnosis_problems_name = diagnosis.problems_uuid.map(
 					(uuid) => problemsMap[uuid]
 				);
 			} else {
-				diagnosis.problems_name = [];
+				diagnosis.diagnosis_problems_name = [];
+			}
+
+			// order_problems_name
+			if (
+				diagnosis.order_problems_uuid &&
+				Array.isArray(diagnosis.order_problems_uuid)
+			) {
+				diagnosis.order_problems_name =
+					diagnosis.order_problems_uuid.map(
+						(uuid) => problemsMap[uuid]
+					);
+			} else {
+				diagnosis.order_problems_name = [];
 			}
 		});
 
@@ -307,6 +356,7 @@ export async function selectByOrder(req, res, next) {
 			info_id: sql`CONCAT('WI', TO_CHAR(${info.created_at}::timestamp, 'YY'), '-', TO_CHAR(${info.id}, 'FM0000'))`,
 			branch_uuid: warehouse.branch_uuid,
 			branch_name: branch.name,
+			order_problems_uuid: order.problems_uuid,
 		})
 		.from(diagnosis)
 		.leftJoin(hrSchema.users, eq(diagnosis.created_by, hrSchema.users.uuid))
@@ -323,10 +373,19 @@ export async function selectByOrder(req, res, next) {
 	try {
 		const data = await diagnosisPromise;
 
-		const problems_uuid = data
-			.filter((diagnosis) => diagnosis.problems_uuid != null)
-			.map((diagnosis) => diagnosis.problems_uuid)
+		const diagnosisProblemsUUIDs = data
+			.filter((d) => d.problems_uuid != null)
+			.map((d) => d.problems_uuid)
 			.flat();
+
+		const orderProblemsUUIDs = data
+			.filter((d) => d.order_problems_uuid != null)
+			.map((d) => d.order_problems_uuid)
+			.flat();
+
+		const allProblemsUUIDs = Array.from(
+			new Set([...diagnosisProblemsUUIDs, ...orderProblemsUUIDs])
+		);
 
 		const problems = await db
 			.select({
@@ -334,7 +393,7 @@ export async function selectByOrder(req, res, next) {
 				uuid: problem.uuid,
 			})
 			.from(problem)
-			.where(inArray(problem.uuid, problems_uuid));
+			.where(inArray(problem.uuid, allProblemsUUIDs));
 
 		const problemsMap = problems.reduce((acc, problem) => {
 			acc[problem.uuid] = problem.name;
@@ -342,15 +401,29 @@ export async function selectByOrder(req, res, next) {
 		}, {});
 
 		data.forEach((diagnosis) => {
+			// diagnosis_problems_name
 			if (
 				diagnosis.problems_uuid &&
 				Array.isArray(diagnosis.problems_uuid)
 			) {
-				diagnosis.problems_name = diagnosis.problems_uuid.map(
+				diagnosis.diagnosis_problems_name = diagnosis.problems_uuid.map(
 					(uuid) => problemsMap[uuid]
 				);
 			} else {
-				diagnosis.problems_name = [];
+				diagnosis.diagnosis_problems_name = [];
+			}
+
+			// order_problems_name
+			if (
+				diagnosis.order_problems_uuid &&
+				Array.isArray(diagnosis.order_problems_uuid)
+			) {
+				diagnosis.order_problems_name =
+					diagnosis.order_problems_uuid.map(
+						(uuid) => problemsMap[uuid]
+					);
+			} else {
+				diagnosis.order_problems_name = [];
 			}
 		});
 
