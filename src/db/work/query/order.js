@@ -193,6 +193,7 @@ export async function selectAll(req, res, next) {
 			delivery_problem_statement: order.delivery_problem_statement,
 			ready_for_delivery_date: order.ready_for_delivery_date,
 			diagnosis_problems_uuid: diagnosis.problems_uuid,
+			diagnosis_problem_statement: diagnosis.problem_statement,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -447,6 +448,7 @@ export async function select(req, res, next) {
 			delivery_problem_statement: order.delivery_problem_statement,
 			ready_for_delivery_date: order.ready_for_delivery_date,
 			diagnosis_problems_uuid: diagnosis.problems_uuid,
+			diagnosis_problem_statement: diagnosis.problem_statement,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
