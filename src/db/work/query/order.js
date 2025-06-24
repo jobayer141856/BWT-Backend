@@ -683,9 +683,15 @@ export async function selectByInfo(req, res, next) {
 			is_proceed_to_repair: order.is_proceed_to_repair,
 			branch_uuid: storeSchema.warehouse.branch_uuid,
 			branch_name: storeSchema.branch.name,
-			repairing_problem: order.repairing_problem,
-			qc_problem: order.qc_problem,
-			delivery_problem: order.delivery_problem,
+			repairing_problems_uuid: order.repairing_problems_uuid,
+			qc_problems_uuid: order.qc_problems_uuid,
+			delivery_problems_uuid: order.delivery_problems_uuid,
+			repairing_problem_statement: order.repairing_problem_statement,
+			qc_problem_statement: order.qc_problem_statement,
+			delivery_problem_statement: order.delivery_problem_statement,
+			ready_for_delivery_date: order.ready_for_delivery_date,
+			diagnosis_problems_uuid: diagnosis.problems_uuid,
+			diagnosis_problem_statement: diagnosis.problem_statement,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -724,12 +730,38 @@ export async function selectByInfo(req, res, next) {
 			storeSchema.branch,
 			eq(storeSchema.warehouse.branch_uuid, storeSchema.branch.uuid)
 		)
+		.leftJoin(diagnosis, eq(order.uuid, diagnosis.order_uuid))
 		.where(eq(order.info_uuid, info_uuid));
 
 	try {
 		const data = await orderPromise;
 
-		const problems_uuid = data.map((order) => order.problems_uuid).flat();
+		// Gather all unique problem UUIDs from all relevant fields
+		const orderProblemsUUIDs = data
+			.map((order) => order.problems_uuid)
+			.flat();
+		const diagnosisProblemsUUIDs = data
+			.map((order) => order.diagnosis_problems_uuid || [])
+			.flat();
+		const repairingProblemsUUIDs = data
+			.map((order) => order.repairing_problems_uuid || [])
+			.flat();
+		const qcProblemsUUIDs = data
+			.map((order) => order.qc_problems_uuid || [])
+			.flat();
+		const deliveryProblemsUUIDs = data
+			.map((order) => order.delivery_problems_uuid || [])
+			.flat();
+
+		const allProblemsUUIDs = Array.from(
+			new Set([
+				...orderProblemsUUIDs,
+				...diagnosisProblemsUUIDs,
+				...repairingProblemsUUIDs,
+				...qcProblemsUUIDs,
+				...deliveryProblemsUUIDs,
+			])
+		);
 
 		const problems = await db
 			.select({
@@ -737,7 +769,7 @@ export async function selectByInfo(req, res, next) {
 				uuid: problem.uuid,
 			})
 			.from(problem)
-			.where(inArray(problem.uuid, problems_uuid));
+			.where(inArray(problem.uuid, allProblemsUUIDs));
 
 		const problemsMap = problems.reduce((acc, problem) => {
 			acc[problem.uuid] = problem.name;
@@ -745,9 +777,21 @@ export async function selectByInfo(req, res, next) {
 		}, {});
 
 		data.forEach((order) => {
-			order.problems_name = order.problems_uuid.map(
+			order.order_problems_name = (order.problems_uuid || []).map(
 				(uuid) => problemsMap[uuid]
 			);
+			order.diagnosis_problems_name = (
+				order.diagnosis_problems_uuid || []
+			).map((uuid) => problemsMap[uuid]);
+			order.repairing_problems_name = (
+				order.repairing_problems_uuid || []
+			).map((uuid) => problemsMap[uuid]);
+			order.qc_problems_name = (order.qc_problems_uuid || []).map(
+				(uuid) => problemsMap[uuid]
+			);
+			order.delivery_problems_name = (
+				order.delivery_problems_uuid || []
+			).map((uuid) => problemsMap[uuid]);
 		});
 
 		const toast = {
