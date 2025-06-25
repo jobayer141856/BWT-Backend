@@ -239,7 +239,7 @@ export async function selectChallanEntryByChallan(req, res, next) {
 	try {
 		const data = await challanEntryPromise;
 
-		const problems_uuid = data.map((item) => item.problems_uuid);
+		const problems_uuid = data.map((item) => item.problems_uuid).flat();
 		const problems = await db
 			.select({
 				uuid: workSchema.problem.uuid,
@@ -253,6 +253,19 @@ export async function selectChallanEntryByChallan(req, res, next) {
 			return acc;
 		}, {});
 
+		const accessories_uuid = data.map((item) => item.accessories).flat();
+		const accessories = await db
+			.select({
+				uuid: workSchema.accessory.uuid,
+				name: workSchema.accessory.name,
+			})
+			.from(workSchema.accessory)
+			.where(inArray(workSchema.accessory.uuid, accessories_uuid));
+		const accessoriesMap = accessories.reduce((acc, item) => {
+			acc[item.uuid] = item.name;
+			return acc;
+		}, {});
+
 		data.forEach((item) => {
 			if (Array.isArray(item.problems_uuid)) {
 				item.problems_name = item.problems_uuid.map(
@@ -260,6 +273,15 @@ export async function selectChallanEntryByChallan(req, res, next) {
 				);
 			} else {
 				item.problems_name = [];
+			}
+		});
+		data.forEach((item) => {
+			if (Array.isArray(item.accessories)) {
+				item.accessories_name = item.accessories.map(
+					(uuid) => accessoriesMap[uuid]
+				);
+			} else {
+				item.accessories_name = [];
 			}
 		});
 

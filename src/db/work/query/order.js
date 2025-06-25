@@ -536,6 +536,21 @@ export async function select(req, res, next) {
 			return acc;
 		}, {});
 
+		const accessories_uuid = data.map((order) => order.accessories).flat();
+
+		const accessories = await db
+			.select({
+				name: accessory.name,
+				uuid: accessory.uuid,
+			})
+			.from(accessory)
+			.where(inArray(accessory.uuid, accessories_uuid));
+
+		const accessoriesMap = accessories.reduce((acc, accessory) => {
+			acc[accessory.uuid] = accessory.name;
+			return acc;
+		}, {});
+
 		data.forEach((order) => {
 			order.order_problems_name = (order.problems_uuid || []).map(
 				(uuid) => problemsMap[uuid]
@@ -552,6 +567,9 @@ export async function select(req, res, next) {
 			order.delivery_problems_name = (
 				order.delivery_problems_uuid || []
 			).map((uuid) => problemsMap[uuid]);
+			order.accessories_name = (order.accessories || []).map(
+				(uuid) => accessoriesMap[uuid]
+			);
 		});
 
 		const api = await createApi(req);
@@ -781,6 +799,21 @@ export async function selectByInfo(req, res, next) {
 			return acc;
 		}, {});
 
+		const accessories_uuid = data.map((order) => order.accessories).flat();
+
+		const accessories = await db
+			.select({
+				name: accessory.name,
+				uuid: accessory.uuid,
+			})
+			.from(accessory)
+			.where(inArray(accessory.uuid, accessories_uuid));
+
+		const accessoriesMap = accessories.reduce((acc, accessory) => {
+			acc[accessory.uuid] = accessory.name;
+			return acc;
+		}, {});
+
 		data.forEach((order) => {
 			order.order_problems_name = (order.problems_uuid || []).map(
 				(uuid) => problemsMap[uuid]
@@ -797,6 +830,9 @@ export async function selectByInfo(req, res, next) {
 			order.delivery_problems_name = (
 				order.delivery_problems_uuid || []
 			).map((uuid) => problemsMap[uuid]);
+			order.accessories_name = (order.accessories || []).map(
+				(uuid) => accessoriesMap[uuid]
+			);
 		});
 
 		const toast = {
