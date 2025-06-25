@@ -18,6 +18,7 @@ import {
 
 import * as hrSchema from '../hr/schema.js';
 import * as workSchema from '../work/schema.js';
+import * as storeSchema from '../store/schema.js';
 
 const delivery = pgSchema('delivery');
 
@@ -78,6 +79,9 @@ export const challan = delivery.table('challan', {
 	remarks: text('remarks').default(null),
 	payment_method: challanPaymentMethodEnum('challan_payment_method').default(
 		'cash'
+	),
+	branch_uuid: defaultUUID('branch_uuid').references(
+		() => storeSchema.branch.uuid
 	),
 });
 
