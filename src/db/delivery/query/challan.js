@@ -5,6 +5,7 @@ import { validateRequest } from '../../../util/index.js';
 import * as hrSchema from '../../hr/schema.js';
 import db from '../../index.js';
 import * as workSchema from '../../work/schema.js';
+import * as storeSchema from '../../store/schema.js';
 
 const customerUser = alias(hrSchema.users, 'customerUser');
 const employeeUser = alias(hrSchema.users, 'employeeUser');
@@ -101,12 +102,18 @@ export async function selectAll(req, res, next) {
 			updated_at: challan.updated_at,
 			remarks: challan.remarks,
 			payment_method: challan.payment_method,
+			branch_uuid: challan.branch_uuid,
+			branch_name: storeSchema.branch.name,
 		})
 		.from(challan)
 		.leftJoin(customerUser, eq(challan.customer_uuid, customerUser.uuid))
 		.leftJoin(employeeUser, eq(challan.employee_uuid, employeeUser.uuid))
 		.leftJoin(vehicle, eq(challan.vehicle_uuid, vehicle.uuid))
 		.leftJoin(courier, eq(challan.courier_uuid, courier.uuid))
+		.leftJoin(
+			storeSchema.branch,
+			eq(challan.branch_uuid, storeSchema.branch.uuid)
+		)
 		.leftJoin(hrSchema.users, eq(challan.created_by, hrSchema.users.uuid));
 	try {
 		const data = await challanPromise;
@@ -152,6 +159,8 @@ export async function select(req, res, next) {
 			order_created_by: workSchema.order.created_by,
 			order_created_by_name: orderUser.name,
 			payment_method: challan.payment_method,
+			branch_uuid: challan.branch_uuid,
+			branch_name: storeSchema.branch.name,
 		})
 		.from(challan)
 		.leftJoin(customerUser, eq(challan.customer_uuid, customerUser.uuid))
@@ -172,6 +181,10 @@ export async function select(req, res, next) {
 		.leftJoin(
 			workSchema.zone,
 			eq(workSchema.info.zone_uuid, workSchema.zone.uuid)
+		)
+		.leftJoin(
+			storeSchema.branch,
+			eq(challan.branch_uuid, storeSchema.branch.uuid)
 		)
 		.where(eq(challan.uuid, req.params.uuid));
 
