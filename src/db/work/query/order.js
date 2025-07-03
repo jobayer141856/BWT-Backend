@@ -258,6 +258,7 @@ export async function selectAll(req, res, next) {
 			and(
 				eq(info.user_uuid, customer_uuid),
 				eq(order.is_ready_for_delivery, true),
+				eq(order.is_challan_needed, true),
 				not(
 					exists(
 						db
