@@ -257,8 +257,10 @@ export async function selectAll(req, res, next) {
 		filters.push(
 			and(
 				eq(info.user_uuid, customer_uuid),
-				eq(order.is_ready_for_delivery, true),
-				eq(order.is_challan_needed, true),
+				or(
+					eq(order.is_ready_for_delivery, true),
+					eq(order.is_challan_needed, true)
+				),
 				not(
 					exists(
 						db
