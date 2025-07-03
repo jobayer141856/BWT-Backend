@@ -196,6 +196,9 @@ export async function selectAll(req, res, next) {
 			diagnosis_problems_uuid: diagnosis.problems_uuid,
 			diagnosis_problem_statement: diagnosis.problem_statement,
 			bill_amount: decimalToNumber(order.bill_amount),
+			is_home_repair: order.is_home_repair,
+			proposed_cost: decimalToNumber(order.proposed_cost),
+			is_challan_needed: order.is_challan_needed,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -452,6 +455,9 @@ export async function select(req, res, next) {
 			diagnosis_problems_uuid: diagnosis.problems_uuid,
 			diagnosis_problem_statement: diagnosis.problem_statement,
 			bill_amount: decimalToNumber(order.bill_amount),
+			is_home_repair: order.is_home_repair,
+			proposed_cost: decimalToNumber(order.proposed_cost),
+			is_challan_needed: order.is_challan_needed,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
@@ -715,6 +721,9 @@ export async function selectByInfo(req, res, next) {
 			diagnosis_problems_uuid: diagnosis.problems_uuid,
 			diagnosis_problem_statement: diagnosis.problem_statement,
 			bill_amount: decimalToNumber(order.bill_amount),
+			is_home_repair: order.is_home_repair,
+			proposed_cost: decimalToNumber(order.proposed_cost),
+			is_challan_needed: order.is_challan_needed,
 		})
 		.from(order)
 		.leftJoin(hrSchema.users, eq(order.created_by, hrSchema.users.uuid))
