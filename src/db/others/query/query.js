@@ -983,7 +983,8 @@ export async function selectModel(req, res, next) {
 }
 
 export async function selectPurchaseEntry(req, res, next) {
-	const { is_purchase_return_entry } = req.query;
+	const { is_purchase_return_entry, warehouse_uuid, purchase_uuid } =
+		req.query;
 
 	const purchaseEntryPromise = db
 		.select({
@@ -1006,10 +1007,26 @@ export async function selectPurchaseEntry(req, res, next) {
 			)
 		);
 
+	const filters = [];
+
 	if (is_purchase_return_entry === 'false') {
-		purchaseEntryPromise.where(
+		filters.push(
 			sql`${storeSchema.purchase_return_entry.purchase_entry_uuid} IS NULL`
 		);
+	}
+	if (warehouse_uuid) {
+		filters.push(
+			eq(storeSchema.purchase_entry.warehouse_uuid, warehouse_uuid)
+		);
+	}
+	if (purchase_uuid) {
+		filters.push(
+			eq(storeSchema.purchase_entry.purchase_uuid, purchase_uuid)
+		);
+	}
+
+	if (filters.length > 0) {
+		purchaseEntryPromise.where(and(...filters));
 	}
 
 	try {
