@@ -47,6 +47,10 @@ const pathUser = {
 					'lsnYBibQt3QZhZM',
 					'lsnYBibQt3QZhZM',
 				]),
+				SE.parameter_query('is_challan_needed', 'is_challan_needed', [
+					'true',
+					'false',
+				]),
 			],
 			responses: {
 				200: {

@@ -18,6 +18,7 @@ export async function selectUser(req, res, next) {
 		challan_uuid,
 		filteredUser,
 		user_uuid,
+		is_challan_needed,
 	} = req.query;
 
 	//console.log(type, designation, department);
@@ -120,6 +121,26 @@ export async function selectUser(req, res, next) {
 			)
 		);
 	}
+	if (is_challan_needed) {
+		filters.push(
+			and(
+				or(
+					eq(
+						workSchema.order.is_ready_for_delivery,
+						'true'
+					),
+					eq(
+						workSchema.order.is_challan_needed,
+						is_challan_needed
+					),
+				),
+				eq(
+					deliverySchema.challan.is_delivery_complete,
+					'false'
+				)
+			)
+		);
+	}
 	if (challan_uuid) {
 		filters.push(eq(deliverySchema.challan.uuid, challan_uuid));
 	}
@@ -130,6 +151,7 @@ export async function selectUser(req, res, next) {
 	if (user_uuid) {
 		userPromise.where(eq(hrSchema.users.uuid, user_uuid));
 	}
+	
 
 	try {
 		const data = await userPromise;
