@@ -983,6 +983,8 @@ export async function selectModel(req, res, next) {
 }
 
 export async function selectPurchaseEntry(req, res, next) {
+	const { is_purchase_return_entry } = req.query;
+
 	const purchaseEntryPromise = db
 		.select({
 			value: storeSchema.purchase_entry.uuid,
@@ -995,7 +997,20 @@ export async function selectPurchaseEntry(req, res, next) {
 				storeSchema.purchase_entry.product_uuid,
 				storeSchema.product.uuid
 			)
+		)
+		.leftJoin(
+			storeSchema.purchase_return_entry,
+			eq(
+				storeSchema.purchase_entry.uuid,
+				storeSchema.purchase_return_entry.purchase_entry_uuid
+			)
 		);
+
+	if (is_purchase_return_entry === 'false') {
+		purchaseEntryPromise.where(
+			sql`${storeSchema.purchase_return_entry.purchase_entry_uuid} IS NULL`
+		);
+	}
 
 	try {
 		const data = await purchaseEntryPromise;

@@ -2,8 +2,12 @@
 CREATE OR REPLACE FUNCTION product_after_purchase_return_entry_insert_function() RETURNS TRIGGER AS $$
 DECLARE 
     warehouse_name TEXT;
+    product_uuid_p TEXT;
+
 BEGIN
     SELECT assigned INTO warehouse_name FROM store.warehouse WHERE uuid = (SELECT warehouse_uuid FROM store.purchase_return WHERE uuid = NEW.purchase_return_uuid);
+   
+     SELECT product_uuid INTO product_uuid_p FROM store.purchase_entry WHERE uuid = NEW.purchase_entry_uuid;
     
     UPDATE store.product
     SET
@@ -19,7 +23,7 @@ BEGIN
         warehouse_10 = CASE WHEN warehouse_name = 'warehouse_10' THEN warehouse_10 - NEW.quantity ELSE warehouse_10 END,
         warehouse_11 = CASE WHEN warehouse_name = 'warehouse_11' THEN warehouse_11 - NEW.quantity ELSE warehouse_11 END,
         warehouse_12 = CASE WHEN warehouse_name = 'warehouse_12' THEN warehouse_12 - NEW.quantity ELSE warehouse_12 END
-    WHERE uuid = NEW.product_uuid;
+    WHERE uuid = product_uuid_p;
     
     RETURN NEW;
 END;
@@ -29,8 +33,11 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION product_after_purchase_return_entry_delete_function() RETURNS TRIGGER AS $$
 DECLARE 
     warehouse_name TEXT;
+    product_uuid_p TEXT;
 BEGIN
     SELECT assigned INTO warehouse_name FROM store.warehouse WHERE uuid = (SELECT warehouse_uuid FROM store.purchase_return WHERE uuid = OLD.purchase_return_uuid);
+
+    SELECT product_uuid INTO product_uuid_p FROM store.purchase_entry WHERE uuid = OLD.purchase_entry_uuid;
     
     UPDATE store.product
     SET
@@ -46,7 +53,7 @@ BEGIN
         warehouse_10 = CASE WHEN warehouse_name = 'warehouse_10' THEN warehouse_10 + OLD.quantity ELSE warehouse_10 END,
         warehouse_11 = CASE WHEN warehouse_name = 'warehouse_11' THEN warehouse_11 + OLD.quantity ELSE warehouse_11 END,
         warehouse_12 = CASE WHEN warehouse_name = 'warehouse_12' THEN warehouse_12 + OLD.quantity ELSE warehouse_12 END
-    WHERE uuid = OLD.product_uuid;
+    WHERE uuid = product_uuid_p;
     
     RETURN OLD;
 END;
@@ -57,10 +64,17 @@ CREATE OR REPLACE FUNCTION product_after_purchase_return_entry_update_function()
 DECLARE 
     old_warehouse_name TEXT;
     new_warehouse_name TEXT;
+    old_product_uuid_p TEXT;
+    new_product_uuid_p TEXT;
 BEGIN
     -- Get old and new warehouse names
     SELECT assigned INTO old_warehouse_name FROM store.warehouse WHERE uuid = (SELECT warehouse_uuid FROM store.purchase_return WHERE uuid = OLD.purchase_return_uuid);
     SELECT assigned INTO new_warehouse_name FROM store.warehouse WHERE uuid = (SELECT warehouse_uuid FROM store.purchase_return WHERE uuid = NEW.purchase_return_uuid);
+
+    -- Get old and new product UUIDs
+    SELECT product_uuid INTO old_product_uuid_p FROM store.purchase_entry WHERE uuid = OLD.purchase_entry_uuid;
+    SELECT product_uuid INTO new_product_uuid_p FROM store.purchase_entry WHERE uuid = NEW.purchase_entry_uuid;
+
 
     IF old_warehouse_name <> new_warehouse_name THEN
         -- Subtract from old warehouse
@@ -78,7 +92,7 @@ BEGIN
             warehouse_10 = CASE WHEN old_warehouse_name = 'warehouse_10' THEN warehouse_10 + OLD.quantity ELSE warehouse_10 END,
             warehouse_11 = CASE WHEN old_warehouse_name = 'warehouse_11' THEN warehouse_11 + OLD.quantity ELSE warehouse_11 END,
             warehouse_12 = CASE WHEN old_warehouse_name = 'warehouse_12' THEN warehouse_12 + OLD.quantity ELSE warehouse_12 END
-        WHERE uuid = OLD.product_uuid;
+        WHERE uuid = old_product_uuid_p;
 
         -- Add to new warehouse
         UPDATE store.product
@@ -95,7 +109,7 @@ BEGIN
             warehouse_10 = CASE WHEN new_warehouse_name = 'warehouse_10' THEN warehouse_10 - NEW.quantity ELSE warehouse_10 END,
             warehouse_11 = CASE WHEN new_warehouse_name = 'warehouse_11' THEN warehouse_11 - NEW.quantity ELSE warehouse_11 END,
             warehouse_12 = CASE WHEN new_warehouse_name = 'warehouse_12' THEN warehouse_12 - NEW.quantity ELSE warehouse_12 END
-        WHERE uuid = NEW.product_uuid;
+        WHERE uuid = new_product_uuid_p;
     ELSE
         -- Update the quantity in the same warehouse
         UPDATE store.product
@@ -112,7 +126,7 @@ BEGIN
             warehouse_10 = CASE WHEN old_warehouse_name = 'warehouse_10' THEN warehouse_10 + OLD.quantity - NEW.quantity ELSE warehouse_10 END,
             warehouse_11 = CASE WHEN old_warehouse_name = 'warehouse_11' THEN warehouse_11 + OLD.quantity - NEW.quantity ELSE warehouse_11 END,
             warehouse_12 = CASE WHEN old_warehouse_name = 'warehouse_12' THEN warehouse_12 + OLD.quantity - NEW.quantity ELSE warehouse_12 END
-        WHERE uuid = NEW.product_uuid;
+        WHERE uuid = new_product_uuid_p;
     END IF;
     RETURN NEW;
 END;
