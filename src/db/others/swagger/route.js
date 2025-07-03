@@ -904,10 +904,11 @@ const pathPurchaseEntry = {
 			summary: 'Get all purchase entry',
 			description: 'Get all purchase entry',
 			parameters: [
-				SE.parameter_query('is_return_entry', 'is_return_entry', [
-					'true',
-					'false',
-				]),
+				SE.parameter_query(
+					'is_purchase_return_entry',
+					'is_purchase_return_entry',
+					['true', 'false']
+				),
 				// SE.parameter_query('vendor_uuid', 'vendor_uuid', [
 				// 	'lsnYBibQt3QZhZM',
 				// 	'lsnYBibQt3QZhZM',

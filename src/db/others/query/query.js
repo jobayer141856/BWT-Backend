@@ -983,7 +983,7 @@ export async function selectModel(req, res, next) {
 }
 
 export async function selectPurchaseEntry(req, res, next) {
-	const { is_return_entry } = req.query;
+	const { is_purchase_return_entry } = req.query;
 
 	const purchaseEntryPromise = db
 		.select({
@@ -1006,7 +1006,7 @@ export async function selectPurchaseEntry(req, res, next) {
 			)
 		);
 
-	if (is_return_entry === 'false') {
+	if (is_purchase_return_entry === 'false') {
 		purchaseEntryPromise.where(
 			sql`${storeSchema.purchase_return_entry.purchase_entry_uuid} IS NULL`
 		);
