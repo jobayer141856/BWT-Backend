@@ -121,12 +121,12 @@ export async function selectUser(req, res, next) {
 			)
 		);
 	}
-	if (is_challan_needed) {
+	if (is_challan_needed === 'true') {
 		filters.push(
 			and(
 				or(
 					eq(workSchema.order.is_ready_for_delivery, true),
-					eq(workSchema.order.is_challan_needed, is_challan_needed)
+					eq(workSchema.order.is_challan_needed, true)
 				),
 				eq(deliverySchema.challan.is_delivery_complete, false)
 			)
