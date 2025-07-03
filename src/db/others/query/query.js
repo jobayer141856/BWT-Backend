@@ -125,19 +125,10 @@ export async function selectUser(req, res, next) {
 		filters.push(
 			and(
 				or(
-					eq(
-						workSchema.order.is_ready_for_delivery,
-						'true'
-					),
-					eq(
-						workSchema.order.is_challan_needed,
-						is_challan_needed
-					),
+					eq(workSchema.order.is_ready_for_delivery, true),
+					eq(workSchema.order.is_challan_needed, is_challan_needed)
 				),
-				eq(
-					deliverySchema.challan.is_delivery_complete,
-					'false'
-				)
+				eq(deliverySchema.challan.is_delivery_complete, false)
 			)
 		);
 	}
@@ -151,7 +142,6 @@ export async function selectUser(req, res, next) {
 	if (user_uuid) {
 		userPromise.where(eq(hrSchema.users.uuid, user_uuid));
 	}
-	
 
 	try {
 		const data = await userPromise;
