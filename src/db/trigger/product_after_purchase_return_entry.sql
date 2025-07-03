@@ -3,6 +3,7 @@ CREATE OR REPLACE FUNCTION product_after_purchase_return_entry_insert_function()
 DECLARE 
     warehouse_name TEXT;
     product_uuid_p TEXT;
+    
 
 BEGIN
     SELECT assigned INTO warehouse_name FROM store.warehouse WHERE uuid = (SELECT warehouse_uuid FROM store.purchase_return WHERE uuid = NEW.purchase_return_uuid);

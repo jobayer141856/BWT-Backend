@@ -909,10 +909,14 @@ const pathPurchaseEntry = {
 					'is_purchase_return_entry',
 					['true', 'false']
 				),
-				// SE.parameter_query('vendor_uuid', 'vendor_uuid', [
-				// 	'lsnYBibQt3QZhZM',
-				// 	'lsnYBibQt3QZhZM',
-				// ]),
+				SE.parameter_query('warehouse_uuid', 'warehouse_uuid', [
+					'lsnYBibQt3QZhZM',
+					'lsnYBibQt3QZhZM',
+				]),
+				SE.parameter_query('purchase_uuid', 'purchase_uuid', [
+					'lsnYBibQt3QZhZM',
+					'lsnYBibQt3QZhZM',
+				]),
 			],
 			responses: {
 				200: {
