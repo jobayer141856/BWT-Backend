@@ -4,7 +4,12 @@ import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { decimalToNumber } from '../../variables.js';
 import * as workSchema from '../../work/schema.js';
-import { product_transfer, product, warehouse } from '../schema.js';
+import {
+	product_transfer,
+	product,
+	warehouse,
+	purchase_entry,
+} from '../schema.js';
 
 import { alias } from 'drizzle-orm/pg-core';
 const user = alias(hrSchema.users, 'user');
@@ -81,7 +86,8 @@ export async function selectAll(req, res, next) {
 			id: product_transfer.id,
 			product_transfer_id: sql`CONCAT('PT', TO_CHAR(${product_transfer.created_at}, 'YY'), '-', TO_CHAR(${product_transfer.id}, 'FM0000'))`,
 			uuid: product_transfer.uuid,
-			product_uuid: product_transfer.product_uuid,
+			purchase_entry_uuid: product_transfer.purchase_entry_uuid,
+			product_uuid: purchase_entry.product_uuid,
 			product_name: product.name,
 			warehouse_uuid: product_transfer.warehouse_uuid,
 			warehouse_name: warehouse.name,
@@ -111,10 +117,13 @@ export async function selectAll(req, res, next) {
 						WHEN ${warehouse.assigned} = 'warehouse_11' THEN ${product.warehouse_11} + ${product_transfer.quantity}
 						WHEN ${warehouse.assigned} = 'warehouse_12' THEN ${product.warehouse_12} + ${product_transfer.quantity}
 						END`),
-			serials: product_transfer.serials,
 		})
 		.from(product_transfer)
-		.leftJoin(product, eq(product_transfer.product_uuid, product.uuid))
+		.leftJoin(
+			purchase_entry,
+			eq(product_transfer.purchase_entry_uuid, purchase_entry.uuid)
+		)
+		.leftJoin(product, eq(purchase_entry.product_uuid, product.uuid))
 		.leftJoin(
 			warehouse,
 			eq(product_transfer.warehouse_uuid, warehouse.uuid)
@@ -152,7 +161,8 @@ export async function select(req, res, next) {
 			id: product_transfer.id,
 			product_transfer_id: sql`CONCAT('PT', TO_CHAR(${product_transfer.created_at}, 'YY'), '-', TO_CHAR(${product_transfer.id}, 'FM0000'))`,
 			uuid: product_transfer.uuid,
-			product_uuid: product_transfer.product_uuid,
+			purchase_entry_uuid: product_transfer.purchase_entry_uuid,
+			product_uuid: purchase_entry.product_uuid,
 			product_name: product.name,
 			warehouse_uuid: product_transfer.warehouse_uuid,
 			warehouse_name: warehouse.name,
@@ -182,10 +192,13 @@ export async function select(req, res, next) {
 						WHEN ${warehouse.assigned} = 'warehouse_11' THEN ${product.warehouse_11} + ${product_transfer.quantity}
 						WHEN ${warehouse.assigned} = 'warehouse_12' THEN ${product.warehouse_12} + ${product_transfer.quantity}
 						END`),
-			serials: product_transfer.serials,
 		})
 		.from(product_transfer)
-		.leftJoin(product, eq(product_transfer.product_uuid, product.uuid))
+		.leftJoin(
+			purchase_entry,
+			eq(product_transfer.purchase_entry_uuid, purchase_entry.uuid)
+		)
+		.leftJoin(product, eq(purchase_entry.product_uuid, product.uuid))
 		.leftJoin(
 			warehouse,
 			eq(product_transfer.warehouse_uuid, warehouse.uuid)
@@ -227,7 +240,8 @@ export async function selectByOrderUuid(req, res, next) {
 		.select({
 			id: product_transfer.id,
 			uuid: product_transfer.uuid,
-			product_uuid: product_transfer.product_uuid,
+			purchase_entry_uuid: product_transfer.purchase_entry_uuid,
+			product_uuid: purchase_entry.product_uuid,
 			product_name: product.name,
 			warehouse_uuid: product_transfer.warehouse_uuid,
 			warehouse_name: warehouse.name,
@@ -258,32 +272,64 @@ export async function selectByOrderUuid(req, res, next) {
 						WHEN ${warehouse.assigned} = 'warehouse_11' THEN ${product.warehouse_11} + SUM(${product_transfer.quantity})
 						WHEN ${warehouse.assigned} = 'warehouse_12' THEN ${product.warehouse_12} + SUM(${product_transfer.quantity})
 						END`,
-			serials: product_transfer.serials,
 		})
 		.from(product_transfer)
 		.leftJoin(
 			hrSchema.users,
 			eq(product_transfer.created_by, hrSchema.users.uuid)
 		)
-		.leftJoin(product, eq(product_transfer.product_uuid, product.uuid))
+		.leftJoin(
+			purchase_entry,
+			eq(product_transfer.purchase_entry_uuid, purchase_entry.uuid)
+		)
+		.leftJoin(product, eq(purchase_entry.product_uuid, product.uuid))
 		.leftJoin(
 			warehouse,
 			eq(product_transfer.warehouse_uuid, warehouse.uuid)
 		)
+		.leftJoin(
+			workSchema.order,
+			eq(product_transfer.order_uuid, workSchema.order.uuid)
+		)
+		.leftJoin(
+			workSchema.info,
+			eq(workSchema.order.info_uuid, workSchema.info.uuid)
+		)
+		.leftJoin(user, eq(workSchema.info.user_uuid, user.uuid))
 		.where(eq(product_transfer.order_uuid, order_uuid))
+
 		.groupBy(
 			product_transfer.id,
 			product_transfer.uuid,
-			product_transfer.product_uuid,
+			product_transfer.purchase_entry_uuid,
+			purchase_entry.product_uuid,
+			product.name,
 			product_transfer.warehouse_uuid,
+			warehouse.name,
 			product_transfer.order_uuid,
 			product_transfer.created_by,
 			hrSchema.users.name,
 			product_transfer.created_at,
 			product_transfer.updated_at,
 			product_transfer.remarks,
-			product.name,
-			warehouse.name
+			workSchema.order.info_uuid,
+			workSchema.info.user_uuid,
+			user.name,
+			workSchema.info.id,
+			workSchema.info.created_at,
+			warehouse.assigned,
+			product.warehouse_1,
+			product.warehouse_2,
+			product.warehouse_3,
+			product.warehouse_4,
+			product.warehouse_5,
+			product.warehouse_6,
+			product.warehouse_7,
+			product.warehouse_8,
+			product.warehouse_9,
+			product.warehouse_10,
+			product.warehouse_11,
+			product.warehouse_12
 		);
 
 	try {

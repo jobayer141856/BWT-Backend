@@ -897,6 +897,42 @@ const pathModel = {
 	},
 };
 
+const pathPurchaseEntry = {
+	'/other/purchase-entry/value/label': {
+		get: {
+			tags: ['others'],
+			summary: 'Get all purchase entry',
+			description: 'Get all purchase entry',
+			parameters: [
+				SE.parameter_query('branch_uuid', 'branch_uuid', [
+					'lsnYBibQt3QZhZM',
+					'lsnYBibQt3QZhZM',
+				]),
+				SE.parameter_query('vendor_uuid', 'vendor_uuid', [
+					'lsnYBibQt3QZhZM',
+					'lsnYBibQt3QZhZM',
+				]),
+			],
+			responses: {
+				200: {
+					description: 'Success',
+					content: {
+						'application/json': {
+							schema: {
+								type: 'object',
+								properties: {
+									value: SE.uuid(),
+									label: SE.string('purchase entry'),
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+};
+
 //* Work others routes *//
 
 const pathProblem = {
@@ -1195,6 +1231,7 @@ export const pathOthers = {
 	...pathCourier,
 	...pathAccessory,
 	...pathZone,
+	...pathPurchaseEntry,
 };
 
 export const tagOthers = [

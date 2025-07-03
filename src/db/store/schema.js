@@ -242,13 +242,14 @@ export const purchase_return_entry = store.table('purchase_return_entry', {
 	purchase_return_uuid: defaultUUID('purchase_return_uuid').references(
 		() => purchase_return.uuid
 	),
-	product_uuid: defaultUUID('product_uuid').references(() => product.uuid),
 	quantity: PG_DECIMAL('quantity').notNull(),
-	price_per_unit: PG_DECIMAL('price_per_unit').notNull(),
 	created_by: defaultUUID('created_by').references(() => hrSchema.users.uuid),
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	purchase_entry_uuid: defaultUUID('purchase_entry_uuid').references(
+		() => purchase_entry.uuid
+	),
 });
 
 export const internal_transfer = store.table('internal_transfer', {
@@ -274,7 +275,6 @@ export const internal_transfer = store.table('internal_transfer', {
 export const product_transfer = store.table('product_transfer', {
 	id: serial('id').notNull().unique(),
 	uuid: uuid_primary,
-	product_uuid: defaultUUID('product_uuid').references(() => product.uuid),
 	warehouse_uuid: defaultUUID('warehouse_uuid').references(
 		() => warehouse.uuid
 	),
@@ -286,7 +286,9 @@ export const product_transfer = store.table('product_transfer', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
-	serials: text('serials').array().default(null),
+	purchase_entry_uuid: defaultUUID('purchase_entry_uuid').references(
+		() => purchase_entry.uuid
+	),
 });
 
 export default store;
