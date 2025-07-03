@@ -286,6 +286,7 @@ export const product_transfer = store.table('product_transfer', {
 	created_at: DateTime('created_at').notNull(),
 	updated_at: DateTime('updated_at').default(null),
 	remarks: text('remarks').default(null),
+	serials: text('serials').array().default(null),
 });
 
 export default store;

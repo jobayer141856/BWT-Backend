@@ -111,6 +111,7 @@ export async function selectAll(req, res, next) {
 						WHEN ${warehouse.assigned} = 'warehouse_11' THEN ${product.warehouse_11} + ${product_transfer.quantity}
 						WHEN ${warehouse.assigned} = 'warehouse_12' THEN ${product.warehouse_12} + ${product_transfer.quantity}
 						END`),
+			serials: product_transfer.serials,
 		})
 		.from(product_transfer)
 		.leftJoin(product, eq(product_transfer.product_uuid, product.uuid))
@@ -181,6 +182,7 @@ export async function select(req, res, next) {
 						WHEN ${warehouse.assigned} = 'warehouse_11' THEN ${product.warehouse_11} + ${product_transfer.quantity}
 						WHEN ${warehouse.assigned} = 'warehouse_12' THEN ${product.warehouse_12} + ${product_transfer.quantity}
 						END`),
+			serials: product_transfer.serials,
 		})
 		.from(product_transfer)
 		.leftJoin(product, eq(product_transfer.product_uuid, product.uuid))
@@ -236,6 +238,27 @@ export async function selectByOrderUuid(req, res, next) {
 			updated_at: product_transfer.updated_at,
 			remarks: product_transfer.remarks,
 			quantity: sql`SUM(${product_transfer.quantity})::float8`,
+			info_uuid: workSchema.order.info_uuid,
+			info_id: sql`CONCAT ('WI', TO_CHAR(${
+				workSchema.info.created_at
+			}::timestamp, 'YY'), '-', TO_CHAR(${workSchema.info.id}, 'FM0000'))`,
+			user_uuid: workSchema.info.user_uuid,
+			user_name: user.name,
+			max_quantity: sql`CASE WHEN ${warehouse.assigned} = 'warehouse_1'
+				THEN ${product.warehouse_1} + SUM(${product_transfer.quantity}) 
+						WHEN ${warehouse.assigned} = 'warehouse_2' THEN ${product.warehouse_2} + SUM(${product_transfer.quantity}) 
+						WHEN ${warehouse.assigned} = 'warehouse_3' THEN ${product.warehouse_3} + SUM(${product_transfer.quantity}) 
+						WHEN ${warehouse.assigned} = 'warehouse_4' THEN ${product.warehouse_4} + SUM(${product_transfer.quantity})
+						WHEN ${warehouse.assigned} = 'warehouse_5' THEN ${product.warehouse_5} + SUM(${product_transfer.quantity}) 
+						WHEN ${warehouse.assigned} = 'warehouse_6' THEN ${product.warehouse_6} + SUM(${product_transfer.quantity}) 
+						WHEN ${warehouse.assigned} = 'warehouse_7' THEN ${product.warehouse_7} + SUM(${product_transfer.quantity}) 
+						WHEN ${warehouse.assigned} = 'warehouse_8' THEN ${product.warehouse_8} + SUM(${product_transfer.quantity}) 
+						WHEN ${warehouse.assigned} = 'warehouse_9' THEN ${product.warehouse_9} + SUM(${product_transfer.quantity}) 
+						WHEN ${warehouse.assigned} = 'warehouse_10' THEN ${product.warehouse_10} + SUM(${product_transfer.quantity})
+						WHEN ${warehouse.assigned} = 'warehouse_11' THEN ${product.warehouse_11} + SUM(${product_transfer.quantity})
+						WHEN ${warehouse.assigned} = 'warehouse_12' THEN ${product.warehouse_12} + SUM(${product_transfer.quantity})
+						END`,
+			serials: product_transfer.serials,
 		})
 		.from(product_transfer)
 		.leftJoin(
