@@ -4,7 +4,12 @@ import db from '../../index.js';
 import * as hrSchema from '../../hr/schema.js';
 import { createApi } from '../../../util/api.js';
 import { decimalToNumber } from '../../variables.js';
-import { product, purchase_return_entry, purchase_return } from '../schema.js';
+import {
+	product,
+	purchase_return_entry,
+	purchase_return,
+	purchase_entry,
+} from '../schema.js';
 
 export async function insert(req, res, next) {
 	if (!(await validateRequest(req, next))) return;
@@ -85,12 +90,10 @@ export async function selectAll(req, res, next) {
                             ' - ',
                             TO_CHAR(${purchase_return.id}, 'FM0000')
                         )`,
-			product_uuid: purchase_return_entry.product_uuid,
+			purchase_entry_uuid: purchase_return_entry.purchase_entry_uuid,
+			product_uuid: purchase_entry.product_uuid,
 			product_name: product.name,
 			quantity: decimalToNumber(purchase_return_entry.quantity),
-			price_per_unit: decimalToNumber(
-				purchase_return_entry.price_per_unit
-			),
 			created_by: purchase_return_entry.created_by,
 			created_by_name: hrSchema.users.name,
 			created_at: purchase_return_entry.created_at,
@@ -98,7 +101,11 @@ export async function selectAll(req, res, next) {
 			remarks: purchase_return_entry.remarks,
 		})
 		.from(purchase_return_entry)
-		.leftJoin(product, eq(purchase_return_entry.product_uuid, product.uuid))
+		.leftJoin(
+			purchase_entry,
+			eq(purchase_return_entry.purchase_entry_uuid, purchase_entry.uuid)
+		)
+		.leftJoin(product, eq(purchase_entry.product_uuid, product.uuid))
 		.leftJoin(
 			hrSchema.users,
 			eq(purchase_return_entry.created_by, hrSchema.users.uuid)
@@ -136,12 +143,10 @@ export async function select(req, res, next) {
                             ' - ',
                             TO_CHAR(${purchase_return.id}, 'FM0000')
                         )`,
-			product_uuid: purchase_return_entry.product_uuid,
+			purchase_entry_uuid: purchase_return_entry.purchase_entry_uuid,
+			product_uuid: purchase_entry.product_uuid,
 			product_name: product.name,
 			quantity: decimalToNumber(purchase_return_entry.quantity),
-			price_per_unit: decimalToNumber(
-				purchase_return_entry.price_per_unit
-			),
 			created_by: purchase_return_entry.created_by,
 			created_by_name: hrSchema.users.name,
 			created_at: purchase_return_entry.created_at,
@@ -149,7 +154,11 @@ export async function select(req, res, next) {
 			remarks: purchase_return_entry.remarks,
 		})
 		.from(purchase_return_entry)
-		.leftJoin(product, eq(purchase_return_entry.product_uuid, product.uuid))
+		.leftJoin(
+			purchase_entry,
+			eq(purchase_return_entry.purchase_entry_uuid, purchase_entry.uuid)
+		)
+		.leftJoin(product, eq(purchase_entry.product_uuid, product.uuid))
 		.leftJoin(
 			hrSchema.users,
 			eq(purchase_return_entry.created_by, hrSchema.users.uuid)
@@ -189,12 +198,10 @@ export async function selectByPurchaseReturnUuid(req, res, next) {
                             ' - ',
                             TO_CHAR(${purchase_return.id}, 'FM0000')
                         )`,
-			product_uuid: purchase_return_entry.product_uuid,
+			purchase_entry_uuid: purchase_return_entry.purchase_entry_uuid,
+			product_uuid: purchase_entry.product_uuid,
 			product_name: product.name,
 			quantity: decimalToNumber(purchase_return_entry.quantity),
-			price_per_unit: decimalToNumber(
-				purchase_return_entry.price_per_unit
-			),
 			created_by: purchase_return_entry.created_by,
 			created_by_name: hrSchema.users.name,
 			created_at: purchase_return_entry.created_at,
@@ -202,7 +209,11 @@ export async function selectByPurchaseReturnUuid(req, res, next) {
 			remarks: purchase_return_entry.remarks,
 		})
 		.from(purchase_return_entry)
-		.leftJoin(product, eq(purchase_return_entry.product_uuid, product.uuid))
+		.leftJoin(
+			purchase_entry,
+			eq(purchase_return_entry.purchase_entry_uuid, purchase_entry.uuid)
+		)
+		.leftJoin(product, eq(purchase_entry.product_uuid, product.uuid))
 		.leftJoin(
 			hrSchema.users,
 			eq(purchase_return_entry.created_by, hrSchema.users.uuid)

@@ -83,11 +83,11 @@ otherRouter.get('/purchase/value/label', otherOperations.selectPurchase);
 // stock routes
 otherRouter.get('/stock/value/label', otherOperations.selectStock);
 
-// purchase entry routes
-// otherRouter.get(
-// 	'/purchase-entry/value/label',
-// 	otherOperations.selectPurchaseEntry
-// );
+//purchase entry routes
+otherRouter.get(
+	'/purchase-entry/value/label',
+	otherOperations.selectPurchaseEntry
+);
 
 // warehouse routes
 otherRouter.get('/warehouse/value/label', otherOperations.selectWarehouse);

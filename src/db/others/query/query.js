@@ -982,6 +982,34 @@ export async function selectModel(req, res, next) {
 	}
 }
 
+export async function selectPurchaseEntry(req, res, next) {
+	const purchaseEntryPromise = db
+		.select({
+			value: storeSchema.purchase_entry.uuid,
+			label: sql`CONCAT( ${storeSchema.product.name}, ' - ', ${storeSchema.purchase_entry.serial_no})`,
+		})
+		.from(storeSchema.purchase_entry)
+		.leftJoin(
+			storeSchema.product,
+			eq(
+				storeSchema.purchase_entry.product_uuid,
+				storeSchema.product.uuid
+			)
+		);
+
+	try {
+		const data = await purchaseEntryPromise;
+		const toast = {
+			status: 200,
+			type: 'select all',
+			message: 'Purchase Entry list',
+		};
+		return await res.status(200).json({ toast, data });
+	} catch (error) {
+		next(error);
+	}
+}
+
 //* Work others routes *//
 
 export async function selectProblem(req, res, next) {
