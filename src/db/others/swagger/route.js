@@ -691,6 +691,7 @@ const pathWarehouse = {
 					'lsnYBibQt3QZhZM',
 					'lsnYBibQt3QZhZM',
 				]),
+				SE.parameter_query('purchase_uuid', 'purchase_uuid', SE.uuid()),
 			],
 			responses: {
 				200: {

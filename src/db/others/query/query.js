@@ -754,7 +754,7 @@ export async function selectStock(req, res, next) {
 }
 
 export async function selectWarehouse(req, res, next) {
-	const { branch_uuid, product_uuid } = req.query;
+	const { branch_uuid, product_uuid, purchase_uuid } = req.query;
 	const warehousePromise = db
 		.select({
 			value: storeSchema.warehouse.uuid,
@@ -775,6 +775,17 @@ export async function selectWarehouse(req, res, next) {
 		);
 	}
 
+	if (purchase_uuid) {
+		warehousePromise
+			.leftJoin(
+				storeSchema.purchase_entry,
+				eq(
+					storeSchema.warehouse.uuid,
+					storeSchema.purchase_entry.warehouse_uuid
+				)
+			)
+			.where(eq(storeSchema.purchase_entry.uuid, purchase_uuid));
+	}
 	try {
 		const data = await warehousePromise;
 		const toast = {
